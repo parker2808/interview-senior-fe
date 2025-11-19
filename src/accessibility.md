@@ -1,52 +1,51 @@
 # Accessibility (A11y)
 
-Making web applications accessible to everyone.
+Làm cho ứng dụng web dễ truy cập cho mọi người.
 
 ---
 
-## Table of Contents
+## Mục Lục
 
-1. [ARIA Attributes](#1-aria-attributes)
-2. [Keyboard Navigation](#2-keyboard-navigation)
-3. [Semantic HTML](#3-semantic-html)
-4. [WCAG Guidelines](#4-wcag-guidelines)
+1. [Thuộc tính ARIA](#1-thuộc-tính-aria)
+2. [Điều hướng bằng bàn phím](#2-điều-hướng-bằng-bàn-phím)
+3. [HTML Ngữ nghĩa](#3-html-ngữ-nghĩa)
+4. [Hướng dẫn WCAG](#4-hướng-dẫn-wcag)
 
 ---
-## 6. Accessibility (A11y)
 
-### 6.1. ARIA Attributes
+## 1. Thuộc tính ARIA
 
 **Câu trả lời chuẩn Senior:**
 
 ARIA (Accessible Rich Internet Applications) giúp screen readers hiểu web apps.
 
-#### **Basic ARIA Attributes**
+#### **Các thuộc tính ARIA Cơ bản**
 
 ```vue
 <template>
-  <!-- role: Định nghĩa element type -->
+  <!-- role: Định nghĩa loại element -->
   <div role="button" tabindex="0" @click="submit" @keypress.enter="submit">
     Submit
   </div>
 
   <!-- aria-label: Label cho screen readers -->
-  <button aria-label="Close dialog">
+  <button aria-label="Đóng dialog">
     <svg><!-- X icon --></svg>
   </button>
 
   <!-- aria-labelledby: Reference đến label element -->
-  <h2 id="dialog-title">Confirm Action</h2>
+  <h2 id="dialog-title">Xác nhận Hành động</h2>
   <div role="dialog" aria-labelledby="dialog-title">
-    <!-- dialog content -->
+    <!-- nội dung dialog -->
   </div>
 
-  <!-- aria-describedby: Additional description -->
+  <!-- aria-describedby: Mô tả bổ sung -->
   <input type="password" aria-describedby="password-hint" />
-  <div id="password-hint">Password must be at least 8 characters</div>
+  <div id="password-hint">Mật khẩu phải có ít nhất 8 ký tự</div>
 
-  <!-- aria-hidden: Hide from screen readers -->
+  <!-- aria-hidden: Ẩn khỏi screen readers -->
   <span aria-hidden="true">★</span>
-  <span class="sr-only">Rating: 4 out of 5</span>
+  <span class="sr-only">Đánh giá: 4 trên 5</span>
 </template>
 ```
 
@@ -54,7 +53,7 @@ ARIA (Accessible Rich Internet Applications) giúp screen readers hiểu web app
 
 ```vue
 <template>
-  <!-- aria-expanded: Expandable elements -->
+  <!-- aria-expanded: Các elements có thể mở rộng -->
   <button
     aria-expanded="isOpen"
     aria-controls="dropdown-menu"
@@ -63,10 +62,10 @@ ARIA (Accessible Rich Internet Applications) giúp screen readers hiểu web app
     Menu
   </button>
   <ul id="dropdown-menu" :hidden="!isOpen">
-    <li>Item 1</li>
+    <li>Mục 1</li>
   </ul>
 
-  <!-- aria-selected: Selection state -->
+  <!-- aria-selected: Trạng thái được chọn -->
   <div role="tablist">
     <button
       v-for="tab in tabs"
@@ -79,26 +78,26 @@ ARIA (Accessible Rich Internet Applications) giúp screen readers hiểu web app
     </button>
   </div>
 
-  <!-- aria-checked: Checkbox/radio state -->
+  <!-- aria-checked: Trạng thái checkbox/radio -->
   <div
     role="checkbox"
     :aria-checked="isChecked"
     @click="isChecked = !isChecked"
   >
-    Accept terms
+    Chấp nhận điều khoản
   </div>
 
-  <!-- aria-disabled: Disabled state -->
+  <!-- aria-disabled: Trạng thái disabled -->
   <button :aria-disabled="isProcessing" :disabled="isProcessing">Submit</button>
 
-  <!-- aria-invalid: Validation state -->
+  <!-- aria-invalid: Trạng thái validation -->
   <input
     v-model="email"
     :aria-invalid="!isValidEmail"
     aria-describedby="email-error"
   />
   <span v-if="!isValidEmail" id="email-error" role="alert">
-    Invalid email format
+    Định dạng email không hợp lệ
   </span>
 </template>
 ```
@@ -107,51 +106,51 @@ ARIA (Accessible Rich Internet Applications) giúp screen readers hiểu web app
 
 ```vue
 <template>
-  <!-- aria-live: Announce dynamic content changes -->
+  <!-- aria-live: Thông báo thay đổi nội dung động -->
   <div aria-live="polite" aria-atomic="true">
     {{ statusMessage }}
   </div>
 
-  <!-- polite: Wait for user to finish -->
-  <!-- assertive: Interrupt immediately -->
+  <!-- polite: Đợi user xong việc hiện tại -->
+  <!-- assertive: Ngắt ngay lập tức -->
   <div aria-live="assertive" role="alert">
     {{ errorMessage }}
   </div>
 
-  <!-- aria-atomic: Read entire content vs only changes -->
-  <div aria-live="polite" aria-atomic="false">Items: {{ itemCount }}</div>
+  <!-- aria-atomic: Đọc toàn bộ nội dung vs chỉ phần thay đổi -->
+  <div aria-live="polite" aria-atomic="false">Số items: {{ itemCount }}</div>
 </template>
 ```
 
 ---
 
-### 6.2. Keyboard Navigation
+## 2. Điều hướng bằng bàn phím
 
 **Câu trả lời chuẩn Senior:**
 
-#### **Focusable Elements**
+#### **Các Elements có thể Focus**
 
 ```vue
 <template>
   <!-- Native focusable: button, a, input, select, textarea -->
   <button>Click me</button>
 
-  <!-- Make div focusable -->
+  <!-- Làm div có thể focus -->
   <div tabindex="0" role="button" @keypress.enter="handleClick">
     Custom button
   </div>
 
-  <!-- tabindex values:
-       0: Natural tab order
-       -1: Programmatically focusable, not in tab order
-       1+: Custom tab order (avoid, breaks natural flow) -->
+  <!-- Giá trị tabindex:
+       0: Thứ tự tab tự nhiên
+       -1: Có thể focus bằng JS, không trong tab order
+       1+: Thứ tự tab tùy chỉnh (tránh dùng, phá vỡ flow tự nhiên) -->
 
-  <!-- Skip in tab order -->
-  <div tabindex="-1">Not tabbable but focusable via JS</div>
+  <!-- Bỏ qua trong tab order -->
+  <div tabindex="-1">Không tabbable nhưng có thể focus qua JS</div>
 </template>
 ```
 
-#### **Keyboard Event Handling**
+#### **Xử lý Keyboard Events**
 
 ```vue
 <template>
@@ -162,13 +161,13 @@ ARIA (Accessible Rich Internet Applications) giúp screen readers hiểu web app
     @keydown.enter="handleAction"
     @keydown.space.prevent="handleAction"
   >
-    Activate
+    Kích hoạt
   </div>
 
-  <!-- Escape to close -->
-  <div v-if="isOpen" role="dialog" @keydown.esc="close">Modal content</div>
+  <!-- Escape để đóng -->
+  <div v-if="isOpen" role="dialog" @keydown.esc="close">Nội dung modal</div>
 
-  <!-- Arrow key navigation -->
+  <!-- Điều hướng bằng phím mũi tên -->
   <ul
     role="listbox"
     @keydown.up.prevent="selectPrevious"
@@ -201,7 +200,7 @@ const selectNext = () => {
 </script>
 ```
 
-#### **Focus Management**
+#### **Quản lý Focus**
 
 ```vue
 <script setup>
@@ -211,7 +210,7 @@ const dialogRef = ref(null);
 const previousFocus = ref(null);
 
 const openDialog = () => {
-  // Save current focus
+  // Lưu focus hiện tại
   previousFocus.value = document.activeElement;
 
   isOpen.value = true;
@@ -225,11 +224,11 @@ const openDialog = () => {
 const closeDialog = () => {
   isOpen.value = false;
 
-  // Restore focus
+  // Khôi phục focus
   previousFocus.value?.focus();
 };
 
-// Trap focus inside dialog
+// Trap focus bên trong dialog
 const trapFocus = (e) => {
   if (!dialogRef.value) return;
 
@@ -259,49 +258,49 @@ const trapFocus = (e) => {
     @keydown.tab="trapFocus"
     @keydown.esc="closeDialog"
   >
-    <!-- Dialog content -->
+    <!-- Nội dung Dialog -->
   </div>
 </template>
 ```
 
 ---
 
-### 6.3. Semantic HTML
+## 3. HTML Ngữ nghĩa
 
 **Câu trả lời chuẩn Senior:**
 
 ```vue
 <template>
-  <!-- ❌ BAD: Div soup -->
+  <!-- ❌ TỆ: Div soup -->
   <div class="header">
     <div class="nav">
-      <div class="nav-item">Home</div>
+      <div class="nav-item">Trang chủ</div>
     </div>
   </div>
   <div class="content">
     <div class="article">
-      <div class="title">Article Title</div>
+      <div class="title">Tiêu đề Bài viết</div>
     </div>
   </div>
 
-  <!-- ✅ GOOD: Semantic HTML -->
+  <!-- ✅ TỐT: HTML Ngữ nghĩa -->
   <header>
     <nav>
-      <a href="/">Home</a>
+      <a href="/">Trang chủ</a>
     </nav>
   </header>
 
   <main>
     <article>
-      <h1>Article Title</h1>
+      <h1>Tiêu đề Bài viết</h1>
       <section>
-        <h2>Section Heading</h2>
-        <p>Content</p>
+        <h2>Tiêu đề Phần</h2>
+        <p>Nội dung</p>
       </section>
     </article>
 
     <aside>
-      <h2>Related</h2>
+      <h2>Liên quan</h2>
     </aside>
   </main>
 
@@ -311,64 +310,64 @@ const trapFocus = (e) => {
 </template>
 ```
 
-#### **Heading Hierarchy**
+#### **Thứ bậc Heading**
 
 ```vue
 <template>
-  <!-- ✅ GOOD: Proper hierarchy -->
-  <h1>Page Title</h1>
-  <h2>Section</h2>
-  <h3>Subsection</h3>
-  <h2>Another Section</h2>
+  <!-- ✅ TỐT: Thứ bậc đúng -->
+  <h1>Tiêu đề Trang</h1>
+  <h2>Phần</h2>
+  <h3>Phần phụ</h3>
+  <h2>Phần khác</h2>
 
-  <!-- ❌ BAD: Skipping levels -->
-  <h1>Title</h1>
-  <h4>Subsection</h4>
-  <!-- Skipped h2, h3 -->
+  <!-- ❌ TỆ: Bỏ qua levels -->
+  <h1>Tiêu đề</h1>
+  <h4>Phần phụ</h4>
+  <!-- Bỏ qua h2, h3 -->
 
-  <!-- ❌ BAD: Using headings for styling -->
-  <h3 class="small-text">This should be paragraph</h3>
+  <!-- ❌ TỆ: Dùng headings cho styling -->
+  <h3 class="small-text">Đây nên là paragraph</h3>
 
-  <!-- ✅ GOOD: Use CSS for styling -->
-  <h2 class="text-sm">Proper heading, styled small</h2>
+  <!-- ✅ TỐT: Dùng CSS cho styling -->
+  <h2 class="text-sm">Heading đúng, style nhỏ</h2>
 </template>
 ```
 
 ---
 
-### 6.4. WCAG Guidelines
+## 4. Hướng dẫn WCAG
 
 **Câu trả lời chuẩn Senior:**
 
 WCAG (Web Content Accessibility Guidelines) có 3 levels: A, AA (target), AAA.
 
-#### **Color Contrast**
+#### **Độ tương phản Màu sắc**
 
 ```
-Minimum contrast ratios (WCAG AA):
-- Normal text: 4.5:1
-- Large text (18pt+): 3:1
+Tỷ lệ tương phản tối thiểu (WCAG AA):
+- Text thường: 4.5:1
+- Text lớn (18pt+): 3:1
 - UI components: 3:1
 ```
 
 ```vue
 <template>
-  <!-- ❌ BAD: Low contrast -->
-  <div style="color: #999; background: #fff;">Hard to read (2.8:1)</div>
+  <!-- ❌ TỆ: Độ tương phản thấp -->
+  <div style="color: #999; background: #fff;">Khó đọc (2.8:1)</div>
 
-  <!-- ✅ GOOD: Sufficient contrast -->
-  <div style="color: #333; background: #fff;">Easy to read (12.6:1)</div>
+  <!-- ✅ TỐT: Độ tương phản đủ -->
+  <div style="color: #333; background: #fff;">Dễ đọc (12.6:1)</div>
 
-  <!-- Use tools: Chrome DevTools, WebAIM Contrast Checker -->
+  <!-- Dùng tools: Chrome DevTools, WebAIM Contrast Checker -->
 </template>
 ```
 
-#### **Form Accessibility**
+#### **Accessibility trong Forms**
 
 ```vue
 <template>
   <form @submit.prevent="handleSubmit">
-    <!-- ✅ Associate labels with inputs -->
+    <!-- ✅ Liên kết labels với inputs -->
     <label for="email">Email:</label>
     <input
       id="email"
@@ -378,63 +377,65 @@ Minimum contrast ratios (WCAG AA):
       aria-describedby="email-hint"
       :aria-invalid="emailError ? 'true' : 'false'"
     />
-    <span id="email-hint" class="hint">We'll never share your email</span>
+    <span id="email-hint" class="hint"
+      >Chúng tôi sẽ không chia sẻ email của bạn</span
+    >
     <span v-if="emailError" role="alert" class="error">
       {{ emailError }}
     </span>
 
-    <!-- ✅ Fieldset for related inputs -->
+    <!-- ✅ Fieldset cho các inputs liên quan -->
     <fieldset>
-      <legend>Contact Preference</legend>
+      <legend>Cách liên hệ ưa thích</legend>
       <label>
         <input type="radio" name="contact" value="email" />
         Email
       </label>
       <label>
         <input type="radio" name="contact" value="phone" />
-        Phone
+        Điện thoại
       </label>
     </fieldset>
 
-    <!-- ✅ Required indication -->
+    <!-- ✅ Đánh dấu required -->
     <label for="name">
-      Name <abbr title="required" aria-label="required">*</abbr>
+      Tên <abbr title="bắt buộc" aria-label="bắt buộc">*</abbr>
     </label>
     <input id="name" required aria-required="true" />
 
-    <button type="submit">Submit</button>
+    <button type="submit">Gửi</button>
   </form>
 </template>
 ```
 
-#### **Image Accessibility**
+#### **Accessibility cho Hình ảnh**
 
 ```vue
 <template>
-  <!-- ✅ Descriptive alt text -->
-  <img src="chart.png" alt="Sales chart showing 20% increase in Q4 2024" />
+  <!-- ✅ Alt text mô tả -->
+  <img src="chart.png" alt="Biểu đồ doanh số tăng 20% trong Q4 2024" />
 
-  <!-- ✅ Decorative images -->
+  <!-- ✅ Hình ảnh trang trí -->
   <img src="decoration.png" alt="" role="presentation" />
 
-  <!-- ✅ Complex images -->
+  <!-- ✅ Hình ảnh phức tạp -->
   <img
     src="complex-diagram.png"
-    alt="System architecture"
+    alt="Kiến trúc hệ thống"
     aria-describedby="diagram-desc"
   />
   <div id="diagram-desc">
-    <p>Detailed description of the system architecture showing...</p>
+    <p>Mô tả chi tiết kiến trúc hệ thống...</p>
   </div>
 
-  <!-- ✅ Icon with text -->
+  <!-- ✅ Icon với text -->
   <button>
     <svg aria-hidden="true"><!-- Icon --></svg>
-    <span>Delete</span>
+    <span>Xóa</span>
   </button>
 
-  <!-- ✅ Icon only button -->
-  <button aria-label="Delete item">
+  <!-- ✅ Button chỉ có icon -->
+  <button aria-label="Xóa item">
     <svg aria-hidden="true"><!-- Trash icon --></svg>
   </button>
 </template>
@@ -442,7 +443,4 @@ Minimum contrast ratios (WCAG AA):
 
 ---
 
-
----
-
-[← Back to Overview](../README.md)
+[← Quay lại Tổng quan](../README.md)

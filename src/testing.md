@@ -1,25 +1,24 @@
 # Testing
 
-Comprehensive testing strategies cho Vue applications.
+Chiến lược testing toàn diện cho Vue applications.
 
 ---
 
-## Table of Contents
+## Mục Lục
 
-1. [Unit Testing with Vitest](#1-unit-testing-with-vitest)
-2. [Component Testing with Vue Test Utils](#2-component-testing-with-vue-test-utils)
-3. [E2E Testing with Playwright](#3-e2e-testing-with-playwright)
+1. [Unit Testing với Vitest](#1-unit-testing-với-vitest)
+2. [Component Testing với Vue Test Utils](#2-component-testing-với-vue-test-utils)
+3. [E2E Testing với Playwright](#3-e2e-testing-với-playwright)
 4. [Test Coverage](#4-test-coverage)
-5. [TDD/BDD Approach](#5-tddbdd-approach)
+5. [Phương pháp TDD/BDD](#5-phương-pháp-tddbdd)
 
 ---
-## 4. Testing
 
-### 4.1. Unit Testing with Vitest
+## 1. Unit Testing với Vitest
 
 **Câu trả lời chuẩn Senior:**
 
-#### **Setup Vitest**
+#### **Cài đặt Vitest**
 
 ```bash
 npm install -D vitest @vitejs/plugin-vue jsdom
@@ -39,7 +38,7 @@ export default defineConfig({
 });
 ```
 
-#### **Basic Test Structure**
+#### **Cấu trúc Test Cơ bản**
 
 ```ts
 // utils.test.ts
@@ -145,11 +144,11 @@ describe("Async tests", () => {
 
 ---
 
-### 4.2. Component Testing with Vue Test Utils
+## 2. Component Testing với Vue Test Utils
 
 **Câu trả lời chuẩn Senior:**
 
-#### **Setup**
+#### **Cài đặt**
 
 ```bash
 npm install -D @vue/test-utils
@@ -164,11 +163,11 @@ import MyComponent from "./MyComponent.vue";
 // mount: renders child components
 const wrapper = mount(MyComponent);
 
-// shallowMount: stubs child components (faster, more isolated)
+// shallowMount: stubs child components (nhanh hơn, isolated hơn)
 const wrapper = shallowMount(MyComponent);
 ```
 
-#### **Basic Component Test**
+#### **Test Component Cơ bản**
 
 ```vue
 <!-- Counter.vue -->
@@ -260,7 +259,7 @@ vi.mock("@/composables/useAuth", () => ({
 }));
 ```
 
-#### **Testing with Pinia**
+#### **Testing với Pinia**
 
 ```ts
 import { setActivePinia, createPinia } from "pinia";
@@ -285,17 +284,17 @@ describe("Component with Pinia", () => {
 
 ---
 
-### 4.3. E2E Testing with Playwright
+## 3. E2E Testing với Playwright
 
 **Câu trả lời chuẩn Senior:**
 
-#### **Setup**
+#### **Cài đặt**
 
 ```bash
 npm init playwright@latest
 ```
 
-#### **Basic Test**
+#### **Test Cơ bản**
 
 ```ts
 // tests/example.spec.ts
@@ -403,18 +402,18 @@ test("mock API response", async ({ page }) => {
 
 ---
 
-### 4.4. Test Coverage
+## 4. Test Coverage
 
 **Câu trả lời chuẩn Senior:**
 
-#### **Enable Coverage**
+#### **Bật Coverage**
 
 ```ts
 // vite.config.ts
 export default defineConfig({
   test: {
     coverage: {
-      provider: "v8", // or 'istanbul'
+      provider: "v8", // hoặc 'istanbul'
       reporter: ["text", "json", "html"],
       exclude: ["node_modules/", "tests/"],
     },
@@ -423,20 +422,20 @@ export default defineConfig({
 ```
 
 ```bash
-# Run tests with coverage
+# Chạy tests với coverage
 npm run test -- --coverage
 ```
 
-#### **Coverage Metrics**
+#### **Các Chỉ số Coverage**
 
 ```
-- **Statements**: % of code statements executed
-- **Branches**: % of if/else branches executed
-- **Functions**: % of functions called
-- **Lines**: % of lines executed
+- **Statements**: % các câu lệnh được thực thi
+- **Branches**: % các nhánh if/else được thực thi
+- **Functions**: % các functions được gọi
+- **Lines**: % các dòng code được thực thi
 ```
 
-#### **Coverage Thresholds**
+#### **Thiết lập Ngưỡng Coverage**
 
 ```ts
 export default defineConfig({
@@ -453,24 +452,24 @@ export default defineConfig({
 
 ---
 
-### 4.5. TDD/BDD Approach
+## 5. Phương pháp TDD/BDD
 
 **TDD (Test-Driven Development):**
 
-1. Write failing test
-2. Write minimal code to pass test
+1. Viết test trước (fail)
+2. Viết code tối thiểu để pass test
 3. Refactor
-4. Repeat
+4. Lặp lại
 
 ```ts
-// 1. Write test first (fails)
+// 1. Viết test trước (fails)
 it("should calculate total price", () => {
   const cart = new Cart();
   cart.addItem({ price: 10, quantity: 2 });
   expect(cart.getTotal()).toBe(20);
 });
 
-// 2. Implement minimum code
+// 2. Implement code tối thiểu
 class Cart {
   items = [];
   addItem(item) {
@@ -484,7 +483,7 @@ class Cart {
   }
 }
 
-// 3. Test passes, refactor if needed
+// 3. Test passes, refactor nếu cần
 ```
 
 **BDD (Behavior-Driven Development):**
@@ -508,7 +507,4 @@ describe("Shopping Cart", () => {
 
 ---
 
-
----
-
-[← Back to Overview](../README.md)
+[← Quay lại Tổng quan](../README.md)
