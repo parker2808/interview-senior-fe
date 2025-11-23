@@ -6,257 +6,180 @@ Tài liệu tổng hợp kiến thức chuẩn **Senior Frontend Developer**, t�
 
 ## 📚 Cấu Trúc Tài Liệu
 
-Tài liệu được tổ chức thành các modules độc lập để dễ điều hướng và học tập:
+Tài liệu được tổ chức thành 5 nhóm chính với 19 chủ đề, từ cơ bản đến nâng cao:
 
-### 🔷 Công Nghệ Frontend Cốt Lõi
+### I. Core Web Technologies
 
-#### 1. [JavaScript](./src/javascript.md)
+1. **[JavaScript](./src/javascript.md)**
 
-- High-order Array Functions
-- Promise vs Async/Await
-- Event Loop, Microtask, Macrotask
-- **Advanced**: Closure & Scope, Prototypes, `this` keyword, ES6+, Memory Management, Hoisting
+   1.1. [Core Concepts](./src/javascript.md#11-core-concepts): [High-order Array Functions](./src/javascript.md#111-high-order-array-functions), [Promise/Async-Await](./src/javascript.md#112-promise-vs-asyncawait), [Event Loop](./src/javascript.md#113-event-loop-microtask-macrotask)
 
-#### 2. [TypeScript](./src/typescript.md)
+   1.2. [Advanced](./src/javascript.md#12-advanced-concepts): [Closure & Scope](./src/javascript.md#121-closure--scope), [Prototypes](./src/javascript.md#122-prototypes--inheritance), [`this`](./src/javascript.md#123-this-keyword), [ES6+](./src/javascript.md#124-es6-modern-features), [Memory Management](./src/javascript.md#125-memory-management--garbage-collection), [Hoisting](./src/javascript.md#126-hoisting--temporal-dead-zone)
 
-- Interface vs Type, Generics, Type Narrowing
-- **Advanced**: Utility Types, Type Guards, Mapped Types, Conditional Types, Template Literal Types
+2. **[TypeScript](./src/typescript.md)**
 
-#### 3. [Vue 3](./src/vue3.md)
+   2.1. [Core Concepts](./src/typescript.md#21-core-concepts): [Interface vs Type](./src/typescript.md#211-interface-vs-type), [Generics](./src/typescript.md#212-generics), [Type Narrowing](./src/typescript.md#213-type-narrowing)
 
-- Virtual DOM, Composition API, Reactivity, Lifecycle
-- Props, Computed, Watch, nextTick
-- **Advanced**: Teleport, Suspense, Custom Directives, Plugins, Render Functions, Provide/Inject
+   2.2. [Advanced Types](./src/typescript.md#22-advanced-types): [Utility Types](./src/typescript.md#221-utility-types), [Type Guards](./src/typescript.md#222-type-guards--predicates), [Mapped Types](./src/typescript.md#223-mapped-types), [Conditional Types](./src/typescript.md#224-conditional-types), [Template Literals](./src/typescript.md#225-template-literal-types)
 
-#### 4. [State Management](./src/state-management.md)
+3. **[CSS Layout](./src/css-layout.md)**
 
-- Vuex vs Pinia
-- State Flow, commit vs dispatch
-- Global vs Local State
+   3.1. [Flexbox](./src/css-layout.md#31-flexbox) vs [CSS Grid](./src/css-layout.md#32-css-grid)
 
-#### 5. [Nuxt.js](./src/nuxt.md)
+   3.2. [Responsive Design Strategy](./src/css-layout.md#34-responsive-design-strategy)
 
-- Nuxt vs Vue
-- CSR vs SSR vs SSG vs SPA
-- File-based routing, Server engine
+4. **[Browser & Web APIs](./src/web-apis.md)**
+
+   4.1. [IndexedDB](./src/web-apis.md#41-indexeddb), [Web Workers](./src/web-apis.md#42-web-workers), [Service Workers](./src/web-apis.md#43-service-workers--pwa)
+
+   4.2. [Intersection Observer](./src/web-apis.md#44-intersection-observer), [Modern APIs](./src/web-apis.md#45-các-api-hiện-đại-khác)
 
 ---
 
-### 🎨 Styling & Layout
+### II. Vue Ecosystem
 
-#### 6. [CSS Layout](./src/css-layout.md)
+5. **[Vue 3](./src/vue3.md)**
 
-- Flexbox vs CSS Grid
-- Chiến lược Responsive Design
-- Kỹ thuật CSS hiện đại
+   5.1. [Core Concepts](./src/vue3.md#51-core-concepts): [Virtual DOM](./src/vue3.md#511-virtual-dom), [Composition API](./src/vue3.md#512-options-api-vs-composition-api), [Reactivity](./src/vue3.md#5110-reactivity-setup-computed-watch), [Lifecycle](./src/vue3.md#5111-lifecycle-vue-2-vs-vue-3), [Props](./src/vue3.md#515-props-truyền-dữ-liệu-từ-parent--child), [Computed](./src/vue3.md#516-computed-vs-method), [Watch](./src/vue3.md#517-computed-vs-watch)
 
----
+   5.2. [Advanced Features](./src/vue3.md#52-advanced-features): [Teleport](./src/vue3.md#521-teleport), [Suspense](./src/vue3.md#522-suspense), [Custom Directives](./src/vue3.md#523-custom-directives), [Plugins](./src/vue3.md#524-plugins), [Render Functions](./src/vue3.md#525-render-functions--jsx), [Provide/Inject](./src/vue3.md#526-provide--inject)
 
-### 🔧 Công Cụ Phát Triển & Hạ Tầng
+6. **[Nuxt.js](./src/nuxt.md)**
 
-#### 7. [Build Tools](./src/build-tools.md)
+   6.1. [Nuxt vs Vue](./src/nuxt.md#62-nuxt-vs-vue)
 
-- Vite vs Webpack
-- Tối ưu hóa Build
+   6.2. [CSR vs SSR vs SSG vs SPA](./src/nuxt.md#63-csr-vs-ssr-vs-ssg-vs-spa)
 
-#### 8. [Networking](./src/networking.md)
+7. **[State Management](./src/state-management.md)**
 
-- REST vs WebSocket
-- Các mẫu giao tiếp API
+   7.1. [Vuex vs Pinia](./src/state-management.md#71-vuex-vs-pinia)
 
-#### 9. [DevOps](./src/devops.md)
+   7.2. [State Flow](./src/state-management.md#72-state-flow), [commit vs dispatch](./src/state-management.md#74-vuex-commit-vs-dispatch)
 
-- Quy trình GitOps
-- ArgoCD pipeline
-- Thực hành CI/CD
+   7.3. [Global vs Local State](./src/state-management.md#73-when-to-use-global-vs-local-state)
 
 ---
 
-### ⚡ Performance & Chất Lượng
+### III. Development Practices
 
-#### 10. [Tối ưu Performance](./src/performance.md)
+8. **[Testing](./src/testing.md)** ⭐
 
-- Chiến lược Storage
-- Checklist Code Review
-- Case Studies về Performance
-- **Nâng cao**: Code Splitting, Tree Shaking, Debounce/Throttle, Tối ưu Hình/Font
+   8.1. [Unit Testing (Vitest)](./src/testing.md#81-unit-testing-với-vitest)
 
----
+   8.2. [Component Testing (Vue Test Utils)](./src/testing.md#82-component-testing-với-vue-test-utils)
 
-### 🛡️ Kỹ Năng Production
+   8.3. [E2E Testing (Playwright)](./src/testing.md#83-e2e-testing-với-playwright)
 
-#### 11. [Testing](./src/testing.md) ⭐
+   8.4. [Test Coverage](./src/testing.md#84-test-coverage), [TDD/BDD](./src/testing.md#85-phương-pháp-tddbdd)
 
-- Unit Testing (Vitest)
-- Component Testing (Vue Test Utils)
-- E2E Testing (Playwright)
-- Test Coverage, TDD/BDD
+9. **[Performance & Optimization](./src/performance.md)** ⚡
 
-#### 12. [Security](./src/security.md) 🔒
+   9.1. [Core Performance](./src/performance.md#91-core-performance): [Storage](./src/performance.md#911-storage-localstorage-vs-sessionstorage-vs-cookie), [Optimization](./src/performance.md#912-performance-optimization), [Code Review](./src/performance.md#913-code-review-checklist)
 
-- Phòng chống XSS
-- Bảo vệ CSRF
-- Best Practices Authentication
-- Validation Input, HTTPS & CORS
+   9.2. [Advanced](./src/performance.md#92-advanced-optimization): [Code Splitting](./src/performance.md#921-code-splitting-strategies), [Tree Shaking](./src/performance.md#922-tree-shaking), [Debounce/Throttle](./src/performance.md#923-debounce-vs-throttle), [Image/Font](./src/performance.md#924-image--font-optimization)
 
-#### 13. [Accessibility (A11y)](./src/accessibility.md) ♿
+10. **[Security](./src/security.md)** 🔒
 
-- Thuộc tính ARIA
-- Điều hướng Bàn phím
-- Hướng dẫn WCAG
-- HTML Ngữ nghĩa
+    10.1. [Phòng chống XSS](./src/security.md#101-phòng-chống-xss)
 
-#### 14. [Monitoring & Xử lý Lỗi](./src/monitoring.md) 📊
+    10.2. [Bảo vệ CSRF](./src/security.md#102-bảo-vệ-csrf)
 
-- Theo dõi Lỗi (Sentry)
-- Error Boundaries
-- Monitoring Performance
-- Core Web Vitals, Logging
+    10.3. [Authentication Best Practices](./src/security.md#103-best-practices-về-authentication)
+
+    10.4. [Validation Input](./src/security.md#104-validation-và-sanitization-input), [HTTPS & CORS](./src/security.md#105-https--cors)
+
+11. **[Accessibility (A11y)](./src/accessibility.md)** ♿
+
+    11.1. [Thuộc tính ARIA](./src/accessibility.md#111-thuộc-tính-aria)
+
+    11.2. [Điều hướng Bàn phím](./src/accessibility.md#112-điều-hướng-bằng-bàn-phím)
+
+    11.3. [HTML Ngữ nghĩa](./src/accessibility.md#113-html-ngữ-nghĩa)
+
+    11.4. [Hướng dẫn WCAG](./src/accessibility.md#114-hướng-dẫn-wcag)
 
 ---
 
-### 🌐 Công Nghệ Web Nâng Cao
+### IV. Infrastructure & Tools
 
-#### 15. [Browser & Web APIs](./src/web-apis.md)
+12. **[Build Tools](./src/build-tools.md)**
 
-- IndexedDB
-- Web Workers, Service Workers
-- PWA
-- Intersection Observer, APIs hiện đại
+    12.1. [Vite vs Webpack](./src/build-tools.md#121-vite-vs-webpack)
 
----
+13. **[Networking](./src/networking.md)**
 
-### 🏗️ Kiến Trúc & Thiết Kế
+    13.1. [REST vs WebSocket](./src/networking.md#131-websocket-vs-rest)
 
-#### 16. [Architecture & Design Patterns](./src/architecture.md)
+14. **[DevOps](./src/devops.md)**
 
-- Các mẫu Component
-- Design Patterns (Factory, Observer, Singleton, Strategy)
-- Nguyên tắc SOLID
-- Module Federation & Micro-frontends
-
-#### 17. [System Design](./src/system-design.md)
-
-- Quyết định Kiến trúc Frontend
-- Chiến lược Caching
-- Thiết kế Component Library
+    14.1. [GitOps & ArgoCD Pipeline](./src/devops.md#141-gitops--argocd-pipeline)
 
 ---
 
-### 👥 Leadership & Kỹ Năng Nhóm
+### V. Professional Skills
 
-#### 18. [Leadership & Soft Skills](./src/leadership.md)
+15. **[Architecture & Design Patterns](./src/architecture.md)** 🏗️
 
-- Mentorship Kỹ thuật
-- Ghi chép Quyết định Kiến trúc (ADR)
-- Ước lượng Độ phức tạp
-- Giải quyết Xung đột
+    15.1. [Các mẫu Component](./src/architecture.md#151-các-mẫu-component)
 
----
+    15.2. [Design Patterns](./src/architecture.md#152-các-mẫu-thiết-kế)
 
-### 💼 Thực Hành Phỏng Vấn
+    15.3. [Nguyên tắc SOLID](./src/architecture.md#153-nguyên-tắc-solid-trong-frontend)
 
-#### 19. [Câu Hỏi Phỏng Vấn Thực Tế](./src/practical-questions.md)
+    15.4. [Module Federation & Micro-frontends](./src/architecture.md#154-module-federation--micro-frontends)
 
-- Xử lý 401 Error & Authentication
-- Quy trình Quản lý Dự án
-- Bug vs Yêu cầu Tính năng
-- Quy trình Git, Giải quyết Xung đột, Gộp Commits
+16. **[System Design](./src/system-design.md)**
 
----
+    16.1. [Quyết định Kiến trúc Frontend](./src/system-design.md#161-quyết-định-kiến-trúc-frontend)
 
-## 🎯 Cách Sử Dụng Tài Liệu
+    16.2. [Chiến lược Caching](./src/system-design.md#162-chiến-lược-caching)
 
-### Chuẩn Bị Phỏng Vấn:
+    16.3. [Thiết kế Component Library](./src/system-design.md#163-thiết-kế-component-library)
 
-1. **Review Nhanh**: Bắt đầu với các topics cốt lõi (JavaScript, TypeScript, Vue 3)
-2. **Đi Sâu**: Chuyển sang các topics nâng cao dựa trên yêu cầu công việc
-3. **Thực Hành**: Làm qua các câu hỏi và tình huống thực tế
-4. **Mock Interview**: Dùng làm tài liệu tham khảo Q&A trong lúc practice
+17. **[Leadership & Soft Skills](./src/leadership.md)** 👥
 
-### Lộ Trình Học Theo Cấp Độ:
+    17.1. [Mentorship Kỹ thuật](./src/leadership.md#171-mentorship-kỹ-thuật)
 
-**Junior → Mid Level:**
+    17.2. [Ghi chép Quyết định Kiến trúc (ADR)](./src/leadership.md#172-ghi-chép-quyết-định-kiến-trúc-adr)
 
-- Tập trung: JavaScript, TypeScript cơ bản, Vue 3 core, CSS Layout
-- Thực hành: Câu hỏi Thực tế
+    17.3. [Ước lượng Độ phức tạp](./src/leadership.md#173-ước-lượng-độ-phức-tạp)
 
-**Mid → Senior Level:**
+    17.4. [Giải quyết Xung đột](./src/leadership.md#174-giải-quyết-xung-đột)
 
-- Tập trung: Advanced JS/TS, Vue 3 Advanced, Testing, Performance
-- Học: Architecture, System Design, Leadership
+18. **[Practical Interview Questions](./src/practical-questions.md)** 💼
 
-**Senior → Lead:**
+    18.1. [Xử lý 401 Error & Authentication](./src/practical-questions.md#181-xử-lý-401-error--redirect-to-login)
 
-- Thành thạo: Tất cả topics với trọng tâm Architecture, System Design, Leadership
-- Chuẩn bị: Case studies thực tế và ra quyết định kỹ thuật
+    18.2. [Quy trình Quản lý Dự án](./src/practical-questions.md#182-công-cụ-quản-lý-dự-án--quy-trình)
+
+    18.3. [Đánh giá Issue: Bug vs Feature](./src/practical-questions.md#183-đánh-giá-issue-bug-hay-yêu-cầu-tính-năng)
+
+    18.4. [Quy trình Git](./src/practical-questions.md#184-quy-trình-git)
+
+    18.5. [Giải quyết Xung đột Git](./src/practical-questions.md#185-giải-quyết-xung-đột-git)
+
+    18.6. [Gộp Commits](./src/practical-questions.md#186-gộp-commits)
+
+19. **[Monitoring & Error Handling](./src/monitoring.md)** 📊
+
+    19.1. [Theo dõi Lỗi (Sentry)](./src/monitoring.md#191-theo-dõi-lỗi-với-sentry)
+
+    19.2. [Error Boundaries](./src/monitoring.md#192-error-boundaries-trong-vue)
+
+    19.3. [Performance Monitoring](./src/monitoring.md#193-theo-dõi-performance)
+
+    19.4. [Chiến lược Logging](./src/monitoring.md#194-chiến-lược-logging)
 
 ---
 
 ## 📊 Thống Kê Coverage
 
-- **Tổng số Topics**: 19 lĩnh vực chính
+- **Nhóm Chính**: 5 nhóm (Core Web, Vue Ecosystem, Dev Practices, Infrastructure, Professional Skills)
+- **Tổng số Topics**: 19 chủ đề chính
 - **Tổng số Sections**: 100+ chủ đề con
 - **Code Examples**: 200+ ví dụ thực tế
 - **Bảng So sánh**: 20+ ma trận ra quyết định
 - **Cấp độ**: Senior Frontend Developer
-
----
-
-## 💡 Tips Phỏng Vấn
-
-### Trong Phỏng Vấn Kỹ Thuật:
-
-✅ **Giải thích WHY trước HOW**
-
-- Không chỉ nói bạn sẽ làm gì – giải thích lý do tại sao
-- Thảo luận về trade-offs của các cách tiếp cận khác nhau
-- Thể hiện nhận thức về các edge cases
-
-✅ **Dùng Kinh Nghiệm Thực Tế**
-
-- Chia sẻ các dự án thực tế bạn đã làm
-- Giải thích các thách thức đã gặp và cách giải quyết
-- Nhắc đến việc cộng tác nhóm và quá trình ra quyết định
-
-✅ **Suy Nghĩ Thành Tiếng**
-
-- Nói ra quá trình suy nghĩ của bạn
-- Hỏi các câu hỏi làm rõ
-- Không sao khi nói "Tôi không biết, nhưng đây là cách tôi sẽ tìm hiểu"
-
-✅ **Thể Hiện Tư Duy Cấp Senior**
-
-- Cân nhắc: Performance, Scalability, Maintainability
-- Nghĩ về: Tác động đến team, Documentation, Testing
-- Thảo luận: Quyết định kiến trúc, Tác động dài hạn
-
-### Các Dạng Phỏng Vấn Thường Gặp:
-
-**1. Technical Deep Dive (45-60 phút)**
-
-- Các khái niệm cốt lõi (JS, TS, Vue)
-- Cách tiếp cận giải quyết vấn đề
-- Quyết định kiến trúc
-
-**2. System Design (45-60 phút)**
-
-- Thiết kế một component library
-- Thiết kế SPA quy mô lớn
-- Chiến lược caching cho dashboard
-
-**3. Coding Challenge (60-90 phút)**
-
-- Xây dựng tính năng với Vue 3
-- Implement component phức tạp
-- Fix bugs trong code có sẵn
-
-**4. Behavioral & Leadership (30-45 phút)**
-
-- Kinh nghiệm quá khứ
-- Giải quyết xung đột
-- Ví dụ về mentorship
-- Ra quyết định kỹ thuật
 
 ---
 
@@ -289,94 +212,6 @@ Tài liệu được tổ chức thành các modules độc lập để dễ đi
 
 ---
 
-## 📝 Document Format
-
-Mỗi document được format theo chuẩn:
-
-- **Câu hỏi phỏng vấn thực tế**: Các câu hỏi thường gặp
-- **Câu trả lời chuẩn Senior**: Detailed, comprehensive answers
-- **Code Examples**: Real-world, production-ready examples
-- **Best Practices**: Dos and Don'ts
-- **Comparison Tables**: Quick reference for decision-making
-- **Use Cases**: When to use what
-
----
-
-## 🎓 Học Tập Liên Tục
-
-**Cập Nhật Kiến Thức:**
-
-- Theo dõi [Vue.js News](https://news.vuejs.org/)
-- Đọc [Vue 3 RFCs](https://github.com/vuejs/rfcs)
-- Xem [Vue Mastery](https://www.vuemastery.com/)
-- Tham gia [Vue Discord](https://discord.com/invite/vue)
-
-**Thực Hành:**
-
-- Xây dựng side projects với tính năng mới
-- Đóng góp cho open source
-- Viết bài blog kỹ thuật
-- Tham gia code reviews
-
-**Cộng Đồng:**
-
-- Tham dự Vue.js meetups
-- Phát biểu tại conferences
-- Chia sẻ kiến thức với team
-- Mentoring junior developers
-
----
-
-## ⭐ Điểm Khác Biệt Chính cho Vị Trí Senior
-
-### Xuất Sắc về Kỹ Thuật:
-
-- Hiểu sâu về Vue 3 internals
-- TypeScript advanced patterns
-- Chuyên môn tối ưu performance
-- Chịu trách nhiệm về chiến lược testing
-
-### Tư Duy Hệ Thống:
-
-- Quyết định thiết kế kiến trúc
-- Cân nhắc về khả năng mở rộng
-- Tập trung vào tính bảo trì
-- Quản lý technical debt
-
-### Leadership:
-
-- Chất lượng code review
-- Mentoring junior developers
-- Technical documentation
-- Cộng tác cross-team
-
-### Tác Động Kinh Doanh:
-
-- Liên kết quyết định tech với mục tiêu business
-- Ước lượng độ phức tạp chính xác
-- Quản lý rủi ro kỹ thuật
-- Giao tiếp hiệu quả với non-technical stakeholders
-
----
-
-## 📖 Tài Liệu Bổ Sung
-
-### Documentation Chính Thức:
-
-- [Vue 3 Docs](https://vuejs.org/)
-- [Nuxt 3 Docs](https://nuxt.com/)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
-- [Pinia Docs](https://pinia.vuejs.org/)
-
-### Sách Đề Xuất:
-
-- "Vue.js 3 Design Patterns and Best Practices"
-- "TypeScript Quickly"
-- "Refactoring UI"
-- "Web Performance in Action"
-
----
-
 ## 🤝 Contributing
 
 Tài liệu này được xây dựng dựa trên kinh nghiệm thực tế và best practices hiện đại. Nếu bạn muốn đóng góp:
@@ -406,5 +241,5 @@ Nếu tài liệu này hữu ích cho bạn, hãy:
 
 **Chúc bạn thành công trong phỏng vấn Senior Frontend Developer! 🚀**
 
-_Cập nhật lần cuối: Tháng 11/2024_
-_Phiên bản: 2.0 (Đã tái cấu trúc)_
+_Cập nhật lần cuối: Tháng 11/2025_
+_Phiên bản: 3.0 (Cấu trúc mới - 5 nhóm chính, 19 chủ đề)_

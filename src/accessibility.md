@@ -4,16 +4,21 @@ Làm cho ứng dụng web dễ truy cập cho mọi người.
 
 ---
 
-## Mục Lục
+## Table of Contents
 
-1. [Thuộc tính ARIA](#1-thuộc-tính-aria)
-2. [Điều hướng bằng bàn phím](#2-điều-hướng-bằng-bàn-phím)
-3. [HTML Ngữ nghĩa](#3-html-ngữ-nghĩa)
-4. [Hướng dẫn WCAG](#4-hướng-dẫn-wcag)
+1. [Thuộc tính ARIA](#111-thuộc-tính-aria)
+
+2. [Điều hướng bằng bàn phím](#112-điều-hướng-bằng-bàn-phím)
+
+3. [HTML Ngữ nghĩa](#113-html-ngữ-nghĩa)
+
+4. [Hướng dẫn WCAG](#114-hướng-dẫn-wcag)
 
 ---
 
-## 1. Thuộc tính ARIA
+## 11. Accessibility (A11y)
+
+### 11.1. Thuộc tính ARIA
 
 **Câu trả lời chuẩn Senior:**
 
@@ -124,7 +129,7 @@ ARIA (Accessible Rich Internet Applications) giúp screen readers hiểu web app
 
 ---
 
-## 2. Điều hướng bằng bàn phím
+### 11.2. Điều hướng bằng bàn phím
 
 **Câu trả lời chuẩn Senior:**
 
@@ -265,7 +270,7 @@ const trapFocus = (e) => {
 
 ---
 
-## 3. HTML Ngữ nghĩa
+### 11.3. HTML Ngữ nghĩa
 
 **Câu trả lời chuẩn Senior:**
 
@@ -335,7 +340,7 @@ const trapFocus = (e) => {
 
 ---
 
-## 4. Hướng dẫn WCAG
+### 11.4. Hướng dẫn WCAG
 
 **Câu trả lời chuẩn Senior:**
 

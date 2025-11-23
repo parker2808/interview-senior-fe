@@ -6,12 +6,13 @@ Web communication protocols and strategies.
 
 ## Table of Contents
 
-1. [WebSocket vs REST](#1-websocket-vs-rest)
+1. [WebSocket vs REST](#131-websocket-vs-rest)
 
 ---
-## 7. Networking
 
-### 7.1. WebSocket vs REST
+## 13. Networking
+
+### 13.1. WebSocket vs REST
 
 #### **REST API**
 

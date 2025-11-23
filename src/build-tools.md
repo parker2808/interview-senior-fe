@@ -6,12 +6,15 @@ Modern build tools for frontend development.
 
 ## Table of Contents
 
-1. [Vite vs Webpack](#1-vite-vs-webpack)
+1. [Vite vs Webpack](#121-vite-vs-webpack)
 
 ---
-## 8. Build Tools
 
-### 8.1. Vite vs Webpack
+## IV. Infrastructure & Tools
+
+## 12. Build Tools
+
+### 12.1. Vite vs Webpack
 
 #### **1. Kiến trúc hoạt động**
 

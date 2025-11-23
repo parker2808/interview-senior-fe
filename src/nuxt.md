@@ -6,14 +6,17 @@ Nuxt.js framework - Vue meta-framework for SSR, SSG, and more.
 
 ## Table of Contents
 
-1. [What is Nuxt.js?](#1-what-is-nuxtjs)
-2. [Nuxt vs Vue](#2-nuxt-vs-vue)
-3. [CSR vs SSR vs SSG vs SPA](#3-csr-vs-ssr-vs-ssg-vs-spa)
+1. [What is Nuxt.js?](#61-what-is-nuxtjs)
+
+2. [Nuxt vs Vue](#62-nuxt-vs-vue)
+
+3. [CSR vs SSR vs SSG vs SPA](#63-csr-vs-ssr-vs-ssg-vs-spa)
 
 ---
-## 5. Nuxt.js
 
-### 5.1. What is Nuxt.js?
+## 6. Nuxt.js
+
+### 6.1. What is Nuxt.js?
 
 Nuxt.js là **framework xây dựng trên Vue** giúp phát triển **SSR, SSG, CSR, SPA** dễ dàng với cấu trúc chuẩn và hệ sinh thái mạnh.
 
@@ -30,7 +33,7 @@ Nuxt.js là **framework xây dựng trên Vue** giúp phát triển **SSR, SSG, 
 
 ---
 
-### 5.2. Nuxt vs Vue
+### 6.2. Nuxt vs Vue
 
 | Tiêu chí          | Vue                               | Nuxt                                                      |
 | ----------------- | --------------------------------- | --------------------------------------------------------- |
@@ -46,7 +49,7 @@ Nuxt.js là **framework xây dựng trên Vue** giúp phát triển **SSR, SSG, 
 
 ---
 
-### 5.3. CSR vs SSR vs SSG vs SPA
+### 6.3. CSR vs SSR vs SSG vs SPA
 
 #### **1. CSR – Client-Side Rendering**
 

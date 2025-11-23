@@ -6,15 +6,19 @@ Modern CSS layout techniques: Flexbox, Grid, and Responsive Design.
 
 ## Table of Contents
 
-1. [Flexbox](#1-flexbox)
-2. [CSS Grid](#2-css-grid)
-3. [Flexbox vs Grid](#3-flexbox-vs-grid)
-4. [Responsive Design Strategy](#4-responsive-design-strategy)
+1. [Flexbox](#31-flexbox)
+
+2. [CSS Grid](#32-css-grid)
+
+3. [Flexbox vs Grid](#33-when-to-use-flexbox-vs-grid)
+
+4. [Responsive Design Strategy](#34-responsive-design-strategy)
 
 ---
-## 6. CSS Layout
 
-### 6.1. Flexbox
+## 3. CSS Layout
+
+### 3.1. Flexbox
 
 - Thiết kế **1 chiều**: theo **row** hoặc **column**.
 - Tối ưu cho layout tuyến tính: navbar, button group, card list.
@@ -38,7 +42,7 @@ gap: 1rem;
 
 ---
 
-### 6.2. CSS Grid
+### 3.2. CSS Grid
 
 - Thiết kế **2 chiều**: cả **rows + columns**.
 - Dùng cho layout phức tạp: dashboard, gallery, page layout.
@@ -61,7 +65,7 @@ gap: 1rem;
 
 ---
 
-### 6.3. When to Use Flexbox vs Grid?
+### 3.3. When to Use Flexbox vs Grid?
 
 - **Flex**: layout 1 chiều → danh sách, alignment, spacing.
 - **Grid**: layout 2 chiều → bố cục trang, lưới hình ảnh.
@@ -70,7 +74,7 @@ gap: 1rem;
 
 ---
 
-### 6.4. Responsive Design Strategy
+### 3.4. Responsive Design Strategy
 
 #### **Mobile-First Approach**
 

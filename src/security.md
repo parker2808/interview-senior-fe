@@ -4,17 +4,23 @@ Best practices về bảo mật web cho frontend applications.
 
 ---
 
-## Mục Lục
+## Table of Contents
 
-1. [Phòng chống XSS](#1-phòng-chống-xss)
-2. [Bảo vệ CSRF](#2-bảo-vệ-csrf)
-3. [Best Practices về Authentication](#3-best-practices-về-authentication)
-4. [Validation và Sanitization Input](#4-validation-và-sanitization-input)
-5. [HTTPS & CORS](#5-https--cors)
+1. [Phòng chống XSS](#101-phòng-chống-xss)
+
+2. [Bảo vệ CSRF](#102-bảo-vệ-csrf)
+
+3. [Best Practices về Authentication](#103-best-practices-về-authentication)
+
+4. [Validation và Sanitization Input](#104-validation-và-sanitization-input)
+
+5. [HTTPS & CORS](#105-https--cors)
 
 ---
 
-## 1. Phòng chống XSS
+## 10. Security
+
+### 10.1. Phòng chống XSS
 
 **Câu trả lời chuẩn Senior:**
 
@@ -138,7 +144,7 @@ new Function(userInput)(); // Nguy hiểm
 
 ---
 
-## 2. Bảo vệ CSRF
+### 10.2. Bảo vệ CSRF
 
 **Câu trả lời chuẩn Senior:**
 
@@ -203,7 +209,7 @@ res.cookie("sessionId", token, {
 
 ---
 
-## 3. Best Practices về Authentication
+### 10.3. Best Practices về Authentication
 
 **Câu trả lời chuẩn Senior:**
 
@@ -305,7 +311,7 @@ const isValid = await bcrypt.compare(inputPassword, hashedPassword);
 
 ---
 
-## 4. Validation và Sanitization Input
+### 10.4. Validation và Sanitization Input
 
 **Câu trả lời chuẩn Senior:**
 
@@ -367,7 +373,7 @@ const user = await User.findOne({ where: { email } });
 
 ---
 
-## 5. HTTPS & CORS
+### 10.5. HTTPS & CORS
 
 **Câu trả lời chuẩn Senior:**
 

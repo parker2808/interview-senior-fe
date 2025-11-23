@@ -6,12 +6,13 @@ DevOps practices for frontend development.
 
 ## Table of Contents
 
-1. [GitOps + ArgoCD Pipeline](#1-gitops--argocd-pipeline)
+1. [GitOps + ArgoCD Pipeline](#141-gitops--argocd-pipeline)
 
 ---
-## 9. DevOps
 
-### 9.1. GitOps + ArgoCD Pipeline
+## 14. DevOps
+
+### 14.1. GitOps + ArgoCD Pipeline
 
 #### **1. GitOps là gì?**
 

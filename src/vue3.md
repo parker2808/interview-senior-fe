@@ -6,28 +6,48 @@ Kiến thức Vue 3 toàn diện từ cơ bản đến nâng cao cho Senior Fron
 
 ## Table of Contents
 
-### Core Concepts
-1. [Virtual DOM](#1-virtual-dom)
-2. [Options API vs Composition API](#2-options-api-vs-composition-api)
-3. [Auto-import Components](#3-auto-import-components)
-4. [v-bind vs v-model](#4-v-bind-vs-v-model)
-5. [Props: Parent → Child](#5-props-parent--child)
-6. [Computed vs Method](#6-computed-vs-method)
-7. [Computed vs Watch](#7-computed-vs-watch)
-8. [nextTick Use Cases](#8-nexttick-use-cases)
-9. [Debug & Fix Component Bugs](#9-debug--fix-component-bugs)
-10. [Reactivity System](#10-reactivity-system)
-11. [Lifecycle Hooks](#11-lifecycle-hooks)
+1. **Core Concepts**
+   
+   1.1. [Virtual DOM](#511-virtual-dom)
+   
+   1.2. [Options API vs Composition API](#512-options-api-vs-composition-api)
+   
+   1.3. [Auto-import Components](#513-auto-import-components)
+   
+   1.4. [v-bind vs v-model](#514-v-bind-vs-v-model)
+   
+   1.5. [Props: Parent → Child](#515-props-truyền-dữ-liệu-từ-parent--child)
+   
+   1.6. [Computed vs Method](#516-computed-vs-method)
+   
+   1.7. [Computed vs Watch](#517-computed-vs-watch)
+   
+   1.8. [nextTick Use Cases](#518-nexttick-use-cases)
+   
+   1.9. [Debug & Fix Component Bugs](#519-debug--fix-component-bugs)
+   
+   1.10. [Reactivity System](#5110-reactivity-setup-computed-watch)
+   
+   1.11. [Lifecycle Hooks](#5111-lifecycle-vue-2-vs-vue-3)
+   
+   1.12. [created vs mounted: Khi Nào Call API?](#5112-created-vs-mounted-khi-nào-call-api)
 
-### Advanced Features
-12. [Teleport](#12-teleport)
-13. [Suspense](#13-suspense)
-14. [Custom Directives](#14-custom-directives)
-15. [Plugins](#15-plugins)
-16. [Render Functions & JSX](#16-render-functions--jsx)
-17. [Provide / Inject](#17-provide--inject)
+2. **Advanced Features**
+   
+   2.1. [Teleport](#521-teleport)
+   
+   2.2. [Suspense](#522-suspense)
+   
+   2.3. [Custom Directives](#523-custom-directives)
+   
+   2.4. [Plugins](#524-plugins)
+   
+   2.5. [Render Functions & JSX](#525-render-functions--jsx)
+   
+   2.6. [Provide / Inject](#526-provide--inject)
 
 ---
+
 ## 3. Vue 3
 
 ### 3.1. Virtual DOM
@@ -59,7 +79,7 @@ Virtual DOM là một **JavaScript object representation** của DOM thật. Tha
 
 ---
 
-### 3.2. Options API vs Composition API
+#### 5.1.2. Options API vs Composition API
 
 #### **Options API**
 
@@ -78,7 +98,7 @@ Virtual DOM là một **JavaScript object representation** của DOM thật. Tha
 
 ---
 
-### 3.3. Auto-import Components
+#### 5.1.3. Auto-import Components
 
 **Câu hỏi:** Muốn tạo 1 component mà mỗi khi dùng không cần khai báo (import) thì làm như thế nào?
 
@@ -139,7 +159,7 @@ app.component("MyComponent", MyComponent);
 
 ---
 
-### 3.4. v-bind vs v-model
+#### 5.1.4. v-bind vs v-model
 
 **Câu trả lời chuẩn Senior:**
 
@@ -193,7 +213,7 @@ function updateValue(e) {
 
 ---
 
-### 3.5. Props: Truyền dữ liệu từ Parent → Child
+#### 5.1.5. Props: Truyền dữ liệu từ Parent → Child
 
 **Câu trả lời chuẩn Senior:**
 
@@ -265,7 +285,7 @@ const localCount = ref(props.count);
 
 ---
 
-### 3.6. Computed vs Method
+#### 5.1.6. Computed vs Method
 
 **Câu trả lời chuẩn Senior:**
 
@@ -313,7 +333,7 @@ function getFullName() {
 
 ---
 
-### 3.7. Computed vs Watch
+#### 5.1.7. Computed vs Watch
 
 **Câu trả lời chuẩn Senior:**
 
@@ -372,7 +392,7 @@ watch(discountedPrice, (newPrice) => {
 
 ---
 
-### 3.8. nextTick Use Cases
+#### 5.1.8. nextTick Use Cases
 
 **Câu hỏi:** Bạn đã dùng nextTick trong những trường hợp nào?
 
@@ -457,7 +477,7 @@ async function toggle() {
 
 ---
 
-### 3.9. Debug & Fix Component Bugs
+#### 5.1.9. Debug & Fix Component Bugs
 
 **Câu hỏi:** Khi bạn phát hiện ra 1 component gây ra bug thì bạn sẽ fix như thế nào?
 
@@ -561,7 +581,7 @@ emit("update:items", [...props.items, newItem]);
 
 ---
 
-### 3.10. Reactivity: setup(), computed, watch
+#### 5.1.10. Reactivity: setup(), computed, watch
 
 **Câu trả lời chuẩn Senior:**
 
@@ -611,7 +631,7 @@ watchEffect(() => {
 
 ---
 
-### 3.11. Lifecycle: Vue 2 vs Vue 3
+#### 5.1.11. Lifecycle: Vue 2 vs Vue 3
 
 #### **Vue 2 Lifecycle (Options API)**
 
@@ -643,9 +663,72 @@ setup()
 
 ---
 
-## 3. Vue 3 Advanced
+#### 5.1.12. created vs mounted: Khi Nào Call API?
 
-### 3.1. Teleport
+**Câu hỏi:** Phân biệt `created` với `mounted` và có thể call API trong `created` không?
+
+**Câu trả lời chuẩn Senior:**
+
+#### **Lưu ý:** Vue 3 Composition API **không có** `onCreated` → logic viết trực tiếp trong `setup()`.
+
+#### **So sánh:**
+
+| Tiêu chí          | created / setup()      | mounted / onMounted         |
+| ----------------- | ---------------------- | --------------------------- |
+| **Thời điểm**     | Component instance tạo | Component đã render vào DOM |
+| **DOM available** | ❌ Chưa                | ✅ Có                       |
+| **Dùng cho**      | Fetch data, init state | DOM manipulation            |
+| **Call API**      | ✅ Khuyến khích        | ✅ Được, nhưng chậm hơn     |
+
+#### **Ví dụ:**
+
+```vue
+<script setup>
+import { ref, onMounted } from "vue";
+
+const user = ref(null);
+const inputRef = ref(null);
+
+// ✅ Call API trong setup() - sớm nhất
+user.value = await api.getUser();
+
+// ✅ Thao tác DOM trong onMounted
+onMounted(() => {
+  inputRef.value?.focus();
+});
+</script>
+```
+
+#### **Có thể call API trong created/setup() không?**
+
+**✅ CÓ - và được KHUYẾN KHÍCH!**
+
+**Lý do:**
+
+- Fetch data sớm hơn → UX tốt hơn
+- SSR-friendly (mounted không chạy server-side)
+- Data sẵn sàng khi DOM render
+
+#### **Khi nào dùng gì:**
+
+| Scenario      | Dùng đâu      | Lý do             |
+| ------------- | ------------- | ----------------- |
+| Fetch API     | `setup()`     | Sớm, SSR-friendly |
+| Init state    | `setup()`     | Không cần DOM     |
+| Focus input   | `onMounted()` | Cần DOM           |
+| Init Chart.js | `onMounted()` | Cần DOM element   |
+
+**Rule dễ nhớ:**
+
+- **Không cần DOM** → `setup()`
+- **Cần DOM** → `onMounted()`
+- **API calls** → `setup()` (càng sớm càng tốt)
+
+---
+
+### 5.2. Advanced Features
+
+#### 5.2.1. Teleport
 
 **Câu trả lời chuẩn Senior:**
 
@@ -730,7 +813,7 @@ const showModal = ref(false);
 
 ---
 
-### 3.2. Suspense
+#### 5.2.2. Suspense
 
 **Câu trả lời chuẩn Senior:**
 
@@ -832,7 +915,7 @@ const onFallback = () => console.log("Showing fallback");
 
 ---
 
-### 3.3. Custom Directives
+#### 5.2.3. Custom Directives
 
 **Câu trả lời chuẩn Senior:**
 
@@ -989,7 +1072,7 @@ app.mount("#app");
 
 ---
 
-### 3.4. Plugins
+#### 5.2.4. Plugins
 
 **Câu trả lời chuẩn Senior:**
 
@@ -1087,7 +1170,7 @@ toast.success("Saved!");
 
 ---
 
-### 3.5. Render Functions & JSX
+#### 5.2.5. Render Functions & JSX
 
 **Câu trả lời chuẩn Senior:**
 
@@ -1168,7 +1251,7 @@ export default defineComponent({
 
 ---
 
-### 3.6. Provide / Inject
+#### 5.2.6. Provide / Inject
 
 **Câu trả lời chuẩn Senior:**
 
@@ -1300,7 +1383,6 @@ export function useTheme(): Theme {
 ```
 
 ---
-
 
 ---
 

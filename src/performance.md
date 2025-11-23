@@ -6,22 +6,33 @@ Best practices và advanced techniques để tối ưu performance cho Vue appli
 
 ## Table of Contents
 
-### Core Performance
-1. [Storage: localStorage vs sessionStorage vs Cookie](#1-storage)
-2. [Performance Optimization Techniques](#2-performance-optimization-techniques)
-3. [Code Review Checklist](#3-code-review-checklist)
-4. [Performance Case Studies](#4-performance-case-studies)
+1. **Core Performance**
+   
+   1.1. [Storage: localStorage vs sessionStorage vs Cookie](#911-storage-localstorage-vs-sessionstorage-vs-cookie)
+   
+   1.2. [Performance Optimization](#912-performance-optimization)
+   
+   1.3. [Code Review Checklist](#913-code-review-checklist)
+   
+   1.4. [Performance Case Studies](#914-performance-case-studies)
 
-### Advanced Performance
-5. [Code Splitting Strategies](#5-code-splitting-strategies)
-6. [Tree Shaking](#6-tree-shaking)
-7. [Debounce vs Throttle](#7-debounce-vs-throttle)
-8. [Image & Font Optimization](#8-image--font-optimization)
+2. **Advanced Optimization**
+   
+   2.1. [Code Splitting Strategies](#921-code-splitting-strategies)
+   
+   2.2. [Tree Shaking](#922-tree-shaking)
+   
+   2.3. [Debounce vs Throttle](#923-debounce-vs-throttle)
+   
+   2.4. [Image & Font Optimization](#924-image--font-optimization)
 
 ---
-## 10. Performance & Best Practices
 
-### 10.1. Storage: localStorage vs sessionStorage vs Cookie
+## 9. Performance & Optimization
+
+### 9.1. Core Performance
+
+#### 9.1.1. Storage: localStorage vs sessionStorage vs Cookie
 
 #### **localStorage**
 
@@ -51,7 +62,7 @@ Best practices và advanced techniques để tối ưu performance cho Vue appli
 
 ---
 
-### 10.2. Performance Optimization
+#### 9.1.2. Performance Optimization
 
 #### **1. Tránh re-render không cần thiết**
 
@@ -90,7 +101,7 @@ Best practices và advanced techniques để tối ưu performance cho Vue appli
 
 ---
 
-### 10.3. Code Review Checklist
+#### 9.1.3. Code Review Checklist
 
 #### **1. Hiểu bối cảnh**
 
@@ -134,7 +145,7 @@ Best practices và advanced techniques để tối ưu performance cho Vue appli
 
 ---
 
-### 10.4. Performance Case Studies
+#### 9.1.4. Performance Case Studies
 
 _Format: Problem → Root Cause → Solution → Result_
 
@@ -234,9 +245,9 @@ _Format: Problem → Root Cause → Solution → Result_
 
 ---
 
-## 10. Advanced Performance
+### 9.2. Advanced Optimization
 
-### 10.1. Code Splitting Strategies
+#### 9.2.1. Code Splitting Strategies
 
 **Câu trả lời chuẩn Senior:**
 
@@ -295,7 +306,7 @@ const loadEditor = async (type: string) => {
 
 ---
 
-### 10.2. Tree Shaking
+#### 9.2.2. Tree Shaking
 
 **Câu trả lời chuẩn Senior:**
 
@@ -332,7 +343,7 @@ import { debounce } from "lodash-es";
 
 ---
 
-### 10.3. Debounce vs Throttle
+#### 9.2.3. Debounce vs Throttle
 
 **Câu trả lời chuẩn Senior:**
 
@@ -410,7 +421,7 @@ window.addEventListener("scroll", handleScroll);
 
 ---
 
-### 10.4. Image & Font Optimization
+#### 9.2.4. Image & Font Optimization
 
 #### **Image Optimization**
 

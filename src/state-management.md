@@ -6,15 +6,21 @@ Quản lý state trong Vue applications với Vuex và Pinia.
 
 ## Table of Contents
 
-1. [Vuex vs Pinia](#1-vuex-vs-pinia)
-2. [State Flow](#2-state-flow)
-3. [Global vs Local State](#3-global-vs-local-state)
-4. [Vuex: commit vs dispatch](#4-vuex-commit-vs-dispatch)
+1. [Vuex vs Pinia](#71-vuex-vs-pinia)
+
+2. [State Flow](#72-state-flow)
+
+3. [Global vs Local State](#73-when-to-use-global-vs-local-state)
+
+4. [Vuex: commit vs dispatch](#74-vuex-commit-vs-dispatch)
+
+5. [Dispatch vs Actions](#75-dispatch-vs-actions-vuex)
 
 ---
-## 4. State Management
 
-### 4.1. Vuex vs Pinia
+## 7. State Management
+
+### 7.1. Vuex vs Pinia
 
 #### **1. Khởi tạo**
 
@@ -53,7 +59,7 @@ Quản lý state trong Vue applications với Vuex và Pinia.
 
 ---
 
-### 4.2. State Flow
+### 7.2. State Flow
 
 #### **Vuex Flow (classic Flux pattern)**
 
@@ -90,7 +96,7 @@ store.loadUsers(); // action
 
 ---
 
-### 4.3. When to Use Global vs Local State
+### 7.3. When to Use Global vs Local State
 
 #### **Dùng Global State cho:**
 
@@ -110,7 +116,7 @@ store.loadUsers(); // action
 
 ---
 
-### 4.4. Vuex: commit vs dispatch
+### 7.4. Vuex: commit vs dispatch
 
 **Câu hỏi:** Khi cần cập nhật giá trị cho state của Vuex. Khi nào thì dùng `$store.commit`, khi nào thì dùng `$store.dispatch`?
 
@@ -225,6 +231,69 @@ actions: {
 
 ---
 
+### 7.5. Dispatch vs Actions (Vuex)
+
+#### **Khái niệm:**
+
+- **Action**: function chứa business logic (sync/async).
+- **Dispatch**: method để gọi/trigger action đó.
+
+→ `dispatch` là cách để thực thi `action`.
+
+#### **Cách dùng:**
+
+```ts
+// Component gọi action
+this.$store.dispatch('fetchUser', userId);
+
+// Action gọi action khác
+actions: {
+  async login({ dispatch, commit }, credentials) {
+    const user = await api.login(credentials);
+    commit('SET_USER', user);
+
+    // Dispatch actions khác
+    await dispatch('fetchUserProfile');
+    await dispatch('loadSettings');
+  }
+}
+```
+
+#### **Khi nào dùng gì:**
+
+| Tình huống                      | Dùng gì            | Lý do                    |
+| ------------------------------- | ------------------ | ------------------------ |
+| Component cần fetch data        | `dispatch(action)` | Action xử lý async       |
+| Component update state đơn giản | `commit(mutation)` | Mutation sync, trực tiếp |
+| Action cần gọi action khác      | `dispatch(action)` | Tái sử dụng, orchestrate |
+| Cần xử lý nhiều mutations       | `dispatch(action)` | Tập trung logic          |
+
+#### **Best Practices:**
+
+```ts
+// ✅ Good: Component dispatch action
+methods: {
+  async loadData() {
+    await this.$store.dispatch('fetchUser', this.userId);
+  }
+}
+
+// ❌ Bad: Component commit mutation trực tiếp
+methods: {
+  updateUser(user) {
+    this.$store.commit('SET_USER', user); // Tránh!
+    // Nên: đưa vào action để dễ maintain
+  }
+}
+```
+
+#### **Rule dễ nhớ:**
+
+- **Có async/logic phức tạp** → `dispatch(action)`
+- **Update state đơn giản, sync** → `commit(mutation)`
+- **Trong component** → ưu tiên `dispatch`, ít dùng `commit` trực tiếp
+
+---
 
 ---
 

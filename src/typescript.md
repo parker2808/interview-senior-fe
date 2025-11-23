@@ -6,19 +6,33 @@ Kiến thức TypeScript từ cơ bản đến nâng cao cho Senior Frontend Dev
 
 ## Table of Contents
 
-1. [Interface vs Type](#1-interface-vs-type)
-2. [Generics](#2-generics)
-3. [Type Narrowing](#3-type-narrowing)
-4. [Utility Types](#4-utility-types)
-5. [Type Guards & Predicates](#5-type-guards--predicates)
-6. [Mapped Types](#6-mapped-types)
-7. [Conditional Types](#7-conditional-types)
-8. [Template Literal Types](#8-template-literal-types)
+1. **Core Concepts**
+
+   1.1. [Interface vs Type](#211-interface-vs-type)
+
+   1.2. [Generics](#212-generics)
+
+   1.3. [Type Narrowing](#213-type-narrowing)
+
+2. **Advanced Types**
+
+   2.1. [Utility Types](#221-utility-types)
+
+   2.2. [Type Guards & Predicates](#222-type-guards--predicates)
+
+   2.3. [Mapped Types](#223-mapped-types)
+
+   2.4. [Conditional Types](#224-conditional-types)
+
+   2.5. [Template Literal Types](#225-template-literal-types)
 
 ---
+
 ## 2. TypeScript
 
-### 2.1. Interface vs Type
+### 2.1. Core Concepts
+
+#### 2.1.1. Interface vs Type
 
 **Câu trả lời chuẩn Senior:**
 
@@ -67,7 +81,7 @@ Trong TS hiện đại, `type` được dùng nhiều hơn vì đa năng hơn, n
 
 ---
 
-### 2.2. Generics
+#### 2.1.2. Generics
 
 Giúp tạo kiểu dữ liệu tái sử dụng và đảm bảo type safety.
 
@@ -89,7 +103,7 @@ const result = wrap<string>("Hello");
 
 ---
 
-### 2.3. Type Narrowing
+#### 2.1.3. Type Narrowing
 
 Giúp thu hẹp kiểu từ rộng → chính xác hơn dựa trên runtime checks.
 
@@ -115,9 +129,9 @@ function area(s: Shape) {
 
 ---
 
-## 2. TypeScript Advanced
+### 2.2. Advanced Types
 
-### 2.1. Utility Types
+#### 2.2.1. Utility Types
 
 **Câu trả lời chuẩn Senior:**
 
@@ -346,7 +360,7 @@ type UpdateUserDto = Pick<ApiUser, "id"> &
 
 ---
 
-### 2.2. Type Guards & Predicates
+#### 2.2.2. Type Guards & Predicates
 
 **Câu trả lời chuẩn Senior:**
 
@@ -498,7 +512,7 @@ function handleValue(value: unknown) {
 
 ---
 
-### 2.3. Mapped Types
+#### 2.2.3. Mapped Types
 
 **Câu trả lời chuẩn Senior:**
 
@@ -603,7 +617,7 @@ type OnlyFunctions = FunctionProperties<Example>;
 
 ---
 
-### 2.4. Conditional Types
+#### 2.2.4. Conditional Types
 
 **Câu trả lời chuẩn Senior:**
 
@@ -687,7 +701,7 @@ type NumberKeys = PropertiesOfType<User, number>;
 
 ---
 
-### 2.5. Template Literal Types
+#### 2.2.5. Template Literal Types
 
 **Câu trả lời chuẩn Senior:**
 
@@ -757,7 +771,6 @@ type APIEndpoint = `${HTTPMethod} ${Route}`;
 ```
 
 ---
-
 
 ---
 

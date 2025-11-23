@@ -6,20 +6,37 @@ Tổng hợp kiến thức JavaScript từ core đến advanced cho Senior Front
 
 ## Table of Contents
 
-1. [High-order Array Functions](#1-high-order-array-functions)
-2. [Promise vs Async/Await](#2-promise-vs-asyncawait)
-3. [Event Loop, Microtask, Macrotask](#3-event-loop-microtask-macrotask)
-4. [Closure & Scope](#4-closure--scope)
-5. [Prototypes & Inheritance](#5-prototypes--inheritance)
-6. [`this` Keyword](#6-this-keyword)
-7. [ES6+ Modern Features](#7-es6-modern-features)
-8. [Memory Management & Garbage Collection](#8-memory-management--garbage-collection)
-9. [Hoisting & Temporal Dead Zone](#9-hoisting--temporal-dead-zone)
+1. **Core Concepts**
+
+   1.1. [High-order Array Functions](#111-high-order-array-functions)
+
+   1.2. [Promise vs Async/Await](#112-promise-vs-asyncawait)
+
+   1.3. [Event Loop, Microtask, Macrotask](#113-event-loop-microtask-macrotask)
+
+2. **Advanced Concepts**
+
+   2.1. [Closure & Scope](#121-closure--scope)
+
+   2.2. [Prototypes & Inheritance](#122-prototypes--inheritance)
+
+   2.3. [`this` Keyword](#123-this-keyword)
+
+   2.4. [ES6+ Modern Features](#124-es6-modern-features)
+
+   2.5. [Memory Management & Garbage Collection](#125-memory-management--garbage-collection)
+
+   2.6. [Hoisting & Temporal Dead Zone](#126-hoisting--temporal-dead-zone)
 
 ---
-## 1. JavaScript Core
 
-### 1.1. High-order Array Functions
+## I. Core Web Technologies
+
+## 1. JavaScript
+
+### 1.1. Core Concepts
+
+#### 1.1.1. High-order Array Functions
 
 Các hàm mảng hiện đại đều **không mutate** mảng gốc (trừ nhóm mutate). Dưới đây là phiên bản rút gọn – dễ nhớ – chuẩn Senior.
 
@@ -50,7 +67,7 @@ Các hàm mảng hiện đại đều **không mutate** mảng gốc (trừ nhó
 
 ---
 
-### 1.2. Promise vs Async/Await
+#### 1.1.2. Promise vs Async/Await
 
 #### **Promise**
 
@@ -89,7 +106,7 @@ async function loadData() {
 
 ---
 
-### 1.3. Event Loop, Microtask, Macrotask
+#### 1.1.3. Event Loop, Microtask, Macrotask
 
 **Câu trả lời chuẩn Senior:**
 
@@ -113,9 +130,9 @@ JavaScript chạy đơn luồng (single-threaded) nên cần **Event Loop** đ�
 
 ---
 
-## 1. JavaScript Advanced
+### 1.2. Advanced Concepts
 
-### 1.1. Closure & Scope
+#### 1.2.1. Closure & Scope
 
 **Câu trả lời chuẩn Senior:**
 
@@ -252,7 +269,7 @@ function optimizedClosure() {
 
 ---
 
-### 1.2. Prototypes & Inheritance
+#### 1.2.2. Prototypes & Inheritance
 
 **Câu trả lời chuẩn Senior:**
 
@@ -415,7 +432,7 @@ console.log(Object.getPrototypeOf(dog) === Dog.prototype); // true
 
 ---
 
-### 1.3. `this` Keyword
+#### 1.2.3. `this` Keyword
 
 **Câu trả lời chuẩn Senior:**
 
@@ -604,7 +621,7 @@ function decrement() {
 
 ---
 
-### 1.4. ES6+ Modern Features
+#### 1.2.4. ES6+ Modern Features
 
 **Câu trả lời chuẩn Senior:**
 
@@ -782,7 +799,7 @@ export * from "./utils.js";
 
 ---
 
-### 1.5. Memory Management & Garbage Collection
+#### 1.2.5. Memory Management & Garbage Collection
 
 **Câu trả lời chuẩn Senior:**
 
@@ -927,7 +944,7 @@ class User {
 
 ---
 
-### 1.6. Hoisting & Temporal Dead Zone
+#### 1.2.6. Hoisting & Temporal Dead Zone
 
 **Câu trả lời chuẩn Senior:**
 
@@ -1054,7 +1071,6 @@ calculate();
 ```
 
 ---
-
 
 ---
 

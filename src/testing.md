@@ -4,17 +4,25 @@ Chiến lược testing toàn diện cho Vue applications.
 
 ---
 
-## Mục Lục
+## Table of Contents
 
-1. [Unit Testing với Vitest](#1-unit-testing-với-vitest)
-2. [Component Testing với Vue Test Utils](#2-component-testing-với-vue-test-utils)
-3. [E2E Testing với Playwright](#3-e2e-testing-với-playwright)
-4. [Test Coverage](#4-test-coverage)
-5. [Phương pháp TDD/BDD](#5-phương-pháp-tddbdd)
+1. [Unit Testing với Vitest](#81-unit-testing-với-vitest)
+
+2. [Component Testing với Vue Test Utils](#82-component-testing-với-vue-test-utils)
+
+3. [E2E Testing với Playwright](#83-e2e-testing-với-playwright)
+
+4. [Test Coverage](#84-test-coverage)
+
+5. [Phương pháp TDD/BDD](#85-phương-pháp-tddbdd)
 
 ---
 
-## 1. Unit Testing với Vitest
+## III. Development Practices
+
+## 8. Testing
+
+### 8.1. Unit Testing với Vitest
 
 **Câu trả lời chuẩn Senior:**
 
@@ -144,7 +152,7 @@ describe("Async tests", () => {
 
 ---
 
-## 2. Component Testing với Vue Test Utils
+### 8.2. Component Testing với Vue Test Utils
 
 **Câu trả lời chuẩn Senior:**
 
@@ -284,7 +292,7 @@ describe("Component with Pinia", () => {
 
 ---
 
-## 3. E2E Testing với Playwright
+### 8.3. E2E Testing với Playwright
 
 **Câu trả lời chuẩn Senior:**
 
@@ -402,7 +410,7 @@ test("mock API response", async ({ page }) => {
 
 ---
 
-## 4. Test Coverage
+### 8.4. Test Coverage
 
 **Câu trả lời chuẩn Senior:**
 
@@ -452,7 +460,7 @@ export default defineConfig({
 
 ---
 
-## 5. Phương pháp TDD/BDD
+### 8.5. Phương pháp TDD/BDD
 
 **TDD (Test-Driven Development):**
 
