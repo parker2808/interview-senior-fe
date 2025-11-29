@@ -14,6 +14,8 @@ Tổng hợp kiến thức JavaScript từ core đến advanced cho Senior Front
 
    1.3. [Event Loop, Microtask, Macrotask](#113-event-loop-microtask-macrotask)
 
+   1.4. [var vs let vs const](#114-var-vs-let-vs-const)
+
 2. **Advanced Concepts**
 
    2.1. [Closure & Scope](#121-closure--scope)
@@ -127,6 +129,136 @@ JavaScript chạy đơn luồng (single-threaded) nên cần **Event Loop** đ�
 - `await` tạm dừng việc thực thi hàm async.
 - Giá trị trả về được wrap thành một Promise.
 - Phần phía sau `await` được đưa vào microtask queue nên vẫn theo đúng nguyên tắc ưu tiên microtask.
+
+---
+
+#### 1.1.4. var vs let vs const
+
+**Câu trả lời chuẩn Senior:**
+
+| Đặc điểm          | `var`                          | `let`               | `const`         |
+| ----------------- | ------------------------------ | ------------------- | --------------- |
+| **Scope**         | Function-scoped                | Block-scoped        | Block-scoped    |
+| **Hoisting**      | ✅ Hoisted, init = `undefined` | ✅ Hoisted, TDZ     | ✅ Hoisted, TDZ |
+| **Re-declare**    | ✅ Cho phép                    | ❌ Error            | ❌ Error        |
+| **Re-assign**     | ✅ Cho phép                    | ✅ Cho phép         | ❌ Error        |
+| **Global Object** | ✅ Thêm vào `window`           | ❌ Không thêm       | ❌ Không thêm   |
+| **Best Practice** | ❌ Tránh dùng                  | ✅ Khi cần reassign | ✅✅ Mặc định   |
+
+#### **Scope Differences**
+
+```js
+// var: function-scoped
+function testVar() {
+  if (true) {
+    var x = 10;
+  }
+  console.log(x); // 10 - accessible outside block
+}
+
+// let/const: block-scoped
+function testLet() {
+  if (true) {
+    let y = 20;
+    const z = 30;
+  }
+  console.log(y); // ReferenceError
+  console.log(z); // ReferenceError
+}
+```
+
+#### **Hoisting Behavior**
+
+```js
+// var: hoisted and initialized with undefined
+console.log(a); // undefined
+var a = 5;
+
+// let/const: hoisted but in TDZ
+console.log(b); // ReferenceError: Cannot access 'b' before initialization
+let b = 10;
+
+console.log(c); // ReferenceError
+const c = 15;
+```
+
+#### **Re-declaration & Re-assignment**
+
+```js
+// var: can re-declare
+var x = 1;
+var x = 2; // ✅ OK
+
+// let: cannot re-declare, can re-assign
+let y = 1;
+let y = 2; // ❌ SyntaxError
+y = 3; // ✅ OK
+
+// const: cannot re-declare or re-assign
+const z = 1;
+const z = 2; // ❌ SyntaxError
+z = 3; // ❌ TypeError
+
+// ⚠️ const with objects/arrays - reference is immutable, content is not
+const obj = { name: "Alice" };
+obj.name = "Bob"; // ✅ OK - modifying content
+obj = {}; // ❌ TypeError - reassigning reference
+
+const arr = [1, 2, 3];
+arr.push(4); // ✅ OK - modifying content
+arr = []; // ❌ TypeError - reassigning reference
+```
+
+#### **Loop Scope Problem**
+
+```js
+// ❌ Classic var problem
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 100);
+}
+// Output: 3, 3, 3 (all share same 'i')
+
+// ✅ let creates new binding per iteration
+for (let i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 100);
+}
+// Output: 0, 1, 2 (each iteration has own 'i')
+```
+
+#### **Global Object Pollution**
+
+```js
+// var adds to global object
+var globalVar = "I'm global";
+console.log(window.globalVar); // "I'm global" (browser)
+
+// let/const don't add to global object
+let blockVar = "I'm block-scoped";
+console.log(window.blockVar); // undefined
+```
+
+#### **Khi nào dùng cái gì?**
+
+```js
+// ✅ Mặc định: dùng const
+const API_URL = "https://api.example.com";
+const user = { name: "Alice" };
+
+// ✅ Khi cần reassign: dùng let
+let count = 0;
+for (let i = 0; i < 10; i++) {
+  count += i;
+}
+
+// ❌ Tránh var: chỉ dùng khi support IE cũ
+// var hasIssues = true;
+```
+
+**Ghi nhớ nhanh:**
+
+- `const` → mặc định (90% cases)
+- `let` → khi cần thay đổi giá trị
+- `var` → không dùng (legacy code only)
 
 ---
 
