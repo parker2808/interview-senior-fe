@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { onBeforeUnmount, ref, watch } from 'vue'
 
 const props = defineProps({
   open: { type: Boolean, required: true },
@@ -11,12 +11,23 @@ const emit = defineEmits(['submit', 'skip'])
 
 const digits = ref('')
 
+function setBodyScrollLocked(locked) {
+  if (typeof document === 'undefined') return
+  document.body.style.overflow = locked ? 'hidden' : ''
+}
+
 watch(
   () => props.open,
   (open) => {
     if (open) digits.value = ''
+    setBodyScrollLocked(open)
   },
+  { immediate: true },
 )
+
+onBeforeUnmount(() => {
+  setBodyScrollLocked(false)
+})
 
 function onInput(e) {
   digits.value = String(e.target.value || '')
@@ -32,65 +43,75 @@ function onSubmit(e) {
 </script>
 
 <template>
-  <div
-    v-if="open"
-    class="overlay"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="edit-gate-title"
-  >
-    <form class="panel" @submit="onSubmit">
-      <h2 id="edit-gate-title">Mã chỉnh sửa</h2>
-      <p class="hint">
-        Nhập mã 6 số để mở <strong>chế độ Sửa</strong> (check-off, publish).
-        Bỏ qua để xem tiến độ ở <strong>chế độ Xem</strong>.
-      </p>
+  <Teleport to="body">
+    <div
+      v-if="open"
+      class="overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="edit-gate-title"
+    >
+      <form class="panel" @submit="onSubmit">
+        <h2 id="edit-gate-title">Mã chỉnh sửa</h2>
+        <p class="hint">
+          Nhập mã 6 số để mở <strong>chế độ Sửa</strong> (check-off, publish).
+          Bỏ qua để xem tiến độ ở <strong>chế độ Xem</strong>.
+        </p>
 
-      <label class="field">
-        <span class="label">Mã 6 số</span>
-        <input
-          type="password"
-          inputmode="numeric"
-          autocomplete="one-time-code"
-          maxlength="6"
-          pattern="[0-9]{6}"
-          placeholder="••••••"
-          :value="digits"
-          :disabled="unlocking"
-          autofocus
-          @input="onInput"
-        />
-      </label>
+        <label class="field">
+          <span class="label">Mã 6 số</span>
+          <input
+            type="password"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="6"
+            pattern="[0-9]{6}"
+            placeholder="••••••"
+            :value="digits"
+            :disabled="unlocking"
+            autofocus
+            @input="onInput"
+          />
+        </label>
 
-      <p v-if="error" class="error" role="alert">{{ error }}</p>
+        <p v-if="error" class="error" role="alert">{{ error }}</p>
 
-      <div class="actions">
-        <button type="submit" class="primary" :disabled="unlocking || digits.length !== 6">
-          {{ unlocking ? 'Đang xác thực…' : 'Mở khóa chỉnh sửa' }}
-        </button>
-        <button type="button" class="ghost" :disabled="unlocking" @click="emit('skip')">
-          Chỉ xem
-        </button>
-      </div>
-    </form>
-  </div>
+        <div class="actions">
+          <button type="submit" class="primary" :disabled="unlocking || digits.length !== 6">
+            {{ unlocking ? 'Đang xác thực…' : 'Mở khóa chỉnh sửa' }}
+          </button>
+          <button type="button" class="ghost" :disabled="unlocking" @click="emit('skip')">
+            Chỉ xem
+          </button>
+        </div>
+      </form>
+    </div>
+  </Teleport>
 </template>
 
 <style scoped>
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 80;
-  display: grid;
-  place-items: center;
-  padding: 1rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
   background: rgba(15, 23, 20, 0.45);
   backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   animation: gate-fade 0.25s ease both;
+  /* Keep dialog centered even if iOS visual viewport shifts */
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
 }
 
 .panel {
   width: min(100%, 380px);
+  max-height: min(90vh, 90dvh);
+  overflow: auto;
   background: var(--bg-elevated, #fff);
   border: 1px solid var(--line, #d5e0db);
   border-radius: var(--radius, 12px);
