@@ -19,8 +19,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Self-check | [docs/self-check-questions.md](../self-check-questions.md) | Full |
-| Weak topic (chọn 1) | `documents/vi/system-design.md` **hoặc** `documents/vi/architecture.md` **hoặc** `documents/en/practical-questions.md` | EN wording nếu chọn EN |
+| Self-check | [self-check-questions.md](../self-check-questions.md) | Full |
+| Weak topic (chọn 1) | [`documents/vi/system-design.md`](../../../../documents/vi/system-design.md) **hoặc** [`documents/vi/architecture.md`](../../../../documents/vi/architecture.md) **hoặc** [`documents/en/practical-questions.md`](../../../../documents/en/practical-questions.md) | EN wording nếu chọn EN |
 | Delivery notes | [capstone/15-delivery-notes.md](./capstone/15-delivery-notes.md) | Script gốc |
 
 Plan Day 30: [30-day-study-plan.md — Day 30](../30-day-study-plan.md#day-30--01112026--mock-interview)

@@ -20,9 +20,9 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Practical | `documents/vi/practical-questions.md` | Quản lý dự án |
-| Leadership | `documents/vi/leadership.md` | Mentorship / communication |
-| Capstone | [docs/capstone-brief.md](../capstone-brief.md) | 15 deliverables |
+| Practical | [`documents/vi/practical-questions.md`](../../../../documents/vi/practical-questions.md) | Quản lý dự án |
+| Leadership | [`documents/vi/leadership.md`](../../../../documents/vi/leadership.md) | Mentorship / communication |
+| Capstone | [capstone-brief.md](../capstone-brief.md) | 15 deliverables |
 
 Plan Day 6: [30-day-study-plan.md — Day 6](../30-day-study-plan.md#day-6--08102026--personal-work-management)
 

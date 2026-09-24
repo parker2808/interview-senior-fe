@@ -7,7 +7,7 @@
 1. Mở **worksheet** và làm đúng hướng dẫn:
    → [`artifacts/day-02-ui-critique.md`](./artifacts/day-02-ui-critique.md)
 2. Đọc repo (path đã verify trong worksheet):
-   - `documents/vi/architecture.md` — Presentational vs Container
+   - [`documents/vi/architecture.md`](../../../documents/vi/architecture.md) — Presentational vs Container
 3. Critique 1 admin page + sketch redesign trong worksheet.
 
 ## Links plan

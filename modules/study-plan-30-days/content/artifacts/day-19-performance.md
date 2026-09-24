@@ -19,8 +19,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Performance | `documents/vi/performance.md` | optimization, splitting |
-| Web APIs | `documents/vi/web-apis.md` | Intersection Observer, Workers |
+| Performance | [`documents/vi/performance.md`](../../../../documents/vi/performance.md) | optimization, splitting |
+| Web APIs | [`documents/vi/web-apis.md`](../../../../documents/vi/web-apis.md) | Intersection Observer, Workers |
 
 Plan Day 19: [30-day-study-plan.md — Day 19](../30-day-study-plan.md#day-19--21102026--performance)
 

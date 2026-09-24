@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-24-e2e-and-ci.md`](./artifacts/day-24-e2e-and-ci.md)
-2. Đọc Playwright trong `documents/vi/testing.md` + Day 21 pipeline
+2. Đọc Playwright trong [`documents/vi/testing.md`](../../../documents/vi/testing.md) + Day 21 pipeline
 3. Cập nhật [`artifacts/capstone/12-test-plan.md`](./artifacts/capstone/12-test-plan.md)
 
 ## Links plan

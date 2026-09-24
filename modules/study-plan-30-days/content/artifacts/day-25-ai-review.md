@@ -19,9 +19,9 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Perf / review | `documents/vi/performance.md` | Code review checklist |
-| Leadership | `documents/vi/leadership.md` | Review tips |
-| Feature Template | [docs/feature-template.md](../feature-template.md) | Mục AI Usage |
+| Perf / review | [`documents/vi/performance.md`](../../../../documents/vi/performance.md) | Code review checklist |
+| Leadership | [`documents/vi/leadership.md`](../../../../documents/vi/leadership.md) | Review tips |
+| Feature Template | [feature-template.md](../feature-template.md) | Mục AI Usage |
 
 Plan Day 25: [30-day-study-plan.md — Day 25](../30-day-study-plan.md#day-25--27102026--ai-assisted-delivery)
 

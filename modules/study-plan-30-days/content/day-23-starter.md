@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-23-test-snippets-vue-react.md`](./artifacts/day-23-test-snippets-vue-react.md)
-2. Đọc `documents/vi/testing.md` (mocking/VTU); React Testing Library ngoài repo
+2. Đọc [`documents/vi/testing.md`](../../../documents/vi/testing.md) (mocking/VTU); React Testing Library ngoài repo
 3. Viết pseudo tests + comparison table.
 
 ## Links plan

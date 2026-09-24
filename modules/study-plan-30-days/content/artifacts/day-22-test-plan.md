@@ -18,7 +18,7 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Testing | `documents/vi/testing.md` | unit / component / E2E / coverage / TDD |
+| Testing | [`documents/vi/testing.md`](../../../../documents/vi/testing.md) | unit / component / E2E / coverage / TDD |
 | React practice | *(không có path repo)* | cùng pyramid + Testing Library ≈ VTU |
 
 Plan Day 22: [30-day-study-plan.md — Day 22](../30-day-study-plan.md#day-22--24102026--test-pyramid)

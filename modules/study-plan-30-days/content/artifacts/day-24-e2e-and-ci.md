@@ -19,7 +19,7 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Testing / Playwright | `documents/vi/testing.md` | E2E |
+| Testing / Playwright | [`documents/vi/testing.md`](../../../../documents/vi/testing.md) | E2E |
 | Day 21 CI | [day-21-ci-and-adr.md](./day-21-ci-and-adr.md) | Pipeline cập nhật |
 | Test plan | [day-22-test-plan.md](./day-22-test-plan.md) | Pyramid |
 

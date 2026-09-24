@@ -20,8 +20,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Self-check | [docs/self-check-questions.md](../self-check-questions.md) | Product + UI/UX |
-| Leadership | `documents/vi/leadership.md` | Ước lượng độ phức tạp |
+| Self-check | [self-check-questions.md](../self-check-questions.md) | Product + UI/UX |
+| Leadership | [`documents/vi/leadership.md`](../../../../documents/vi/leadership.md) | Ước lượng độ phức tạp |
 | Day 1 flow | [artifacts/day-01-user-flow.md](./day-01-user-flow.md) | Input hôm nay |
 
 Plan Day 5: [30-day-study-plan.md — Day 5](../30-day-study-plan.md#day-5--07102026--product-review-ac)

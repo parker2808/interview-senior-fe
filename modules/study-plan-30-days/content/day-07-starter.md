@@ -4,7 +4,7 @@
 
 ## Làm theo thứ tự
 
-1. Đọc [feature-template.md](./feature-template.md) + [capstone-brief.md](./capstone-brief.md) + `/workspace/jd1.md`
+1. Đọc [feature-template.md](./feature-template.md) + [capstone-brief.md](./capstone-brief.md) + [`jd1.md`](../../../jd1.md)
 2. Điền Feature Template:
    → [`artifacts/capstone/00-feature-template.md`](./artifacts/capstone/00-feature-template.md)
 3. Outline wireframe 3 màn:

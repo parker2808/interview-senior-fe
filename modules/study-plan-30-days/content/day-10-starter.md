@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-10-types-and-flow.md`](./artifacts/day-10-types-and-flow.md)
-2. Đọc `documents/vi/typescript.md` + `documents/vi/javascript.md`
+2. Đọc [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) + [`documents/vi/javascript.md`](../../../documents/vi/javascript.md)
 3. Điền types + Save flow trong worksheet.
 
 ## Links plan

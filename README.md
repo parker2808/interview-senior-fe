@@ -10,9 +10,10 @@ Tài liệu tổng hợp kiến thức chuẩn **Senior Frontend Developer**, t�
 
 Module: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/)
 
+- **Live / Demo:** [https://parker-interview-documents.netlify.app](https://parker-interview-documents.netlify.app)
 - **Plan & artifacts:** [`content/`](./modules/study-plan-30-days/content/) — bắt đầu từ [daily-index.md](./modules/study-plan-30-days/content/daily-index.md) hoặc [30-day-study-plan.md](./modules/study-plan-30-days/content/30-day-study-plan.md)
 - **UI theo dõi:** Vite + Vue 3 trong [`modules/study-plan-30-days/src/`](./modules/study-plan-30-days/src/)
-- **Deploy:** [Netlify](https://www.netlify.com/) — [`netlify.toml`](./netlify.toml) (`base = modules/study-plan-30-days/src`)
+- **Deploy:** [Netlify](https://www.netlify.com/) — [`netlify.toml`](./netlify.toml) (`base = modules/study-plan-30-days/src`). Site settings: Base = `modules/study-plan-30-days/src`, Build = `npm run build`, Publish = `dist`.
 
 ```bash
 cd modules/study-plan-30-days/src
@@ -21,7 +22,7 @@ npm run dev      # local: http://localhost:5173
 npm run build    # → dist/ (Netlify publish)
 ```
 
-Tiến độ lưu trong `localStorage`. UI import markdown từ `content/` lúc build (alias `@plan`). Knowledge base dùng chung nằm ở [`documents/`](./documents/) (không thuộc module).
+Tiến độ: `localStorage` trên máy bạn; có thể **share URL**, load `progress.json` public, hoặc export/import JSON (xem UI). UI import markdown từ `content/` lúc build (alias `@plan`). Knowledge base dùng chung nằm ở [`documents/`](./documents/) (không thuộc module).
 
 ---
 

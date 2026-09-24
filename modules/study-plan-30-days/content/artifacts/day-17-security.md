@@ -18,8 +18,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Security | `documents/vi/security.md` | XSS, CSRF, auth, validation, CORS |
-| Storage | `documents/vi/performance.md` | localStorage vs session vs cookie |
+| Security | [`documents/vi/security.md`](../../../../documents/vi/security.md) | XSS, CSRF, auth, validation, CORS |
+| Storage | [`documents/vi/performance.md`](../../../../documents/vi/performance.md) | localStorage vs session vs cookie |
 
 Plan Day 17: [30-day-study-plan.md — Day 17](../30-day-study-plan.md#day-17--19102026--fe-security)
 

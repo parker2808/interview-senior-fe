@@ -6,7 +6,7 @@
 
 1. Mở **worksheet**:
    → [`artifacts/day-06-work-plan.md`](./artifacts/day-06-work-plan.md)
-2. Đọc `documents/vi/practical-questions.md` + `documents/vi/leadership.md`
+2. Đọc [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) + [`documents/vi/leadership.md`](../../../documents/vi/leadership.md)
 3. Break ~12 tasks + daily loop trong worksheet.
 
 ## Links plan

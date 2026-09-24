@@ -41,7 +41,7 @@ pagination | filter | sort | validation | error schema | conflict
 unit | component | integration | 1 critical E2E
 ```
 
-## 15 deliverables (nộp trong `docs/artifacts/capstone/`)
+## 15 deliverables (nộp trong [`artifacts/capstone/`](./artifacts/capstone/))
 
 | # | Deliverable | File gợi ý |
 |---|---|---|
@@ -62,7 +62,7 @@ unit | component | integration | 1 critical E2E
 | 15 | Delivery notes | `15-delivery-notes.md` |
 
 Code spikes (không tính là app production):
-- `docs/artifacts/capstone/spikes/vue/` — 1–2 slices
-- `docs/artifacts/capstone/spikes/react/` — cùng slice tương đương
+- [`artifacts/capstone/spikes/vue/`](./artifacts/capstone/spikes/vue/) — 1–2 slices
+- [`artifacts/capstone/spikes/react/`](./artifacts/capstone/spikes/react/) — cùng slice tương đương
 
 Quay lại [Plan 30 ngày](./30-day-study-plan.md).

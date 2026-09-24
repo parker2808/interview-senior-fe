@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-15-api-contract.md`](./artifacts/day-15-api-contract.md)
-2. Đọc `documents/vi/networking.md` + `javascript.md` + `nuxt.md` (high-level)
+2. Đọc [`documents/vi/networking.md`](../../../documents/vi/networking.md) + [`documents/vi/javascript.md`](../../../documents/vi/javascript.md) + [`documents/vi/nuxt.md`](../../../documents/vi/nuxt.md) (high-level)
 3. Copy sang [`artifacts/capstone/06-api-contract.md`](./artifacts/capstone/06-api-contract.md)
 
 ## Links plan

@@ -6,8 +6,24 @@ import { useProgress } from './composables/useProgress.js'
 import DayList from './components/DayList.vue'
 import DayDetail from './components/DayDetail.vue'
 import ResourceDoc from './components/ResourceDoc.vue'
+import ProgressTools from './components/ProgressTools.vue'
 
-const { completedCount, percent, isDone, toggleDone, weekStats } = useProgress()
+const {
+  completedCount,
+  percent,
+  isDone,
+  toggleDone,
+  weekStats,
+  source,
+  readOnly,
+  publicMeta,
+  statusMessage,
+  useLocal,
+  loadPublicProgress,
+  copyShareLink,
+  exportJson,
+  importJsonFile,
+} = useProgress()
 
 const view = ref('list') // list | day | resource
 const selectedDay = ref(null)
@@ -43,6 +59,7 @@ function backToList() {
 }
 
 function onToggle(day) {
+  if (readOnly.value) return
   const wasDone = isDone(day)
   toggleDone(day)
   if (!wasDone) {
@@ -92,13 +109,15 @@ const hashSync = () => {
 }
 
 watch([view, selectedDay, resourcePath], () => {
+  const url = new URL(window.location.href)
   if (view.value === 'day' && selectedDay.value) {
-    history.replaceState(null, '', `#day/${selectedDay.value}`)
+    url.hash = `day/${selectedDay.value}`
   } else if (view.value === 'resource') {
-    history.replaceState(null, '', `#doc/${encodeURIComponent(resourcePath.value)}`)
+    url.hash = `doc/${encodeURIComponent(resourcePath.value)}`
   } else {
-    history.replaceState(null, '', '#')
+    url.hash = ''
   }
+  history.replaceState(null, '', url.pathname + url.search + url.hash)
 })
 
 hashSync()
@@ -134,6 +153,18 @@ window.addEventListener('hashchange', hashSync)
       </div>
     </header>
 
+    <ProgressTools
+      :source="source"
+      :read-only="readOnly"
+      :status-message="statusMessage"
+      :public-meta="publicMeta"
+      @use-local="useLocal"
+      @load-public="loadPublicProgress"
+      @copy-share="copyShareLink"
+      @export="exportJson"
+      @import-file="importJsonFile"
+    />
+
     <nav class="resources" aria-label="Tài liệu nhanh">
       <button
         v-for="r in RESOURCES"
@@ -155,6 +186,7 @@ window.addEventListener('hashchange', hashSync)
         :week-labels="WEEK_LABELS"
         :week-progress="weekProgress"
         :is-done="isDone"
+        :read-only="readOnly"
         @update:week-filter="weekFilter = $event"
         @open="openDay"
         @toggle="onToggle"
@@ -164,6 +196,7 @@ window.addEventListener('hashchange', hashSync)
         v-else-if="view === 'day' && currentMeta"
         :day="currentMeta"
         :done="isDone(currentMeta.day)"
+        :read-only="readOnly"
         @toggle="onToggle(currentMeta.day)"
         @prev="goPrev"
         @next="goNext"
@@ -174,6 +207,7 @@ window.addEventListener('hashchange', hashSync)
         v-else-if="view === 'resource'"
         :path="resourcePath"
         @back="backToList"
+        @open-doc="openResource"
       />
     </main>
   </div>

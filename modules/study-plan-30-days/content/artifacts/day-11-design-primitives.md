@@ -19,8 +19,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| System design | `documents/vi/system-design.md` | Component library |
-| Monitoring | `documents/vi/monitoring.md` | Error boundaries |
+| System design | [`documents/vi/system-design.md`](../../../../documents/vi/system-design.md) | Component library |
+| Monitoring | [`documents/vi/monitoring.md`](../../../../documents/vi/monitoring.md) | Error boundaries |
 
 Plan Day 11: [30-day-study-plan.md — Day 11](../30-day-study-plan.md#day-11--13102026--emptyerror-ui-design-system)
 

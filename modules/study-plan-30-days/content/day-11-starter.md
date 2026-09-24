@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-11-design-primitives.md`](./artifacts/day-11-design-primitives.md)
-2. Đọc `documents/vi/system-design.md` + `documents/vi/monitoring.md`
+2. Đọc [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) + [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md)
 3. Spec Button / FormField / EmptyState / ErrorState.
 
 ## Links plan

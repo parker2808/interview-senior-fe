@@ -5,6 +5,7 @@ defineProps({
   weekLabels: { type: Object, required: true },
   weekProgress: { type: Object, required: true },
   isDone: { type: Function, required: true },
+  readOnly: { type: Boolean, default: false },
 })
 
 defineEmits(['update:weekFilter', 'open', 'toggle'])
@@ -44,6 +45,7 @@ defineEmits(['update:weekFilter', 'open', 'toggle'])
           <input
             type="checkbox"
             :checked="isDone(d.day)"
+            :disabled="readOnly"
             :aria-label="`Đánh dấu Day ${d.day} hoàn thành`"
             @click.stop
             @change="$emit('toggle', d.day)"

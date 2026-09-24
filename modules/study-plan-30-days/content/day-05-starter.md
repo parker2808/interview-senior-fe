@@ -6,7 +6,7 @@
 
 1. Mở **worksheet**:
    → [`artifacts/day-05-product-review.md`](./artifacts/day-05-product-review.md)
-2. Đọc [self-check-questions.md](./self-check-questions.md) (Product + UI/UX) + `documents/vi/leadership.md`
+2. Đọc [self-check-questions.md](./self-check-questions.md) (Product + UI/UX) + [`documents/vi/leadership.md`](../../../documents/vi/leadership.md)
 3. Viết AC v1 List + Field Config, rồi copy sang:
    → [`artifacts/capstone/03-acceptance-criteria.md`](./artifacts/capstone/03-acceptance-criteria.md)
 

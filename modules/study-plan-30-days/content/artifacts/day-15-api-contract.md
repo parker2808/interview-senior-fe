@@ -18,9 +18,9 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Networking | `documents/vi/networking.md` | REST vs WebSocket |
-| JavaScript | `documents/vi/javascript.md` | async |
-| Nuxt (T-shaped) | `documents/vi/nuxt.md` | CSR/SSR/SSG high-level |
+| Networking | [`documents/vi/networking.md`](../../../../documents/vi/networking.md) | REST vs WebSocket |
+| JavaScript | [`documents/vi/javascript.md`](../../../../documents/vi/javascript.md) | async |
+| Nuxt (T-shaped) | [`documents/vi/nuxt.md`](../../../../documents/vi/nuxt.md) | CSR/SSR/SSG high-level |
 
 Plan Day 15: [30-day-study-plan.md — Day 15](../30-day-study-plan.md#day-15--17102026--api-contract)
 

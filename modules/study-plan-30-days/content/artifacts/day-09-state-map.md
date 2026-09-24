@@ -19,7 +19,7 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| State (Vue) | `documents/vi/state-management.md` | global vs local, Pinia/Vuex |
+| State (Vue) | [`documents/vi/state-management.md`](../../../../documents/vi/state-management.md) | global vs local, Pinia/Vuex |
 | React practice | *(không có path repo)* | local vs URL vs server cache vs Context |
 
 Plan Day 9: [30-day-study-plan.md — Day 9](../30-day-study-plan.md#day-9--11102026--state-ownership)

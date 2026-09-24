@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-16-error-matrix.md`](./artifacts/day-16-error-matrix.md)
-2. Đọc `documents/vi/practical-questions.md` (401) + `documents/vi/monitoring.md`
+2. Đọc [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) (401) + [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md)
 3. Copy sang [`artifacts/capstone/07-error-matrix.md`](./artifacts/capstone/07-error-matrix.md)
 
 ## Links plan

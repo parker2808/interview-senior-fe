@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-08-component-tree.md`](./artifacts/day-08-component-tree.md)
-2. Đọc `documents/vi/architecture.md` + `documents/vi/vue3.md`; React: đối chiếu hooks/compound
+2. Đọc [`documents/vi/architecture.md`](../../../documents/vi/architecture.md) + [`documents/vi/vue3.md`](../../../documents/vi/vue3.md); React: đối chiếu hooks/compound
 3. Copy sang [`artifacts/capstone/04-component-architecture.md`](./artifacts/capstone/04-component-architecture.md)
 
 ## Links plan

@@ -6,7 +6,7 @@
 
 1. Mở **worksheet**:
    → [`artifacts/day-04-data-heavy.md`](./artifacts/day-04-data-heavy.md)
-2. Đọc `documents/vi/css-layout.md` (Flex/Grid + responsive).
+2. Đọc [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) (Flex/Grid + responsive).
 3. Chốt cột / search vs filter / pagination strategy trong worksheet.
 
 ## Links plan

@@ -18,9 +18,9 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Build tools | `documents/vi/build-tools.md` | Vite vs Webpack |
-| Monitoring | `documents/vi/monitoring.md` | Performance monitoring |
-| System design | `documents/vi/system-design.md` | Caching |
+| Build tools | [`documents/vi/build-tools.md`](../../../../documents/vi/build-tools.md) | Vite vs Webpack |
+| Monitoring | [`documents/vi/monitoring.md`](../../../../documents/vi/monitoring.md) | Performance monitoring |
+| System design | [`documents/vi/system-design.md`](../../../../documents/vi/system-design.md) | Caching |
 
 Plan Day 20: [30-day-study-plan.md — Day 20](../30-day-study-plan.md#day-20--22102026--bundle-observability)
 
