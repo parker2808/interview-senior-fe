@@ -9,6 +9,8 @@ import ResourceDoc from './components/ResourceDoc.vue'
 import ProgressTools from './components/ProgressTools.vue'
 import EditGateModal from './components/EditGateModal.vue'
 
+const NAV_COLLAPSE_KEY = 'senior-fe-nav-collapsed-v1'
+
 const {
   completedCount,
   percent,
@@ -40,6 +42,24 @@ const view = ref('list') // list | day | resource
 const selectedDay = ref(null)
 const weekFilter = ref(0)
 const celebrate = ref(false)
+const navExpanded = ref(true)
+
+try {
+  if (localStorage.getItem(NAV_COLLAPSE_KEY) === '1') {
+    navExpanded.value = false
+  }
+} catch {
+  /* ignore */
+}
+
+function toggleNav() {
+  navExpanded.value = !navExpanded.value
+  try {
+    localStorage.setItem(NAV_COLLAPSE_KEY, navExpanded.value ? '0' : '1')
+  } catch {
+    /* ignore */
+  }
+}
 
 const filteredDays = computed(() =>
   weekFilter.value === 0
@@ -94,6 +114,17 @@ function goNext() {
 const currentMeta = computed(() =>
   selectedDay.value ? getDay(selectedDay.value) : null,
 )
+
+const navTitle = computed(() => {
+  if (view.value === 'resource') {
+    const match = RESOURCES.find((r) => r.path === resourcePath.value)
+    return match?.label ?? 'Tài liệu'
+  }
+  if (view.value === 'day' && currentMeta.value) {
+    return `Ngày ${currentMeta.value.day}`
+  }
+  return 'Điều hướng'
+})
 
 const hashSync = () => {
   const hash = window.location.hash.slice(1)
@@ -205,17 +236,37 @@ window.addEventListener('hashchange', hashSync)
       @request-unlock="openUnlockModal"
     />
 
-    <nav class="resources" aria-label="Tài liệu nhanh">
+    <nav
+      class="resources"
+      :class="{ 'is-collapsed': !navExpanded }"
+      aria-label="Tài liệu nhanh"
+    >
       <button
-        v-for="r in RESOURCES"
-        :key="r.id"
         type="button"
-        class="chip"
-        :class="{ active: view === 'resource' && resourcePath === r.path }"
-        @click="openResource(r.path)"
+        class="nav-toggle"
+        :aria-expanded="navExpanded"
+        :aria-controls="'resources-pills'"
+        @click="toggleNav"
       >
-        {{ r.label }}
+        <span class="nav-toggle-text">{{ navExpanded ? 'Nav' : navTitle }}</span>
+        <span class="nav-chevron" aria-hidden="true">{{ navExpanded ? '▴' : '▾' }}</span>
       </button>
+      <div
+        v-show="navExpanded"
+        id="resources-pills"
+        class="resources-pills"
+      >
+        <button
+          v-for="r in RESOURCES"
+          :key="r.id"
+          type="button"
+          class="chip"
+          :class="{ active: view === 'resource' && resourcePath === r.path }"
+          @click="openResource(r.path)"
+        >
+          {{ r.label }}
+        </button>
+      </div>
     </nav>
 
     <main class="main">
@@ -258,7 +309,17 @@ window.addEventListener('hashchange', hashSync)
   max-width: 920px;
   margin: 0 auto;
   padding: 1.25rem 1rem 3rem;
-  animation: fade-up 0.35s var(--ease) both;
+  /* Opacity-only: transform on this ancestor would break sticky nav + fixed modal */
+  animation: shell-in 0.35s var(--ease) both;
+}
+
+@keyframes shell-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .top {
@@ -383,10 +444,58 @@ h1 {
 }
 
 .resources {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: grid;
+  gap: 0.45rem;
+  margin: 0 -1rem 1.25rem;
+  padding: 0.55rem 1rem;
+  padding-top: max(0.55rem, env(safe-area-inset-top));
+  background:
+    linear-gradient(180deg, rgba(244, 247, 246, 0.97) 0%, rgba(244, 247, 246, 0.92) 100%);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 100%;
+  border: 1px solid var(--line);
+  background: var(--bg-elevated);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.nav-toggle-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.nav-chevron {
+  flex-shrink: 0;
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+}
+
+.resources-pills {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
-  margin-bottom: 1.25rem;
+}
+
+.resources.is-collapsed {
+  padding-bottom: 0.55rem;
 }
 
 .chip {
@@ -423,6 +532,18 @@ h1 {
   .top {
     grid-template-columns: 1fr minmax(200px, 280px);
     align-items: end;
+  }
+
+  .resources {
+    margin-left: -1.5rem;
+    margin-right: -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .nav-toggle {
+    width: auto;
+    min-width: 7.5rem;
   }
 }
 </style>
