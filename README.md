@@ -10,6 +10,7 @@ Tài liệu tổng hợp kiến thức chuẩn **Senior Frontend Developer**, t�
 
 - **Plan & artifacts:** [`study-plan/30-days/`](./study-plan/30-days/) — bắt đầu từ [daily-index.md](./study-plan/30-days/daily-index.md) hoặc [30-day-study-plan.md](./study-plan/30-days/30-day-study-plan.md)
 - **UI theo dõi / đánh dấu tiến độ:** Vite + Vue 3 app trong [`study-plan/app/`](./study-plan/app/)
+- **Live (GitHub Pages):** [https://parker2808.github.io/interview-senior-fe/](https://parker2808.github.io/interview-senior-fe/) — deploy qua [`.github/workflows/deploy-study-plan.yml`](./.github/workflows/deploy-study-plan.yml)
 
 ```bash
 cd study-plan/app
@@ -18,6 +19,7 @@ npm run dev
 ```
 
 Mở URL local (mặc định `http://localhost:5173`). Tiến độ lưu trong `localStorage`.
+
 
 ---
 

@@ -10,6 +10,12 @@ study-plan/
   app/              # Vite + Vue 3 progress UI
 ```
 
+## Live UI
+
+[https://parker2808.github.io/interview-senior-fe/](https://parker2808.github.io/interview-senior-fe/)
+
+Deploy: GitHub Actions → Pages (`.github/workflows/deploy-study-plan.yml`).
+
 ## Quick start (UI)
 
 ```bash
@@ -17,6 +23,7 @@ cd study-plan/app
 npm install
 npm run dev
 ```
+
 
 ## Key docs
 

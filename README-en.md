@@ -10,6 +10,7 @@ Complete knowledge base for **Senior Frontend Developer** interviews, focusing o
 
 - **Plan & artifacts:** [`study-plan/30-days/`](./study-plan/30-days/) — start with [daily-index.md](./study-plan/30-days/daily-index.md) or [30-day-study-plan.md](./study-plan/30-days/30-day-study-plan.md)
 - **Follow / check-off UI:** Vite + Vue 3 app in [`study-plan/app/`](./study-plan/app/)
+- **Live (GitHub Pages):** [https://parker2808.github.io/interview-senior-fe/](https://parker2808.github.io/interview-senior-fe/) — deployed by [`.github/workflows/deploy-study-plan.yml`](./.github/workflows/deploy-study-plan.yml)
 
 ```bash
 cd study-plan/app
@@ -18,6 +19,7 @@ npm run dev
 ```
 
 Open the local URL (default `http://localhost:5173`). Progress persists in `localStorage`.
+
 
 ---
 
