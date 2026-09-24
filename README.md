@@ -6,6 +6,21 @@ Tài liệu tổng hợp kiến thức chuẩn **Senior Frontend Developer**, t�
 
 ---
 
+## 🗓️ Kế hoạch ôn 30 ngày
+
+- **Plan & artifacts:** [`study-plan/30-days/`](./study-plan/30-days/) — bắt đầu từ [daily-index.md](./study-plan/30-days/daily-index.md) hoặc [30-day-study-plan.md](./study-plan/30-days/30-day-study-plan.md)
+- **UI theo dõi / đánh dấu tiến độ:** Vite + Vue 3 app trong [`study-plan/app/`](./study-plan/app/)
+
+```bash
+cd study-plan/app
+npm install
+npm run dev
+```
+
+Mở URL local (mặc định `http://localhost:5173`). Tiến độ lưu trong `localStorage`.
+
+---
+
 ## 📚 Cấu Trúc Tài Liệu
 
 Tài liệu được tổ chức thành 5 nhóm chính với 19 chủ đề, từ cơ bản đến nâng cao:

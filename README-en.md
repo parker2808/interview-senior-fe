@@ -6,6 +6,21 @@ Complete knowledge base for **Senior Frontend Developer** interviews, focusing o
 
 ---
 
+## 🗓️ 30-day study plan
+
+- **Plan & artifacts:** [`study-plan/30-days/`](./study-plan/30-days/) — start with [daily-index.md](./study-plan/30-days/daily-index.md) or [30-day-study-plan.md](./study-plan/30-days/30-day-study-plan.md)
+- **Follow / check-off UI:** Vite + Vue 3 app in [`study-plan/app/`](./study-plan/app/)
+
+```bash
+cd study-plan/app
+npm install
+npm run dev
+```
+
+Open the local URL (default `http://localhost:5173`). Progress persists in `localStorage`.
+
+---
+
 ## 📚 Document Structure
 
 The documentation is organized into 5 main groups with 19 topics, from basic to advanced:
