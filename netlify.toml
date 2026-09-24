@@ -1,0 +1,14 @@
+# Study-plan follow UI — Vite + Vue app lives under `src/`
+# Docs (interview KB + 30-day plan) live under `documents/` and are
+# imported at build time via the Vite `@plan` alias.
+
+[build]
+  base = "src"
+  command = "npm run build"
+  publish = "dist"
+
+# SPA fallback (safe even if the app is mostly client-only today)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
