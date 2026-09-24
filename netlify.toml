@@ -11,10 +11,16 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# API before SPA fallback — Blobs-backed progress (see netlify/functions/progress.js)
+# API before SPA fallback — Blobs-backed progress + edit unlock
 [[redirects]]
   from = "/api/progress"
   to = "/.netlify/functions/progress"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/auth/edit"
+  to = "/.netlify/functions/auth-edit"
   status = 200
   force = true
 

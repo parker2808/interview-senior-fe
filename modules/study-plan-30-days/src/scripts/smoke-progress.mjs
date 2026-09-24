@@ -1,9 +1,16 @@
 /**
- * Local smoke checks for progress codec + API payload shape.
+ * Local smoke checks for progress codec, edit-auth helpers, and API payload shape.
  * Run: npm run smoke
- * (Blobs write still needs a Netlify deploy + PROGRESS_WRITE_TOKEN.)
+ * Uses a fake EDIT_PASSCODE (never the real owner code).
+ * (Blobs write still needs a Netlify deploy + env secrets.)
  */
 import assert from 'node:assert/strict'
+
+// Fake secrets for local unit checks only — placeholders, not production values.
+process.env.EDIT_PASSCODE = '111111'
+process.env.PROGRESS_WRITE_TOKEN = 'smoke-write-token-not-real'
+delete process.env.EDIT_TOKEN_SECRET
+
 import {
   bitmaskToDoneMap,
   decodeShareToken,
@@ -12,6 +19,13 @@ import {
   fromProgressJson,
   toExportJson,
 } from '../src/utils/progressCodec.js'
+import {
+  isSixDigitPasscode,
+  issueEditToken,
+  safeEqualString,
+  verifyEditToken,
+  verifyPasscode,
+} from '../netlify/lib/editAuth.js'
 
 function normalizeLikeFunction(raw) {
   if (!raw || typeof raw !== 'object') return null
@@ -54,5 +68,22 @@ const normalized = normalizeLikeFunction({
 assert.deepEqual(normalized.completed, [1, 3, 30])
 assert.equal(normalized.owner, 'Parker')
 assert.equal(normalizeLikeFunction({ foo: 1 }), null)
+
+assert.equal(isSixDigitPasscode('111111'), true)
+assert.equal(isSixDigitPasscode('11111'), false)
+assert.equal(isSixDigitPasscode('1111111'), false)
+assert.equal(isSixDigitPasscode('abcdef'), false)
+assert.equal(safeEqualString('abc', 'abc'), true)
+assert.equal(safeEqualString('abc', 'abd'), false)
+
+assert.equal(verifyPasscode('111111').ok, true)
+assert.equal(verifyPasscode('222222').ok, false)
+assert.equal(verifyPasscode('12345').status, 401)
+
+const issued = issueEditToken()
+assert.ok(issued.token.includes('.'))
+assert.equal(verifyEditToken(issued.token), true)
+assert.equal(verifyEditToken('nope.bad'), false)
+assert.equal(verifyEditToken(issued.token, Date.now() + 13 * 60 * 60 * 1000), false)
 
 console.log('smoke-progress: ok')

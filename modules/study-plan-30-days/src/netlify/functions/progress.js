@@ -2,13 +2,19 @@
  * Public progress API backed by Netlify Blobs.
  *
  * GET  /api/progress  — public read (no auth)
- * PUT|POST /api/progress — write; requires header x-progress-token === PROGRESS_WRITE_TOKEN
+ * PUT|POST /api/progress — write; requires either:
+ *   - header x-progress-token === PROGRESS_WRITE_TOKEN, or
+ *   - header x-edit-token (or x-progress-token) = valid short-lived editToken
+ *     from POST /api/auth/edit after EDIT_PASSCODE unlock
  *
- * Set PROGRESS_WRITE_TOKEN in Netlify Site settings → Environment variables.
- * Do not commit the real token.
+ * Env (Netlify UI only — never commit):
+ *   PROGRESS_WRITE_TOKEN — long-lived publish secret
+ *   EDIT_PASSCODE — 6-digit owner unlock (used by /api/auth/edit)
+ *   EDIT_TOKEN_SECRET — optional HMAC key for edit tokens
  */
 
 import { getStore } from '@netlify/blobs'
+import { safeEqualString, verifyEditToken } from '../lib/editAuth.js'
 
 const STORE_NAME = 'study-progress'
 const BLOB_KEY = 'parker'
@@ -16,7 +22,8 @@ const DAY_COUNT = 30
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'Content-Type, x-progress-token',
+  'Access-Control-Allow-Headers':
+    'Content-Type, x-progress-token, x-edit-token',
   'Access-Control-Allow-Methods': 'GET, PUT, POST, OPTIONS',
 }
 
@@ -72,16 +79,39 @@ function emptyProgress() {
   }
 }
 
-function assertWriteToken(req) {
+/**
+ * Accept PROGRESS_WRITE_TOKEN or a valid edit session token.
+ */
+function assertWriteAuth(req) {
+  const editHeader = req.headers.get('x-edit-token') || ''
+  if (editHeader && verifyEditToken(editHeader)) {
+    return { ok: true, via: 'edit-token' }
+  }
+
+  const progressHeader = req.headers.get('x-progress-token') || ''
+  if (progressHeader && verifyEditToken(progressHeader)) {
+    return { ok: true, via: 'edit-token' }
+  }
+
   const expected = process.env.PROGRESS_WRITE_TOKEN
-  if (!expected) {
-    return { ok: false, status: 503, error: 'PROGRESS_WRITE_TOKEN is not configured on the site' }
+  if (expected && progressHeader && safeEqualString(progressHeader, expected)) {
+    return { ok: true, via: 'write-token' }
   }
-  const got = req.headers.get('x-progress-token') || ''
-  if (got !== expected) {
-    return { ok: false, status: 401, error: 'Invalid or missing x-progress-token' }
+
+  if (!expected && !process.env.EDIT_PASSCODE) {
+    return {
+      ok: false,
+      status: 503,
+      error:
+        'Neither PROGRESS_WRITE_TOKEN nor EDIT_PASSCODE is configured on the site',
+    }
   }
-  return { ok: true }
+
+  return {
+    ok: false,
+    status: 401,
+    error: 'Invalid or missing write auth (x-progress-token or x-edit-token)',
+  }
 }
 
 export default async (req) => {
@@ -104,7 +134,7 @@ export default async (req) => {
   }
 
   if (req.method === 'PUT' || req.method === 'POST') {
-    const auth = assertWriteToken(req)
+    const auth = assertWriteAuth(req)
     if (!auth.ok) return json({ error: auth.error }, auth.status)
 
     let raw

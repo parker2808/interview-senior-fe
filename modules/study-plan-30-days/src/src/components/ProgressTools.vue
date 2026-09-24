@@ -4,6 +4,7 @@ import { ref } from 'vue'
 const props = defineProps({
   source: { type: String, required: true },
   readOnly: { type: Boolean, required: true },
+  isEditMode: { type: Boolean, default: false },
   statusMessage: { type: String, default: '' },
   publicMeta: { type: Object, default: null },
 })
@@ -16,6 +17,7 @@ const emit = defineEmits([
   'copy-share',
   'export',
   'import-file',
+  'request-unlock',
 ])
 
 const fileInput = ref(null)
@@ -38,11 +40,26 @@ function onFileChange(e) {
   if (file) emit('import-file', file)
   e.target.value = ''
 }
+
+function onImportClick() {
+  if (!props.isEditMode) {
+    emit('request-unlock')
+    return
+  }
+  fileInput.value?.click()
+}
 </script>
 
 <template>
   <section class="progress-tools" aria-label="Nguồn tiến độ">
-    <div v-if="readOnly" class="banner" role="status">
+    <div v-if="!isEditMode" class="banner banner-locked" role="status">
+      <strong>Chế độ Xem</strong>
+      <span> — check-off và publish bị khóa. Load cloud / share vẫn dùng được.</span>
+      <button type="button" class="linkish" @click="emit('request-unlock')">
+        Mở khóa chỉnh sửa
+      </button>
+    </div>
+    <div v-else-if="readOnly" class="banner" role="status">
       <strong>{{ bannerTitle[source] || 'Đang xem tiến độ chỉ đọc' }}</strong>
       <span v-if="publicMeta?.owner"> · {{ publicMeta.owner }}</span>
       <span v-if="publicMeta?.updatedAt"> · cập nhật {{ publicMeta.updatedAt }}</span>
@@ -51,7 +68,7 @@ function onFileChange(e) {
       </button>
     </div>
     <div v-else class="banner banner-local" role="status">
-      <strong>Nguồn đang dùng: Local</strong>
+      <strong>Chế độ Sửa · Local</strong>
       <span> — check-off ghi vào máy này; publish cloud khi muốn người khác theo dõi.</span>
     </div>
 
@@ -80,13 +97,23 @@ function onFileChange(e) {
         >
           Load cloud
         </button>
-        <button type="button" @click="emit('publish-cloud')" :disabled="source !== 'local'">
+        <button
+          type="button"
+          @click="emit('publish-cloud')"
+          :disabled="!isEditMode || source !== 'local'"
+          :title="!isEditMode ? 'Cần mở khóa chỉnh sửa' : undefined"
+        >
           Publish to cloud
         </button>
         <button type="button" @click="emit('export')" :disabled="source !== 'local'">
           Export JSON
         </button>
-        <button type="button" @click="fileInput?.click()">
+        <button
+          type="button"
+          @click="onImportClick"
+          :disabled="source !== 'local'"
+          :title="!isEditMode ? 'Cần mở khóa chỉnh sửa' : undefined"
+        >
           Import JSON
         </button>
         <input
@@ -129,13 +156,24 @@ function onFileChange(e) {
   color: #166534;
 }
 
+.banner-locked {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
 .linkish {
   border: 0;
   background: transparent;
-  color: #c2410c;
+  color: #0f766e;
   text-decoration: underline;
   padding: 0;
   font-weight: 600;
+}
+
+.banner .linkish {
+  color: inherit;
+  text-decoration: underline;
 }
 
 .row {

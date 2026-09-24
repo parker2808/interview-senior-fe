@@ -10,10 +10,12 @@ import {
 } from '../utils/progressCodec.js'
 import {
   fetchCloudProgress,
+  getEditToken,
   getWriteToken,
   publishCloudProgress,
   setWriteToken,
 } from '../utils/progressApi.js'
+import { useEditMode } from './useEditMode.js'
 
 const STORAGE_KEY = 'senior-fe-30day-progress-v1'
 
@@ -51,10 +53,23 @@ const source = ref('local')
 const publicMeta = ref(null)
 const statusMessage = ref('')
 
+const {
+  isEditMode,
+  modeLabel,
+  modalOpen,
+  unlocking,
+  unlockError,
+  submitPasscode,
+  enterViewMode,
+  openUnlockModal,
+  lockEditMode,
+} = useEditMode()
+
 watch(
   localDoneMap,
   (value) => {
-    if (source.value !== 'local') return
+    // Only persist owner mutations while unlocked + on local source
+    if (source.value !== 'local' || !isEditMode.value) return
     localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
   },
   { deep: true },
@@ -64,7 +79,8 @@ const activeDoneMap = computed(() =>
   source.value === 'local' ? localDoneMap.value : viewDoneMap.value || {},
 )
 
-const readOnly = computed(() => source.value !== 'local')
+/** View-only when locked or browsing a non-local source. */
+const readOnly = computed(() => !isEditMode.value || source.value !== 'local')
 
 function enterViewOnly(map, nextSource, meta = null) {
   viewDoneMap.value = { ...map }
@@ -155,15 +171,32 @@ async function loadCloudProgress() {
 
 /**
  * Publish local progress to Netlify Blobs.
- * @param {string} [tokenOverride] — if empty, uses sessionStorage or prompts
+ * Prefers short-lived editToken from passcode unlock; falls back to PROGRESS_WRITE_TOKEN.
+ * @param {string} [tokenOverride] — if empty, uses editToken / sessionStorage / prompt
  */
 async function publishToCloud(tokenOverride) {
+  if (!isEditMode.value) {
+    statusMessage.value = 'Cần mở khóa chỉnh sửa trước khi publish.'
+    openUnlockModal()
+    return false
+  }
   if (source.value !== 'local') {
     statusMessage.value = 'Chỉ publish từ nguồn Local.'
     return false
   }
 
-  let token = (tokenOverride || getWriteToken() || '').trim()
+  const editTok = (getEditToken() || '').trim()
+  let token = (tokenOverride || '').trim()
+  let kind = 'write-token'
+
+  if (!token && editTok) {
+    token = editTok
+    kind = 'edit-token'
+  }
+  if (!token) {
+    token = (getWriteToken() || '').trim()
+    kind = 'write-token'
+  }
   if (!token && typeof window !== 'undefined') {
     token = (
       window.prompt(
@@ -171,20 +204,21 @@ async function publishToCloud(tokenOverride) {
         '',
       ) || ''
     ).trim()
+    kind = 'write-token'
   }
   if (!token) {
-    statusMessage.value = 'Đã hủy — cần token để publish.'
+    statusMessage.value = 'Đã hủy — cần editToken hoặc PROGRESS_WRITE_TOKEN để publish.'
     return false
   }
 
-  setWriteToken(token)
+  if (kind === 'write-token') setWriteToken(token)
   statusMessage.value = 'Đang publish lên cloud…'
   try {
     const payload = {
       ...toExportJson(localDoneMap.value),
       owner: 'Parker',
     }
-    const result = await publishCloudProgress(payload, token)
+    const result = await publishCloudProgress(payload, token, kind)
     const published = result?.progress || payload
     statusMessage.value = `Đã publish cloud · cập nhật ${published.updatedAt || 'now'} (${published.completed?.length ?? 0} ngày).`
     return true
@@ -215,6 +249,20 @@ export function useProgress() {
   function toggleDone(day) {
     if (readOnly.value) return
     setDone(day, !isDone(day))
+  }
+
+  async function tryUnlock(passcode) {
+    const ok = await submitPasscode(passcode)
+    statusMessage.value = ok
+      ? 'Đã mở chế độ Sửa cho phiên này.'
+      : unlockError.value || 'Không mở được chế độ Sửa.'
+    return ok
+  }
+
+  function skipUnlock() {
+    enterViewMode()
+    statusMessage.value =
+      'Chế độ Xem — có thể Load cloud / share; không sửa tiến độ local hay publish.'
   }
 
   function weekStats(week) {
@@ -259,6 +307,11 @@ export function useProgress() {
   }
 
   function importJsonFile(file) {
+    if (!isEditMode.value) {
+      statusMessage.value = 'Cần mở khóa chỉnh sửa trước khi import.'
+      openUnlockModal()
+      return Promise.resolve(false)
+    }
     return new Promise((resolve) => {
       const reader = new FileReader()
       reader.onload = () => {
@@ -290,6 +343,11 @@ export function useProgress() {
     localDoneMap,
     source,
     readOnly,
+    isEditMode,
+    modeLabel,
+    modalOpen,
+    unlocking,
+    unlockError,
     publicMeta,
     statusMessage,
     completedCount,
@@ -307,5 +365,9 @@ export function useProgress() {
     exportJson,
     importJsonFile,
     applyShareFromUrl,
+    tryUnlock,
+    skipUnlock,
+    openUnlockModal,
+    lockEditMode,
   }
 }

@@ -7,6 +7,7 @@ import DayList from './components/DayList.vue'
 import DayDetail from './components/DayDetail.vue'
 import ResourceDoc from './components/ResourceDoc.vue'
 import ProgressTools from './components/ProgressTools.vue'
+import EditGateModal from './components/EditGateModal.vue'
 
 const {
   completedCount,
@@ -16,6 +17,11 @@ const {
   weekStats,
   source,
   readOnly,
+  isEditMode,
+  modeLabel,
+  modalOpen,
+  unlocking,
+  unlockError,
   publicMeta,
   statusMessage,
   useLocal,
@@ -25,6 +31,9 @@ const {
   copyShareLink,
   exportJson,
   importJsonFile,
+  tryUnlock,
+  skipUnlock,
+  openUnlockModal,
 } = useProgress()
 
 const view = ref('list') // list | day | resource
@@ -128,6 +137,14 @@ window.addEventListener('hashchange', hashSync)
 
 <template>
   <div class="shell" :class="{ celebrate }">
+    <EditGateModal
+      :open="modalOpen"
+      :unlocking="unlocking"
+      :error="unlockError"
+      @submit="tryUnlock"
+      @skip="skipUnlock"
+    />
+
     <header class="top">
       <div class="brand-row">
         <button
@@ -141,6 +158,23 @@ window.addEventListener('hashchange', hashSync)
         <div class="brand">
           <p class="eyebrow">Senior FE · 03/10 → 01/11/2026</p>
           <h1>Kế hoạch ôn 30 ngày</h1>
+          <div class="mode-row">
+            <span
+              class="mode-badge"
+              :class="isEditMode ? 'mode-edit' : 'mode-view'"
+              :title="isEditMode ? 'Đã mở khóa chỉnh sửa (phiên này)' : 'Chỉ xem — không sửa / publish'"
+            >
+              {{ modeLabel }}
+            </span>
+            <button
+              v-if="!isEditMode"
+              type="button"
+              class="unlock-link"
+              @click="openUnlockModal"
+            >
+              Mở khóa
+            </button>
+          </div>
         </div>
       </div>
 
@@ -158,6 +192,7 @@ window.addEventListener('hashchange', hashSync)
     <ProgressTools
       :source="source"
       :read-only="readOnly"
+      :is-edit-mode="isEditMode"
       :status-message="statusMessage"
       :public-meta="publicMeta"
       @use-local="useLocal"
@@ -167,6 +202,7 @@ window.addEventListener('hashchange', hashSync)
       @copy-share="copyShareLink"
       @export="exportJson"
       @import-file="importJsonFile"
+      @request-unlock="openUnlockModal"
     />
 
     <nav class="resources" aria-label="Tài liệu nhanh">
@@ -259,6 +295,47 @@ h1 {
   font-size: clamp(1.45rem, 3vw, 1.85rem);
   font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+.mode-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+}
+
+.mode-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 6px;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid transparent;
+}
+
+.mode-edit {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+  color: #047857;
+}
+
+.mode-view {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.unlock-link {
+  border: 0;
+  background: transparent;
+  color: var(--accent-ink, #0f766e);
+  text-decoration: underline;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0;
 }
 
 .progress-block {

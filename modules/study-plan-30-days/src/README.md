@@ -30,22 +30,32 @@ Output: `dist/` — Netlify publish directory (see repo-root `netlify.toml`).
 
 | Source | Behavior |
 |---|---|
-| **Local** | `localStorage` key `senior-fe-30day-progress-v1` — editable |
+| **Local** | `localStorage` key `senior-fe-30day-progress-v1` — editable only after passcode unlock |
 | **Share link** | `?share=<base36-bitmask>` — view-only banner; local data untouched |
 | **Public file** | `GET /progress.json` (from `public/progress.json`) — view-only after deploy |
-| **Cloud (Blobs)** | `GET /api/progress` public read; **Publish to cloud** writes with `x-progress-token` |
-| **Export / Import** | Download or upload JSON (`version`, `completed` days) |
+| **Cloud (Blobs)** | `GET /api/progress` public read; **Publish** needs edit session or write token |
+| **Export / Import** | Download anytime from local; import requires Edit mode |
 
 Opening a share link never silently overwrites local progress.
 
+### Edit gate
+
+- First visit shows a modal → `POST /api/auth/edit` with `{ "passcode": "******" }`
+- Success → Edit mode + short-lived `editToken` in `sessionStorage` (not the raw passcode)
+- Skip / wrong → View mode (badge **Chế độ: Xem**)
+
 ### Cloud API (Netlify)
 
-- Function: [`netlify/functions/progress.js`](./netlify/functions/progress.js)
-- Routes (via root `netlify.toml`): `/api/progress` → `/.netlify/functions/progress`
-- Env: set **`PROGRESS_WRITE_TOKEN`** in Netlify Site env (not in git). UI prompts once and keeps it in `sessionStorage` only.
-- Visitors: **Load cloud** (GET, no token).
-- Free plan: Functions/Blobs credits apply — light personal use only.
+- Functions: [`netlify/functions/auth-edit.js`](./netlify/functions/auth-edit.js), [`netlify/functions/progress.js`](./netlify/functions/progress.js)
+- Routes (via root `netlify.toml`): `/api/auth/edit`, `/api/progress`
+- Env (Netlify UI only — never commit):
+  - **`EDIT_PASSCODE`** — 6-digit owner unlock (`YOUR_6_DIGIT_CODE`)
+  - **`PROGRESS_WRITE_TOKEN`** — optional long-lived publish fallback
+  - **`EDIT_TOKEN_SECRET`** — optional HMAC key for edit tokens
+- Progress write accepts `x-edit-token` (from unlock) **or** `x-progress-token` === `PROGRESS_WRITE_TOKEN`
+- Visitors: **Load cloud** (GET, no token) after choosing view mode
+- Free plan: Functions/Blobs credits apply — light personal use only
 
 ```bash
-npm run smoke   # codec + payload shape (no Netlify needed)
+npm run smoke   # codec + edit-auth helpers + payload shape (no Netlify needed)
 ```
