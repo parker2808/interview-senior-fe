@@ -11,6 +11,8 @@ const props = defineProps({
 const emit = defineEmits([
   'use-local',
   'load-public',
+  'load-cloud',
+  'publish-cloud',
   'copy-share',
   'export',
   'import-file',
@@ -21,7 +23,14 @@ const fileInput = ref(null)
 const sourceLabel = {
   local: 'Local (máy này)',
   share: 'Share link (chỉ đọc)',
-  public: 'Public repo (chỉ đọc)',
+  public: 'Public file (chỉ đọc)',
+  cloud: 'Cloud Blobs (chỉ đọc)',
+}
+
+const bannerTitle = {
+  share: 'Đang xem tiến độ đã share',
+  public: 'Đang xem tiến độ public từ repo',
+  cloud: 'Đang xem tiến độ cloud (Netlify Blobs)',
 }
 
 function onFileChange(e) {
@@ -34,12 +43,16 @@ function onFileChange(e) {
 <template>
   <section class="progress-tools" aria-label="Nguồn tiến độ">
     <div v-if="readOnly" class="banner" role="status">
-      <strong>{{ source === 'share' ? 'Đang xem tiến độ đã share' : 'Đang xem tiến độ public từ repo' }}</strong>
+      <strong>{{ bannerTitle[source] || 'Đang xem tiến độ chỉ đọc' }}</strong>
       <span v-if="publicMeta?.owner"> · {{ publicMeta.owner }}</span>
       <span v-if="publicMeta?.updatedAt"> · cập nhật {{ publicMeta.updatedAt }}</span>
       <button type="button" class="linkish" @click="emit('use-local')">
         Quay về tiến độ local
       </button>
+    </div>
+    <div v-else class="banner banner-local" role="status">
+      <strong>Nguồn đang dùng: Local</strong>
+      <span> — check-off ghi vào máy này; publish cloud khi muốn người khác theo dõi.</span>
     </div>
 
     <div class="row">
@@ -58,7 +71,17 @@ function onFileChange(e) {
           :class="{ active: source === 'public' }"
           @click="emit('load-public')"
         >
-          Dùng tiến độ public từ repo
+          Public file
+        </button>
+        <button
+          type="button"
+          :class="{ active: source === 'cloud' }"
+          @click="emit('load-cloud')"
+        >
+          Load cloud
+        </button>
+        <button type="button" @click="emit('publish-cloud')" :disabled="source !== 'local'">
+          Publish to cloud
         </button>
         <button type="button" @click="emit('export')" :disabled="source !== 'local'">
           Export JSON
@@ -98,6 +121,12 @@ function onFileChange(e) {
   flex-wrap: wrap;
   gap: 0.35rem 0.75rem;
   align-items: center;
+}
+
+.banner-local {
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #166534;
 }
 
 .linkish {

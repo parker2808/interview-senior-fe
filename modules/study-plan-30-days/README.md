@@ -35,12 +35,36 @@ npm run build    # → dist/ (Netlify publish)
 
 The app loads markdown from sibling `../content` at build time (Vite alias `@plan`).
 
-## Progress (no backend)
+## Progress sources
 
-- **Local:** `localStorage` on this device
-- **Share link:** copy a URL with a compact day bitmask in the hash (`#share=…`) — opens **view-only** (does not overwrite local)
-- **Public file:** optional [`src/public/progress.json`](./src/public/progress.json) → served as `/progress.json` after Netlify deploy
-- **Export / Import:** download or upload JSON backup from the UI
+| Source | Who | Notes |
+|---|---|---|
+| **Local** | You on this device | `localStorage` — editable |
+| **Share link** | Anyone with the URL | Compact day bitmask (`?share=…`) — **view-only**, does not overwrite local |
+| **Public file** | Anyone | Optional [`src/public/progress.json`](./src/public/progress.json) → `/progress.json` after deploy (commit + redeploy to update) |
+| **Cloud (Blobs)** | Anyone can read; Parker publishes | Live sync via Netlify Functions + Blobs — no always-on backend |
+| **Export / Import** | You | JSON backup from the UI |
+
+### Cloud sync (Netlify Functions + Blobs)
+
+API (after deploy):
+
+| Method | Path | Auth |
+|---|---|---|
+| `GET` | `/api/progress` | Public — visitors use **Load cloud** |
+| `PUT` / `POST` | `/api/progress` | Header `x-progress-token` must match env `PROGRESS_WRITE_TOKEN` |
+
+**Parker setup (once):**
+
+1. Netlify UI → Site configuration → Environment variables → add `PROGRESS_WRITE_TOKEN` (long random secret). **Never commit it.**
+2. Redeploy so Functions pick up the env var.
+3. In the live UI, check off days locally → **Publish to cloud** → paste the token when prompted (stored in `sessionStorage` for that tab only).
+
+**Visitors:** open the live site → **Load cloud** (no token). Local + share link remain available as fallbacks.
+
+**Free-plan caveat:** Functions and Blobs use Netlify Free credits. Fine for light personal study sync; heavy traffic or large blobs can hit limits — see [Netlify pricing](https://www.netlify.com/pricing/).
+
+Function source: [`src/netlify/functions/progress.js`](./src/netlify/functions/progress.js). Full write tests need a Netlify deploy; locally run `npm run smoke` in `src/`.
 
 ## Deploy (Netlify)
 
@@ -51,6 +75,8 @@ Root [`netlify.toml`](../../netlify.toml) currently points at this module:
 | Base directory | `modules/study-plan-30-days/src` |
 | Build command | `npm run build` |
 | Publish directory | `dist` |
+| Functions directory | `netlify/functions` (relative to base) |
+| Env (site) | `PROGRESS_WRITE_TOKEN` — write secret for `/api/progress` |
 
 Live site: [parker-interview-documents.netlify.app](https://parker-interview-documents.netlify.app)
 

@@ -22,7 +22,7 @@ npm run dev      # local: http://localhost:5173
 npm run build    # → dist/ (Netlify publish)
 ```
 
-Progress: `localStorage` on your device; plus **share URL**, optional public `progress.json`, and export/import JSON (see the UI). The app loads markdown from `content/` at build time (`@plan` alias). Shared interview topics live under [`documents/`](./documents/) (not owned by the module).
+Progress: `localStorage` on your device; **share URL**; optional public `progress.json`; **cloud** via Netlify Functions + Blobs (`GET/PUT /api/progress`); or export/import JSON (see the UI). Parker sets `PROGRESS_WRITE_TOKEN` in Netlify env (never commit it). Visitors open the site → **Load cloud**. Free plan: watch Functions/Blobs credits. Details: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). The app loads markdown from `content/` at build time (`@plan` alias). Shared interview topics live under [`documents/`](./documents/) (not owned by the module).
 
 ---
 

@@ -20,6 +20,8 @@ const {
   statusMessage,
   useLocal,
   loadPublicProgress,
+  loadCloudProgress,
+  publishToCloud,
   copyShareLink,
   exportJson,
   importJsonFile,
@@ -160,6 +162,8 @@ window.addEventListener('hashchange', hashSync)
       :public-meta="publicMeta"
       @use-local="useLocal"
       @load-public="loadPublicProgress"
+      @load-cloud="loadCloudProgress"
+      @publish-cloud="publishToCloud"
       @copy-share="copyShareLink"
       @export="exportJson"
       @import-file="importJsonFile"

@@ -22,7 +22,7 @@ npm run dev      # local: http://localhost:5173
 npm run build    # → dist/ (Netlify publish)
 ```
 
-Tiến độ: `localStorage` trên máy bạn; có thể **share URL**, load `progress.json` public, hoặc export/import JSON (xem UI). UI import markdown từ `content/` lúc build (alias `@plan`). Knowledge base dùng chung nằm ở [`documents/`](./documents/) (không thuộc module).
+Tiến độ: `localStorage` trên máy bạn; **share URL**; file `progress.json` public; **cloud** qua Netlify Functions + Blobs (`GET/PUT /api/progress`); hoặc export/import JSON (xem UI). Parker đặt `PROGRESS_WRITE_TOKEN` trong Netlify env (không commit). Khách vào site → **Load cloud**. Free plan: lưu ý hạn mức Functions/Blobs. Chi tiết: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). UI import markdown từ `content/` lúc build (alias `@plan`). Knowledge base dùng chung nằm ở [`documents/`](./documents/) (không thuộc module).
 
 ---
 

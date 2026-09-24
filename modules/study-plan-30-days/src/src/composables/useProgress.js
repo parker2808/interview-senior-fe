@@ -8,6 +8,12 @@ import {
   fromProgressJson,
   toExportJson,
 } from '../utils/progressCodec.js'
+import {
+  fetchCloudProgress,
+  getWriteToken,
+  publishCloudProgress,
+  setWriteToken,
+} from '../utils/progressApi.js'
 
 const STORAGE_KEY = 'senior-fe-30day-progress-v1'
 
@@ -40,7 +46,7 @@ function parseShareFromLocation() {
 
 const localDoneMap = ref(readStorage())
 const viewDoneMap = ref(null)
-/** @type {import('vue').Ref<'local' | 'share' | 'public'>} */
+/** @type {import('vue').Ref<'local' | 'share' | 'public' | 'cloud'>} */
 const source = ref('local')
 const publicMeta = ref(null)
 const statusMessage = ref('')
@@ -122,6 +128,68 @@ async function loadPublicProgress() {
     return true
   } catch (err) {
     statusMessage.value = `Không tải được progress.json: ${err.message || err}`
+    return false
+  }
+}
+
+async function loadCloudProgress() {
+  statusMessage.value = 'Đang tải tiến độ cloud…'
+  try {
+    const data = await fetchCloudProgress()
+    const map = fromProgressJson(data)
+    if (!map) throw new Error('Schema không hợp lệ (cần completed: number[])')
+    enterViewOnly(map, 'cloud', {
+      owner: data.owner || null,
+      updatedAt: data.updatedAt || null,
+      note: data.note || null,
+    })
+    statusMessage.value = data.owner
+      ? `Đang xem tiến độ cloud của ${data.owner} (chỉ đọc).`
+      : 'Đang xem tiến độ cloud (chỉ đọc).'
+    return true
+  } catch (err) {
+    statusMessage.value = `Không tải được cloud progress: ${err.message || err}`
+    return false
+  }
+}
+
+/**
+ * Publish local progress to Netlify Blobs.
+ * @param {string} [tokenOverride] — if empty, uses sessionStorage or prompts
+ */
+async function publishToCloud(tokenOverride) {
+  if (source.value !== 'local') {
+    statusMessage.value = 'Chỉ publish từ nguồn Local.'
+    return false
+  }
+
+  let token = (tokenOverride || getWriteToken() || '').trim()
+  if (!token && typeof window !== 'undefined') {
+    token = (
+      window.prompt(
+        'Nhập PROGRESS_WRITE_TOKEN (lưu tạm trong sessionStorage — không commit):',
+        '',
+      ) || ''
+    ).trim()
+  }
+  if (!token) {
+    statusMessage.value = 'Đã hủy — cần token để publish.'
+    return false
+  }
+
+  setWriteToken(token)
+  statusMessage.value = 'Đang publish lên cloud…'
+  try {
+    const payload = {
+      ...toExportJson(localDoneMap.value),
+      owner: 'Parker',
+    }
+    const result = await publishCloudProgress(payload, token)
+    const published = result?.progress || payload
+    statusMessage.value = `Đã publish cloud · cập nhật ${published.updatedAt || 'now'} (${published.completed?.length ?? 0} ngày).`
+    return true
+  } catch (err) {
+    statusMessage.value = `Publish thất bại: ${err.message || err}`
     return false
   }
 }
@@ -232,6 +300,8 @@ export function useProgress() {
     weekStats,
     useLocal,
     loadPublicProgress,
+    loadCloudProgress,
+    publishToCloud,
     copyShareLink,
     buildShareUrl,
     exportJson,
