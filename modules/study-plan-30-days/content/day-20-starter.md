@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-20-observability.md`](./artifacts/day-20-observability.md)
-2. Đọc `build-tools.md` + `monitoring.md` + `system-design.md`
+2. Đọc [`documents/vi/build-tools.md`](../../../documents/vi/build-tools.md) + [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) + [`documents/vi/system-design.md`](../../../documents/vi/system-design.md)
 3. Điền observability + lazy candidates.
 
 ## Links plan

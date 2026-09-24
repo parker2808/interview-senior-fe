@@ -10,9 +10,10 @@ Complete knowledge base for **Senior Frontend Developer** interviews, focusing o
 
 Module: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/)
 
+- **Live / Demo:** [https://parker-interview-documents.netlify.app](https://parker-interview-documents.netlify.app)
 - **Plan & artifacts:** [`content/`](./modules/study-plan-30-days/content/) — start with [daily-index.md](./modules/study-plan-30-days/content/daily-index.md) or [30-day-study-plan.md](./modules/study-plan-30-days/content/30-day-study-plan.md)
 - **Follow / check-off UI:** Vite + Vue 3 in [`modules/study-plan-30-days/src/`](./modules/study-plan-30-days/src/)
-- **Deploy:** [Netlify](https://www.netlify.com/) — [`netlify.toml`](./netlify.toml) (`base = modules/study-plan-30-days/src`)
+- **Deploy:** [Netlify](https://www.netlify.com/) — [`netlify.toml`](./netlify.toml) (`base = modules/study-plan-30-days/src`). Site settings: Base = `modules/study-plan-30-days/src`, Build = `npm run build`, Publish = `dist`.
 
 ```bash
 cd modules/study-plan-30-days/src
@@ -21,7 +22,7 @@ npm run dev      # local: http://localhost:5173
 npm run build    # → dist/ (Netlify publish)
 ```
 
-Progress persists in `localStorage`. The UI loads markdown from `content/` at build time (`@plan` alias). Shared interview topics live under [`documents/`](./documents/) (not owned by the module).
+Progress: default **View** mode; Parker unlocks **Edit** with a 6-digit passcode via `POST /api/auth/edit` (set `EDIT_PASSCODE` in Netlify — never commit). Cloud: Functions + Blobs (`GET/PUT /api/progress`; publish with session `editToken` or `PROGRESS_WRITE_TOKEN`). Share URL / `progress.json` / export-import still available. Visitors: **View only** → **Load cloud**. Details: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). The app loads markdown from `content/` at build time (`@plan` alias). Shared interview topics live under [`documents/`](./documents/) (not owned by the module).
 
 ---
 

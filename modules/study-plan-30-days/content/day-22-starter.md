@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-22-test-plan.md`](./artifacts/day-22-test-plan.md)
-2. Đọc `documents/vi/testing.md`; React: đối chiếu Testing Library
+2. Đọc [`documents/vi/testing.md`](../../../documents/vi/testing.md); React: đối chiếu Testing Library
 3. Copy sang [`artifacts/capstone/12-test-plan.md`](./artifacts/capstone/12-test-plan.md)
 
 ## Links plan

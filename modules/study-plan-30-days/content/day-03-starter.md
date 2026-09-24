@@ -7,8 +7,8 @@
 1. Mở **worksheet**:
    → [`artifacts/day-03-form-states.md`](./artifacts/day-03-form-states.md)
 2. Đọc:
-   - `documents/vi/accessibility.md`
-   - `documents/vi/vue3.md`
+   - [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md)
+   - [`documents/vi/vue3.md`](../../../documents/vi/vue3.md)
    - React: đối chiếu controlled inputs (không có file React trong repo)
 3. Điền field map + state machine trong worksheet.
 

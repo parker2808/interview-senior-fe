@@ -19,7 +19,7 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Self-check | [docs/self-check-questions.md](../self-check-questions.md) | AI + Testing |
+| Self-check | [self-check-questions.md](../self-check-questions.md) | AI + Testing |
 | DoD | [docs/definition-of-done.md](../definition-of-done.md) | Đọc trước |
 | Day 25 | [day-25-ai-review.md](./day-25-ai-review.md) | Input review |
 

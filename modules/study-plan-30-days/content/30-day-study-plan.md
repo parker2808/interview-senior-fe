@@ -4,8 +4,8 @@
 **Thời lượng:** 60–90 phút/ngày · ~30% đọc / 50% làm / 20% ghi artifact  
 **Mục tiêu:** Senior FE — mindset **framework-agnostic** trước; drill **Vue + React + TypeScript** (repo có Vue/TS; React = practice ngoài repo, đối chiếu concept)
 
-**Repo drill:** [`interview-senior-fe`](https://github.com/parker2808/interview-senior-fe) — ưu tiên files dưới `documents/vi/`, JD map `jd1.md`  
-**Artifact nộp:** `docs/artifacts/` (trong Context store này)
+**Repo drill:** [`interview-senior-fe`](https://github.com/parker2808/interview-senior-fe) — ưu tiên files dưới `documents/vi/`, JD map [`jd1.md`](../../../jd1.md)  
+**Artifact nộp:** [`artifacts/`](./artifacts/) (module plan; có thể sync sang Context store)
 
 ### Tài liệu kèm (đọc khi ngày bảo “dùng template”)
 
@@ -25,7 +25,7 @@ Mỗi ngày làm đúng 4 ô:
 1. **Mục tiêu** — 1 câu (xong ngày khi đạt được điều này)
 2. **Đọc** — file repo / brief (path thật, đã verify)
 3. **Làm gì** — bài tập cụ thể (diagram, checklist, hoặc code spike)
-4. **Artifact** — file nộp dưới `docs/artifacts/…` (tên đã gợi ý)
+4. **Artifact** — file nộp dưới [`artifacts/`](./artifacts/) (tên đã gợi ý)
 
 **Capstone xuyên tháng**
 
@@ -36,9 +36,9 @@ Mỗi ngày làm đúng 4 ô:
 
 | Khi ngày ghi… | Ý nghĩa |
 |---|---|
-| **Vue drill** | Đọc `documents/vi/vue3.md` / `state-management.md` / `testing.md` rồi áp dụng concept |
+| **Vue drill** | Đọc [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) / [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) / [`documents/vi/testing.md`](../../../documents/vi/testing.md) rồi áp dụng concept |
 | **React practice** | Repo **không có** file React — luyện từ concept agnostic + **đối chiếu** với note Vue trong repo (hooks ≈ composables, Context/Zustand ≈ Pinia, Testing Library ≈ VTU) |
-| **TS** | `documents/vi/typescript.md` dùng chung cho cả hai |
+| **TS** | [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) dùng chung cho cả hai |
 
 **Không còn tham chiếu “§20 / §21”** — mọi template nằm trong file có tên rõ ở bảng trên.
 
@@ -110,15 +110,15 @@ flowchart LR
 
 **Đọc**
 - [Capstone brief](./capstone-brief.md) (scope)
-- `documents/vi/practical-questions.md` — quy trình / bug vs feature
-- `README.md` — map chủ đề repo
+- [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) — quy trình / bug vs feature
+- [`README.md`](../../../README.md) — map chủ đề repo
 
 **Làm gì**
 - Trả lời trước khi code: user nào? goal? happy path? permission? API fail thì sao?
 - Vẽ flow: List → Filter → Select → View → Edit → Validate → Save → Feedback → Refresh
 
-**Artifact:** `docs/artifacts/day-01-user-flow.md`  
-*(đồng thời copy sang `docs/artifacts/capstone/01-user-flow.md`)*
+**Artifact:** [`artifacts/day-01-user-flow.md`](./artifacts/day-01-user-flow.md)  
+*(đồng thời copy sang [`artifacts/capstone/01-user-flow.md`](./artifacts/capstone/01-user-flow.md))*
 
 ---
 
@@ -127,13 +127,13 @@ flowchart LR
 **Mục tiêu:** Chỉ ra được primary action + 10 UX issues trên một admin UI.
 
 **Đọc**
-- `documents/vi/architecture.md` — Presentational vs Container
+- [`documents/vi/architecture.md`](../../../documents/vi/architecture.md) — Presentational vs Container
 
 **Làm gì**
 - Critique 1 admin page quen: hierarchy, empty/loading/error, wording consistency
 - Sketch redesign 1 màn (ASCII/wireframe text OK)
 
-**Artifact:** `docs/artifacts/day-02-ui-critique.md`
+**Artifact:** [`artifacts/day-02-ui-critique.md`](./artifacts/day-02-ui-critique.md)
 
 ---
 
@@ -142,15 +142,15 @@ flowchart LR
 **Mục tiêu:** Spec form Edit Profile với validation + state machine rõ.
 
 **Đọc**
-- `documents/vi/accessibility.md` — forms / labels
-- `documents/vi/vue3.md` — v-model, props *(Vue drill)*
+- [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md) — forms / labels
+- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) — v-model, props *(Vue drill)*
 - React practice: đối chiếu controlled inputs / form state (không có file React trong repo)
 
 **Làm gì**
 - Map field → rule → chỗ hiện error → khi nào disable Save
 - Viết state: `pristine → dirty → validating → invalid → submitting → success|error`
 
-**Artifact:** `docs/artifacts/day-03-form-states.md`
+**Artifact:** [`artifacts/day-03-form-states.md`](./artifacts/day-03-form-states.md)
 
 ---
 
@@ -159,12 +159,12 @@ flowchart LR
 **Mục tiêu:** Quyết định chiến lược table 500 rows (cột, filter, pagination).
 
 **Đọc**
-- `documents/vi/css-layout.md` — Flex/Grid + responsive strategy
+- [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) — Flex/Grid + responsive strategy
 
 **Làm gì**
 - Ưu tiên cột always-visible vs optional; search vs filter; pagination vs infinite scroll
 
-**Artifact:** `docs/artifacts/day-04-data-heavy.md`
+**Artifact:** [`artifacts/day-04-data-heavy.md`](./artifacts/day-04-data-heavy.md)
 
 ---
 
@@ -174,13 +174,13 @@ flowchart LR
 
 **Đọc**
 - [Self-check questions](./self-check-questions.md) — phần Product + UI/UX
-- `documents/vi/leadership.md` — ước lượng độ phức tạp
+- [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) — ước lượng độ phức tạp
 
 **Làm gì**
 - Tự trả lời self-check Product/UI cho flow Day 1
 - Viết 3 metric sau release (vd: time-to-verify, config error rate)
 
-**Artifact:** `docs/artifacts/day-05-product-review.md` + `docs/artifacts/capstone/03-acceptance-criteria.md`
+**Artifact:** [`artifacts/day-05-product-review.md`](./artifacts/day-05-product-review.md) + [`artifacts/capstone/03-acceptance-criteria.md`](./artifacts/capstone/03-acceptance-criteria.md)
 
 ---
 
@@ -189,14 +189,14 @@ flowchart LR
 **Mục tiêu:** Break Capstone thành sub-tasks + estimate theo uncertainty.
 
 **Đọc**
-- `documents/vi/practical-questions.md` — quản lý dự án
-- `documents/vi/leadership.md` — mentorship / communication
+- [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) — quản lý dự án
+- [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) — mentorship / communication
 
 **Làm gì**
 - Break ~12 task nhỏ (flow → UI → API → list → filter → edit → validation → states → permission → a11y → tests → docs)
 - Daily loop: 1 main outcome / blockers / end-of-day note
 
-**Artifact:** `docs/artifacts/day-06-work-plan.md`
+**Artifact:** [`artifacts/day-06-work-plan.md`](./artifacts/day-06-work-plan.md)
 
 ---
 
@@ -207,14 +207,14 @@ flowchart LR
 **Đọc**
 - [Feature Template](./feature-template.md)
 - [Capstone brief](./capstone-brief.md)
-- `jd1.md` — JD ưu tiên (Vue-heavy; vẫn ôn React song song)
+- [`jd1.md`](../../../jd1.md) — JD ưu tiên (Vue-heavy; vẫn ôn React song song)
 
 **Làm gì**
 - Copy template → điền Goal → Risks cho Capstone
 - Wireframe outline 3 màn: List / Detail / Field Config
 - Ghi assumption stack: docs bắt buộc; code spike Vue **và** React ở tuần 4
 
-**Artifact:** `docs/artifacts/capstone/00-feature-template.md` + `docs/artifacts/capstone/02-wireframes.md`  
+**Artifact:** [`artifacts/capstone/00-feature-template.md`](./artifacts/capstone/00-feature-template.md) + [`artifacts/capstone/02-wireframes.md`](./artifacts/capstone/02-wireframes.md)  
 **Milestone:** deliverables 01–03 sẵn sàng review
 
 ---
@@ -226,15 +226,15 @@ flowchart LR
 **Mục tiêu:** Component tree Customer List với responsibility rõ từng node.
 
 **Đọc**
-- `documents/vi/architecture.md` — patterns, SOLID
-- `documents/vi/vue3.md` — Composition API, provide/inject *(Vue drill)*
+- [`documents/vi/architecture.md`](../../../documents/vi/architecture.md) — patterns, SOLID
+- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) — Composition API, provide/inject *(Vue drill)*
 - React practice: đối chiếu hooks / compound components / container vs presentational
 
 **Làm gì**
 - Chia: `Search + FilterBar + Table + Pagination + DetailDrawer`
 - Bảng: component | trách nhiệm | không làm gì
 
-**Artifact:** `docs/artifacts/day-08-component-tree.md` → copy `capstone/04-component-architecture.md`
+**Artifact:** [`artifacts/day-08-component-tree.md`](./artifacts/day-08-component-tree.md) → copy `capstone/04-component-architecture.md`
 
 ---
 
@@ -243,13 +243,13 @@ flowchart LR
 **Mục tiêu:** Map state filter page — ai là source of truth.
 
 **Đọc**
-- `documents/vi/state-management.md` — flow, global vs local, Pinia/Vuex *(Vue drill)*
+- [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) — flow, global vs local, Pinia/Vuex *(Vue drill)*
 - React practice: local state vs URL vs server cache (React Query/SWR mindset) vs Context — **đối chiếu** note Vue, không invent path repo
 
 **Làm gì**
 - Classify: query string, selected row, modal open, API cache, form draft
 
-**Artifact:** `docs/artifacts/day-09-state-map.md` → `capstone/05-state-ownership.md`
+**Artifact:** [`artifacts/day-09-state-map.md`](./artifacts/day-09-state-map.md) → `capstone/05-state-ownership.md`
 
 ---
 
@@ -258,14 +258,14 @@ flowchart LR
 **Mục tiêu:** Model type Field Config + diagram Save flow.
 
 **Đọc**
-- `documents/vi/typescript.md` — interface/type, generics, narrowing, utilities
-- `documents/vi/javascript.md` — Promise/async, event loop
+- [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) — interface/type, generics, narrowing, utilities
+- [`documents/vi/javascript.md`](../../../documents/vi/javascript.md) — Promise/async, event loop
 
 **Làm gì**
 - DTO vs UI model; `VerificationStatus` union; tránh `any`
 - Vẽ: UI event → state → request → response → cache → render
 
-**Artifact:** `docs/artifacts/day-10-types-and-flow.md`
+**Artifact:** [`artifacts/day-10-types-and-flow.md`](./artifacts/day-10-types-and-flow.md)
 
 ---
 
@@ -274,14 +274,14 @@ flowchart LR
 **Mục tiêu:** Chuẩn hóa 4 primitives dùng lại cho Capstone.
 
 **Đọc**
-- `documents/vi/system-design.md` — component library
-- `documents/vi/monitoring.md` — error boundaries
+- [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) — component library
+- [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) — error boundaries
 
 **Làm gì**
 - Spec API props: `Button`, `FormField`, `EmptyState`, `ErrorState`
 - Note refactor 1 “god component”
 
-**Artifact:** `docs/artifacts/day-11-design-primitives.md`
+**Artifact:** [`artifacts/day-11-design-primitives.md`](./artifacts/day-11-design-primitives.md)
 
 ---
 
@@ -290,13 +290,13 @@ flowchart LR
 **Mục tiêu:** Chọn strategy mobile cho table 10 cột + ghi trade-off.
 
 **Đọc**
-- `documents/vi/css-layout.md` — responsive strategy
+- [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) — responsive strategy
 
 **Làm gì**
 - So 3 hướng: horizontal scroll / hide columns / card stack
 - Chốt Capstone: desktop full / tablet / mobile (không ép parity)
 
-**Artifact:** `docs/artifacts/day-12-responsive-tradeoffs.md` → `capstone/08-responsive-strategy.md`
+**Artifact:** [`artifacts/day-12-responsive-tradeoffs.md`](./artifacts/day-12-responsive-tradeoffs.md) → `capstone/08-responsive-strategy.md`
 
 ---
 
@@ -305,14 +305,14 @@ flowchart LR
 **Mục tiêu:** Spec Edit Field modal dùng được hoàn toàn bằng keyboard.
 
 **Đọc**
-- `documents/vi/accessibility.md` — ARIA, keyboard, semantic, WCAG
-- `documents/vi/vue3.md` — Teleport *(Vue drill)*
+- [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md) — ARIA, keyboard, semantic, WCAG
+- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) — Teleport *(Vue drill)*
 - React practice: portal + focus trap pattern (đối chiếu concept)
 
 **Làm gì**
 - Focus trap, Esc, return focus, `aria-modal`, labelledby, announce error
 
-**Artifact:** `docs/artifacts/day-13-modal-a11y.md` → bắt đầu `capstone/09-a11y-checklist.md`
+**Artifact:** [`artifacts/day-13-modal-a11y.md`](./artifacts/day-13-modal-a11y.md) → bắt đầu `capstone/09-a11y-checklist.md`
 
 ---
 
@@ -328,7 +328,7 @@ flowchart LR
 - Đi keyboard path trên spec/prototype; ghi fail
 - Gom: tree, state map, responsive, a11y
 
-**Artifact:** `docs/artifacts/day-14-keyboard-result.md`  
+**Artifact:** [`artifacts/day-14-keyboard-result.md`](./artifacts/day-14-keyboard-result.md)  
 **Milestone:** 04, 05, 08, 09 khá hoàn chỉnh
 
 ---
@@ -340,14 +340,14 @@ flowchart LR
 **Mục tiêu:** Draft contract `GET/PATCH fields` đủ pagination/filter/sort/nullable.
 
 **Đọc**
-- `documents/vi/networking.md` — REST vs WebSocket
-- `documents/vi/javascript.md` — async
-- `documents/vi/nuxt.md` — CSR/SSR/SSG *(high-level T-shaped; không bắt buộc Nuxt)*
+- [`documents/vi/networking.md`](../../../documents/vi/networking.md) — REST vs WebSocket
+- [`documents/vi/javascript.md`](../../../documents/vi/javascript.md) — async
+- [`documents/vi/nuxt.md`](../../../documents/vi/nuxt.md) — CSR/SSR/SSG *(high-level T-shaped; không bắt buộc Nuxt)*
 
 **Làm gì**
 - Viết paths, query, body, response, conflict (409)
 
-**Artifact:** `docs/artifacts/day-15-api-contract.md` → `capstone/06-api-contract.md`
+**Artifact:** [`artifacts/day-15-api-contract.md`](./artifacts/day-15-api-contract.md) → `capstone/06-api-contract.md`
 
 ---
 
@@ -356,14 +356,14 @@ flowchart LR
 **Mục tiêu:** Mỗi status code có UX + retry + log rõ.
 
 **Đọc**
-- `documents/vi/practical-questions.md` — handling 401
-- `documents/vi/monitoring.md` — Sentry / logging
+- [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) — handling 401
+- [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) — Sentry / logging
 
 **Làm gì**
 - Matrix: 400, 401, 403, 404, 409, 422, 429, 500, timeout, offline  
 - Phân biệt field error vs toast vs full-page
 
-**Artifact:** `docs/artifacts/day-16-error-matrix.md` → `capstone/07-error-matrix.md`
+**Artifact:** [`artifacts/day-16-error-matrix.md`](./artifacts/day-16-error-matrix.md) → `capstone/07-error-matrix.md`
 
 ---
 
@@ -372,13 +372,13 @@ flowchart LR
 **Mục tiêu:** Security checklist Capstone (XSS, authz, storage).
 
 **Đọc**
-- `documents/vi/security.md` — XSS, CSRF, auth, validation, CORS
-- `documents/vi/performance.md` — localStorage vs session vs cookie
+- [`documents/vi/security.md`](../../../documents/vi/security.md) — XSS, CSRF, auth, validation, CORS
+- [`documents/vi/performance.md`](../../../documents/vi/performance.md) — localStorage vs session vs cookie
 
 **Làm gì**
 - Threat model: HTML render, Viewer/Editor/Admin, “permission chỉ check UI?”
 
-**Artifact:** `docs/artifacts/day-17-security.md` → `capstone/10-security-checklist.md`
+**Artifact:** [`artifacts/day-17-security.md`](./artifacts/day-17-security.md) → `capstone/10-security-checklist.md`
 
 ---
 
@@ -387,16 +387,16 @@ flowchart LR
 **Mục tiêu:** Có investigation log cho “Save OK nhưng UI stale” + mitigation race.
 
 **Đọc**
-- `documents/vi/vue3.md` — debug component bugs *(Vue drill)*
-- `documents/vi/javascript.md` — event loop
-- `documents/vi/performance.md` — debounce/throttle
+- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) — debug component bugs *(Vue drill)*
+- [`documents/vi/javascript.md`](../../../documents/vi/javascript.md) — event loop
+- [`documents/vi/performance.md`](../../../documents/vi/performance.md) — debounce/throttle
 - React practice: stale closure / abort controller / query key invalidation — đối chiếu
 
 **Làm gì**
 - Framework debug: reproduce → hypothesis → evidence → fix options (cache, optimistic, refetch)
 - Case search race: request cũ ghi đè request mới
 
-**Artifact:** `docs/artifacts/day-18-debug-stale-ui.md`
+**Artifact:** [`artifacts/day-18-debug-stale-ui.md`](./artifacts/day-18-debug-stale-ui.md)
 
 ---
 
@@ -405,13 +405,13 @@ flowchart LR
 **Mục tiêu:** Phân loại bottleneck + proposal cho list lớn / live search.
 
 **Đọc**
-- `documents/vi/performance.md` — optimization, case studies, code splitting
-- `documents/vi/web-apis.md` — Intersection Observer, Workers
+- [`documents/vi/performance.md`](../../../documents/vi/performance.md) — optimization, case studies, code splitting
+- [`documents/vi/web-apis.md`](../../../documents/vi/web-apis.md) — Intersection Observer, Workers
 
 **Làm gì**
 - Render vs network vs bundle; virtualize? debounce? cancel in-flight?
 
-**Artifact:** `docs/artifacts/day-19-performance.md` → `capstone/11-performance-review.md`
+**Artifact:** [`artifacts/day-19-performance.md`](./artifacts/day-19-performance.md) → `capstone/11-performance-review.md`
 
 ---
 
@@ -420,15 +420,15 @@ flowchart LR
 **Mục tiêu:** Observability plan + lazy-load candidates.
 
 **Đọc**
-- `documents/vi/build-tools.md` — Vite vs Webpack
-- `documents/vi/monitoring.md` — performance monitoring
-- `documents/vi/system-design.md` — caching
+- [`documents/vi/build-tools.md`](../../../documents/vi/build-tools.md) — Vite vs Webpack
+- [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) — performance monitoring
+- [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) — caching
 
 **Làm gì**
 - Plan: error log, request ID, breadcrumb, Core Web Vitals
 - List route/component lazy cho Capstone
 
-**Artifact:** `docs/artifacts/day-20-observability.md`
+**Artifact:** [`artifacts/day-20-observability.md`](./artifacts/day-20-observability.md)
 
 ---
 
@@ -437,16 +437,16 @@ flowchart LR
 **Mục tiêu:** CI quality gates + 1 ADR ngắn.
 
 **Đọc**
-- `documents/vi/devops.md` — GitOps high-level
-- `documents/vi/practical-questions.md` — Git flow
-- `documents/vi/leadership.md` — ADR template
-- `documents/vi/system-design.md` — architecture decisions
+- [`documents/vi/devops.md`](../../../documents/vi/devops.md) — GitOps high-level
+- [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) — Git flow
+- [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) — ADR template
+- [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) — architecture decisions
 
 **Làm gì**
 - Pipeline: install → lint → typecheck → unit → build → deploy → smoke
 - ADR: “URL state cho filters” hoặc “global store vs local cho Field Config” (**agnostic** — áp dụng được Vue và React)
 
-**Artifact:** `docs/artifacts/day-21-ci-and-adr.md`  
+**Artifact:** [`artifacts/day-21-ci-and-adr.md`](./artifacts/day-21-ci-and-adr.md)  
 **Milestone tuần 3:** 06, 07, 10, 11 sẵn sàng
 
 ---
@@ -458,13 +458,13 @@ flowchart LR
 **Mục tiêu:** Map behavior Capstone → đúng tầng test (không E2E hết).
 
 **Đọc**
-- `documents/vi/testing.md` — unit / component / E2E / coverage / TDD *(Vue + Vitest / Playwright trong repo)*
+- [`documents/vi/testing.md`](../../../documents/vi/testing.md) — unit / component / E2E / coverage / TDD *(Vue + Vitest / Playwright trong repo)*
 - React practice: cùng pyramid với Jest/Vitest + Testing Library — đối chiếu VTU
 
 **Làm gì**
 - Chọn ~5 unit, 4 component, 2 integration, 1 critical E2E
 
-**Artifact:** `docs/artifacts/day-22-test-plan.md` → `capstone/12-test-plan.md`
+**Artifact:** [`artifacts/day-22-test-plan.md`](./artifacts/day-22-test-plan.md) → `capstone/12-test-plan.md`
 
 ---
 
@@ -473,14 +473,14 @@ flowchart LR
 **Mục tiêu:** Có pseudo/code tests cho validation + 409 + 403 trên **cả hai** mindset.
 
 **Đọc**
-- `documents/vi/testing.md` — mocking async, Vue Test Utils
+- [`documents/vi/testing.md`](../../../documents/vi/testing.md) — mocking async, Vue Test Utils
 - React: Testing Library patterns (ngoài repo; đối chiếu)
 
 **Làm gì**
 - Viết hoặc pseudo: Save success, conflict 409, permission 403
 - Cột so sánh: Vue test vs React test cho cùng behavior
 
-**Artifact:** `docs/artifacts/day-23-test-snippets-vue-react.md`
+**Artifact:** [`artifacts/day-23-test-snippets-vue-react.md`](./artifacts/day-23-test-snippets-vue-react.md)
 
 ---
 
@@ -489,13 +489,13 @@ flowchart LR
 **Mục tiêu:** 1 E2E scenario critical + gắn CI gates.
 
 **Đọc**
-- `documents/vi/testing.md` — Playwright
+- [`documents/vi/testing.md`](../../../documents/vi/testing.md) — Playwright
 
 **Làm gì**
 - Scenario: Editor → edit field → save → list cập nhật
 - Cập nhật pipeline Day 21
 
-**Artifact:** `docs/artifacts/day-24-e2e-and-ci.md` · Capstone **12** gần final
+**Artifact:** [`artifacts/day-24-e2e-and-ci.md`](./artifacts/day-24-e2e-and-ci.md) · Capstone **12** gần final
 
 ---
 
@@ -504,15 +504,15 @@ flowchart LR
 **Mục tiêu:** Prompt đủ context + audit AI output (không blind merge).
 
 **Đọc**
-- `documents/vi/performance.md` — code review checklist
-- `documents/vi/leadership.md` — review tips
+- [`documents/vi/performance.md`](../../../documents/vi/performance.md) — code review checklist
+- [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) — review tips
 - [Feature Template](./feature-template.md) mục AI Usage
 
 **Làm gì**
 - Prompt AI generate Field Config edit (AC, states, a11y, roles) — có thể xin **Vue hoặc React**
 - Audit: correctness, architecture, security, a11y, performance, tests
 
-**Artifact:** `docs/artifacts/day-25-ai-review.md` → `capstone/13-ai-evidence.md`
+**Artifact:** [`artifacts/day-25-ai-review.md`](./artifacts/day-25-ai-review.md) → `capstone/13-ai-evidence.md`
 
 ---
 
@@ -528,7 +528,7 @@ flowchart LR
 - Review “PR giả định” (AI draft): null, double-click, permission, unmount khi pending
 - Ghi lỗi AI hay gặp
 
-**Artifact:** `docs/artifacts/day-26-code-review.md` → `capstone/14-code-review-checklist.md`
+**Artifact:** [`artifacts/day-26-code-review.md`](./artifacts/day-26-code-review.md) → `capstone/14-code-review-checklist.md`
 
 ---
 
@@ -537,14 +537,14 @@ flowchart LR
 **Mục tiêu:** Implement **một slice** (List+filter hoặc Field Config) bằng Vue/TS — không full app.
 
 **Đọc**
-- `documents/vi/vue3.md`, `documents/vi/state-management.md`, `documents/vi/typescript.md`
+- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md), [`documents/vi/state-management.md`](../../../documents/vi/state-management.md), [`documents/vi/typescript.md`](../../../documents/vi/typescript.md)
 - Artifacts Capstone 01–11 (docs đã làm)
 
 **Làm gì**
 - Spike nhỏ: đủ loading/empty/error + 1 action save
 - Bám [Feature Template](./feature-template.md) sections UI States / State / API
 
-**Artifact:** `docs/artifacts/capstone/spikes/vue/` + note `docs/artifacts/day-27-vue-spike.md`
+**Artifact:** [`artifacts/capstone/spikes/vue/`](./artifacts/capstone/spikes/vue/) + note [`artifacts/day-27-vue-spike.md`](./artifacts/day-27-vue-spike.md)
 
 ---
 
@@ -560,7 +560,7 @@ flowchart LR
 - Cùng behavior: filter/list hoặc field edit
 - Ghi bảng so sánh: state, effects, test approach Vue vs React
 
-**Artifact:** `docs/artifacts/capstone/spikes/react/` + `docs/artifacts/day-28-react-spike.md`  
+**Artifact:** [`artifacts/capstone/spikes/react/`](./artifacts/capstone/spikes/react/) + [`artifacts/day-28-react-spike.md`](./artifacts/day-28-react-spike.md)  
 Cũng hoàn thiện evidence responsive/a11y/security còn thiếu → 08–11
 
 ---
@@ -577,7 +577,7 @@ Cũng hoàn thiện evidence responsive/a11y/security còn thiếu → 08–11
 - README Capstone: architecture, API, tests, limitations, risks, link Vue/React spikes
 - Index `01`…`15` — mục nào thiếu thì bổ sung ngắn
 
-**Artifact:** `docs/artifacts/capstone/15-delivery-notes.md` + DoD checklist đã tick
+**Artifact:** [`artifacts/capstone/15-delivery-notes.md`](./artifacts/capstone/15-delivery-notes.md) + DoD checklist đã tick
 
 ---
 
@@ -587,13 +587,13 @@ Cũng hoàn thiện evidence responsive/a11y/security còn thiếu → 08–11
 
 **Đọc**
 - [Self-check questions](./self-check-questions.md) (full)
-- Skim yếu: chọn 1 trong `documents/vi/system-design.md` / `documents/vi/architecture.md` / `documents/en/practical-questions.md` (EN wording)
+- Skim yếu: chọn 1 trong [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) / [`documents/vi/architecture.md`](../../../documents/vi/architecture.md) / [`documents/en/practical-questions.md`](../../../documents/en/practical-questions.md) (EN wording)
 
 **Làm gì**
 - Mock: product → state → API → a11y → test → AI review → Vue vs React trade-off bạn vừa spike
 - 5′ triage nếu thời gian còn lại trong tháng
 
-**Artifact:** `docs/artifacts/day-30-mock-outline.md`
+**Artifact:** [`artifacts/day-30-mock-outline.md`](./artifacts/day-30-mock-outline.md)
 
 ---
 
@@ -617,7 +617,7 @@ Giữ **P0 mindset**; cắt độ sâu P2 và full code.
 ## Folder artifacts gợi ý
 
 ```text
-docs/artifacts/
+artifacts/
   day-01-user-flow.md
   …
   day-30-mock-outline.md
@@ -637,16 +637,16 @@ Tạo folder khi Day 1 bắt đầu (`03/10/2026`).
 
 | Chủ đề | Path |
 |---|---|
-| Index | `README.md`, `README-en.md` |
-| JD map | `jd1.md` |
-| JS / TS | `documents/vi/javascript.md`, `documents/vi/typescript.md` |
-| CSS / Responsive | `documents/vi/css-layout.md` |
-| Web APIs | `documents/vi/web-apis.md` |
-| Vue / Nuxt / State | `documents/vi/vue3.md`, `documents/vi/nuxt.md`, `documents/vi/state-management.md` |
-| Testing / Perf / Security / A11y | `documents/vi/testing.md`, `documents/vi/performance.md`, `documents/vi/security.md`, `documents/vi/accessibility.md` |
-| Build / Net / DevOps | `documents/vi/build-tools.md`, `documents/vi/networking.md`, `documents/vi/devops.md` |
-| Arch / System / Leadership | `documents/vi/architecture.md`, `documents/vi/system-design.md`, `documents/vi/leadership.md` |
-| Practical / Monitoring | `documents/vi/practical-questions.md`, `documents/vi/monitoring.md` |
+| Index | [`README.md`](../../../README.md), [`README-en.md`](../../../README-en.md) |
+| JD map | [`jd1.md`](../../../jd1.md) |
+| JS / TS | [`documents/vi/javascript.md`](../../../documents/vi/javascript.md), [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) |
+| CSS / Responsive | [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) |
+| Web APIs | [`documents/vi/web-apis.md`](../../../documents/vi/web-apis.md) |
+| Vue / Nuxt / State | [`documents/vi/vue3.md`](../../../documents/vi/vue3.md), [`documents/vi/nuxt.md`](../../../documents/vi/nuxt.md), [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) |
+| Testing / Perf / Security / A11y | [`documents/vi/testing.md`](../../../documents/vi/testing.md), [`documents/vi/performance.md`](../../../documents/vi/performance.md), [`documents/vi/security.md`](../../../documents/vi/security.md), [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md) |
+| Build / Net / DevOps | [`documents/vi/build-tools.md`](../../../documents/vi/build-tools.md), [`documents/vi/networking.md`](../../../documents/vi/networking.md), [`documents/vi/devops.md`](../../../documents/vi/devops.md) |
+| Arch / System / Leadership | [`documents/vi/architecture.md`](../../../documents/vi/architecture.md), [`documents/vi/system-design.md`](../../../documents/vi/system-design.md), [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) |
+| Practical / Monitoring | [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md), [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) |
 | EN twins | cùng tên dưới `documents/en/` |
 | **React** | *không có trong repo* — practice ngoài + đối chiếu Vue notes |
 

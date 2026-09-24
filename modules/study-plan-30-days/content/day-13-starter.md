@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-13-modal-a11y.md`](./artifacts/day-13-modal-a11y.md)
-2. Đọc `documents/vi/accessibility.md` + Teleport trong `documents/vi/vue3.md`
+2. Đọc [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md) + Teleport trong [`documents/vi/vue3.md`](../../../documents/vi/vue3.md)
 3. Bắt đầu [`artifacts/capstone/09-a11y-checklist.md`](./artifacts/capstone/09-a11y-checklist.md)
 
 ## Links plan

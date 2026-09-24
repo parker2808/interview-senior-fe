@@ -18,7 +18,7 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Testing | `documents/vi/testing.md` | Mocking async, Vue Test Utils |
+| Testing | [`documents/vi/testing.md`](../../../../documents/vi/testing.md) | Mocking async, Vue Test Utils |
 | React | *(không có path repo)* | Testing Library patterns |
 
 Plan Day 23: [30-day-study-plan.md — Day 23](../30-day-study-plan.md#day-23--25102026--form-api-error-tests-vue-react)

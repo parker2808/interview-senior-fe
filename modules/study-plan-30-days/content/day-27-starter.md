@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-27-vue-spike.md`](./artifacts/day-27-vue-spike.md)
-2. Đọc `vue3.md` + `state-management.md` + `typescript.md` + Capstone 01–11
+2. Đọc [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) + [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) + [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) + Capstone 01–11
 3. Cập nhật [`artifacts/capstone/spikes/vue/README.md`](./artifacts/capstone/spikes/vue/README.md)
 
 ## Links plan

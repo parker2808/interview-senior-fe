@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "updatedAt": "",
+  "owner": "Parker",
+  "completed": [],
+  "note": "Commit updates here and redeploy Netlify so others can load public progress from /progress.json"
+}

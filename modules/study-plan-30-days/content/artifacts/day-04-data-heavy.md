@@ -20,8 +20,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| CSS / responsive | `documents/vi/css-layout.md` | Flex/Grid + responsive strategy |
-| Capstone | [docs/capstone-brief.md](../capstone-brief.md) | List: search, filter, sort, pagination |
+| CSS / responsive | [`documents/vi/css-layout.md`](../../../../documents/vi/css-layout.md) | Flex/Grid + responsive strategy |
+| Capstone | [capstone-brief.md](../capstone-brief.md) | List: search, filter, sort, pagination |
 
 Plan Day 4: [30-day-study-plan.md — Day 4](../30-day-study-plan.md#day-4--06102026--data-heavy-ui)
 

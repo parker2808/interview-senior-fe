@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-17-security.md`](./artifacts/day-17-security.md)
-2. Đọc `documents/vi/security.md` + storage notes trong `documents/vi/performance.md`
+2. Đọc [`documents/vi/security.md`](../../../documents/vi/security.md) + storage notes trong [`documents/vi/performance.md`](../../../documents/vi/performance.md)
 3. Copy sang [`artifacts/capstone/10-security-checklist.md`](./artifacts/capstone/10-security-checklist.md)
 
 ## Links plan

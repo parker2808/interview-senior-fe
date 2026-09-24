@@ -19,8 +19,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| TypeScript | `documents/vi/typescript.md` | interface/type, generics, narrowing, utilities |
-| JavaScript | `documents/vi/javascript.md` | Promise/async, event loop |
+| TypeScript | [`documents/vi/typescript.md`](../../../../documents/vi/typescript.md) | interface/type, generics, narrowing, utilities |
+| JavaScript | [`documents/vi/javascript.md`](../../../../documents/vi/javascript.md) | Promise/async, event loop |
 
 Plan Day 10: [30-day-study-plan.md — Day 10](../30-day-study-plan.md#day-10--12102026--data-flow-typescript)
 

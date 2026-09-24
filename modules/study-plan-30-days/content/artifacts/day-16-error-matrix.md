@@ -19,8 +19,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Practical | `documents/vi/practical-questions.md` | Handling 401 |
-| Monitoring | `documents/vi/monitoring.md` | Sentry / logging |
+| Practical | [`documents/vi/practical-questions.md`](../../../../documents/vi/practical-questions.md) | Handling 401 |
+| Monitoring | [`documents/vi/monitoring.md`](../../../../documents/vi/monitoring.md) | Sentry / logging |
 
 Plan Day 16: [30-day-study-plan.md — Day 16](../30-day-study-plan.md#day-16--18102026--error-handling-matrix)
 

@@ -19,8 +19,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Architecture | `documents/vi/architecture.md` | Patterns, SOLID, Presentational vs Container |
-| Vue drill | `documents/vi/vue3.md` | Composition API, provide/inject |
+| Architecture | [`documents/vi/architecture.md`](../../../../documents/vi/architecture.md) | Patterns, SOLID, Presentational vs Container |
+| Vue drill | [`documents/vi/vue3.md`](../../../../documents/vi/vue3.md) | Composition API, provide/inject |
 | React practice | *(không có path repo)* | hooks / compound / container vs presentational |
 
 Plan Day 8: [30-day-study-plan.md — Day 8](../30-day-study-plan.md#day-8--10102026--component-architecture)

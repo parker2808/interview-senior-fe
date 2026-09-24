@@ -6,6 +6,24 @@
   command = "npm run build"
   publish = "dist"
 
+# Paths are relative to [build].base
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# API before SPA fallback — Blobs-backed progress + edit unlock
+[[redirects]]
+  from = "/api/progress"
+  to = "/.netlify/functions/progress"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/auth/edit"
+  to = "/.netlify/functions/auth-edit"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"

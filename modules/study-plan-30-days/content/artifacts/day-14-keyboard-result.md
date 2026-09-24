@@ -19,8 +19,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Self-check | [docs/self-check-questions.md](../self-check-questions.md) | Responsive + Accessibility |
-| Day 8–13 artifacts | `docs/artifacts/day-08-…` → `day-13-…` | Review notes |
+| Self-check | [self-check-questions.md](../self-check-questions.md) | Responsive + Accessibility |
+| Day 8–13 artifacts | [`artifacts/day-08-…`](./day-08-…) → `day-13-…` | Review notes |
 
 Plan Day 14: [30-day-study-plan.md — Day 14](../30-day-study-plan.md#day-14--16102026--keyboard-review-wrap-tuần-2)
 

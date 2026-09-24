@@ -6,8 +6,35 @@ import { useProgress } from './composables/useProgress.js'
 import DayList from './components/DayList.vue'
 import DayDetail from './components/DayDetail.vue'
 import ResourceDoc from './components/ResourceDoc.vue'
+import ProgressTools from './components/ProgressTools.vue'
+import EditGateModal from './components/EditGateModal.vue'
 
-const { completedCount, percent, isDone, toggleDone, weekStats } = useProgress()
+const {
+  completedCount,
+  percent,
+  isDone,
+  toggleDone,
+  weekStats,
+  source,
+  readOnly,
+  isEditMode,
+  modeLabel,
+  modalOpen,
+  unlocking,
+  unlockError,
+  publicMeta,
+  statusMessage,
+  useLocal,
+  loadPublicProgress,
+  loadCloudProgress,
+  publishToCloud,
+  copyShareLink,
+  exportJson,
+  importJsonFile,
+  tryUnlock,
+  skipUnlock,
+  openUnlockModal,
+} = useProgress()
 
 const view = ref('list') // list | day | resource
 const selectedDay = ref(null)
@@ -43,6 +70,7 @@ function backToList() {
 }
 
 function onToggle(day) {
+  if (readOnly.value) return
   const wasDone = isDone(day)
   toggleDone(day)
   if (!wasDone) {
@@ -92,13 +120,15 @@ const hashSync = () => {
 }
 
 watch([view, selectedDay, resourcePath], () => {
+  const url = new URL(window.location.href)
   if (view.value === 'day' && selectedDay.value) {
-    history.replaceState(null, '', `#day/${selectedDay.value}`)
+    url.hash = `day/${selectedDay.value}`
   } else if (view.value === 'resource') {
-    history.replaceState(null, '', `#doc/${encodeURIComponent(resourcePath.value)}`)
+    url.hash = `doc/${encodeURIComponent(resourcePath.value)}`
   } else {
-    history.replaceState(null, '', '#')
+    url.hash = ''
   }
+  history.replaceState(null, '', url.pathname + url.search + url.hash)
 })
 
 hashSync()
@@ -107,6 +137,14 @@ window.addEventListener('hashchange', hashSync)
 
 <template>
   <div class="shell" :class="{ celebrate }">
+    <EditGateModal
+      :open="modalOpen"
+      :unlocking="unlocking"
+      :error="unlockError"
+      @submit="tryUnlock"
+      @skip="skipUnlock"
+    />
+
     <header class="top">
       <div class="brand-row">
         <button
@@ -120,6 +158,23 @@ window.addEventListener('hashchange', hashSync)
         <div class="brand">
           <p class="eyebrow">Senior FE · 03/10 → 01/11/2026</p>
           <h1>Kế hoạch ôn 30 ngày</h1>
+          <div class="mode-row">
+            <span
+              class="mode-badge"
+              :class="isEditMode ? 'mode-edit' : 'mode-view'"
+              :title="isEditMode ? 'Đã mở khóa chỉnh sửa (phiên này)' : 'Chỉ xem — không sửa / publish'"
+            >
+              {{ modeLabel }}
+            </span>
+            <button
+              v-if="!isEditMode"
+              type="button"
+              class="unlock-link"
+              @click="openUnlockModal"
+            >
+              Mở khóa
+            </button>
+          </div>
         </div>
       </div>
 
@@ -133,6 +188,22 @@ window.addEventListener('hashchange', hashSync)
         </div>
       </div>
     </header>
+
+    <ProgressTools
+      :source="source"
+      :read-only="readOnly"
+      :is-edit-mode="isEditMode"
+      :status-message="statusMessage"
+      :public-meta="publicMeta"
+      @use-local="useLocal"
+      @load-public="loadPublicProgress"
+      @load-cloud="loadCloudProgress"
+      @publish-cloud="publishToCloud"
+      @copy-share="copyShareLink"
+      @export="exportJson"
+      @import-file="importJsonFile"
+      @request-unlock="openUnlockModal"
+    />
 
     <nav class="resources" aria-label="Tài liệu nhanh">
       <button
@@ -155,6 +226,7 @@ window.addEventListener('hashchange', hashSync)
         :week-labels="WEEK_LABELS"
         :week-progress="weekProgress"
         :is-done="isDone"
+        :read-only="readOnly"
         @update:week-filter="weekFilter = $event"
         @open="openDay"
         @toggle="onToggle"
@@ -164,6 +236,7 @@ window.addEventListener('hashchange', hashSync)
         v-else-if="view === 'day' && currentMeta"
         :day="currentMeta"
         :done="isDone(currentMeta.day)"
+        :read-only="readOnly"
         @toggle="onToggle(currentMeta.day)"
         @prev="goPrev"
         @next="goNext"
@@ -174,6 +247,7 @@ window.addEventListener('hashchange', hashSync)
         v-else-if="view === 'resource'"
         :path="resourcePath"
         @back="backToList"
+        @open-doc="openResource"
       />
     </main>
   </div>
@@ -221,6 +295,47 @@ h1 {
   font-size: clamp(1.45rem, 3vw, 1.85rem);
   font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+.mode-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+}
+
+.mode-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border-radius: 6px;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid transparent;
+}
+
+.mode-edit {
+  background: #ecfdf5;
+  border-color: #6ee7b7;
+  color: #047857;
+}
+
+.mode-view {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.unlock-link {
+  border: 0;
+  background: transparent;
+  color: var(--accent-ink, #0f766e);
+  text-decoration: underline;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0;
 }
 
 .progress-block {

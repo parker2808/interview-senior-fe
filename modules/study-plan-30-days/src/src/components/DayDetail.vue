@@ -2,10 +2,12 @@
 import { computed, ref, watch } from 'vue'
 import { marked } from 'marked'
 import { loadMarkdown } from '../data/markdown.js'
+import { classifyMarkdownHref } from '../utils/markdownLinks.js'
 
 const props = defineProps({
   day: { type: Object, required: true },
   done: { type: Boolean, required: true },
+  readOnly: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['toggle', 'prev', 'next', 'open-doc'])
@@ -32,23 +34,19 @@ function onDocClick(e) {
   const a = e.target.closest('a')
   if (!a) return
   const href = a.getAttribute('href')
-  if (!href || href.startsWith('http') || href.startsWith('#')) return
-
-  // Resolve relative markdown links inside plan folder
-  e.preventDefault()
-  let base = activePath.value.includes('/')
-    ? activePath.value.slice(0, activePath.value.lastIndexOf('/') + 1)
-    : ''
-  let target = href.replace(/^\.\//, '')
-  while (target.startsWith('../')) {
-    target = target.slice(3)
-    if (base) {
-      const parts = base.replace(/\/$/, '').split('/')
-      parts.pop()
-      base = parts.length ? parts.join('/') + '/' : ''
-    }
+  const result = classifyMarkdownHref(activePath.value, href, (path) =>
+    loadMarkdown(path).ok,
+  )
+  if (result.kind === 'ignore' || result.kind === 'hash') return
+  if (result.kind === 'external' || result.kind === 'github') {
+    e.preventDefault()
+    window.open(result.url, '_blank', 'noopener,noreferrer')
+    return
   }
-  emit('open-doc', base + target)
+  if (result.kind === 'plan') {
+    e.preventDefault()
+    emit('open-doc', result.path)
+  }
 }
 </script>
 
@@ -59,9 +57,14 @@ function onDocClick(e) {
         <p class="eyebrow">Day {{ String(day.day).padStart(2, '0') }} · {{ day.date }}</p>
         <h2>{{ day.theme }}</h2>
       </div>
-      <label class="done-toggle">
-        <input type="checkbox" :checked="done" @change="$emit('toggle')" />
-        <span>{{ done ? 'Đã xong' : 'Đánh dấu xong' }}</span>
+      <label class="done-toggle" :class="{ disabled: readOnly }">
+        <input
+          type="checkbox"
+          :checked="done"
+          :disabled="readOnly"
+          @change="$emit('toggle')"
+        />
+        <span>{{ readOnly ? (done ? 'Đã xong (xem)' : 'Chưa xong') : done ? 'Đã xong' : 'Đánh dấu xong' }}</span>
       </label>
     </header>
 
@@ -152,6 +155,11 @@ h2 {
   background: var(--done-soft);
   border-color: #86efac;
   color: var(--done);
+}
+
+.done-toggle.disabled {
+  opacity: 0.75;
+  cursor: default;
 }
 
 .tabs {

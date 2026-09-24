@@ -9,8 +9,8 @@
 2. Đọc nhanh scope Capstone (đã link trong worksheet):  
    → [`capstone-brief.md`](./capstone-brief.md)
 3. Đọc repo (paths trong worksheet đã verify):  
-   - `documents/vi/practical-questions.md`  
-   - `/workspace/README.md`
+   - [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md)  
+   - [`README.md`](../../../README.md)
 4. Khi xong, copy flow sang:  
    → [`artifacts/capstone/01-user-flow.md`](./artifacts/capstone/01-user-flow.md)
 

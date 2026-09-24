@@ -20,8 +20,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| A11y forms | `documents/vi/accessibility.md` | Forms / labels |
-| Vue drill | `documents/vi/vue3.md` | v-model, props |
+| A11y forms | [`documents/vi/accessibility.md`](../../../../documents/vi/accessibility.md) | Forms / labels |
+| Vue drill | [`documents/vi/vue3.md`](../../../../documents/vi/vue3.md) | v-model, props |
 | React practice | *(không có path repo)* | Đối chiếu controlled inputs / form state |
 
 Plan Day 3: [30-day-study-plan.md — Day 3](../30-day-study-plan.md#day-3--05102026--forms)

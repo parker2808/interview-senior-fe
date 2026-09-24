@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-21-ci-and-adr.md`](./artifacts/day-21-ci-and-adr.md)
-2. Đọc `devops.md` + `practical-questions.md` + `leadership.md` + `system-design.md`
+2. Đọc [`documents/vi/devops.md`](../../../documents/vi/devops.md) + [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) + [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) + [`documents/vi/system-design.md`](../../../documents/vi/system-design.md)
 3. Viết pipeline + ADR trong worksheet.
 
 ## Links plan

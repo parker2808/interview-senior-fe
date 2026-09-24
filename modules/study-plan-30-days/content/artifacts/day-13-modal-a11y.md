@@ -18,8 +18,8 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| A11y | `documents/vi/accessibility.md` | ARIA, keyboard, semantic, WCAG |
-| Vue Teleport | `documents/vi/vue3.md` | Teleport |
+| A11y | [`documents/vi/accessibility.md`](../../../../documents/vi/accessibility.md) | ARIA, keyboard, semantic, WCAG |
+| Vue Teleport | [`documents/vi/vue3.md`](../../../../documents/vi/vue3.md) | Teleport |
 | React practice | *(không có path repo)* | portal + focus trap |
 
 Plan Day 13: [30-day-study-plan.md — Day 13](../30-day-study-plan.md#day-13--15102026--modal-accessibility)

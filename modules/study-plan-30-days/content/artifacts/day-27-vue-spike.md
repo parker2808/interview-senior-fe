@@ -20,11 +20,11 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Vue | `documents/vi/vue3.md` | |
-| State | `documents/vi/state-management.md` | |
-| TS | `documents/vi/typescript.md` | |
+| Vue | [`documents/vi/vue3.md`](../../../../documents/vi/vue3.md) | |
+| State | [`documents/vi/state-management.md`](../../../../documents/vi/state-management.md) | |
+| TS | [`documents/vi/typescript.md`](../../../../documents/vi/typescript.md) | |
 | Capstone docs | [artifacts/capstone/](./capstone/) | 01–11 |
-| Feature Template | [docs/feature-template.md](../feature-template.md) | UI States / State / API |
+| Feature Template | [feature-template.md](../feature-template.md) | UI States / State / API |
 
 Plan Day 27: [30-day-study-plan.md — Day 27](../30-day-study-plan.md#day-27--29102026--capstone-vue-spike)
 

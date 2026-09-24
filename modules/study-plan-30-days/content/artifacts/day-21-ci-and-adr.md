@@ -18,10 +18,10 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| DevOps | `documents/vi/devops.md` | GitOps high-level |
-| Practical | `documents/vi/practical-questions.md` | Git flow |
-| Leadership | `documents/vi/leadership.md` | ADR template |
-| System design | `documents/vi/system-design.md` | Architecture decisions |
+| DevOps | [`documents/vi/devops.md`](../../../../documents/vi/devops.md) | GitOps high-level |
+| Practical | [`documents/vi/practical-questions.md`](../../../../documents/vi/practical-questions.md) | Git flow |
+| Leadership | [`documents/vi/leadership.md`](../../../../documents/vi/leadership.md) | ADR template |
+| System design | [`documents/vi/system-design.md`](../../../../documents/vi/system-design.md) | Architecture decisions |
 
 Plan Day 21: [30-day-study-plan.md — Day 21](../30-day-study-plan.md#day-21--23102026--ci-t-shaped-wrap)
 

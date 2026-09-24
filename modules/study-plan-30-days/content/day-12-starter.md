@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-12-responsive-tradeoffs.md`](./artifacts/day-12-responsive-tradeoffs.md)
-2. Đọc `documents/vi/css-layout.md` + notes Day 4
+2. Đọc [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) + notes Day 4
 3. Copy sang [`artifacts/capstone/08-responsive-strategy.md`](./artifacts/capstone/08-responsive-strategy.md)
 
 ## Links plan

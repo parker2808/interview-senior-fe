@@ -1,7 +1,27 @@
 import { computed, ref, watch } from 'vue'
 import { DAYS } from '../data/days.js'
+import {
+  bitmaskToDoneMap,
+  decodeShareToken,
+  doneMapToBitmask,
+  encodeShareToken,
+  fromProgressJson,
+  toExportJson,
+} from '../utils/progressCodec.js'
+import {
+  fetchCloudProgress,
+  getEditToken,
+  getWriteToken,
+  publishCloudProgress,
+  setWriteToken,
+} from '../utils/progressApi.js'
+import { useEditMode } from './useEditMode.js'
 
 const STORAGE_KEY = 'senior-fe-30day-progress-v1'
+
+function publicProgressUrl() {
+  return new URL('progress.json', document.baseURI).href
+}
 
 function readStorage() {
   try {
@@ -14,19 +34,203 @@ function readStorage() {
   }
 }
 
-const doneMap = ref(readStorage())
+/** Prefer ?share=TOKEN; also accept #share=TOKEN on first load. */
+function parseShareFromLocation() {
+  const fromQuery = new URLSearchParams(window.location.search).get('share')
+  const hash = window.location.hash.slice(1)
+  const fromHash = hash.match(/(?:^|[&#/;])share[=/]([0-9a-z]+)/i)?.[1]
+  const token = fromQuery || fromHash
+  if (!token) return null
+  const mask = decodeShareToken(token)
+  if (mask === null) return null
+  return bitmaskToDoneMap(mask)
+}
+
+const localDoneMap = ref(readStorage())
+const viewDoneMap = ref(null)
+/** @type {import('vue').Ref<'local' | 'share' | 'public' | 'cloud'>} */
+const source = ref('local')
+const publicMeta = ref(null)
+const statusMessage = ref('')
+
+const {
+  isEditMode,
+  modeLabel,
+  modalOpen,
+  unlocking,
+  unlockError,
+  submitPasscode,
+  enterViewMode,
+  openUnlockModal,
+  lockEditMode,
+} = useEditMode()
 
 watch(
-  doneMap,
+  localDoneMap,
   (value) => {
+    // Only persist owner mutations while unlocked + on local source
+    if (source.value !== 'local' || !isEditMode.value) return
     localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
   },
   { deep: true },
 )
 
+const activeDoneMap = computed(() =>
+  source.value === 'local' ? localDoneMap.value : viewDoneMap.value || {},
+)
+
+/** View-only when locked or browsing a non-local source. */
+const readOnly = computed(() => !isEditMode.value || source.value !== 'local')
+
+function enterViewOnly(map, nextSource, meta = null) {
+  viewDoneMap.value = { ...map }
+  source.value = nextSource
+  publicMeta.value = meta
+}
+
+function useLocal() {
+  source.value = 'local'
+  viewDoneMap.value = null
+  publicMeta.value = null
+  // Drop share query so refresh stays local
+  const url = new URL(window.location.href)
+  if (url.searchParams.has('share')) {
+    url.searchParams.delete('share')
+    history.replaceState(null, '', url.pathname + url.search + url.hash)
+  }
+  statusMessage.value = 'Đang dùng tiến độ local trên máy này.'
+}
+
+function applyShareFromUrl() {
+  const map = parseShareFromLocation()
+  if (!map) return false
+  enterViewOnly(map, 'share')
+  statusMessage.value =
+    'Đang xem tiến độ đã share (chỉ đọc — không ghi đè local).'
+  // Normalize to ?share= so hash can stay for #day / #doc
+  const tokenMatch =
+    new URLSearchParams(window.location.search).get('share') ||
+    window.location.hash.slice(1).match(/(?:^|[&#/;])share[=/]([0-9a-z]+)/i)?.[1]
+  if (tokenMatch) {
+    const url = new URL(window.location.href)
+    url.searchParams.set('share', tokenMatch)
+    // Strip share from hash if present, keep day/doc
+    let hash = url.hash.slice(1)
+    hash = hash
+      .replace(/(?:^|[&#/;])share[=/][0-9a-z]+/gi, '')
+      .replace(/^[&;/]+/, '')
+    url.hash = hash
+    history.replaceState(null, '', url.pathname + url.search + url.hash)
+  }
+  return true
+}
+
+async function loadPublicProgress() {
+  statusMessage.value = 'Đang tải progress.json…'
+  try {
+    const res = await fetch(publicProgressUrl(), { cache: 'no-store' })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data = await res.json()
+    const map = fromProgressJson(data)
+    if (!map) throw new Error('Schema không hợp lệ (cần completed: number[])')
+    enterViewOnly(map, 'public', {
+      owner: data.owner || null,
+      updatedAt: data.updatedAt || null,
+      note: data.note || null,
+    })
+    statusMessage.value = data.owner
+      ? `Đang xem tiến độ public của ${data.owner} (chỉ đọc).`
+      : 'Đang xem tiến độ public từ repo (chỉ đọc).'
+    return true
+  } catch (err) {
+    statusMessage.value = `Không tải được progress.json: ${err.message || err}`
+    return false
+  }
+}
+
+async function loadCloudProgress() {
+  statusMessage.value = 'Đang tải tiến độ cloud…'
+  try {
+    const data = await fetchCloudProgress()
+    const map = fromProgressJson(data)
+    if (!map) throw new Error('Schema không hợp lệ (cần completed: number[])')
+    enterViewOnly(map, 'cloud', {
+      owner: data.owner || null,
+      updatedAt: data.updatedAt || null,
+      note: data.note || null,
+    })
+    statusMessage.value = data.owner
+      ? `Đang xem tiến độ cloud của ${data.owner} (chỉ đọc).`
+      : 'Đang xem tiến độ cloud (chỉ đọc).'
+    return true
+  } catch (err) {
+    statusMessage.value = `Không tải được cloud progress: ${err.message || err}`
+    return false
+  }
+}
+
+/**
+ * Publish local progress to Netlify Blobs.
+ * Prefers short-lived editToken from passcode unlock; falls back to PROGRESS_WRITE_TOKEN.
+ * @param {string} [tokenOverride] — if empty, uses editToken / sessionStorage / prompt
+ */
+async function publishToCloud(tokenOverride) {
+  if (!isEditMode.value) {
+    statusMessage.value = 'Cần mở khóa chỉnh sửa trước khi publish.'
+    openUnlockModal()
+    return false
+  }
+  if (source.value !== 'local') {
+    statusMessage.value = 'Chỉ publish từ nguồn Local.'
+    return false
+  }
+
+  const editTok = (getEditToken() || '').trim()
+  let token = (tokenOverride || '').trim()
+  let kind = 'write-token'
+
+  if (!token && editTok) {
+    token = editTok
+    kind = 'edit-token'
+  }
+  if (!token) {
+    token = (getWriteToken() || '').trim()
+    kind = 'write-token'
+  }
+  if (!token && typeof window !== 'undefined') {
+    token = (
+      window.prompt(
+        'Nhập PROGRESS_WRITE_TOKEN (lưu tạm trong sessionStorage — không commit):',
+        '',
+      ) || ''
+    ).trim()
+    kind = 'write-token'
+  }
+  if (!token) {
+    statusMessage.value = 'Đã hủy — cần editToken hoặc PROGRESS_WRITE_TOKEN để publish.'
+    return false
+  }
+
+  if (kind === 'write-token') setWriteToken(token)
+  statusMessage.value = 'Đang publish lên cloud…'
+  try {
+    const payload = {
+      ...toExportJson(localDoneMap.value),
+      owner: 'Parker',
+    }
+    const result = await publishCloudProgress(payload, token, kind)
+    const published = result?.progress || payload
+    statusMessage.value = `Đã publish cloud · cập nhật ${published.updatedAt || 'now'} (${published.completed?.length ?? 0} ngày).`
+    return true
+  } catch (err) {
+    statusMessage.value = `Publish thất bại: ${err.message || err}`
+    return false
+  }
+}
+
 export function useProgress() {
   const completedCount = computed(
-    () => DAYS.filter((d) => !!doneMap.value[d.day]).length,
+    () => DAYS.filter((d) => !!activeDoneMap.value[d.day]).length,
   )
 
   const percent = computed(() =>
@@ -34,15 +238,31 @@ export function useProgress() {
   )
 
   function isDone(day) {
-    return !!doneMap.value[day]
+    return !!activeDoneMap.value[day]
   }
 
   function setDone(day, value) {
-    doneMap.value = { ...doneMap.value, [day]: !!value }
+    if (readOnly.value) return
+    localDoneMap.value = { ...localDoneMap.value, [day]: !!value }
   }
 
   function toggleDone(day) {
+    if (readOnly.value) return
     setDone(day, !isDone(day))
+  }
+
+  async function tryUnlock(passcode) {
+    const ok = await submitPasscode(passcode)
+    statusMessage.value = ok
+      ? 'Đã mở chế độ Sửa cho phiên này.'
+      : unlockError.value || 'Không mở được chế độ Sửa.'
+    return ok
+  }
+
+  function skipUnlock() {
+    enterViewMode()
+    statusMessage.value =
+      'Chế độ Xem — có thể Load cloud / share; không sửa tiến độ local hay publish.'
   }
 
   function weekStats(week) {
@@ -51,13 +271,103 @@ export function useProgress() {
     return { total: inWeek.length, done }
   }
 
+  function buildShareUrl() {
+    const mask = doneMapToBitmask(localDoneMap.value)
+    const token = encodeShareToken(mask)
+    const url = new URL(window.location.href)
+    url.searchParams.set('share', token)
+    // Keep current day/doc hash if any
+    return url.toString()
+  }
+
+  async function copyShareLink() {
+    const link = buildShareUrl()
+    try {
+      await navigator.clipboard.writeText(link)
+      statusMessage.value =
+        'Đã copy share link (người mở sẽ xem chế độ chỉ đọc).'
+      return true
+    } catch {
+      statusMessage.value = `Copy thủ công: ${link}`
+      return false
+    }
+  }
+
+  function exportJson() {
+    const payload = toExportJson(localDoneMap.value)
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: 'application/json',
+    })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `study-plan-progress-${payload.updatedAt || 'export'}.json`
+    a.click()
+    URL.revokeObjectURL(a.href)
+    statusMessage.value = 'Đã tải file JSON tiến độ local.'
+  }
+
+  function importJsonFile(file) {
+    if (!isEditMode.value) {
+      statusMessage.value = 'Cần mở khóa chỉnh sửa trước khi import.'
+      openUnlockModal()
+      return Promise.resolve(false)
+    }
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(String(reader.result))
+          const map = fromProgressJson(data)
+          if (!map) throw new Error('Thiếu mảng completed')
+          localDoneMap.value = map
+          useLocal()
+          statusMessage.value = `Đã import ${Object.keys(map).length} ngày vào local.`
+          resolve(true)
+        } catch (err) {
+          statusMessage.value = `Import thất bại: ${err.message || err}`
+          resolve(false)
+        }
+      }
+      reader.onerror = () => {
+        statusMessage.value = 'Không đọc được file.'
+        resolve(false)
+      }
+      reader.readAsText(file)
+    })
+  }
+
+  applyShareFromUrl()
+
   return {
-    doneMap,
+    doneMap: activeDoneMap,
+    localDoneMap,
+    source,
+    readOnly,
+    isEditMode,
+    modeLabel,
+    modalOpen,
+    unlocking,
+    unlockError,
+    publicMeta,
+    statusMessage,
     completedCount,
     percent,
     isDone,
     setDone,
     toggleDone,
     weekStats,
+    useLocal,
+    loadPublicProgress,
+    loadCloudProgress,
+    publishToCloud,
+    copyShareLink,
+    buildShareUrl,
+    exportJson,
+    importJsonFile,
+    applyShareFromUrl,
+    tryUnlock,
+    skipUnlock,
+    openUnlockModal,
+    lockEditMode,
   }
 }

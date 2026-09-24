@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-09-state-map.md`](./artifacts/day-09-state-map.md)
-2. Đọc `documents/vi/state-management.md`; React: URL vs cache vs Context (ngoài repo)
+2. Đọc [`documents/vi/state-management.md`](../../../documents/vi/state-management.md); React: URL vs cache vs Context (ngoài repo)
 3. Copy sang [`artifacts/capstone/05-state-ownership.md`](./artifacts/capstone/05-state-ownership.md)
 
 ## Links plan

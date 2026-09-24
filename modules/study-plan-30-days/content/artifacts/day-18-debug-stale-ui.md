@@ -18,9 +18,9 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Vue debug | `documents/vi/vue3.md` | Debug component bugs |
-| JS | `documents/vi/javascript.md` | Event loop |
-| Perf | `documents/vi/performance.md` | debounce/throttle |
+| Vue debug | [`documents/vi/vue3.md`](../../../../documents/vi/vue3.md) | Debug component bugs |
+| JS | [`documents/vi/javascript.md`](../../../../documents/vi/javascript.md) | Event loop |
+| Perf | [`documents/vi/performance.md`](../../../../documents/vi/performance.md) | debounce/throttle |
 | React practice | *(không có path repo)* | stale closure / abort / query keys |
 
 Plan Day 18: [30-day-study-plan.md — Day 18](../30-day-study-plan.md#day-18--20102026--debug-stale-ui-search-race)

@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-19-performance.md`](./artifacts/day-19-performance.md)
-2. Đọc `documents/vi/performance.md` + `documents/vi/web-apis.md`
+2. Đọc [`documents/vi/performance.md`](../../../documents/vi/performance.md) + [`documents/vi/web-apis.md`](../../../documents/vi/web-apis.md)
 3. Copy sang [`artifacts/capstone/11-performance-review.md`](./artifacts/capstone/11-performance-review.md)
 
 ## Links plan

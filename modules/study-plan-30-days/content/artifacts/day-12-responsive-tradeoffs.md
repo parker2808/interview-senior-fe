@@ -19,7 +19,7 @@
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| CSS layout | `documents/vi/css-layout.md` | Responsive strategy |
+| CSS layout | [`documents/vi/css-layout.md`](../../../../documents/vi/css-layout.md) | Responsive strategy |
 | Day 4 notes | [day-04-data-heavy.md](./day-04-data-heavy.md) | Column priority |
 
 Plan Day 12: [30-day-study-plan.md — Day 12](../30-day-study-plan.md#day-12--14102026--responsive-table)

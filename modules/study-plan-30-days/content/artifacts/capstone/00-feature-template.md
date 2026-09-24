@@ -3,13 +3,13 @@
 **Ngày:** Day 7 · 09/10/2026 · **Timebox:** một phần của 60–90′  
 **Mục tiêu:** Điền Feature Template cho toàn Capstone (Goal → Risks).  
 **Nguồn template:** [`feature-template.md`](../../feature-template.md)  
-**Brief:** [`capstone-brief.md`](../../capstone-brief.md) · JD: `/workspace/jd1.md`
+**Brief:** [`capstone-brief.md`](../../capstone-brief.md) · JD: [`jd1.md`](../../../../../jd1.md)
 
 ---
 
 ## Hướng dẫn
 
-1. Đọc Feature Template + Capstone brief + `jd1.md` (Vue-heavy; vẫn ôn React song song).
+1. Đọc Feature Template + Capstone brief + [`jd1.md`](../../../../../jd1.md) (Vue-heavy; vẫn ôn React song song).
 2. Điền **mọi** section dưới — để `>` trống nếu chưa chắc, không xóa section.
 3. Ghi assumption stack: docs bắt buộc; code spike Vue **và** React ở tuần 4.
 4. Song song outline wireframe ở [`02-wireframes.md`](./02-wireframes.md).
