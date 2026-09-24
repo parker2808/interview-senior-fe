@@ -1,0 +1,12 @@
+# Deploy the study-plan-30-days follow UI (only module with a site for now).
+# Shared interview KB lives under documents/ and is not published by this build.
+
+[build]
+  base = "modules/study-plan-30-days/src"
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
