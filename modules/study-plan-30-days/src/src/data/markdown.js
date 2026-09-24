@@ -6,7 +6,7 @@ const modules = import.meta.glob('@plan/**/*.md', {
 
 /** Normalize glob keys to plan-relative paths like `day-01-starter.md` */
 function toPlanPath(key) {
-  const marker = '/30-days/'
+  const marker = '/content/'
   const idx = key.indexOf(marker)
   if (idx === -1) return key.replace(/^\.?\/+/, '')
   return key.slice(idx + marker.length)

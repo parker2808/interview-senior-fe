@@ -8,30 +8,36 @@ Complete knowledge base for **Senior Frontend Developer** interviews, focusing o
 
 ## 🗓️ 30-day study plan
 
-- **Plan & artifacts:** [`documents/study-plan/30-days/`](./documents/study-plan/30-days/) — start with [daily-index.md](./documents/study-plan/30-days/daily-index.md) or [30-day-study-plan.md](./documents/study-plan/30-days/30-day-study-plan.md)
-- **Follow / check-off UI:** Vite + Vue 3 app in [`src/`](./src/)
-- **Deploy:** [Netlify](https://www.netlify.com/) — see [`netlify.toml`](./netlify.toml) (`base = src`, `npm run build`, publish `dist`)
+Module: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/)
+
+- **Plan & artifacts:** [`content/`](./modules/study-plan-30-days/content/) — start with [daily-index.md](./modules/study-plan-30-days/content/daily-index.md) or [30-day-study-plan.md](./modules/study-plan-30-days/content/30-day-study-plan.md)
+- **Follow / check-off UI:** Vite + Vue 3 in [`modules/study-plan-30-days/src/`](./modules/study-plan-30-days/src/)
+- **Deploy:** [Netlify](https://www.netlify.com/) — [`netlify.toml`](./netlify.toml) (`base = modules/study-plan-30-days/src`)
 
 ```bash
-cd src
+cd modules/study-plan-30-days/src
 npm install
 npm run dev      # local: http://localhost:5173
-npm run build    # output: src/dist (Netlify publish dir)
+npm run build    # → dist/ (Netlify publish)
 ```
 
-Progress persists in `localStorage`. The UI loads markdown from `documents/study-plan/30-days/` at build time (Vite `@plan` alias).
+Progress persists in `localStorage`. The UI loads markdown from `content/` at build time (`@plan` alias). Shared interview topics live under [`documents/`](./documents/) (not owned by the module).
 
 ---
 
 ## 📁 Repo layout
 
 ```
-documents/           # all documentation
-  en/ · vi/          # interview knowledge base
-  study-plan/30-days # plan, starters, artifacts, capstone
-src/                 # Vite + Vue follow UI (package.json + vite here)
-netlify.toml
+documents/                      # shared interview KB only
+  en/ · vi/
+modules/
+  study-plan-30-days/           # module: plan + Capstone + Vue UI
+    content/
+    src/
+netlify.toml                    # builds this module’s UI for now
 ```
+
+How to add another module: [`modules/README.md`](./modules/README.md).
 
 ---
 

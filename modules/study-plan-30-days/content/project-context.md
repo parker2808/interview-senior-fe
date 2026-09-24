@@ -19,7 +19,7 @@
 | Lens | Practice |
 |---|---|
 | Agnostic | Product, state ownership, API, a11y, perf, testing pyramid |
-| Vue + TS | Repo notes under `documents/vi/` + Week 4 Vue spike |
+| Vue + TS | Shared notes under `documents/vi/` + Week 4 Vue spike |
 | React + TS | No React files in repo — map hooks/composables, etc. + Week 4 React spike |
 
 ## Calendar
@@ -40,4 +40,5 @@
 | Day 1 starter | [day-01-starter.md](./day-01-starter.md) |
 | Daily index (1–30) | [daily-index.md](./daily-index.md) |
 | Artifacts root | [artifacts/](./artifacts/) |
-| Interview repo | [`interview-senior-fe`](https://github.com/parker2808/interview-senior-fe) (local checkout: `/workspace`) |
+| Interview repo | [`interview-senior-fe`](https://github.com/parker2808/interview-senior-fe) — module path `modules/study-plan-30-days/` |
+| Shared KB | `documents/en`, `documents/vi` (not owned by this module) |
