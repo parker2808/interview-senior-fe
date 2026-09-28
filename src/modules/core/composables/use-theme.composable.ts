@@ -2,8 +2,24 @@ export type ThemeMode = 'light' | 'dark'
 
 const STORAGE_KEY = 'sf_theme'
 
+function readStored(): ThemeMode {
+  if (!import.meta.client) return 'light'
+  try {
+    const fromDom = document.documentElement.dataset.theme
+    if (fromDom === 'dark' || fromDom === 'light') return fromDom
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored === 'dark' || stored === 'light') return stored
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark'
+  } catch {
+    /* ignore */
+  }
+  return 'light'
+}
+
 export function useTheme() {
-  const theme = useState<ThemeMode>('sf-theme', () => 'light')
+  const theme = useState<ThemeMode>('sf-theme', () =>
+    import.meta.client ? readStored() : 'light',
+  )
 
   function apply(mode: ThemeMode) {
     theme.value = mode
@@ -23,18 +39,7 @@ export function useTheme() {
   }
 
   function init() {
-    if (!import.meta.client) return
-    let initial: ThemeMode = 'light'
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored === 'dark' || stored === 'light') initial = stored
-      else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        initial = 'dark'
-      }
-    } catch {
-      /* ignore */
-    }
-    apply(initial)
+    apply(readStored())
   }
 
   return { theme, apply, toggle, init }
