@@ -63,6 +63,14 @@ html[data-theme='dark'] {
     font-family: var(--font);
   }
 
+  /* Docs reader: only `.docs-main` scrolls — block outer page overflow */
+  html.docs-lock-scroll,
+  html.docs-lock-scroll body {
+    overflow: hidden;
+    height: 100%;
+    overscroll-behavior: none;
+  }
+
   a {
     color: var(--accent-ink);
   }

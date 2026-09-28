@@ -14,9 +14,8 @@
   "docs": {
     "brand": "Knowledge Base",
     "onThisPage": "Trong trang này",
-    "searchPlaceholder": "Tìm chủ đề…",
+    "searchPlaceholder": "Tìm theo từ khóa… (vd: hoisting)",
     "searchHint": "⌘K / Ctrl+K",
-    "recent": "Gần đây",
     "prev": "Trước",
     "next": "Sau",
     "openNav": "Mục lục",

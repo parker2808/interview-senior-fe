@@ -31,14 +31,12 @@ const backLabel = computed(() =>
 
 const {
   catalog,
-  flatTopics,
   safeLang,
   loaded,
   html,
   toc,
   adjacent,
   title,
-  recent,
 } = useDocReader(lang, slug)
 
 const sidebarOpen = ref(false)
@@ -56,14 +54,9 @@ const langPreserve = ref<{
   ratio: number
 } | null>(null)
 
+/** Docs shell always scrolls inside `.docs-main` (all breakpoints). */
 function scrollEl(): HTMLElement | Window {
-  if (
-    import.meta.client &&
-    window.matchMedia('(min-width: 1024px)').matches &&
-    mainRef.value
-  ) {
-    return mainRef.value
-  }
+  if (import.meta.client && mainRef.value) return mainRef.value
   return window
 }
 
@@ -108,11 +101,26 @@ function withFromQuery(path: string) {
   return `${path}${join}from=plan`
 }
 
-function goDoc(nextSlug: string, nextLang: string = safeLang.value) {
+function goDoc(
+  nextSlug: string,
+  nextLang: string = safeLang.value,
+  hash?: string,
+) {
   langPreserve.value = null
-  router.push(withFromQuery(`/docs/${nextLang}/${nextSlug}`))
+  const base = withFromQuery(`/docs/${nextLang}/${nextSlug}`)
+  const path = hash ? `${base}#${hash}` : base
+  router.push(path)
   sidebarOpen.value = false
-  nextTick(() => setScrollTop(0))
+  if (!hash) nextTick(() => setScrollTop(0))
+}
+
+function onSearchSelect(payload: { slug: string; hash?: string }) {
+  goDoc(payload.slug, safeLang.value, payload.hash)
+  if (payload.hash) {
+    nextTick(() => {
+      requestAnimationFrame(() => scrollToId(payload.hash!, true, true))
+    })
+  }
 }
 
 function switchLang(next: DocLang) {
@@ -230,6 +238,10 @@ watch(
 )
 
 onMounted(() => {
+  // Lock document scroll so only `.docs-main` scrolls (tablet/desktop).
+  document.documentElement.classList.add('docs-lock-scroll')
+  document.body.classList.add('docs-lock-scroll')
+
   syncHashScroll()
   window.addEventListener('hashchange', syncHashScroll)
 
@@ -247,45 +259,50 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  document.documentElement.classList.remove('docs-lock-scroll')
+  document.body.classList.remove('docs-lock-scroll')
   window.removeEventListener('hashchange', syncHashScroll)
 })
 
 let observer: IntersectionObserver | null = null
 
-watch(
-  toc,
-  (items) => {
-    observer?.disconnect()
-    if (!import.meta.client || !items.length) return
-    observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-        if (visible[0]?.target?.id) {
-          activeHeading.value = visible[0].target.id
-        }
-      },
-      { rootMargin: '-20% 0px -60% 0px', threshold: [0, 1] },
-    )
-    nextTick(() => {
-      for (const item of items) {
-        const el = document.getElementById(item.id)
-        if (el) observer?.observe(el)
+function bindHeadingObserver() {
+  observer?.disconnect()
+  observer = null
+  if (!import.meta.client || !toc.value.length || !mainRef.value) return
+  observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+      if (visible[0]?.target?.id) {
+        activeHeading.value = visible[0].target.id
       }
-    })
-  },
-  { immediate: true },
-)
+    },
+    {
+      root: mainRef.value,
+      rootMargin: '-20% 0px -60% 0px',
+      threshold: [0, 1],
+    },
+  )
+  nextTick(() => {
+    for (const item of toc.value) {
+      const el = document.getElementById(item.id)
+      if (el) observer?.observe(el)
+    }
+  })
+}
+
+watch([toc, mainRef], () => bindHeadingObserver(), { immediate: true })
 
 onUnmounted(() => observer?.disconnect())
 </script>
 
 <template>
-  <div class="docs-shell min-h-screen lg:h-dvh lg:overflow-hidden">
+  <div class="docs-shell flex h-dvh max-h-dvh flex-col overflow-hidden">
     <header
       ref="headerRef"
-      class="docs-header sticky top-0 z-30 border-b border-line bg-surface-elevated backdrop-blur"
+      class="docs-header z-30 shrink-0 border-b border-line bg-surface-elevated backdrop-blur"
     >
       <div class="flex h-12 items-center gap-1.5 px-2 sm:gap-2 sm:px-4 lg:px-5">
         <button
@@ -342,15 +359,14 @@ onUnmounted(() => observer?.disconnect())
       </div>
     </header>
 
-    <div class="lg:flex lg:h-[calc(100dvh-var(--docs-header-h,3.5rem))]">
+    <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
       <aside
-        class="hidden w-64 shrink-0 border-r border-line bg-surface-elevated/70 lg:block xl:w-72"
+        class="hidden w-64 shrink-0 overflow-y-auto border-r border-line bg-surface-elevated/70 lg:block xl:w-72"
       >
         <DocSidebar
           :catalog="catalog"
           :lang="safeLang"
           :active-slug="slug"
-          :recent="recent"
           @select="goDoc"
         />
       </aside>
@@ -391,7 +407,6 @@ onUnmounted(() => observer?.disconnect())
               :catalog="catalog"
               :lang="safeLang"
               :active-slug="slug"
-              :recent="recent"
               @select="goDoc"
             />
           </aside>
@@ -400,7 +415,7 @@ onUnmounted(() => observer?.disconnect())
 
       <main
         ref="mainRef"
-        class="docs-main min-w-0 flex-1 px-4 py-6 sm:px-6 lg:overflow-y-auto lg:px-8"
+        class="docs-main min-h-0 min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8"
       >
         <article v-if="loaded.ok" class="animate-fade-up mx-auto max-w-prose">
           <div
@@ -463,9 +478,8 @@ onUnmounted(() => observer?.disconnect())
 
     <DocSearch
       v-model:open="searchOpen"
-      :topics="flatTopics"
       :lang="safeLang"
-      @select="goDoc"
+      @select="onSearchSelect"
     />
   </div>
 </template>
