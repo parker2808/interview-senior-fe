@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     head: {
       title: 'Senior FE Interview Prep',
       htmlAttrs: { lang: 'vi' },
+      script: [{ src: '/theme-init.js', tagPosition: 'head' }],
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         {

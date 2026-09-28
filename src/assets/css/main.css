@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:root,
+[data-theme='light'] {
   --bg: #f4f7f6;
   --bg-elevated: #ffffff;
   --ink: #14201c;
@@ -19,6 +20,30 @@
   --mono: 'IBM Plex Mono', ui-monospace, monospace;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --app-header-h: 3.5rem;
+  --bg-glow-a: #d9efe9;
+  --bg-glow-b: #e8f0ec;
+  --code-bg: #0f1c18;
+  --code-fg: #e7f5f1;
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  --bg: #0f1614;
+  --bg-elevated: #1a2421;
+  --ink: #e7f0ec;
+  --ink-muted: #9db0a8;
+  --ink-faint: #6f827a;
+  --line: #2a3833;
+  --accent: #2dd4bf;
+  --accent-soft: #134e4a;
+  --accent-ink: #5eead4;
+  --done: #4ade80;
+  --done-soft: #14532d;
+  --bg-glow-a: #12201c;
+  --bg-glow-b: #15241f;
+  --code-bg: #0a1210;
+  --code-fg: #d5efe8;
+  color-scheme: dark;
 }
 
 @layer base {
@@ -31,8 +56,8 @@
     @apply min-h-full antialiased;
     margin: 0;
     background:
-      radial-gradient(1200px 500px at 10% -10%, #d9efe9 0%, transparent 55%),
-      radial-gradient(900px 400px at 100% 0%, #e8f0ec 0%, transparent 50%),
+      radial-gradient(1200px 500px at 10% -10%, var(--bg-glow-a) 0%, transparent 55%),
+      radial-gradient(900px 400px at 100% 0%, var(--bg-glow-b) 0%, transparent 50%),
       var(--bg);
     color: var(--ink);
     font-family: var(--font);
@@ -45,6 +70,17 @@
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+  }
+
+  /* Hardcoded white surfaces in templates → respect theme */
+  [data-theme='dark'] .bg-white {
+    background-color: var(--bg-elevated);
+  }
+
+  [data-theme='dark'] .shadow-sm,
+  [data-theme='dark'] .shadow-md,
+  [data-theme='dark'] .shadow-xl {
+    --tw-shadow-color: rgb(0 0 0 / 0.45);
   }
 }
 
@@ -93,7 +129,9 @@
   }
 
   .prose-doc pre {
-    @apply mb-4 overflow-x-auto rounded-lg bg-[#0f1c18] p-3 text-sm text-[#e7f5f1];
+    @apply mb-4 overflow-x-auto rounded-lg p-3 text-sm;
+    background: var(--code-bg);
+    color: var(--code-fg);
     font-family: var(--mono);
   }
 
@@ -104,6 +142,16 @@
 
   .prose-doc pre code {
     @apply bg-transparent p-0 text-inherit;
+  }
+
+  .prose-doc a {
+    @apply underline decoration-[var(--accent)] underline-offset-2;
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .prose-doc a code {
+    @apply underline decoration-[var(--accent)] underline-offset-2;
   }
 
   .prose-doc table {

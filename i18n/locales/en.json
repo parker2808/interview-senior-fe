@@ -45,6 +45,9 @@
   },
   "common": {
     "vi": "VI",
-    "en": "EN"
+    "en": "EN",
+    "scrollTop": "Back to top",
+    "themeDark": "Dark mode",
+    "themeLight": "Light mode"
   }
 }

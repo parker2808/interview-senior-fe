@@ -45,6 +45,9 @@
   },
   "common": {
     "vi": "VI",
-    "en": "EN"
+    "en": "EN",
+    "scrollTop": "Lên đầu trang",
+    "themeDark": "Chế độ tối",
+    "themeLight": "Chế độ sáng"
   }
 }

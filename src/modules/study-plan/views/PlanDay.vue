@@ -39,6 +39,17 @@ function openDocs(payload: { lang: string; slug: string; hash?: string }) {
   const hash = payload.hash ? `#${payload.hash}` : ''
   router.push(`/docs/${payload.lang}/${payload.slug}?from=plan${hash}`)
 }
+
+watch(
+  () => props.dayNumber,
+  () => {
+    if (import.meta.client) window.scrollTo({ top: 0, left: 0 })
+  },
+)
+
+onMounted(() => {
+  if (import.meta.client) window.scrollTo({ top: 0, left: 0 })
+})
 </script>
 
 <template>
@@ -52,7 +63,7 @@ function openDocs(payload: { lang: string; slug: string; hash?: string }) {
     />
 
     <div
-      class="sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur"
+      class="sticky top-0 z-20 border-b border-line bg-surface-elevated backdrop-blur"
     >
       <div class="flex h-12 items-center gap-2 px-2 sm:px-4">
         <BackLink to="/plan" :label="t('plan.backDayList')" icon-only />
@@ -62,7 +73,7 @@ function openDocs(payload: { lang: string; slug: string; hash?: string }) {
       </div>
     </div>
 
-    <div class="px-4 pt-4 sm:px-6 sm:pt-6">
+    <div class="px-4 pt-3 sm:px-6 sm:pt-5">
       <DayDetail
         v-if="day"
         :day="day"

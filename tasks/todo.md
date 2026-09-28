@@ -1,14 +1,13 @@
-# Fix mobile sticky headers (1-row icon-only)
+# UX: header overlap, dark mode, scroll-top, links, lang scroll
 
 ## Plan
-- [x] BackLink + LocaleToggle compact / icon-only support
-- [x] Docs header: single nowrap row (menu / back / title / search / locale)
-- [x] Plan sticky headers: icon-only hub / docs / back
-- [x] Sync header height CSS vars + scroll-padding / HEADER_OFFSET
-- [x] Verify mobile screenshots; commit + PR
+- [x] Fix sticky header covering content after reload/nav (scroll restoration)
+- [x] Dark mode (CSS vars + toggle + persist)
+- [x] Scroll-to-top FAB
+- [x] Fix/enhance markdown hyperlink handling (autolink bare `.md` paths)
+- [x] Keep scroll position when switching language
+- [x] Verify + PR
 
 ## Review
-- Docs + plan sticky = one `h-12` row with icon controls
-- ResizeObserver sets `--docs-header-h` / `--app-header-h`
-- Screenshots: mobile-docs-header-1row.webp, mobile-plan-header-1row.webp
-- PR: https://github.com/parker2808/interview-senior-fe/pull/12
+- Playwright: dark toggle OK; day1 checkbox below sticky; md link → `/plan/doc/...`; FAB works; VI→EN keeps mid-page scroll
+- PR: https://github.com/parker2808/interview-senior-fe/pull/13

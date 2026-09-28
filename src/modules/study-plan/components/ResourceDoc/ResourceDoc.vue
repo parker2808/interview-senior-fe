@@ -2,6 +2,7 @@
 import { marked } from 'marked'
 import { loadMarkdown, isBundledPath } from '@/modules/study-plan/utils/load-markdown.util'
 import { classifyMarkdownHref } from '@/modules/study-plan/utils/markdown-links.util'
+import { autolinkMarkdownPaths } from '@/modules/study-plan/utils/autolink-md.util'
 
 const props = defineProps<{
   path: string
@@ -13,9 +14,10 @@ const emit = defineEmits<{
 }>()
 
 const loaded = computed(() => loadMarkdown(props.path))
-const html = computed(
-  () => marked.parse(loaded.value.text, { async: false }) as string,
-)
+const html = computed(() => {
+  const raw = marked.parse(loaded.value.text, { async: false }) as string
+  return autolinkMarkdownPaths(raw, props.path)
+})
 
 function onDocClick(e: MouseEvent) {
   const a = (e.target as HTMLElement).closest('a')
@@ -23,22 +25,20 @@ function onDocClick(e: MouseEvent) {
   const href = a.getAttribute('href')
   const result = classifyMarkdownHref(props.path, href || '', isBundledPath)
   if (result.kind === 'ignore' || result.kind === 'hash') return
+  e.preventDefault()
   if (result.kind === 'external' || result.kind === 'github') {
-    e.preventDefault()
     window.open(result.url, '_blank', 'noopener,noreferrer')
     return
   }
   if (result.kind === 'docs') {
-    e.preventDefault()
     emit('open-docs', {
-      lang: result.lang,
+      lang: result.lang || 'vi',
       slug: result.slug,
       hash: result.hash,
     })
     return
   }
   if (result.kind === 'plan') {
-    e.preventDefault()
     emit('open-doc', result.path)
   }
 }
