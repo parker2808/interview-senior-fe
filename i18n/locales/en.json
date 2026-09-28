@@ -4,7 +4,7 @@
     "headline": "Prepare for Senior Frontend interviews systematically",
     "sub": "A hub for the bilingual knowledge base and the 30-day study plan.",
     "docsTitle": "Knowledge Base",
-    "docsDesc": "19 vi/en topics across 5 groups — reread everything with a sidebar and quick search.",
+    "docsDesc": "21 vi/en topics across 6 groups — reread everything with a sidebar and quick search.",
     "docsCta": "Open docs",
     "planTitle": "30-day study plan",
     "planDesc": "Track daily progress, worksheets, and Capstone — from product to ship.",
@@ -26,9 +26,10 @@
     "groups": {
       "core": "I. Core Web",
       "vue": "II. Vue Ecosystem",
-      "practices": "III. Dev Practices",
-      "infra": "IV. Infrastructure",
-      "pro": "V. Professional"
+      "react": "III. React Ecosystem",
+      "practices": "IV. Dev Practices",
+      "infra": "V. Infrastructure",
+      "pro": "VI. Professional"
     },
     "backHub": "Hub",
     "backPlan": "Plan",

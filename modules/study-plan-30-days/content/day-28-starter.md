@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-28-react-spike.md`](./artifacts/day-28-react-spike.md)
-2. Đối chiếu Day 27 + concept Days 8–10, 15–16 — **không có** React md trong repo
+2. Đối chiếu Day 27 + [`documents/vi/react.md`](../../../documents/vi/react.md) (concept Days 8–10, 15–16)
 3. Cập nhật [`artifacts/capstone/spikes/react/README.md`](./artifacts/capstone/spikes/react/README.md)
 
 ## Links plan

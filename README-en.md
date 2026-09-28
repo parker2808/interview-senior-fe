@@ -43,7 +43,7 @@ Add a UI module: [STRUCTURE.md](./STRUCTURE.md). Content tracks: [`modules/READM
 
 ## 📚 Document Structure
 
-The documentation is organized into 5 main groups with 19 topics, from basic to advanced:
+The documentation is organized into 6 main groups with 21 topics, from basic to advanced:
 
 ### I. Core Web Technologies
 
@@ -97,122 +97,138 @@ The documentation is organized into 5 main groups with 19 topics, from basic to 
 
 ---
 
-### III. Development Practices
+### III. React Ecosystem
 
-8. **[Testing](./documents/en/testing.md)** ⭐
+8. **[React](./documents/en/react.md)**
 
-   8.1. [Unit Testing (Vitest)](./documents/en/testing.md#81-unit-testing-with-vitest)
+   8.1. [Core Concepts](./documents/en/react.md#201-core-concepts): [Virtual DOM](./documents/en/react.md#2011-virtual-dom--reconciliation), [Hooks](./documents/en/react.md#2012-class-components-vs-function-components--hooks), [JSX](./documents/en/react.md#2013-jsx--rendering-model), [Props/State](./documents/en/react.md#2014-props-vs-state), [`useEffect`](./documents/en/react.md#2017-effects-useeffect-vs-vue-watch--lifecycle), [`useMemo`](./documents/en/react.md#2018-derived-values-usememo-vs-vue-computed)
 
-   8.2. [Component Testing (Vue Test Utils)](./documents/en/testing.md#82-component-testing-with-vue-test-utils)
+   8.2. [Advanced](./documents/en/react.md#202-advanced-features): [Context](./documents/en/react.md#2021-context-vs-vue-provide--inject), [Portals](./documents/en/react.md#2022-portals-vs-vue-teleport), [Suspense](./documents/en/react.md#2023-suspense), [Error Boundaries](./documents/en/react.md#2024-error-boundaries), [Custom Hooks](./documents/en/react.md#2025-custom-hooks-vs-vue-composables)
 
-   8.3. [E2E Testing (Playwright)](./documents/en/testing.md#83-e2e-testing-with-playwright)
+9. **[Next.js](./documents/en/nextjs.md)**
 
-   8.4. [Test Coverage](./documents/en/testing.md#84-test-coverage), [TDD/BDD](./documents/en/testing.md#85-tddbdd-methodology)
+   9.1. [Next vs React](./documents/en/nextjs.md#212-nextjs-vs-react), [Nuxt ↔ Next](./documents/en/nextjs.md#213-nuxt--next-mental-map)
 
-9. **[Performance & Optimization](./documents/en/performance.md)** ⚡
-
-   9.1. [Core Performance](./documents/en/performance.md#91-core-performance): [Storage](./documents/en/performance.md#911-storage-localstorage-vs-sessionstorage-vs-cookie), [Optimization](./documents/en/performance.md#912-performance-optimization), [Code Review](./documents/en/performance.md#913-code-review-checklist)
-
-   9.2. [Advanced](./documents/en/performance.md#92-advanced-optimization): [Code Splitting](./documents/en/performance.md#921-code-splitting-strategies), [Tree Shaking](./documents/en/performance.md#922-tree-shaking), [Debounce/Throttle](./documents/en/performance.md#923-debounce-vs-throttle), [Image/Font](./documents/en/performance.md#924-image--font-optimization)
-
-10. **[Security](./documents/en/security.md)** 🔒
-
-    10.1. [Prevent XSS](./documents/en/security.md#101-preventing-xss)
-
-    10.2. [Protect Against CSRF](./documents/en/security.md#102-protecting-against-csrf)
-
-    10.3. [Authentication Best Practices](./documents/en/security.md#103-authentication-best-practices)
-
-    10.4. [Input Validation](./documents/en/security.md#104-input-validation-and-sanitization), [HTTPS & CORS](./documents/en/security.md#105-https--cors)
-
-11. **[Accessibility (A11y)](./documents/en/accessibility.md)** ♿
-
-    11.1. [ARIA Attributes](./documents/en/accessibility.md#111-aria-attributes)
-
-    11.2. [Keyboard Navigation](./documents/en/accessibility.md#112-keyboard-navigation)
-
-    11.3. [Semantic HTML](./documents/en/accessibility.md#113-semantic-html)
-
-    11.4. [WCAG Guidelines](./documents/en/accessibility.md#114-wcag-guidelines)
+   9.2. [CSR/SSR/SSG/RSC](./documents/en/nextjs.md#214-csr-vs-ssr-vs-ssg-vs-spa-and-rsc), [App Router](./documents/en/nextjs.md#215-app-router-fundamentals)
 
 ---
 
-### IV. Infrastructure & Tools
+### IV. Development Practices
 
-12. **[Build Tools](./documents/en/build-tools.md)**
+10. **[Testing](./documents/en/testing.md)** ⭐
 
-    12.1. [Vite vs Webpack](./documents/en/build-tools.md#121-vite-vs-webpack)
+    10.1. [Unit Testing (Vitest)](./documents/en/testing.md#81-unit-testing-with-vitest)
 
-13. **[Networking](./documents/en/networking.md)**
+    10.2. [Component Testing (Vue Test Utils)](./documents/en/testing.md#82-component-testing-with-vue-test-utils)
 
-    13.1. [REST vs WebSocket](./documents/en/networking.md#131-websocket-vs-rest)
+    10.3. [E2E Testing (Playwright)](./documents/en/testing.md#83-e2e-testing-with-playwright)
 
-14. **[DevOps](./documents/en/devops.md)**
+    10.4. [Test Coverage](./documents/en/testing.md#84-test-coverage), [TDD/BDD](./documents/en/testing.md#85-tddbdd-methodology)
 
-    14.1. [GitOps & ArgoCD Pipeline](./documents/en/devops.md#141-gitops--argocd-pipeline)
+11. **[Performance & Optimization](./documents/en/performance.md)** ⚡
+
+    11.1. [Core Performance](./documents/en/performance.md#91-core-performance): [Storage](./documents/en/performance.md#911-storage-localstorage-vs-sessionstorage-vs-cookie), [Optimization](./documents/en/performance.md#912-performance-optimization), [Code Review](./documents/en/performance.md#913-code-review-checklist)
+
+    11.2. [Advanced](./documents/en/performance.md#92-advanced-optimization): [Code Splitting](./documents/en/performance.md#921-code-splitting-strategies), [Tree Shaking](./documents/en/performance.md#922-tree-shaking), [Debounce/Throttle](./documents/en/performance.md#923-debounce-vs-throttle), [Image/Font](./documents/en/performance.md#924-image--font-optimization)
+
+12. **[Security](./documents/en/security.md)** 🔒
+
+    12.1. [Prevent XSS](./documents/en/security.md#101-preventing-xss)
+
+    12.2. [Protect Against CSRF](./documents/en/security.md#102-protecting-against-csrf)
+
+    12.3. [Authentication Best Practices](./documents/en/security.md#103-authentication-best-practices)
+
+    12.4. [Input Validation](./documents/en/security.md#104-input-validation-and-sanitization), [HTTPS & CORS](./documents/en/security.md#105-https--cors)
+
+13. **[Accessibility (A11y)](./documents/en/accessibility.md)** ♿
+
+    13.1. [ARIA Attributes](./documents/en/accessibility.md#111-aria-attributes)
+
+    13.2. [Keyboard Navigation](./documents/en/accessibility.md#112-keyboard-navigation)
+
+    13.3. [Semantic HTML](./documents/en/accessibility.md#113-semantic-html)
+
+    13.4. [WCAG Guidelines](./documents/en/accessibility.md#114-wcag-guidelines)
 
 ---
 
-### V. Professional Skills
+### V. Infrastructure & Tools
 
-15. **[Architecture & Design Patterns](./documents/en/architecture.md)** 🏗️
+14. **[Build Tools](./documents/en/build-tools.md)**
 
-    15.1. [Component Patterns](./documents/en/architecture.md#151-component-patterns)
+    14.1. [Vite vs Webpack](./documents/en/build-tools.md#121-vite-vs-webpack)
 
-    15.2. [Design Patterns](./documents/en/architecture.md#152-design-patterns)
+15. **[Networking](./documents/en/networking.md)**
 
-    15.3. [SOLID Principles](./documents/en/architecture.md#153-solid-principles-in-frontend)
+    15.1. [REST vs WebSocket](./documents/en/networking.md#131-websocket-vs-rest)
 
-    15.4. [Module Federation & Micro-frontends](./documents/en/architecture.md#154-module-federation--micro-frontends)
+16. **[DevOps](./documents/en/devops.md)**
 
-16. **[System Design](./documents/en/system-design.md)**
+    16.1. [GitOps & ArgoCD Pipeline](./documents/en/devops.md#141-gitops--argocd-pipeline)
 
-    16.1. [Frontend Architecture Decisions](./documents/en/system-design.md#161-frontend-architecture-decisions)
+---
 
-    16.2. [Caching Strategies](./documents/en/system-design.md#162-caching-strategies)
+### VI. Professional Skills
 
-    16.3. [Component Library Design](./documents/en/system-design.md#163-component-library-design)
+17. **[Architecture & Design Patterns](./documents/en/architecture.md)** 🏗️
 
-17. **[Leadership & Soft Skills](./documents/en/leadership.md)** 👥
+    17.1. [Component Patterns](./documents/en/architecture.md#151-component-patterns)
 
-    17.1. [Technical Mentorship](./documents/en/leadership.md#171-technical-mentorship)
+    17.2. [Design Patterns](./documents/en/architecture.md#152-design-patterns)
 
-    17.2. [Architecture Decision Records (ADR)](./documents/en/leadership.md#172-architecture-decision-records-adr)
+    17.3. [SOLID Principles](./documents/en/architecture.md#153-solid-principles-in-frontend)
 
-    17.3. [Complexity Estimation](./documents/en/leadership.md#173-complexity-estimation)
+    17.4. [Module Federation & Micro-frontends](./documents/en/architecture.md#154-module-federation--micro-frontends)
 
-    17.4. [Conflict Resolution](./documents/en/leadership.md#174-conflict-resolution)
+18. **[System Design](./documents/en/system-design.md)**
 
-18. **[Practical Interview Questions](./documents/en/practical-questions.md)** 💼
+    18.1. [Frontend Architecture Decisions](./documents/en/system-design.md#161-frontend-architecture-decisions)
 
-    18.1. [401 Error Handling & Authentication](./documents/en/practical-questions.md#181-handling-401-error--redirect-to-login)
+    18.2. [Caching Strategies](./documents/en/system-design.md#162-caching-strategies)
 
-    18.2. [Project Management Process](./documents/en/practical-questions.md#182-project-management-tools--process)
+    18.3. [Component Library Design](./documents/en/system-design.md#163-component-library-design)
 
-    18.3. [Bug vs Feature Assessment](./documents/en/practical-questions.md#183-assessing-issue-bug-or-feature-request)
+19. **[Leadership & Soft Skills](./documents/en/leadership.md)** 👥
 
-    18.4. [Git Workflow](./documents/en/practical-questions.md#184-git-workflow)
+    19.1. [Technical Mentorship](./documents/en/leadership.md#171-technical-mentorship)
 
-    18.5. [Resolving Git Conflicts](./documents/en/practical-questions.md#185-resolving-git-conflicts)
+    19.2. [Architecture Decision Records (ADR)](./documents/en/leadership.md#172-architecture-decision-records-adr)
 
-    18.6. [Squashing Commits](./documents/en/practical-questions.md#186-squashing-commits)
+    19.3. [Complexity Estimation](./documents/en/leadership.md#173-complexity-estimation)
 
-19. **[Monitoring & Error Handling](./documents/en/monitoring.md)** 📊
+    19.4. [Conflict Resolution](./documents/en/leadership.md#174-conflict-resolution)
 
-    19.1. [Error Tracking (Sentry)](./documents/en/monitoring.md#191-error-tracking-with-sentry)
+20. **[Practical Interview Questions](./documents/en/practical-questions.md)** 💼
 
-    19.2. [Error Boundaries](./documents/en/monitoring.md#192-error-boundaries-in-vue)
+    20.1. [401 Error Handling & Authentication](./documents/en/practical-questions.md#181-handling-401-error--redirect-to-login)
 
-    19.3. [Performance Monitoring](./documents/en/monitoring.md#193-performance-monitoring)
+    20.2. [Project Management Process](./documents/en/practical-questions.md#182-project-management-tools--process)
 
-    19.4. [Logging Strategy](./documents/en/monitoring.md#194-logging-strategy)
+    20.3. [Bug vs Feature Assessment](./documents/en/practical-questions.md#183-assessing-issue-bug-or-feature-request)
+
+    20.4. [Git Workflow](./documents/en/practical-questions.md#184-git-workflow)
+
+    20.5. [Resolving Git Conflicts](./documents/en/practical-questions.md#185-resolving-git-conflicts)
+
+    20.6. [Squashing Commits](./documents/en/practical-questions.md#186-squashing-commits)
+
+21. **[Monitoring & Error Handling](./documents/en/monitoring.md)** 📊
+
+    21.1. [Error Tracking (Sentry)](./documents/en/monitoring.md#191-error-tracking-with-sentry)
+
+    21.2. [Error Boundaries](./documents/en/monitoring.md#192-error-boundaries-in-vue)
+
+    21.3. [Performance Monitoring](./documents/en/monitoring.md#193-performance-monitoring)
+
+    21.4. [Logging Strategy](./documents/en/monitoring.md#194-logging-strategy)
 
 ---
 
 ## 📊 Coverage Statistics
 
-- **Main Groups**: 5 groups (Core Web, Vue Ecosystem, Dev Practices, Infrastructure, Professional Skills)
-- **Total Topics**: 19 main topics
+- **Main Groups**: 6 groups (Core Web, Vue Ecosystem, React Ecosystem, Dev Practices, Infrastructure, Professional Skills)
+- **Total Topics**: 21 main topics
 - **Total Sections**: 100+ sub-topics
 - **Code Examples**: 200+ real-world examples
 - **Comparison Tables**: 20+ decision matrices
@@ -224,10 +240,10 @@ The documentation is organized into 5 main groups with 19 topics, from basic to 
 
 **Core Stack:**
 
-- Vue 3 (Composition API)
+- Vue 3 (Composition API) / React (Hooks)
 - TypeScript
-- Nuxt 3
-- Pinia / Vuex
+- Nuxt 3 / Next.js (App Router)
+- Pinia / Vuex · Redux / Zustand / Jotai
 
 **Build Tools:**
 
@@ -278,6 +294,6 @@ If you find this documentation helpful:
 
 **Good luck with your Senior Frontend Developer interview! 🚀**
 
-_Last updated: November 2025_
-_Version: 3.0 (New structure - 5 main groups, 19 topics)_
+_Last updated: September 2026_
+_Version: 3.1 (Added React Ecosystem — 6 main groups, 21 topics)_
 
