@@ -31,13 +31,16 @@
       "pro": "V. Professional"
     },
     "backHub": "Hub",
+    "backPlan": "Plan",
     "emptySearch": "No results"
   },
   "plan": {
     "title": "30-day study plan",
     "eyebrow": "Senior FE · 03/10 → 01/11/2026",
     "backHub": "Hub",
-    "openDocs": "Knowledge Base"
+    "openDocs": "Knowledge Base",
+    "backPlan": "Back to Plan",
+    "backDayList": "Day list"
   },
   "common": {
     "vi": "VI",

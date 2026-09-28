@@ -62,7 +62,7 @@ function openResource(path: string) {
 </script>
 
 <template>
-  <div class="mx-auto min-h-screen max-w-hub px-4 py-5 sm:px-6 sm:py-8">
+  <div class="mx-auto min-h-screen max-w-hub pb-10">
     <EditGateModal
       :open="modalOpen"
       :unlocking="unlocking"
@@ -71,17 +71,26 @@ function openResource(path: string) {
       @skip="skipUnlock"
     />
 
-    <header class="animate-fade-up flex flex-col gap-4 border-b border-line pb-5 sm:flex-row sm:items-start sm:justify-between">
-      <div class="min-w-0">
-        <div class="mb-3 flex flex-wrap gap-2">
-          <BackLink :label="$t('plan.backHub')" />
-          <NuxtLink
-            to="/docs"
-            class="inline-flex min-h-10 items-center rounded-lg border border-line bg-surface-elevated px-3 text-sm font-semibold"
-          >
-            {{ $t('plan.openDocs') }}
-          </NuxtLink>
+    <div
+      class="sticky top-0 z-20 border-b border-line bg-surface/95 px-4 py-3 backdrop-blur sm:px-6"
+    >
+      <div class="flex flex-wrap items-center gap-2">
+        <BackLink :label="$t('plan.backHub')" />
+        <NuxtLink
+          to="/docs?from=plan"
+          class="inline-flex min-h-10 items-center rounded-lg border border-line bg-surface-elevated px-3 text-sm font-semibold"
+        >
+          {{ $t('plan.openDocs') }}
+        </NuxtLink>
+        <div class="ml-auto">
+          <LocaleToggle />
         </div>
+      </div>
+    </div>
+
+    <div class="animate-fade-up px-4 pt-5 sm:px-6 sm:pt-8">
+    <header class="flex flex-col gap-4 border-b border-line pb-5 sm:flex-row sm:items-start sm:justify-between">
+      <div class="min-w-0">
         <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
           {{ $t('plan.eyebrow') }}
         </p>
@@ -111,7 +120,6 @@ function openResource(path: string) {
       </div>
 
       <div class="flex flex-col items-stretch gap-3 sm:items-end">
-        <LocaleToggle />
         <div class="min-w-[10rem]">
           <div class="mb-1 flex justify-between text-sm font-semibold">
             <span>{{ completedCount }}/30</span>
@@ -189,5 +197,6 @@ function openResource(path: string) {
         @toggle="toggleDone"
       />
     </main>
+    </div>
   </div>
 </template>

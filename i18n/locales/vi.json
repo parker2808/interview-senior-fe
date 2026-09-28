@@ -31,13 +31,16 @@
       "pro": "V. Professional"
     },
     "backHub": "Hub",
+    "backPlan": "Plan",
     "emptySearch": "Không có kết quả"
   },
   "plan": {
     "title": "Kế hoạch ôn 30 ngày",
     "eyebrow": "Senior FE · 03/10 → 01/11/2026",
     "backHub": "Hub",
-    "openDocs": "Knowledge Base"
+    "openDocs": "Knowledge Base",
+    "backPlan": "Quay lại Plan",
+    "backDayList": "Danh sách ngày"
   },
   "common": {
     "vi": "VI",
