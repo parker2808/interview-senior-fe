@@ -72,19 +72,36 @@ function openResource(path: string) {
     />
 
     <div
-      class="sticky top-0 z-20 border-b border-line bg-surface/95 px-4 py-3 backdrop-blur sm:px-6"
+      class="sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur"
     >
-      <div class="flex flex-wrap items-center gap-2">
-        <BackLink :label="$t('plan.backHub')" />
+      <div class="flex h-12 items-center gap-1.5 px-2 sm:gap-2 sm:px-4">
+        <BackLink :label="$t('plan.backHub')" icon-only />
         <NuxtLink
           to="/docs?from=plan"
-          class="inline-flex min-h-10 items-center rounded-lg border border-line bg-surface-elevated px-3 text-sm font-semibold"
+          class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface-elevated text-ink transition hover:border-accent hover:text-accent-ink"
+          :aria-label="$t('plan.openDocs')"
+          :title="$t('plan.openDocs')"
         >
-          {{ $t('plan.openDocs') }}
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+          </svg>
         </NuxtLink>
-        <div class="ml-auto">
-          <LocaleToggle />
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-sm font-semibold text-ink">
+            {{ $t('plan.title') }}
+          </p>
         </div>
+        <LocaleToggle />
       </div>
     </div>
 
@@ -94,9 +111,6 @@ function openResource(path: string) {
         <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
           {{ $t('plan.eyebrow') }}
         </p>
-        <h1 class="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
-          {{ $t('plan.title') }}
-        </h1>
         <div class="mt-2 flex flex-wrap items-center gap-2">
           <span
             class="rounded-full px-2.5 py-1 text-xs font-semibold"

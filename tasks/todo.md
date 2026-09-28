@@ -1,16 +1,14 @@
-# React / Next Knowledge Base Foundation
+# Fix mobile sticky headers (1-row icon-only)
 
 ## Plan
-- [x] Design React/Next KB structure mirroring Vue ecosystem (Vue↔React, Nuxt↔Next bridges)
-- [x] Write `documents/en|vi/react.md` + `nextjs.md` (senior Q&A style)
-- [x] Wire catalog (`react` group), fix security group typo, i18n `groups.react`, hub counts
-- [x] Update README topic index (VI + EN) → 6 groups / 21 topics
-- [x] Point study-plan Day 8/18/28 at new KB paths
-- [x] Verify `/docs` loads react + nextjs; commit + PR
-- [x] Add `state-management-react` (RTK/Zustand/Jotai/Query + Next) → 22 topics
+- [x] BackLink + LocaleToggle compact / icon-only support
+- [x] Docs header: single nowrap row (menu / back / title / search / locale)
+- [x] Plan sticky headers: icon-only hub / docs / back
+- [x] Sync header height CSS vars + scroll-padding / HEADER_OFFSET
+- [x] Verify mobile screenshots; commit + PR
 
 ## Review
-- `npm run build` succeeds (Nitro vercel preset)
-- Manual QA: hub shows 21/6 then 22/6; `/docs/vi|en/react` + `/docs/vi/nextjs` + state-management-react
-- Demo: `/opt/cursor/artifacts/react-next-kb-demo.mp4` + screenshots
-- PR: https://github.com/parker2808/interview-senior-fe/pull/11
+- Docs + plan sticky = one `h-12` row with icon controls
+- ResizeObserver sets `--docs-header-h` / `--app-header-h`
+- Screenshots: mobile-docs-header-1row.webp, mobile-plan-header-1row.webp
+- PR: https://github.com/parker2808/interview-senior-fe/pull/12
