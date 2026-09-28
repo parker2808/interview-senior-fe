@@ -4,8 +4,8 @@ export const GITHUB_BLOB_MAIN =
   'https://github.com/parker2808/interview-senior-fe/blob/main/'
 
 /**
- * Resolve a relative path from a plan-relative file path.
- * @param {string} fromPath e.g. `artifacts/day-01-user-flow.md`
+ * Resolve a relative path from a plan-relative or repo-root file path.
+ * @param {string} fromPath e.g. `artifacts/day-01-user-flow.md` or `documents/vi/vue3.md`
  * @param {string} href e.g. `../../../documents/vi/vue3.md` or `./capstone-brief.md`
  * @returns {string} normalized path without leading ./
  */
@@ -26,14 +26,34 @@ export function resolveRelative(fromPath, href) {
 }
 
 /**
- * @param {string} fromPath plan-relative path of the current markdown file
+ * Normalize common path forms to a repo- or plan-relative lookup key.
+ * @param {string} path
+ */
+export function normalizeDocPath(path) {
+  return String(path || '')
+    .replace(/^\.?\/+/, '')
+    .replace(/^\/+/, '')
+}
+
+/**
+ * @param {string} fromPath plan-relative or `documents/...` path of the current markdown file
  * @param {string} href raw href from <a>
  * @param {(path: string) => boolean} isBundledPath whether path loads from @plan / @kb
- * @returns {{ kind: 'ignore' } | { kind: 'hash', href: string } | { kind: 'external', url: string } | { kind: 'plan', path: string } | { kind: 'github', url: string }}
+ * @returns {{ kind: 'ignore' } | { kind: 'hash', href: string } | { kind: 'external', url: string } | { kind: 'plan', path: string, hash?: string } | { kind: 'github', url: string }}
  */
 export function classifyMarkdownHref(fromPath, href, isBundledPath) {
   if (!href || href.startsWith('mailto:')) return { kind: 'ignore' }
   if (href.startsWith('http://') || href.startsWith('https://')) {
+    // Prefer in-app when the URL is our GitHub blob for a bundled file
+    const blobPrefix = GITHUB_BLOB_MAIN
+    if (href.startsWith(blobPrefix)) {
+      const rest = href.slice(blobPrefix.length)
+      const [pathPart, hash] = rest.split('#')
+      const normalized = normalizeDocPath(pathPart)
+      if (isBundledPath(normalized)) {
+        return { kind: 'plan', path: normalized, hash: hash || undefined }
+      }
+    }
     return { kind: 'external', url: href }
   }
   if (href.startsWith('#')) {
@@ -45,9 +65,22 @@ export function classifyMarkdownHref(fromPath, href, isBundledPath) {
     return { kind: 'hash', href: href }
   }
 
-  const resolved = resolveRelative(fromPath, pathPart)
+  // Absolute-from-repo forms: /documents/vi/x.md or documents/vi/x.md
+  let resolved
+  const stripped = normalizeDocPath(pathPart)
+  if (
+    stripped.startsWith('documents/') ||
+    stripped === 'README.md' ||
+    stripped === 'README-en.md' ||
+    stripped === 'jd1.md' ||
+    stripped.startsWith('modules/')
+  ) {
+    resolved = stripped
+  } else {
+    resolved = normalizeDocPath(resolveRelative(fromPath, pathPart))
+  }
 
-  // Bundled plan content or shared KB (documents/en|vi) → in-app navigation
+  // Bundled plan content or shared KB → in-app navigation
   if (isBundledPath(resolved)) {
     return { kind: 'plan', path: resolved, hash: hash || undefined }
   }
@@ -64,8 +97,7 @@ export function classifyMarkdownHref(fromPath, href, isBundledPath) {
     return { kind: 'github', url }
   }
 
-  // Relative path that walked above content via ../../../documents already caught;
-  // leftover unknown → try GitHub under modules/study-plan-30-days/content/
+  // Leftover unknown → try GitHub under modules/study-plan-30-days/content/
   const contentRepoPath = `modules/study-plan-30-days/content/${resolved}`
   return {
     kind: 'github',

@@ -2,7 +2,7 @@
 
 **Ngày:** 30/10/2026 · **Timebox:** 60–90 phút  
 **Mục tiêu ngày:** Cùng slice tương đương bằng React/TS (parallel, không clone full Vue app).  
-**Capstone link:** Code dưới [`capstone/spikes/react/`](./capstone/spikes/react/) — **không** fake React files trong `/workspace`.
+**Capstone link:** Code dưới [`capstone/spikes/react/`](./capstone/spikes/react/) — **không** fake React files trong repo (React practice is outside / mapped concepts).
 
 ---
 

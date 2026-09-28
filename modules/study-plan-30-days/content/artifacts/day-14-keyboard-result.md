@@ -20,7 +20,7 @@
 | Nguồn | Path | Ghi chú |
 |---|---|---|
 | Self-check | [self-check-questions.md](../self-check-questions.md) | Responsive + Accessibility |
-| Day 8–13 artifacts | [`artifacts/day-08-…`](./day-08-…) → `day-13-…` | Review notes |
+| Day 8–13 artifacts | [day-08](./day-08-component-tree.md) · [09](./day-09-state-map.md) · [10](./day-10-types-and-flow.md) · [11](./day-11-design-primitives.md) · [12](./day-12-responsive-tradeoffs.md) · [13](./day-13-modal-a11y.md) | Review notes |
 
 Plan Day 14: [30-day-study-plan.md — Day 14](../30-day-study-plan.md#day-14--16102026--keyboard-review-wrap-tuần-2)
 

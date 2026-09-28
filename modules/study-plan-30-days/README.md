@@ -25,10 +25,14 @@ Shared interview topics stay in repo [`documents/en`](../../documents/en) and [`
 | Target | In `.md` files | In the Vue follow UI |
 |---|---|---|
 | Module `content/` | Relative links between files | In-app navigation (`#day/N`, `#doc/…`) |
-| Shared `documents/{en,vi}/` | Relative paths (e.g. `../../../documents/vi/…`) | **In-app** (bundled via `@kb` at build time) |
+| Shared `documents/**` | Relative paths (e.g. `../../../documents/vi/…`) | **In-app** (bundled via `@kb` at build time) |
 | Root `README.md` / `jd1.md` (not bundled) | Relative paths from the file | Opens [GitHub blob on `main`](https://github.com/parker2808/interview-senior-fe/blob/main/) |
 
-Do not use Agent Store paths (`/cursor/stores/…`) or absolute `/workspace/…` paths in repo files.
+**Back navigation:** opening a plan or KB doc from a day (or another doc) uses `history.pushState`. The header / doc **← Quay lại Day N** control and the browser back button return to the prior screen. Deep links with no stack fall back to the day list.
+
+Do not use Agent Store paths (`/cursor/stores/…`) or absolute `/workspace/…` paths in repo files. Layout rationale: [`documents/README.md`](../../documents/README.md).
+
+Link audit (from `src/`): `npm run audit:links`.
 
 ## Quick start (UI)
 
