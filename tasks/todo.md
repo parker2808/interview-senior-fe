@@ -8,8 +8,9 @@
 - [x] Migrate study-plan to `/plan`
 - [x] Nitro API + vercel.json
 - [x] Cleanup Vite SPA + README
-- [ ] Verify desktop/tablet/mobile
+- [x] Verify desktop/tablet/mobile
 
 ## Review
 - Folder layout mirrors product-details: thin `pages/` + `src/modules/{hub,knowledge-base,study-plan,core}/`
 - `npm run build` succeeds with Nitro vercel preset
+- Manual QA + demo video: hub → docs (search) → plan; mobile stacked hub + docs nav
