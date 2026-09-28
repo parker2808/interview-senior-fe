@@ -6,29 +6,30 @@ export default {
     './layouts/**/*.vue',
     './pages/**/*.vue',
     './app.vue',
+    './plugins/**/*.{js,ts}',
     './src/**/*.{vue,js,ts}',
   ],
   theme: {
     extend: {
       colors: {
         ink: {
-          DEFAULT: '#14201c',
-          muted: '#5a6b64',
-          faint: '#8a9a93',
+          DEFAULT: 'var(--ink)',
+          muted: 'var(--ink-muted)',
+          faint: 'var(--ink-faint)',
         },
         accent: {
-          DEFAULT: '#0f766e',
-          soft: '#ccfbf1',
-          ink: '#115e59',
+          DEFAULT: 'var(--accent)',
+          soft: 'var(--accent-soft)',
+          ink: 'var(--accent-ink)',
         },
-        line: '#d5e0db',
+        line: 'var(--line)',
         surface: {
-          DEFAULT: '#f4f7f6',
-          elevated: '#ffffff',
+          DEFAULT: 'var(--bg)',
+          elevated: 'var(--bg-elevated)',
         },
         done: {
-          DEFAULT: '#15803d',
-          soft: '#dcfce7',
+          DEFAULT: 'var(--done)',
+          soft: 'var(--done-soft)',
         },
       },
       fontFamily: {

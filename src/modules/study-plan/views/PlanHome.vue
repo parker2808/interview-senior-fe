@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BackLink from '@/modules/core/components/BackLink/BackLink.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
+import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import DayList from '@/modules/study-plan/components/DayList/DayList.vue'
 import ProgressTools from '@/modules/study-plan/components/ProgressTools/ProgressTools.vue'
 import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
@@ -72,7 +73,7 @@ function openResource(path: string) {
     />
 
     <div
-      class="sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur"
+      class="sticky top-0 z-20 border-b border-line bg-surface-elevated backdrop-blur"
     >
       <div class="flex h-12 items-center gap-1.5 px-2 sm:gap-2 sm:px-4">
         <BackLink :label="$t('plan.backHub')" icon-only />
@@ -102,6 +103,7 @@ function openResource(path: string) {
           </p>
         </div>
         <LocaleToggle />
+        <ThemeToggle />
       </div>
     </div>
 

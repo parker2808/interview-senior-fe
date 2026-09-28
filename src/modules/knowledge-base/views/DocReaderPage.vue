@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BackLink from '@/modules/core/components/BackLink/BackLink.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
+import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import DocSidebar from '@/modules/knowledge-base/components/DocSidebar/DocSidebar.vue'
 import DocToc from '@/modules/knowledge-base/components/DocToc/DocToc.vue'
 import DocSearch from '@/modules/knowledge-base/components/DocSearch/DocSearch.vue'
@@ -46,7 +47,52 @@ const activeHeading = ref('')
 const tocOpen = ref(false)
 const proseRef = ref<HTMLElement | null>(null)
 const headerRef = ref<HTMLElement | null>(null)
+const mainRef = ref<HTMLElement | null>(null)
 const headerOffset = ref(HEADER_OFFSET)
+
+/** Preserve reading position across VI↔EN on the same slug */
+const langPreserve = ref<{
+  tocIndex: number
+  ratio: number
+} | null>(null)
+
+function scrollEl(): HTMLElement | Window {
+  if (
+    import.meta.client &&
+    window.matchMedia('(min-width: 1024px)').matches &&
+    mainRef.value
+  ) {
+    return mainRef.value
+  }
+  return window
+}
+
+function getScrollTop() {
+  const el = scrollEl()
+  return el === window ? window.scrollY : (el as HTMLElement).scrollTop
+}
+
+function setScrollTop(top: number, smooth = false) {
+  const el = scrollEl()
+  const opts: ScrollToOptions = {
+    top: Math.max(0, top),
+    behavior: smooth ? 'smooth' : 'auto',
+  }
+  if (el === window) window.scrollTo(opts)
+  else (el as HTMLElement).scrollTo(opts)
+}
+
+function getScrollHeight() {
+  const el = scrollEl()
+  if (el === window) {
+    return Math.max(
+      document.documentElement.scrollHeight - window.innerHeight,
+      1,
+    )
+  }
+  const node = el as HTMLElement
+  return Math.max(node.scrollHeight - node.clientHeight, 1)
+}
 
 watch(
   safeLang,
@@ -63,14 +109,24 @@ function withFromQuery(path: string) {
 }
 
 function goDoc(nextSlug: string, nextLang: string = safeLang.value) {
+  langPreserve.value = null
   router.push(withFromQuery(`/docs/${nextLang}/${nextSlug}`))
   sidebarOpen.value = false
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  nextTick(() => setScrollTop(0))
 }
 
 function switchLang(next: DocLang) {
+  if (!import.meta.client) {
+    setLocale(next)
+    return
+  }
+  const tocIndex = toc.value.findIndex((item) => item.id === activeHeading.value)
+  langPreserve.value = {
+    tocIndex: tocIndex >= 0 ? tocIndex : -1,
+    ratio: getScrollTop() / getScrollHeight(),
+  }
   setLocale(next)
-  const hash = import.meta.client ? window.location.hash : ''
+  const hash = window.location.hash
   router.push(withFromQuery(`/docs/${next}/${slug.value}${hash}`))
 }
 
@@ -80,12 +136,24 @@ watch(locale, (l) => {
   }
 })
 
-function scrollToId(id: string, updateHash = true) {
+function scrollToId(id: string, updateHash = true, smooth = true) {
   if (!id) return
   const el = document.getElementById(id)
   if (!el) return
-  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset.value
-  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+  const container = scrollEl()
+  if (container === window) {
+    const top =
+      el.getBoundingClientRect().top + window.scrollY - headerOffset.value
+    setScrollTop(top, smooth)
+  } else {
+    const root = container as HTMLElement
+    const top =
+      el.getBoundingClientRect().top -
+      root.getBoundingClientRect().top +
+      root.scrollTop -
+      headerOffset.value
+    setScrollTop(top, smooth)
+  }
   if (updateHash) {
     history.replaceState(null, '', `#${id}`)
   }
@@ -133,13 +201,31 @@ function syncHashScroll() {
   const id = decodeURIComponent(window.location.hash.replace(/^#/, ''))
   if (!id) return
   nextTick(() => {
-    requestAnimationFrame(() => scrollToId(id, false))
+    requestAnimationFrame(() => scrollToId(id, false, false))
+  })
+}
+
+function restoreLangScroll() {
+  const preserved = langPreserve.value
+  if (!preserved) return
+  langPreserve.value = null
+  nextTick(() => {
+    requestAnimationFrame(() => {
+      if (preserved.tocIndex >= 0 && toc.value[preserved.tocIndex]) {
+        scrollToId(toc.value[preserved.tocIndex].id, true, false)
+        return
+      }
+      setScrollTop(preserved.ratio * getScrollHeight(), false)
+    })
   })
 }
 
 watch(
   () => [html.value, route.fullPath] as const,
-  () => syncHashScroll(),
+  () => {
+    if (langPreserve.value) restoreLangScroll()
+    else syncHashScroll()
+  },
   { flush: 'post' },
 )
 
@@ -199,7 +285,7 @@ onUnmounted(() => observer?.disconnect())
   <div class="docs-shell min-h-screen lg:h-dvh lg:overflow-hidden">
     <header
       ref="headerRef"
-      class="docs-header sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur"
+      class="docs-header sticky top-0 z-30 border-b border-line bg-surface-elevated backdrop-blur"
     >
       <div class="flex h-12 items-center gap-1.5 px-2 sm:gap-2 sm:px-4 lg:px-5">
         <button
@@ -252,6 +338,7 @@ onUnmounted(() => observer?.disconnect())
         </button>
 
         <LocaleToggle />
+        <ThemeToggle />
       </div>
     </header>
 
@@ -311,7 +398,10 @@ onUnmounted(() => observer?.disconnect())
         </div>
       </Teleport>
 
-      <main class="docs-main min-w-0 flex-1 px-4 py-6 sm:px-6 lg:overflow-y-auto lg:px-8">
+      <main
+        ref="mainRef"
+        class="docs-main min-w-0 flex-1 px-4 py-6 sm:px-6 lg:overflow-y-auto lg:px-8"
+      >
         <article v-if="loaded.ok" class="animate-fade-up mx-auto max-w-prose">
           <div
             ref="proseRef"

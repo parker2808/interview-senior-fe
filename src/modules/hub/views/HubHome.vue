@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
+import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import { HUB_MODULES } from '@/modules/hub/constants/hub-modules.constant'
 </script>
 
@@ -17,7 +18,10 @@ import { HUB_MODULES } from '@/modules/hub/constants/hub-modules.constant'
           {{ $t('hub.sub') }}
         </p>
       </div>
-      <LocaleToggle class="self-start" />
+      <div class="flex items-center gap-2 self-start">
+        <LocaleToggle />
+        <ThemeToggle />
+      </div>
     </header>
 
     <section

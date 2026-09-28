@@ -4,6 +4,7 @@ import type { DayMeta } from '@/modules/study-plan/constants/days.constant'
 import { loadMarkdown } from '@/modules/study-plan/utils/load-markdown.util'
 import { classifyMarkdownHref } from '@/modules/study-plan/utils/markdown-links.util'
 import { isBundledPath } from '@/modules/study-plan/utils/load-markdown.util'
+import { autolinkMarkdownPaths } from '@/modules/study-plan/utils/autolink-md.util'
 
 const props = defineProps<{
   day: DayMeta
@@ -32,9 +33,12 @@ const activePath = computed(() =>
   tab.value === 'starter' ? props.day.starter : props.day.worksheet,
 )
 
-const html = computed(() =>
-  marked.parse(loadMarkdown(activePath.value).text, { async: false }) as string,
-)
+const html = computed(() => {
+  const raw = marked.parse(loadMarkdown(activePath.value).text, {
+    async: false,
+  }) as string
+  return autolinkMarkdownPaths(raw, activePath.value)
+})
 
 function onDocClick(e: MouseEvent) {
   const a = (e.target as HTMLElement).closest('a')
@@ -42,22 +46,20 @@ function onDocClick(e: MouseEvent) {
   const href = a.getAttribute('href')
   const result = classifyMarkdownHref(activePath.value, href || '', isBundledPath)
   if (result.kind === 'ignore' || result.kind === 'hash') return
+  e.preventDefault()
   if (result.kind === 'external' || result.kind === 'github') {
-    e.preventDefault()
     window.open(result.url, '_blank', 'noopener,noreferrer')
     return
   }
   if (result.kind === 'docs') {
-    e.preventDefault()
     emit('open-docs', {
-      lang: result.lang,
+      lang: result.lang || 'vi',
       slug: result.slug,
       hash: result.hash,
     })
     return
   }
   if (result.kind === 'plan') {
-    e.preventDefault()
     emit('open-doc', result.path)
   }
 }

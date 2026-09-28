@@ -55,14 +55,20 @@ export function classifyMarkdownHref(
 
   let resolved: string
   const stripped = normalizeDocPath(pathPart)
+
   if (
     stripped.startsWith('documents/') ||
     stripped === 'README.md' ||
     stripped === 'README-en.md' ||
     stripped === 'jd1.md' ||
-    stripped.startsWith('modules/')
+    stripped.startsWith('modules/') ||
+    stripped.startsWith('artifacts/')
   ) {
     resolved = stripped
+  } else if (stripped.startsWith('capstone/')) {
+    resolved = `artifacts/${stripped}`
+  } else if (/^\d{2}-[a-z0-9-]+\.md$/i.test(stripped)) {
+    resolved = `artifacts/capstone/${stripped}`
   } else {
     resolved = normalizeDocPath(resolveRelative(fromPath, pathPart))
   }

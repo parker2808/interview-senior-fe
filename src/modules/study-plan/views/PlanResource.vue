@@ -29,7 +29,7 @@ function openDocs(payload: { lang: string; slug: string; hash?: string }) {
 <template>
   <div class="mx-auto min-h-screen max-w-hub pb-10">
     <div
-      class="sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur"
+      class="sticky top-0 z-20 border-b border-line bg-surface-elevated backdrop-blur"
     >
       <div class="flex h-12 items-center gap-2 px-2 sm:px-4">
         <BackLink to="/plan" :label="t('plan.backPlan')" icon-only />
