@@ -1,38 +1,38 @@
 # Modules
 
-Self-contained study / practice tracks that **build on** the shared interview knowledge base in [`documents/`](../documents/).
+## Two layers
 
-## Shared vs module
+| Path | Owns |
+|---|---|
+| [`documents/`](../documents/) | Shared interview KB (`en/`, `vi/`) |
+| `modules/<track>/content/` | Track markdown only (plan, worksheets, Capstone) |
+| [`src/modules/`](../src/modules/) | **UI feature modules** (Nuxt) — see [STRUCTURE.md](../STRUCTURE.md) |
 
-| Area | Owns | Does not own |
-|---|---|---|
-| [`documents/`](../documents/) | Interview topics (`en/`, `vi/`) — common across tracks | Day plans, worksheets, module UIs |
-| `modules/<name>/` | That track’s markdown + optional app | Copying or forking the shared KB |
-
-Modules **reference** shared docs by repo-root path, e.g. `documents/vi/vue3.md` or `documents/en/testing.md`. Prefer those paths in prose and tables so links stay stable when modules move.
-
-## Layout convention
+## Content tracks
 
 ```text
 modules/
-  README.md                 # this file
-  <kebab-module-name>/
-    README.md               # what the module is, how to run it
-    content/                # module-owned markdown (plan, starters, artifacts)
-    src/                    # optional Vite (or other) app for this module
+  README.md
+  <kebab-track-name>/
+    README.md
+    content/          # markdown owned by this track
 ```
 
-Name modules in **kebab-case** (`study-plan-30-days`, `system-design-drills`, …).
+Name tracks in **kebab-case**. Do **not** nest copies of `documents/en|vi` inside a track.
 
-## Adding a module later
+## UI modules (`src/modules/`)
 
-1. Create `modules/<name>/` with `README.md` and usually a `content/` folder.
-2. Link shared topics with `documents/...` paths (do not nest copies of `en`/`vi` inside the module).
-3. If the module has a UI, put it in `modules/<name>/src/` with its own `package.json`.
-4. Wire Vercel (or another host) when that module should be the live site — today root [`vercel.json`](../vercel.json) deploys the study-plan UI with **Root Directory = `.` (repo root)** so the build can see both the module and shared [`documents/`](../documents/). Thin `/api` adapters live at repo-root [`api/`](../api/).
+Feature UI follows [STRUCTURE.md](../STRUCTURE.md) (same convention as product-details):
 
-## Current modules
+- `src/modules/hub/` — hub landing
+- `src/modules/knowledge-base/` — docs reader
+- `src/modules/study-plan/` — 30-day plan UI
+- `src/modules/core/` — shared components
 
-| Module | Path | Notes |
+Thin Nuxt routes live in `pages/` and import views from `@/modules/.../views/`.
+
+## Current content tracks
+
+| Track | Path | Notes |
 |---|---|---|
-| 30-day study plan | [`study-plan-30-days/`](./study-plan-30-days/) | Plan + Capstone artifacts + Vue follow UI |
+| 30-day study plan | [`study-plan-30-days/`](./study-plan-30-days/) | Markdown plan + Capstone artifacts |

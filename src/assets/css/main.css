@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f4f7f6;
+  --bg-elevated: #ffffff;
+  --ink: #14201c;
+  --ink-muted: #5a6b64;
+  --ink-faint: #8a9a93;
+  --line: #d5e0db;
+  --accent: #0f766e;
+  --accent-soft: #ccfbf1;
+  --accent-ink: #115e59;
+  --done: #15803d;
+  --done-soft: #dcfce7;
+  --radius: 10px;
+  --font: 'IBM Plex Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html,
+  body {
+    @apply min-h-full antialiased;
+    margin: 0;
+    background:
+      radial-gradient(1200px 500px at 10% -10%, #d9efe9 0%, transparent 55%),
+      radial-gradient(900px 400px at 100% 0%, #e8f0ec 0%, transparent 50%),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+  }
+
+  a {
+    color: var(--accent-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .prose-doc {
+    @apply text-[0.95rem] leading-relaxed text-[var(--ink)] sm:text-base;
+  }
+
+  .prose-doc h1 {
+    @apply mb-4 mt-0 text-2xl font-bold tracking-tight sm:text-3xl;
+  }
+
+  .prose-doc h2 {
+    @apply mb-3 mt-8 scroll-mt-24 border-b border-[var(--line)] pb-2 text-xl font-semibold sm:text-2xl;
+  }
+
+  .prose-doc h3 {
+    @apply mb-2 mt-6 scroll-mt-24 text-lg font-semibold;
+  }
+
+  .prose-doc h4 {
+    @apply mb-2 mt-4 scroll-mt-24 text-base font-semibold;
+  }
+
+  .prose-doc p,
+  .prose-doc ul,
+  .prose-doc ol {
+    @apply mb-4;
+  }
+
+  .prose-doc ul,
+  .prose-doc ol {
+    @apply pl-5;
+  }
+
+  .prose-doc li {
+    @apply mb-1;
+  }
+
+  .prose-doc ul {
+    list-style: disc;
+  }
+
+  .prose-doc ol {
+    list-style: decimal;
+  }
+
+  .prose-doc pre {
+    @apply mb-4 overflow-x-auto rounded-lg bg-[#0f1c18] p-3 text-sm text-[#e7f5f1];
+    font-family: var(--mono);
+  }
+
+  .prose-doc code {
+    @apply rounded bg-[var(--accent-soft)] px-1 py-0.5 text-[0.9em] text-[var(--accent-ink)];
+    font-family: var(--mono);
+  }
+
+  .prose-doc pre code {
+    @apply bg-transparent p-0 text-inherit;
+  }
+
+  .prose-doc table {
+    @apply mb-4 block w-full overflow-x-auto border-collapse text-sm;
+  }
+
+  .prose-doc th,
+  .prose-doc td {
+    @apply border border-[var(--line)] px-2 py-1.5 text-left;
+  }
+
+  .prose-doc blockquote {
+    @apply mb-4 border-l-4 border-[var(--accent)] pl-3 text-[var(--ink-muted)];
+  }
+
+  .prose-doc hr {
+    @apply my-6 border-[var(--line)];
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.35s var(--ease) both;
+}

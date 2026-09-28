@@ -1,0 +1,46 @@
+{
+  "hub": {
+    "brand": "Senior FE Interview Prep",
+    "headline": "Ôn phỏng vấn Senior Frontend một cách có hệ thống",
+    "sub": "Hub quản lý knowledge base song ngữ và kế hoạch ôn 30 ngày.",
+    "docsTitle": "Knowledge Base",
+    "docsDesc": "19 chủ đề vi/en theo 5 nhóm — đọc lại toàn bộ tài liệu với sidebar và tìm kiếm nhanh.",
+    "docsCta": "Mở tài liệu",
+    "planTitle": "Kế hoạch 30 ngày",
+    "planDesc": "Theo dõi tiến độ ngày, worksheet, Capstone — từ product đến ship.",
+    "planCta": "Mở kế hoạch",
+    "locale": "Ngôn ngữ"
+  },
+  "docs": {
+    "brand": "Knowledge Base",
+    "onThisPage": "Trong trang này",
+    "searchPlaceholder": "Tìm chủ đề…",
+    "searchHint": "⌘K / Ctrl+K",
+    "recent": "Gần đây",
+    "prev": "Trước",
+    "next": "Sau",
+    "openNav": "Mục lục",
+    "closeNav": "Đóng",
+    "noToc": "Không có mục lục",
+    "notFound": "Không tìm thấy tài liệu",
+    "groups": {
+      "core": "I. Core Web",
+      "vue": "II. Vue Ecosystem",
+      "practices": "III. Dev Practices",
+      "infra": "IV. Infrastructure",
+      "pro": "V. Professional"
+    },
+    "backHub": "Hub",
+    "emptySearch": "Không có kết quả"
+  },
+  "plan": {
+    "title": "Kế hoạch ôn 30 ngày",
+    "eyebrow": "Senior FE · 03/10 → 01/11/2026",
+    "backHub": "Hub",
+    "openDocs": "Knowledge Base"
+  },
+  "common": {
+    "vi": "VI",
+    "en": "EN"
+  }
+}
