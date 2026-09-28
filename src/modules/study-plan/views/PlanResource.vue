@@ -29,9 +29,14 @@ function openDocs(payload: { lang: string; slug: string; hash?: string }) {
 <template>
   <div class="mx-auto min-h-screen max-w-hub pb-10">
     <div
-      class="sticky top-0 z-20 border-b border-line bg-surface/95 px-4 py-3 backdrop-blur sm:px-6"
+      class="sticky top-0 z-20 border-b border-line bg-surface/95 backdrop-blur"
     >
-      <BackLink to="/plan" :label="t('plan.backPlan')" />
+      <div class="flex h-12 items-center gap-2 px-2 sm:px-4">
+        <BackLink to="/plan" :label="t('plan.backPlan')" icon-only />
+        <p class="min-w-0 flex-1 truncate text-sm font-semibold text-ink">
+          {{ t('plan.title') }}
+        </p>
+      </div>
     </div>
     <div class="px-4 pt-4 sm:px-6 sm:pt-6">
       <ResourceDoc

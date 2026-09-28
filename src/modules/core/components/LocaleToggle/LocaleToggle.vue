@@ -8,13 +8,13 @@ function toggle(code: 'vi' | 'en') {
 
 <template>
   <div
-    class="inline-flex rounded-lg border border-line bg-surface-elevated p-0.5 text-sm font-semibold"
+    class="inline-flex shrink-0 rounded-lg border border-line bg-surface-elevated p-0.5 text-xs font-semibold"
     role="group"
     :aria-label="$t('hub.locale')"
   >
     <button
       type="button"
-      class="min-h-10 min-w-10 rounded-md px-2.5 transition sm:min-h-9"
+      class="inline-flex h-9 min-w-9 items-center justify-center rounded-md px-2 transition"
       :class="
         locale === 'vi'
           ? 'bg-accent text-white'
@@ -26,7 +26,7 @@ function toggle(code: 'vi' | 'en') {
     </button>
     <button
       type="button"
-      class="min-h-10 min-w-10 rounded-md px-2.5 transition sm:min-h-9"
+      class="inline-flex h-9 min-w-9 items-center justify-center rounded-md px-2 transition"
       :class="
         locale === 'en'
           ? 'bg-accent text-white'

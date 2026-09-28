@@ -9,7 +9,7 @@ import { DOC_LANGS, type DocLang } from '@/modules/core/constants/locale.constan
 import { DEFAULT_DOC_SLUG } from '@/modules/knowledge-base/constants/doc-catalog.constant'
 import { classifyKbHref } from '@/modules/knowledge-base/utils/kb-links.util'
 
-const HEADER_OFFSET = 72
+const HEADER_OFFSET = 56
 
 const route = useRoute()
 const router = useRouter()
@@ -45,6 +45,8 @@ const searchOpen = ref(false)
 const activeHeading = ref('')
 const tocOpen = ref(false)
 const proseRef = ref<HTMLElement | null>(null)
+const headerRef = ref<HTMLElement | null>(null)
+const headerOffset = ref(HEADER_OFFSET)
 
 watch(
   safeLang,
@@ -82,7 +84,7 @@ function scrollToId(id: string, updateHash = true) {
   if (!id) return
   const el = document.getElementById(id)
   if (!el) return
-  const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET
+  const top = el.getBoundingClientRect().top + window.scrollY - headerOffset.value
   window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
   if (updateHash) {
     history.replaceState(null, '', `#${id}`)
@@ -144,6 +146,18 @@ watch(
 onMounted(() => {
   syncHashScroll()
   window.addEventListener('hashchange', syncHashScroll)
+
+  const el = headerRef.value
+  if (el && typeof ResizeObserver !== 'undefined') {
+    const ro = new ResizeObserver(([entry]) => {
+      const h = Math.ceil(entry.contentRect.height)
+      headerOffset.value = h + 8
+      el.style.setProperty('--docs-header-h', `${h}px`)
+      document.documentElement.style.setProperty('--app-header-h', `${h}px`)
+    })
+    ro.observe(el)
+    onUnmounted(() => ro.disconnect())
+  }
 })
 
 onUnmounted(() => {
@@ -184,37 +198,57 @@ onUnmounted(() => observer?.disconnect())
 <template>
   <div class="docs-shell min-h-screen lg:h-dvh lg:overflow-hidden">
     <header
+      ref="headerRef"
       class="docs-header sticky top-0 z-30 border-b border-line bg-surface/95 backdrop-blur"
     >
-      <div
-        class="flex flex-wrap items-center gap-2 px-3 py-2 sm:px-4 lg:px-5"
-      >
+      <div class="flex h-12 items-center gap-1.5 px-2 sm:gap-2 sm:px-4 lg:px-5">
         <button
           type="button"
-          class="inline-flex min-h-10 items-center rounded-lg border border-line bg-white px-3 text-sm font-semibold lg:hidden"
+          class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-white text-ink lg:hidden"
+          :aria-label="$t('docs.openNav')"
+          :title="$t('docs.openNav')"
           @click="sidebarOpen = true"
         >
-          {{ $t('docs.openNav') }}
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
         </button>
 
-        <BackLink :to="backTo" :label="backLabel" />
+        <BackLink :to="backTo" :label="backLabel" icon-only />
 
-        <div class="min-w-0 flex-1 basis-[40%] sm:basis-auto">
-          <p class="truncate text-xs font-semibold uppercase tracking-wider text-accent-ink">
-            {{ $t('docs.brand') }}
-          </p>
-          <p class="truncate text-sm font-semibold text-ink sm:text-base">
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-sm font-semibold text-ink">
             {{ title }}
           </p>
         </div>
 
         <button
           type="button"
-          class="inline-flex min-h-10 items-center rounded-lg border border-line bg-white px-3 text-sm font-semibold"
+          class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-white text-ink"
+          :aria-label="$t('docs.searchPlaceholder')"
+          :title="$t('docs.searchHint')"
           @click="searchOpen = true"
         >
-          <span class="sm:hidden">⌕</span>
-          <span class="hidden sm:inline">{{ $t('docs.searchHint') }}</span>
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3-3" />
+          </svg>
         </button>
 
         <LocaleToggle />
@@ -244,13 +278,25 @@ onUnmounted(() => observer?.disconnect())
             class="absolute inset-y-0 left-0 flex w-[min(100%,20rem)] flex-col bg-surface-elevated shadow-xl"
           >
             <div class="flex items-center justify-between border-b border-line px-3 py-2">
-              <BackLink :to="backTo" :label="backLabel" />
+              <BackLink :to="backTo" :label="backLabel" icon-only />
               <button
                 type="button"
-                class="min-h-10 rounded-lg px-3 text-sm font-semibold"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink"
+                :aria-label="$t('docs.closeNav')"
+                :title="$t('docs.closeNav')"
                 @click="sidebarOpen = false"
               >
-                {{ $t('docs.closeNav') }}
+                <svg
+                  class="h-5 w-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
               </button>
             </div>
             <DocSidebar
@@ -336,14 +382,7 @@ onUnmounted(() => observer?.disconnect())
 
 <style scoped>
 .docs-shell {
-  --docs-header-h: 3.5rem;
-}
-
-@media (max-width: 639px) {
-  .docs-shell {
-    /* Wrapped header row on small phones */
-    --docs-header-h: 5.5rem;
-  }
+  --docs-header-h: 3rem;
 }
 
 .docs-main :deep(h1),
