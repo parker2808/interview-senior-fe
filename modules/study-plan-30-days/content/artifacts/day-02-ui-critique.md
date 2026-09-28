@@ -1,12 +1,14 @@
 # Day 2 — UI hierarchy critique
 
-**Ngày:** 04/10/2026 · **Timebox:** 60–90 phút  
+> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
+
+**Ngày:** 04/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Chỉ ra được primary action + 10 UX issues trên một admin UI.  
 **Capstone link:** Ghi chú áp dụng cho List/Detail/Field Config (optional section cuối).
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15′) — Presentational vs Container trong architecture.
 2. **Chọn 1 admin page** quen (hoặc màn List Capstone) — screenshot/mental model OK.
@@ -121,3 +123,52 @@ Issue nào sẽ áp vào List / Detail / Field Config?
 
 
 Quay lại: [Day 2 starter](../day-02-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+<!-- PLAN_V2_TRACKS_START -->
+## Plan v2 — React / Next Lab
+
+**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
+
+Lab: useState counter + conditional render. So sánh với ref Vue. Giải thích re-render khi setState.
+
+### Lab log
+
+- Repo / path:
+- Commands chạy được:
+- So sánh với Vue (3–5 dòng):
+
+> 
+
+---
+
+## Plan v2 — Algo Drill
+
+**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
+
+**Bài:** Valid Anagram — frequency map.
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases đã test | |
+| Lỗi hay gặp / học được | |
+
+Code (dán hoặc link `artifacts/algo/day-02.ts`):
+
+```ts
+// ...
+```
+
+---
+
+## Plan v2 — Checkpoint
+
+**Mục tiêu ngày:** Giải thích this + micro/macrotask; critique UI admin có hierarchy rõ.
+
+- [ ] Nói được thứ tự log của 1 snippet Promise/setTimeout; có UI critique; Anagram pass.
+- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
+- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
+- [ ] Algo có lời giải + Big-O
+
+<!-- PLAN_V2_TRACKS_END -->

@@ -1,16 +1,26 @@
 # Bắt đầu đây — Day 26 (28/10/2026)
 
-**Timebox:** 60–90 phút · Code review + AI before/after
+**Timebox:** 90–120 phút · Code review + Next Capstone page
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-26-code-review.md`](./artifacts/day-26-code-review.md)
-2. Đọc Self-check AI+Testing + [definition-of-done.md](./definition-of-done.md)
-3. Copy sang [`artifacts/capstone/14-code-review-checklist.md`](./artifacts/capstone/14-code-review-checklist.md)
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-26-code-review.md`](./artifacts/day-26-code-review.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab Next: Customers List page theo AC Day 5 (mock data) — loading/empty/error/table.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Weak-topic drill #2 (15′).
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 26](./30-day-study-plan.md#day-26--28102026--code-review-mindset)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- definition-of-done.md
+- documents/vi/leadership.md — review
 
-**Xong Day 26 khi:** review PR giả định đủ null/double-click/permission/unmount; copy capstone/14.
+## Links
+
+- Plan Day 26: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 26 khi:** Checklist dùng được; List page Next demo; drill xong.

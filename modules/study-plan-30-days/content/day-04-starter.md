@@ -1,17 +1,27 @@
 # Bắt đầu đây — Day 4 (06/10/2026)
 
-**Timebox:** 60–90 phút · Data-heavy table
+**Timebox:** 90–120 phút · TS + Data-heavy table
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở **worksheet**:
+1. Mở **worksheet** và làm khối FE Craft:  
    → [`artifacts/day-04-data-heavy.md`](./artifacts/day-04-data-heavy.md)
-2. Đọc [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) (Flex/Grid + responsive).
-3. Chốt cột / search vs filter / pagination strategy trong worksheet.
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab: render table 50 rows từ mock data typed bằng TS interface; filter client-side; giải thích key ổn định.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Group Anagrams — map sorted key / count key.
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 4](./30-day-study-plan.md#day-4--06102026--data-heavy-ui)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/typescript.md — interfaces, unions, generics cơ bản
+- documents/vi/performance.md — list virtualization skim
+- documents/vi/react.md — lists & keys
 
-**Xong Day 4 khi:** đã chọn cột always-visible vs optional, search vs filter, pagination vs infinite scroll + lý do.
+## Links
+
+- Plan Day 4: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 4 khi:** Có TS type cho CustomerRow; table React filter được; Group Anagrams đúng.

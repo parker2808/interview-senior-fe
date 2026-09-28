@@ -1,12 +1,14 @@
 # Day 5 — Product review + AC
 
-**Ngày:** 07/10/2026 · **Timebox:** 60–90 phút  
+> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
+
+**Ngày:** 07/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Có Acceptance Criteria v1 cho List + Field Config.  
 **Capstone link:** Deliverable 03 → [`capstone/03-acceptance-criteria.md`](./capstone/03-acceptance-criteria.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15′) — Self-check Product + UI/UX; leadership ước lượng.
 2. **Self-check** flow Day 1 (trả lời ngắn trong section dưới).
@@ -107,3 +109,52 @@ Khi xong section 3–4, paste vào [`capstone/03-acceptance-criteria.md`](./caps
 Đã copy sang [`capstone/03-acceptance-criteria.md`](./capstone/03-acceptance-criteria.md)
 
 Quay lại: [Day 5 starter](../day-05-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+<!-- PLAN_V2_TRACKS_START -->
+## Plan v2 — React / Next Lab
+
+**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
+
+Lab: extract useLocalStorage(key, initial) hoặc useToggle — dùng trong form Day 3.
+
+### Lab log
+
+- Repo / path:
+- Commands chạy được:
+- So sánh với Vue (3–5 dòng):
+
+> 
+
+---
+
+## Plan v2 — Algo Drill
+
+**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
+
+**Bài:** Top K Frequent Elements (Medium lite) — map + sort hoặc bucket.
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases đã test | |
+| Lỗi hay gặp / học được | |
+
+Code (dán hoặc link `artifacts/algo/day-05.ts`):
+
+```ts
+// ...
+```
+
+---
+
+## Plan v2 — Checkpoint
+
+**Mục tiêu ngày:** AC v1 Capstone testable; viết custom hook React đầu tiên.
+
+- [ ] AC đo được (pass/fail); hook tái sử dụng được; Top K chạy sample.
+- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
+- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
+- [ ] Algo có lời giải + Big-O
+
+<!-- PLAN_V2_TRACKS_END -->

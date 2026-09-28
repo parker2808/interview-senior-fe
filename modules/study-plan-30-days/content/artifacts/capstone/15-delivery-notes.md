@@ -1,6 +1,8 @@
 # Capstone 15 — Delivery notes
 
-**Ngày:** Day 29 · 31/10/2026 · **Timebox:** 60–90′  
+> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
+
+**Ngày:** Day 29 · 31/10/2026 · **Timebox:** 90–120′  
 **Mục tiêu:** Tick trung thực DoD; đủ index 15 deliverables; README-style delivery notes.  
 **Đọc:** [definition-of-done.md](../../definition-of-done.md) · [capstone-brief.md](../../capstone-brief.md)
 
@@ -92,3 +94,52 @@ Mục chưa tick — lý do / plan:
 - React:  
 
 Quay lại: [Day 29 starter](../../day-29-starter.md) · [Plan](../../30-day-study-plan.md)
+
+<!-- PLAN_V2_TRACKS_START -->
+## Plan v2 — React / Next Lab
+
+**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../../react-next-track.md)
+
+Polish Next page: empty/error copy, basic a11y, remove console noise.
+
+### Lab log
+
+- Repo / path:
+- Commands chạy được:
+- So sánh với Vue (3–5 dòng):
+
+> 
+
+---
+
+## Plan v2 — Algo Drill
+
+**Timebox:** 15–25′ · [algorithms-track.md](../../algorithms-track.md)
+
+**Bài:** Flashcards: 8 patterns + 1 bài random 15′.
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases đã test | |
+| Lỗi hay gặp / học được | |
+
+Code (dán hoặc link `artifacts/algo/day-29.ts`):
+
+```ts
+// ...
+```
+
+---
+
+## Plan v2 — Checkpoint
+
+**Mục tiêu ngày:** Tick DoD; index deliverables 01–15; polish spike.
+
+- [ ] DoD ≥80% tick; delivery notes thẳng thắn về gap; flashcards xong.
+- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
+- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
+- [ ] Algo có lời giải + Big-O
+
+<!-- PLAN_V2_TRACKS_END -->

@@ -3,8 +3,9 @@
 ## Goals
 
 - Prep for **Senior Front-End** interviews with a **framework-agnostic** mindset first.
-- Drill **Vue + React + TypeScript** in parallel (repo is Vue/TS-heavy; React via outside practice + concept mapping).
-- Ship a **Capstone** as **docs-first**, then small **Vue and React/TS** spikes of the same slice — not a full dual app.
+- Drill **Vue (strength) + React/Next (gap fill) + TypeScript** every day.
+- Add an **Algorithms track** (Easy→Medium) for coding rounds.
+- Ship a **Capstone** as docs + early labs, then Vue and React/Next spikes of the same slice.
 
 ## Capstone
 
@@ -19,8 +20,9 @@
 | Lens | Practice |
 |---|---|
 | Agnostic | Product, state ownership, API, a11y, perf, testing pyramid |
-| Vue + TS | Shared notes under `documents/vi/` + Week 4 Vue spike |
-| React + TS | No React files in repo — map hooks/composables, etc. + Week 4 React spike |
+| Vue + TS | `documents/vi/` notes + Day 27 Vue spike |
+| React + Next + TS | Daily lab + KB `react.md` / `nextjs.md` / `state-management-react.md` + Day 28 spike |
+| Algorithms | [algorithms-track.md](./algorithms-track.md) — 15–25′/day |
 
 ## Calendar
 
@@ -28,17 +30,17 @@
 |---|---|
 | **Day 1** | **03/10/2026** |
 | **Day 30** | **01/11/2026** |
-| Daily | 60–90 min · ~30% read / 50% do / 20% artifact |
+| Daily | **90–120 min** · Craft · React/Next lab · Algo · Checkpoint |
 
 ## Key links
 
 | Doc | Path |
 |---|---|
-| 30-day plan | [30-day-study-plan.md](./30-day-study-plan.md) |
+| 30-day plan v2 | [30-day-study-plan.md](./30-day-study-plan.md) |
+| Daily index | [daily-index.md](./daily-index.md) |
+| React/Next track | [react-next-track.md](./react-next-track.md) |
+| Algorithms track | [algorithms-track.md](./algorithms-track.md) |
 | Capstone brief | [capstone-brief.md](./capstone-brief.md) |
 | Feature template | [feature-template.md](./feature-template.md) |
 | Day 1 starter | [day-01-starter.md](./day-01-starter.md) |
-| Daily index (1–30) | [daily-index.md](./daily-index.md) |
-| Artifacts root | [artifacts/](./artifacts/) |
-| Interview repo | [`interview-senior-fe`](https://github.com/parker2808/interview-senior-fe) — module path `modules/study-plan-30-days/` |
-| Shared KB | `documents/en`, `documents/vi` (not owned by this module) |
+| Repo map | `documents/vi/` knowledge base |

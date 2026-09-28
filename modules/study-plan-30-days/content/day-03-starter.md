@@ -1,20 +1,28 @@
 # Bắt đầu đây — Day 3 (05/10/2026)
 
-**Timebox:** 60–90 phút · Forms validation
+**Timebox:** 90–120 phút · Promises + Forms
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở **worksheet**:
+1. Mở **worksheet** và làm khối FE Craft:  
    → [`artifacts/day-03-form-states.md`](./artifacts/day-03-form-states.md)
-2. Đọc:
-   - [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md)
-   - [`documents/vi/vue3.md`](../../../documents/vi/vue3.md)
-   - React: đối chiếu controlled inputs (không có file React trong repo)
-3. Điền field map + state machine trong worksheet.
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab: form Profile (name, email) controlled, validate on blur + submit, disable button khi invalid. So với v-model.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Contains Duplicate — Set.
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 3](./30-day-study-plan.md#day-3--05102026--forms)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/javascript.md — Promise/async
+- documents/vi/accessibility.md — forms
+- documents/vi/vue3.md — v-model
+- documents/vi/react.md — controlled inputs
 
-**Xong Day 3 khi:** có field→rule→error map, Save disable rules, và state machine pristine→…→success|error.
+## Links
+
+- Plan Day 3: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 3 khi:** Form React chạy được validation; state machine ghi đủ transitions; Set solution O(n).

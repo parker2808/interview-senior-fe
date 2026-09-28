@@ -1,12 +1,14 @@
 # Day 6 — Personal work management
 
-**Ngày:** 08/10/2026 · **Timebox:** 60–90 phút  
+> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
+
+**Ngày:** 08/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Break Capstone thành sub-tasks + estimate theo uncertainty.  
 **Capstone link:** Lịch docs-first → spike tuần 4 (xem preferences).
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15′) — quản lý dự án + communication.
 2. **Break** Capstone ~12 task nhỏ theo chuỗi gợi ý plan.
@@ -88,3 +90,52 @@ Theo preferences: docs tuần 1–3, Vue+React spike tuần 4. Việc nào cố 
 
 
 Quay lại: [Day 6 starter](../day-06-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+<!-- PLAN_V2_TRACKS_START -->
+## Plan v2 — React / Next Lab
+
+**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
+
+Chốt setup: fe-react-lab (Vite) + (optional) fe-next-lab. README lab: scripts, folder day-NN convention.
+
+### Lab log
+
+- Repo / path:
+- Commands chạy được:
+- So sánh với Vue (3–5 dòng):
+
+> 
+
+---
+
+## Plan v2 — Algo Drill
+
+**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
+
+**Bài:** Valid Parentheses — Stack.
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases đã test | |
+| Lỗi hay gặp / học được | |
+
+Code (dán hoặc link `artifacts/algo/day-06.ts`):
+
+```ts
+// ...
+```
+
+---
+
+## Plan v2 — Checkpoint
+
+**Mục tiêu ngày:** Break Capstone thành ~12 tasks; lab React/Next sẵn sàng xuyên tháng.
+
+- [ ] Work plan ≥10 tasks; repo lab chạy `npm run dev`; Parentheses pass.
+- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
+- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
+- [ ] Algo có lời giải + Big-O
+
+<!-- PLAN_V2_TRACKS_END -->

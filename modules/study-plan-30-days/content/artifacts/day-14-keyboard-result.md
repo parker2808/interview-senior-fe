@@ -1,12 +1,14 @@
 # Day 14 — Keyboard review
 
-**Ngày:** 16/10/2026 · **Timebox:** 60–90 phút  
+> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
+
+**Ngày:** 16/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Có kết quả keyboard-test + pack artifacts tuần 2.  
 **Capstone link:** Milestone tuần 2: 04, 05, 08, 09.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** Self-check Responsive + Accessibility; skim notes Days 8–13.
 2. **Keyboard path** trên spec/prototype (hoặc walkthrough trên paper spec) — ghi pass/fail.
@@ -78,3 +80,52 @@ Gaps còn lại:
 
 
 Quay lại: [Day 14 starter](../day-14-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+<!-- PLAN_V2_TRACKS_START -->
+## Plan v2 — React / Next Lab
+
+**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
+
+Lab: audit Day 13 Modal + form Day 3 bằng keyboard only; sửa 2 issue.
+
+### Lab log
+
+- Repo / path:
+- Commands chạy được:
+- So sánh với Vue (3–5 dòng):
+
+> 
+
+---
+
+## Plan v2 — Algo Drill
+
+**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
+
+**Bài:** Week 2 review timed: Binary Search + Sliding Window (20′).
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases đã test | |
+| Lỗi hay gặp / học được | |
+
+Code (dán hoặc link `artifacts/algo/day-14.ts`):
+
+```ts
+// ...
+```
+
+---
+
+## Plan v2 — Checkpoint
+
+**Mục tiêu ngày:** Keyboard test Capstone screens; đóng gói artifact tuần 2; React a11y pass.
+
+- [ ] Có keyboard result sheet; ≥1 bug fixed trong lab; timed algo xong.
+- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
+- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
+- [ ] Algo có lời giải + Big-O
+
+<!-- PLAN_V2_TRACKS_END -->

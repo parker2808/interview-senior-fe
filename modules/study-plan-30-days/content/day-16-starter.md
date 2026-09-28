@@ -1,16 +1,26 @@
 # Bắt đầu đây — Day 16 (18/10/2026)
 
-**Timebox:** 60–90 phút · Error matrix + 401
+**Timebox:** 90–120 phút · Error matrix + Error Boundary
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-16-error-matrix.md`](./artifacts/day-16-error-matrix.md)
-2. Đọc [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) (401) + [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md)
-3. Copy sang [`artifacts/capstone/07-error-matrix.md`](./artifacts/capstone/07-error-matrix.md)
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-16-error-matrix.md`](./artifacts/day-16-error-matrix.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab: ErrorBoundary class (hoặc library) bọc page; fallback UI + retry. Note: boundary không bắt lỗi async event.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Maximum Depth of Binary Tree — DFS.
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 16](./30-day-study-plan.md#day-16--18102026--error-handling-matrix)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/practical-questions.md — debug
+- documents/vi/react.md — error boundaries
 
-**Xong Day 16 khi:** matrix 400…500 + timeout/offline; phân biệt field/toast/full-page; copy capstone/07.
+## Links
+
+- Plan Day 16: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 16 khi:** Matrix đủ 6 status; Boundary demo; DFS depth đúng.

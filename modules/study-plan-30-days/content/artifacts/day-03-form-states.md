@@ -1,14 +1,16 @@
 # Day 3 — Form states & validation
 
-**Ngày:** 05/10/2026 · **Timebox:** 60–90 phút  
+> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
+
+**Ngày:** 05/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Spec form Edit Profile với validation + state machine rõ.  
 **Capstone link:** Có thể dùng cho Field Config / Detail edit sau này.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
-1. **Đọc** (≈20′) — a11y forms + Vue v-model/props; **đối chiếu** controlled inputs React (không có file React trong repo).
+1. **Đọc** (≈20′) — a11y forms + Vue v-model/props; **đối chiếu** controlled inputs React (đọc `documents/vi/react.md`).
 2. **Chọn form** — Edit Profile *hoặc* Capstone Field Config edit / Profile fields.
 3. **Map** field → rule → chỗ hiện error → khi nào disable Save.
 4. **Viết state machine** `pristine → dirty → validating → invalid → submitting → success|error`.
@@ -22,7 +24,7 @@
 |---|---|---|
 | A11y forms | [`documents/vi/accessibility.md`](../../../../documents/vi/accessibility.md) | Forms / labels |
 | Vue drill | [`documents/vi/vue3.md`](../../../../documents/vi/vue3.md) | v-model, props |
-| React practice | *(không có path repo)* | Đối chiếu controlled inputs / form state |
+| React practice | [`documents/vi/react.md`](../../../../documents/vi/react.md) / [`documents/vi/nextjs.md`](../../../../documents/vi/nextjs.md) | Đối chiếu controlled inputs / form state |
 
 Plan Day 3: [30-day-study-plan.md — Day 3](../30-day-study-plan.md#day-3--05102026--forms)
 
@@ -114,3 +116,52 @@ Bullet rõ ràng (boolean logic OK):
 
 
 Quay lại: [Day 3 starter](../day-03-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+<!-- PLAN_V2_TRACKS_START -->
+## Plan v2 — React / Next Lab
+
+**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
+
+Lab: form Profile (name, email) controlled, validate on blur + submit, disable button khi invalid. So với v-model.
+
+### Lab log
+
+- Repo / path:
+- Commands chạy được:
+- So sánh với Vue (3–5 dòng):
+
+> 
+
+---
+
+## Plan v2 — Algo Drill
+
+**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
+
+**Bài:** Contains Duplicate — Set.
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases đã test | |
+| Lỗi hay gặp / học được | |
+
+Code (dán hoặc link `artifacts/algo/day-03.ts`):
+
+```ts
+// ...
+```
+
+---
+
+## Plan v2 — Checkpoint
+
+**Mục tiêu ngày:** Spec form state machine + viết controlled form React.
+
+- [ ] Form React chạy được validation; state machine ghi đủ transitions; Set solution O(n).
+- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
+- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
+- [ ] Algo có lời giải + Big-O
+
+<!-- PLAN_V2_TRACKS_END -->

@@ -1,12 +1,14 @@
 # Day 1 — User flow (Customer Verification)
 
-**Ngày:** 03/10/2026 · **Timebox:** 60–90 phút  
+> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
+
+**Ngày:** 03/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Biến requirement Customer Verification thành user flow + edge cases rõ.  
 **Capstone link:** Deliverable 01 → copy kết quả sang [`capstone/01-user-flow.md`](./capstone/01-user-flow.md) khi xong.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15–20′) — mở các path ở mục Đọc bên dưới.
 2. **Trả lời trước khi “code”** — điền các section bên dưới; để trống chỗ `>` nếu chưa chắc, không bỏ section.
@@ -143,3 +145,52 @@ Bullet thô — “Given / When / Then” hoặc “User can…”. Day 5 sẽ r
 - [ ] Đã copy sang [`capstone/01-user-flow.md`](./capstone/01-user-flow.md)
 
 Quay lại: [Day 1 starter](../day-01-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+<!-- PLAN_V2_TRACKS_START -->
+## Plan v2 — React / Next Lab
+
+**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
+
+Đọc mental model React vs Vue (component = function). Tạo app Vite React+TS skeleton (hoặc note Day 6 setup nếu chưa kịp). Viết 1 component Hello + props.
+
+### Lab log
+
+- Repo / path:
+- Commands chạy được:
+- So sánh với Vue (3–5 dòng):
+
+> 
+
+---
+
+## Plan v2 — Algo Drill
+
+**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
+
+**Bài:** Two Sum (Easy) — HashMap pattern. Ghi O(n)/O(n).
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases đã test | |
+| Lỗi hay gặp / học được | |
+
+Code (dán hoặc link `artifacts/algo/day-01.ts`):
+
+```ts
+// ...
+```
+
+---
+
+## Plan v2 — Checkpoint
+
+**Mục tiêu ngày:** Nắm closures/scope đủ giải thích phỏng vấn + có user flow Capstone rõ.
+
+- [ ] Giải thích closure bằng 1 ví dụ; show flow Capstone; code Two Sum chạy đúng 2 test.
+- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
+- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
+- [ ] Algo có lời giải + Big-O
+
+<!-- PLAN_V2_TRACKS_END -->

@@ -1,16 +1,26 @@
 # Bắt đầu đây — Day 9 (11/10/2026)
 
-**Timebox:** 60–90 phút · State ownership
+**Timebox:** 90–120 phút · State ownership
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-09-state-map.md`](./artifacts/day-09-state-map.md)
-2. Đọc [`documents/vi/state-management.md`](../../../documents/vi/state-management.md); React: URL vs cache vs Context (ngoài repo)
-3. Copy sang [`artifacts/capstone/05-state-ownership.md`](./artifacts/capstone/05-state-ownership.md)
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-09-state-map.md`](./artifacts/day-09-state-map.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab: lift filter state lên page; thử Context cho theme/auth mock; viết note khi nào cần Zustand.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Two Sum II / Two Pointers trên sorted array.
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 9](./30-day-study-plan.md#day-9--11102026--state-ownership)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/state-management.md
+- documents/vi/state-management-react.md
 
-**Xong Day 9 khi:** mọi state chính đã classify (URL/local/server/…) và copy sang capstone/05.
+## Links
+
+- Plan Day 9: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 9 khi:** State map không còn “mọi thứ trong page”; Context demo chạy; two pointers đúng.

@@ -1,16 +1,26 @@
 # Bắt đầu đây — Day 25 (27/10/2026)
 
-**Timebox:** 60–90 phút · AI prompt + review
+**Timebox:** 90–120 phút · AI-assisted + Server Actions
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-25-ai-review.md`](./artifacts/day-25-ai-review.md)
-2. Đọc review tips + [feature-template.md](./feature-template.md) mục AI Usage
-3. Copy evidence sang [`artifacts/capstone/13-ai-evidence.md`](./artifacts/capstone/13-ai-evidence.md)
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-25-ai-review.md`](./artifacts/day-25-ai-review.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab Next: form submit qua Server Action (mock), progressive enhancement note.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Weak-topic drill: chọn pattern yếu nhất tuần 1–3, 2 bài.
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 25](./30-day-study-plan.md#day-25--27102026--ai-assisted-delivery)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/practical-questions.md
+- documents/vi/nextjs.md — server actions
 
-**Xong Day 25 khi:** prompt + audit 6 chiều; evidence copy sang capstone/13.
+## Links
+
+- Plan Day 25: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 25 khi:** AI evidence trước/sau; Server Action chạy; weak drill note.

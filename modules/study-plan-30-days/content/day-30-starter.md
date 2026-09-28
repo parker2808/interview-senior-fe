@@ -1,16 +1,26 @@
 # Bắt đầu đây — Day 30 (01/11/2026)
 
-**Timebox:** 60–90 phút · Mock interview
+**Timebox:** 90–120 phút · Full mock interview
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-30-mock-outline.md`](./artifacts/day-30-mock-outline.md)
-2. Đọc full [self-check-questions.md](./self-check-questions.md) + 1 weak topic path trong worksheet
-3. Rehearse không nhìn code; ghi log trong worksheet.
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-30-mock-outline.md`](./artifacts/day-30-mock-outline.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Chuẩn bị 5 câu: hooks rules, useEffect deps, RSC vs client, key reconciliation, state library choice.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Live coding 2 bài trong mock (Easy+Medium), narrate while coding.
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 30](./30-day-study-plan.md#day-30--01112026--mock-interview)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- self-check-questions.md
+- algorithms-track.md
 
-**Xong Day 30 khi:** outline mock 10–15′ + weak-topic list + (optional) 5′ triage note.
+## Links
+
+- Plan Day 30: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 30 khi:** Ghi điểm 3 phần (Capstone/React/Algo) + 5 việc ôn tiếp 7 ngày sau.

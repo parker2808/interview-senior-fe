@@ -1,12 +1,14 @@
 # Day 28 — Capstone React spike
 
-**Ngày:** 30/10/2026 · **Timebox:** 60–90 phút  
+> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
+
+**Ngày:** 30/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Cùng slice tương đương bằng React/TS (parallel, không clone full Vue app).  
 **Capstone link:** Code dưới [`capstone/spikes/react/`](./capstone/spikes/react/) — sandbox React ngoài app Nuxt; KB concept trong [`documents/vi/react.md`](../../../../documents/vi/react.md).
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** concept Days 8–10 + 15–16 (agnostic); đối chiếu note Vue spike Day 27 + [`documents/vi/react.md`](../../../../documents/vi/react.md).
 2. **Không invent** `src/**/react*.md` — code practice ngoài app Nuxt; dùng KB React/Next.
@@ -82,3 +84,52 @@ Diff cố ý:
 
 
 Quay lại: [Day 28 starter](../day-28-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+<!-- PLAN_V2_TRACKS_START -->
+## Plan v2 — React / Next Lab
+
+**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
+
+Đây là ngày React chính: hoàn thiện slice + 1 test RTL smoke + note RSC/client boundary.
+
+### Lab log
+
+- Repo / path:
+- Commands chạy được:
+- So sánh với Vue (3–5 dòng):
+
+> 
+
+---
+
+## Plan v2 — Algo Drill
+
+**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
+
+**Bài:** Off / hoặc 1 Easy cool-down 10′.
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases đã test | |
+| Lỗi hay gặp / học được | |
+
+Code (dán hoặc link `artifacts/algo/day-28.ts`):
+
+```ts
+// ...
+```
+
+---
+
+## Plan v2 — Checkpoint
+
+**Mục tiêu ngày:** Cùng slice với Day 27 bằng React + Next (ưu tiên Next nếu đã có lab).
+
+- [ ] Demo 2 spike cạnh nhau; nói được 3 khác biệt Vue vs React/Next.
+- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
+- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
+- [ ] Algo có lời giải + Big-O
+
+<!-- PLAN_V2_TRACKS_END -->

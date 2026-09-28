@@ -1,16 +1,26 @@
 # Bắt đầu đây — Day 11 (13/10/2026)
 
-**Timebox:** 60–90 phút · Empty/error + design system
+**Timebox:** 90–120 phút · Design system primitives
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-11-design-primitives.md`](./artifacts/day-11-design-primitives.md)
-2. Đọc [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) + [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md)
-3. Spec Button / FormField / EmptyState / ErrorState.
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-11-design-primitives.md`](./artifacts/day-11-design-primitives.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab: <Tabs> compound (Tabs, TabsList, TabsTrigger, TabsContent) bằng Context nội bộ.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Min Stack — design O(1) getMin.
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 11](./30-day-study-plan.md#day-11--13102026--emptyerror-ui-design-system)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/css-layout.md — skim tokens
+- documents/vi/react.md — compound components
 
-**Xong Day 11 khi:** spec props Button/FormField/EmptyState/ErrorState + note refactor 1 god component.
+## Links
+
+- Plan Day 11: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 11 khi:** Spec đủ để handoff; Tabs lab keyboard-ish; Min Stack đúng.

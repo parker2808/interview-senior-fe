@@ -1,16 +1,27 @@
 # Bắt đầu đây — Day 27 (29/10/2026)
 
-**Timebox:** 60–90 phút · Capstone Vue spike
+**Timebox:** 90–120 phút · Capstone Vue spike
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-27-vue-spike.md`](./artifacts/day-27-vue-spike.md)
-2. Đọc [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) + [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) + [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) + Capstone 01–11
-3. Cập nhật [`artifacts/capstone/spikes/vue/README.md`](./artifacts/capstone/spikes/vue/README.md)
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-27-vue-spike.md`](./artifacts/day-27-vue-spike.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Parity note: liệt kê API/composable sẽ map sang hooks ngày mai (bảng Vue→React).
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Off / flashcard Big-O 10′ (giữ sức cho spike).
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 27](./30-day-study-plan.md#day-27--29102026--capstone-vue-spike)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/vue3.md
+- documents/vi/state-management.md
+- artifacts/capstone/spikes/vue/README.md
 
-**Xong Day 27 khi:** spike đủ loading/empty/error + 1 save; note + spikes/vue README đã cập nhật.
+## Links
+
+- Plan Day 27: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 27 khi:** Spike Vue chạy được happy path; parity table sẵn cho Day 28.

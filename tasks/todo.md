@@ -1,16 +1,15 @@
-# Hub grid, docs scroll, search upgrade
+# Plan v2 — React/Next + Algorithms redesign
 
 ## Plan
-- [x] Fix hub tablet grid stretch (`flex-1` / min-heights)
-- [x] Docs shell: true `h-dvh` + `min-h-0` inner scroll; ScrollToTop listens to `.docs-main`
-- [x] Remove Recent from docs sidebar
-- [x] Keyword search over headings (current lang) + jump to hash
-- [x] Verify + PR
+- [x] Diagnose v1 gaps (docs-heavy, no algo, thin React/Next)
+- [x] Write curriculum-v2 + generate master plan / index / starters
+- [x] Patch all worksheets with React lab + Algo + Checkpoint
+- [x] Add algorithms-track.md + react-next-track.md
+- [x] Update days.constant, project-context, i18n, capstone brief
+- [ ] Commit + PR
 
 ## Review
-- Hub cards: drop `min-h-screen`/`flex-1`/`justify-between` so tablet grid hugs content
-- Docs: `h-dvh` shell + `overflow-y-auto` on `.docs-main` all breakpoints; lock html/body scroll
-- ScrollToTop binds window + `.docs-main`
-- Sidebar Recent removed
-- DocSearch indexes headings via same markdown→HTML pipeline; fuzzy/prefix match; jump to hash
-- Verified: hub card heights ~200–226px; window scrollY=0 on docs; FAB on main scroll; `hois` → Hoisting hash
+- Timebox 90–120′ with 4 blocks/day
+- Capstone spine kept; React lab from Day 1; Next from Day 20
+- Algo Easy→Medium FE-oriented patterns
+- Generator: `modules/study-plan-30-days/content/generate-plan-v2.mjs`

@@ -1,16 +1,26 @@
 # Bắt đầu đây — Day 10 (12/10/2026)
 
-**Timebox:** 60–90 phút · Data flow + TypeScript
+**Timebox:** 90–120 phút · Data flow + TypeScript
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-10-types-and-flow.md`](./artifacts/day-10-types-and-flow.md)
-2. Đọc [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) + [`documents/vi/javascript.md`](../../../documents/vi/javascript.md)
-3. Điền types + Save flow trong worksheet.
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-10-types-and-flow.md`](./artifacts/day-10-types-and-flow.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab: form FieldConfig dùng useReducer (update_field | validate | submit_*).
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Longest Substring Without Repeating — Sliding Window.
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 10](./30-day-study-plan.md#day-10--12102026--data-flow-typescript)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/typescript.md — discriminated unions
+- documents/vi/react.md — useReducer
 
-**Xong Day 10 khi:** có DTO vs UI model, VerificationStatus union, và diagram UI→…→render.
+## Links
+
+- Plan Day 10: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 10 khi:** Types compile; reducer transitions rõ; sliding window O(n).

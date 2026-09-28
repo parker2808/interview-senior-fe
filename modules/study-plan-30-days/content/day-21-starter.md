@@ -1,16 +1,26 @@
 # Bắt đầu đây — Day 21 (23/10/2026)
 
-**Timebox:** 60–90 phút · CI / T-shaped wrap
+**Timebox:** 90–120 phút · CI + Next data caching
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-21-ci-and-adr.md`](./artifacts/day-21-ci-and-adr.md)
-2. Đọc [`documents/vi/devops.md`](../../../documents/vi/devops.md) + [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) + [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) + [`documents/vi/system-design.md`](../../../documents/vi/system-design.md)
-3. Viết pipeline + ADR trong worksheet.
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-21-ci-and-adr.md`](./artifacts/day-21-ci-and-adr.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab Next: fetch mock với `revalidate` / `no-store`; ghi bảng “khi nào cache”.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Week 3 review: Islands + Climbing Stairs timed 20′.
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 21](./30-day-study-plan.md#day-21--23102026--ci-t-shaped-wrap)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/devops.md
+- documents/vi/nextjs.md — caching, revalidate
 
-**Xong Day 21 khi:** pipeline install→…→smoke + 1 ADR agnostic (filters URL hoặc store vs local).
+## Links
+
+- Plan Day 21: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 21 khi:** ADR + CI list; cache table ≥4 rows; timed algo xong.

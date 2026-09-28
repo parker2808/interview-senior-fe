@@ -1,16 +1,27 @@
 # Bắt đầu đây — Day 20 (22/10/2026)
 
-**Timebox:** 60–90 phút · Bundle + observability
+**Timebox:** 90–120 phút · Observability + Next App Router
 
-## Làm theo thứ tự
+## Làm theo thứ tự (4 khối)
 
-1. Mở [`artifacts/day-20-observability.md`](./artifacts/day-20-observability.md)
-2. Đọc [`documents/vi/build-tools.md`](../../../documents/vi/build-tools.md) + [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) + [`documents/vi/system-design.md`](../../../documents/vi/system-design.md)
-3. Điền observability + lazy candidates.
+1. Mở **worksheet** và làm khối FE Craft:  
+   → [`artifacts/day-20-observability.md`](./artifacts/day-20-observability.md)
+2. **React / Next Lab** (chi tiết trong worksheet + plan):  
+   Lab Next: app/ layout + page customers (RSC mặc định) + 1 Client Component interactive filter.
+3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
+   Coin Change (unbounded) — DP lite (hoặc BFS nếu DP kẹt).
+4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
 
-## Links plan
+## Đọc nhanh
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 20](./30-day-study-plan.md#day-20--22102026--bundle-observability)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+- documents/vi/monitoring.md
+- documents/vi/nextjs.md — App Router, layouts
+- documents/vi/build-tools.md — skim bundle
 
-**Xong Day 20 khi:** plan error log/request ID/breadcrumb/CWV + list lazy routes/components.
+## Links
+
+- Plan Day 20: [30-day-study-plan.md](./30-day-study-plan.md)
+- React track: [react-next-track.md](./react-next-track.md)
+- Algo track: [algorithms-track.md](./algorithms-track.md)
+
+**Xong Day 20 khi:** Obs notes; Next /customers render; phân biệt Server vs Client component được.
