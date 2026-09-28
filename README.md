@@ -43,7 +43,7 @@ Cách thêm UI module: [STRUCTURE.md](./STRUCTURE.md). Content track: [`modules/
 
 ## 📚 Cấu Trúc Tài Liệu
 
-Tài liệu được tổ chức thành 5 nhóm chính với 19 chủ đề, từ cơ bản đến nâng cao:
+Tài liệu được tổ chức thành 6 nhóm chính với 22 chủ đề, từ cơ bản đến nâng cao:
 
 ### I. Core Web Technologies
 
@@ -97,122 +97,146 @@ Tài liệu được tổ chức thành 5 nhóm chính với 19 chủ đề, t�
 
 ---
 
-### III. Development Practices
+### III. React Ecosystem
 
-8. **[Testing](./documents/vi/testing.md)** ⭐
+8. **[React](./documents/vi/react.md)**
 
-   8.1. [Unit Testing (Vitest)](./documents/vi/testing.md#81-unit-testing-với-vitest)
+   8.1. [Core Concepts](./documents/vi/react.md#201-core-concepts): [Virtual DOM](./documents/vi/react.md#2011-virtual-dom--reconciliation), [Hooks](./documents/vi/react.md#2012-class-vs-function-components--hooks), [JSX](./documents/vi/react.md#2013-jsx--mô-hình-render), [Props/State](./documents/vi/react.md#2014-props-vs-state), [`useEffect`](./documents/vi/react.md#2017-effects-useeffect-vs-watch--lifecycle-vue), [`useMemo`](./documents/vi/react.md#2018-giá-trị-suy-diễn-usememo-vs-computed)
 
-   8.2. [Component Testing (Vue Test Utils)](./documents/vi/testing.md#82-component-testing-với-vue-test-utils)
+   8.2. [Advanced](./documents/vi/react.md#202-advanced-features): [Context](./documents/vi/react.md#2021-context-vs-provide--inject), [Portals](./documents/vi/react.md#2022-portals-vs-teleport), [Suspense](./documents/vi/react.md#2023-suspense), [Error Boundaries](./documents/vi/react.md#2024-error-boundaries), [Custom Hooks](./documents/vi/react.md#2025-custom-hooks-vs-composables)
 
-   8.3. [E2E Testing (Playwright)](./documents/vi/testing.md#83-e2e-testing-với-playwright)
+9. **[Next.js](./documents/vi/nextjs.md)**
 
-   8.4. [Test Coverage](./documents/vi/testing.md#84-test-coverage), [TDD/BDD](./documents/vi/testing.md#85-phương-pháp-tddbdd)
+   9.1. [Next vs React](./documents/vi/nextjs.md#212-nextjs-vs-react), [Nuxt ↔ Next](./documents/vi/nextjs.md#213-bản-đồ-tư-duy-nuxt--next)
 
-9. **[Performance & Optimization](./documents/vi/performance.md)** ⚡
+   9.2. [CSR/SSR/SSG/RSC](./documents/vi/nextjs.md#214-csr-vs-ssr-vs-ssg-vs-spa-và-rsc), [App Router](./documents/vi/nextjs.md#215-nền-tảng-app-router)
 
-   9.1. [Core Performance](./documents/vi/performance.md#91-core-performance): [Storage](./documents/vi/performance.md#911-storage-localstorage-vs-sessionstorage-vs-cookie), [Optimization](./documents/vi/performance.md#912-performance-optimization), [Code Review](./documents/vi/performance.md#913-code-review-checklist)
+10. **[State Management (React)](./documents/vi/state-management-react.md)**
 
-   9.2. [Advanced](./documents/vi/performance.md#92-advanced-optimization): [Code Splitting](./documents/vi/performance.md#921-code-splitting-strategies), [Tree Shaking](./documents/vi/performance.md#922-tree-shaking), [Debounce/Throttle](./documents/vi/performance.md#923-debounce-vs-throttle), [Image/Font](./documents/vi/performance.md#924-image--font-optimization)
+    10.1. [Các tầng state](./documents/vi/state-management-react.md#221-các-tầng-state), [RTK vs Zustand vs Jotai](./documents/vi/state-management-react.md#222-redux-toolkit-vs-zustand-vs-jotai)
 
-10. **[Security](./documents/vi/security.md)** 🔒
+    10.2. [Server state (Query/SWR)](./documents/vi/state-management-react.md#225-server-state-tanstack-query--swr), [Next patterns](./documents/vi/state-management-react.md#226-pattern-state-trên-nextjs)
 
-    10.1. [Phòng chống XSS](./documents/vi/security.md#101-phòng-chống-xss)
-
-    10.2. [Bảo vệ CSRF](./documents/vi/security.md#102-bảo-vệ-csrf)
-
-    10.3. [Authentication Best Practices](./documents/vi/security.md#103-best-practices-về-authentication)
-
-    10.4. [Validation Input](./documents/vi/security.md#104-validation-và-sanitization-input), [HTTPS & CORS](./documents/vi/security.md#105-https--cors)
-
-11. **[Accessibility (A11y)](./documents/vi/accessibility.md)** ♿
-
-    11.1. [Thuộc tính ARIA](./documents/vi/accessibility.md#111-thuộc-tính-aria)
-
-    11.2. [Điều hướng Bàn phím](./documents/vi/accessibility.md#112-điều-hướng-bằng-bàn-phím)
-
-    11.3. [HTML Ngữ nghĩa](./documents/vi/accessibility.md#113-html-ngữ-nghĩa)
-
-    11.4. [Hướng dẫn WCAG](./documents/vi/accessibility.md#114-hướng-dẫn-wcag)
+    10.3. [Vuex/Pinia → React](./documents/vi/state-management-react.md#227-bản-đồ-vuex--pinia--react)
 
 ---
 
-### IV. Infrastructure & Tools
+### IV. Development Practices
 
-12. **[Build Tools](./documents/vi/build-tools.md)**
+11. **[Testing](./documents/vi/testing.md)** ⭐
 
-    12.1. [Vite vs Webpack](./documents/vi/build-tools.md#121-vite-vs-webpack)
+    11.1. [Unit Testing (Vitest)](./documents/vi/testing.md#81-unit-testing-với-vitest)
 
-13. **[Networking](./documents/vi/networking.md)**
+    11.2. [Component Testing (Vue Test Utils)](./documents/vi/testing.md#82-component-testing-với-vue-test-utils)
 
-    13.1. [REST vs WebSocket](./documents/vi/networking.md#131-websocket-vs-rest)
+    11.3. [E2E Testing (Playwright)](./documents/vi/testing.md#83-e2e-testing-với-playwright)
 
-14. **[DevOps](./documents/vi/devops.md)**
+    11.4. [Test Coverage](./documents/vi/testing.md#84-test-coverage), [TDD/BDD](./documents/vi/testing.md#85-phương-pháp-tddbdd)
 
-    14.1. [GitOps & ArgoCD Pipeline](./documents/vi/devops.md#141-gitops--argocd-pipeline)
+12. **[Performance & Optimization](./documents/vi/performance.md)** ⚡
+
+    12.1. [Core Performance](./documents/vi/performance.md#91-core-performance): [Storage](./documents/vi/performance.md#911-storage-localstorage-vs-sessionstorage-vs-cookie), [Optimization](./documents/vi/performance.md#912-performance-optimization), [Code Review](./documents/vi/performance.md#913-code-review-checklist)
+
+    12.2. [Advanced](./documents/vi/performance.md#92-advanced-optimization): [Code Splitting](./documents/vi/performance.md#921-code-splitting-strategies), [Tree Shaking](./documents/vi/performance.md#922-tree-shaking), [Debounce/Throttle](./documents/vi/performance.md#923-debounce-vs-throttle), [Image/Font](./documents/vi/performance.md#924-image--font-optimization)
+
+13. **[Security](./documents/vi/security.md)** 🔒
+
+    13.1. [Phòng chống XSS](./documents/vi/security.md#101-phòng-chống-xss)
+
+    13.2. [Bảo vệ CSRF](./documents/vi/security.md#102-bảo-vệ-csrf)
+
+    13.3. [Authentication Best Practices](./documents/vi/security.md#103-best-practices-về-authentication)
+
+    13.4. [Validation Input](./documents/vi/security.md#104-validation-và-sanitization-input), [HTTPS & CORS](./documents/vi/security.md#105-https--cors)
+
+14. **[Accessibility (A11y)](./documents/vi/accessibility.md)** ♿
+
+    14.1. [Thuộc tính ARIA](./documents/vi/accessibility.md#111-thuộc-tính-aria)
+
+    14.2. [Điều hướng Bàn phím](./documents/vi/accessibility.md#112-điều-hướng-bằng-bàn-phím)
+
+    14.3. [HTML Ngữ nghĩa](./documents/vi/accessibility.md#113-html-ngữ-nghĩa)
+
+    14.4. [Hướng dẫn WCAG](./documents/vi/accessibility.md#114-hướng-dẫn-wcag)
 
 ---
 
-### V. Professional Skills
+### V. Infrastructure & Tools
 
-15. **[Architecture & Design Patterns](./documents/vi/architecture.md)** 🏗️
+15. **[Build Tools](./documents/vi/build-tools.md)**
 
-    15.1. [Các mẫu Component](./documents/vi/architecture.md#151-các-mẫu-component)
+    15.1. [Vite vs Webpack](./documents/vi/build-tools.md#121-vite-vs-webpack)
 
-    15.2. [Design Patterns](./documents/vi/architecture.md#152-các-mẫu-thiết-kế)
+16. **[Networking](./documents/vi/networking.md)**
 
-    15.3. [Nguyên tắc SOLID](./documents/vi/architecture.md#153-nguyên-tắc-solid-trong-frontend)
+    16.1. [REST vs WebSocket](./documents/vi/networking.md#131-websocket-vs-rest)
 
-    15.4. [Module Federation & Micro-frontends](./documents/vi/architecture.md#154-module-federation--micro-frontends)
+17. **[DevOps](./documents/vi/devops.md)**
 
-16. **[System Design](./documents/vi/system-design.md)**
+    17.1. [GitOps & ArgoCD Pipeline](./documents/vi/devops.md#141-gitops--argocd-pipeline)
 
-    16.1. [Quyết định Kiến trúc Frontend](./documents/vi/system-design.md#161-quyết-định-kiến-trúc-frontend)
+---
 
-    16.2. [Chiến lược Caching](./documents/vi/system-design.md#162-chiến-lược-caching)
+### VI. Professional Skills
 
-    16.3. [Thiết kế Component Library](./documents/vi/system-design.md#163-thiết-kế-component-library)
+18. **[Architecture & Design Patterns](./documents/vi/architecture.md)** 🏗️
 
-17. **[Leadership & Soft Skills](./documents/vi/leadership.md)** 👥
+    18.1. [Các mẫu Component](./documents/vi/architecture.md#151-các-mẫu-component)
 
-    17.1. [Mentorship Kỹ thuật](./documents/vi/leadership.md#171-mentorship-kỹ-thuật)
+    18.2. [Design Patterns](./documents/vi/architecture.md#152-các-mẫu-thiết-kế)
 
-    17.2. [Ghi chép Quyết định Kiến trúc (ADR)](./documents/vi/leadership.md#172-ghi-chép-quyết-định-kiến-trúc-adr)
+    18.3. [Nguyên tắc SOLID](./documents/vi/architecture.md#153-nguyên-tắc-solid-trong-frontend)
 
-    17.3. [Ước lượng Độ phức tạp](./documents/vi/leadership.md#173-ước-lượng-độ-phức-tạp)
+    18.4. [Module Federation & Micro-frontends](./documents/vi/architecture.md#154-module-federation--micro-frontends)
 
-    17.4. [Giải quyết Xung đột](./documents/vi/leadership.md#174-giải-quyết-xung-đột)
+19. **[System Design](./documents/vi/system-design.md)**
 
-18. **[Practical Interview Questions](./documents/vi/practical-questions.md)** 💼
+    19.1. [Quyết định Kiến trúc Frontend](./documents/vi/system-design.md#161-quyết-định-kiến-trúc-frontend)
 
-    18.1. [Xử lý 401 Error & Authentication](./documents/vi/practical-questions.md#181-xử-lý-401-error--redirect-to-login)
+    19.2. [Chiến lược Caching](./documents/vi/system-design.md#162-chiến-lược-caching)
 
-    18.2. [Quy trình Quản lý Dự án](./documents/vi/practical-questions.md#182-công-cụ-quản-lý-dự-án--quy-trình)
+    19.3. [Thiết kế Component Library](./documents/vi/system-design.md#163-thiết-kế-component-library)
 
-    18.3. [Đánh giá Issue: Bug vs Feature](./documents/vi/practical-questions.md#183-đánh-giá-issue-bug-hay-yêu-cầu-tính-năng)
+20. **[Leadership & Soft Skills](./documents/vi/leadership.md)** 👥
 
-    18.4. [Quy trình Git](./documents/vi/practical-questions.md#184-quy-trình-git)
+    20.1. [Mentorship Kỹ thuật](./documents/vi/leadership.md#171-mentorship-kỹ-thuật)
 
-    18.5. [Giải quyết Xung đột Git](./documents/vi/practical-questions.md#185-giải-quyết-xung-đột-git)
+    20.2. [Ghi chép Quyết định Kiến trúc (ADR)](./documents/vi/leadership.md#172-ghi-chép-quyết-định-kiến-trúc-adr)
 
-    18.6. [Gộp Commits](./documents/vi/practical-questions.md#186-gộp-commits)
+    20.3. [Ước lượng Độ phức tạp](./documents/vi/leadership.md#173-ước-lượng-độ-phức-tạp)
 
-19. **[Monitoring & Error Handling](./documents/vi/monitoring.md)** 📊
+    20.4. [Giải quyết Xung đột](./documents/vi/leadership.md#174-giải-quyết-xung-đột)
 
-    19.1. [Theo dõi Lỗi (Sentry)](./documents/vi/monitoring.md#191-theo-dõi-lỗi-với-sentry)
+21. **[Practical Interview Questions](./documents/vi/practical-questions.md)** 💼
 
-    19.2. [Error Boundaries](./documents/vi/monitoring.md#192-error-boundaries-trong-vue)
+    21.1. [Xử lý 401 Error & Authentication](./documents/vi/practical-questions.md#181-xử-lý-401-error--redirect-to-login)
 
-    19.3. [Performance Monitoring](./documents/vi/monitoring.md#193-theo-dõi-performance)
+    21.2. [Quy trình Quản lý Dự án](./documents/vi/practical-questions.md#182-công-cụ-quản-lý-dự-án--quy-trình)
 
-    19.4. [Chiến lược Logging](./documents/vi/monitoring.md#194-chiến-lược-logging)
+    21.3. [Đánh giá Issue: Bug vs Feature](./documents/vi/practical-questions.md#183-đánh-giá-issue-bug-hay-yêu-cầu-tính-năng)
+
+    21.4. [Quy trình Git](./documents/vi/practical-questions.md#184-quy-trình-git)
+
+    21.5. [Giải quyết Xung đột Git](./documents/vi/practical-questions.md#185-giải-quyết-xung-đột-git)
+
+    21.6. [Gộp Commits](./documents/vi/practical-questions.md#186-gộp-commits)
+
+22. **[Monitoring & Error Handling](./documents/vi/monitoring.md)** 📊
+
+    22.1. [Theo dõi Lỗi (Sentry)](./documents/vi/monitoring.md#191-theo-dõi-lỗi-với-sentry)
+
+    22.2. [Error Boundaries](./documents/vi/monitoring.md#192-error-boundaries-trong-vue)
+
+    22.3. [Performance Monitoring](./documents/vi/monitoring.md#193-theo-dõi-performance)
+
+    22.4. [Chiến lược Logging](./documents/vi/monitoring.md#194-chiến-lược-logging)
 
 ---
 
 ## 📊 Thống Kê Coverage
 
-- **Nhóm Chính**: 5 nhóm (Core Web, Vue Ecosystem, Dev Practices, Infrastructure, Professional Skills)
-- **Tổng số Topics**: 19 chủ đề chính
+- **Nhóm Chính**: 6 nhóm (Core Web, Vue Ecosystem, React Ecosystem, Dev Practices, Infrastructure, Professional Skills)
+- **Tổng số Topics**: 22 chủ đề chính
 - **Tổng số Sections**: 100+ chủ đề con
 - **Code Examples**: 200+ ví dụ thực tế
 - **Bảng So sánh**: 20+ ma trận ra quyết định
@@ -224,10 +248,10 @@ Tài liệu được tổ chức thành 5 nhóm chính với 19 chủ đề, t�
 
 **Core Stack:**
 
-- Vue 3 (Composition API)
+- Vue 3 (Composition API) / React (Hooks)
 - TypeScript
-- Nuxt 3
-- Pinia / Vuex
+- Nuxt 3 / Next.js (App Router)
+- Pinia / Vuex · Redux / Zustand / Jotai
 
 **Build Tools:**
 
@@ -278,5 +302,5 @@ Nếu tài liệu này hữu ích cho bạn, hãy:
 
 **Chúc bạn thành công trong phỏng vấn Senior Frontend Developer! 🚀**
 
-_Cập nhật lần cuối: Tháng 11/2025_
-_Phiên bản: 3.0 (Cấu trúc mới - 5 nhóm chính, 19 chủ đề)_
+_Cập nhật lần cuối: Tháng 9/2026_
+_Phiên bản: 3.2 (State Management React — 6 nhóm chính, 22 chủ đề)_

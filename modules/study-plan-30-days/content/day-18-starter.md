@@ -5,7 +5,7 @@
 ## Làm theo thứ tự
 
 1. Mở [`artifacts/day-18-debug-stale-ui.md`](./artifacts/day-18-debug-stale-ui.md)
-2. Đọc [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) + [`documents/vi/javascript.md`](../../../documents/vi/javascript.md) + [`documents/vi/performance.md`](../../../documents/vi/performance.md); React: stale closure/abort (ngoài repo)
+2. Đọc [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) + [`documents/vi/javascript.md`](../../../documents/vi/javascript.md) + [`documents/vi/performance.md`](../../../documents/vi/performance.md); React: stale closure/abort trong [`documents/vi/react.md`](../../../documents/vi/react.md) (`useEffect`)
 3. Điền investigation log + race mitigation.
 
 ## Links plan

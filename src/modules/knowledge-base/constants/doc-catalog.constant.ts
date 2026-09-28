@@ -1,4 +1,4 @@
-export type DocGroupId = 'core' | 'vue' | 'practices' | 'infra' | 'pro'
+export type DocGroupId = 'core' | 'vue' | 'react' | 'practices' | 'infra' | 'pro'
 
 export type DocTopic = {
   slug: string
@@ -37,8 +37,24 @@ export const DOC_CATALOG: DocGroup[] = [
     ],
   },
   {
-    id: 'practices',
+    id: 'react',
     order: 3,
+    topics: [
+      { slug: 'react', title: { vi: 'React', en: 'React' }, group: 'react' },
+      { slug: 'nextjs', title: { vi: 'Next.js', en: 'Next.js' }, group: 'react' },
+      {
+        slug: 'state-management-react',
+        title: {
+          vi: 'State Management (React)',
+          en: 'State Management (React)',
+        },
+        group: 'react',
+      },
+    ],
+  },
+  {
+    id: 'practices',
+    order: 4,
     topics: [
       { slug: 'testing', title: { vi: 'Testing', en: 'Testing' }, group: 'practices' },
       { slug: 'performance', title: { vi: 'Performance', en: 'Performance' }, group: 'practices' },
@@ -52,7 +68,7 @@ export const DOC_CATALOG: DocGroup[] = [
   },
   {
     id: 'infra',
-    order: 4,
+    order: 5,
     topics: [
       { slug: 'build-tools', title: { vi: 'Build Tools', en: 'Build Tools' }, group: 'infra' },
       { slug: 'networking', title: { vi: 'Networking', en: 'Networking' }, group: 'infra' },
@@ -61,7 +77,7 @@ export const DOC_CATALOG: DocGroup[] = [
   },
   {
     id: 'pro',
-    order: 5,
+    order: 6,
     topics: [
       { slug: 'architecture', title: { vi: 'Architecture', en: 'Architecture' }, group: 'pro' },
       { slug: 'system-design', title: { vi: 'System Design', en: 'System Design' }, group: 'pro' },

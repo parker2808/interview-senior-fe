@@ -2,7 +2,7 @@
 
 **Lịch:** Day 1 = **03/10/2026** → Day 30 = **01/11/2026** (DD/MM/YYYY)  
 **Thời lượng:** 60–90 phút/ngày · ~30% đọc / 50% làm / 20% ghi artifact  
-**Mục tiêu:** Senior FE — mindset **framework-agnostic** trước; drill **Vue + React + TypeScript** (repo có Vue/TS; React = practice ngoài repo, đối chiếu concept)
+**Mục tiêu:** Senior FE — mindset **framework-agnostic** trước; drill **Vue + React + TypeScript** (repo có Vue/TS/React/Next notes; code React spike practice ngoài app Nuxt)
 
 **Repo drill:** [`interview-senior-fe`](https://github.com/parker2808/interview-senior-fe) — ưu tiên files dưới `documents/vi/`, JD map [`jd1.md`](../../../jd1.md)  
 **Artifact nộp:** [`artifacts/`](./artifacts/) (module plan; có thể sync sang Context store)
@@ -554,7 +554,7 @@ flowchart LR
 
 **Đọc**
 - Concept Day 8–10 + 15–16 (agnostic)
-- Đối chiếu note Vue spike Day 27 — **không có** `src/**/react*.md` trong repo
+- Đối chiếu note Vue spike Day 27 + KB [`documents/vi/react.md`](../../../documents/vi/react.md) / [`documents/vi/nextjs.md`](../../../documents/vi/nextjs.md) — **không** invent `src/**/react*.md` (code spike ngoài app Nuxt)
 
 **Làm gì**
 - Cùng behavior: filter/list hoặc field edit
@@ -643,12 +643,12 @@ Tạo folder khi Day 1 bắt đầu (`03/10/2026`).
 | CSS / Responsive | [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) |
 | Web APIs | [`documents/vi/web-apis.md`](../../../documents/vi/web-apis.md) |
 | Vue / Nuxt / State | [`documents/vi/vue3.md`](../../../documents/vi/vue3.md), [`documents/vi/nuxt.md`](../../../documents/vi/nuxt.md), [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) |
+| React / Next / State | [`documents/vi/react.md`](../../../documents/vi/react.md), [`documents/vi/nextjs.md`](../../../documents/vi/nextjs.md), [`documents/vi/state-management-react.md`](../../../documents/vi/state-management-react.md) |
 | Testing / Perf / Security / A11y | [`documents/vi/testing.md`](../../../documents/vi/testing.md), [`documents/vi/performance.md`](../../../documents/vi/performance.md), [`documents/vi/security.md`](../../../documents/vi/security.md), [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md) |
 | Build / Net / DevOps | [`documents/vi/build-tools.md`](../../../documents/vi/build-tools.md), [`documents/vi/networking.md`](../../../documents/vi/networking.md), [`documents/vi/devops.md`](../../../documents/vi/devops.md) |
 | Arch / System / Leadership | [`documents/vi/architecture.md`](../../../documents/vi/architecture.md), [`documents/vi/system-design.md`](../../../documents/vi/system-design.md), [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) |
 | Practical / Monitoring | [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md), [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) |
 | EN twins | cùng tên dưới `documents/en/` |
-| **React** | *không có trong repo* — practice ngoài + đối chiếu Vue notes |
 
 ---
 
