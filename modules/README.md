@@ -29,7 +29,7 @@ Name modules in **kebab-case** (`study-plan-30-days`, `system-design-drills`, �
 1. Create `modules/<name>/` with `README.md` and usually a `content/` folder.
 2. Link shared topics with `documents/...` paths (do not nest copies of `en`/`vi` inside the module).
 3. If the module has a UI, put it in `modules/<name>/src/` with its own `package.json`.
-4. Wire Netlify (or another host) when that module should be the live site — today root [`netlify.toml`](../netlify.toml) builds `modules/study-plan-30-days/src` only.
+4. Wire Vercel (or another host) when that module should be the live site — today [`modules/study-plan-30-days/src/vercel.json`](./study-plan-30-days/src/vercel.json) is the deploy root (`Root Directory = modules/study-plan-30-days/src`).
 
 ## Current modules
 

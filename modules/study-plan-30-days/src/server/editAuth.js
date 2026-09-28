@@ -1,5 +1,5 @@
 /**
- * Edit-session auth helpers for Netlify Functions.
+ * Edit-session auth helpers for Vercel Serverless Functions.
  * Passcode lives only in env EDIT_PASSCODE — never in the client bundle.
  */
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto'

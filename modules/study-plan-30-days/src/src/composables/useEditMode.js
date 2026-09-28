@@ -24,7 +24,7 @@ function initFromSession() {
 }
 
 /**
- * Edit-mode gate: passcode → Netlify Function → session unlock + editToken.
+ * Edit-mode gate: passcode → Vercel Function → session unlock + editToken.
  * View mode = default for visitors / cancel / wrong code.
  */
 export function useEditMode() {

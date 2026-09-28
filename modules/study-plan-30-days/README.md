@@ -2,14 +2,14 @@
 
 Senior FE interview prep calendar (03/10 → 01/11/2026): markdown plan, starters, Capstone worksheets, and a Vite + Vue follow/check UI.
 
-**Live / Demo:** [https://parker-interview-documents.netlify.app](https://parker-interview-documents.netlify.app)
+**Live / Demo:** deploy on Vercel (Parker connects the project) — migrated from Netlify.
 
 ## Layout
 
 ```text
 modules/study-plan-30-days/
   content/     # plan, daily starters, artifacts, Capstone stubs
-  src/         # Vite + Vue 3 progress UI
+  src/         # Vite + Vue 3 progress UI + Vercel serverless APIs
   README.md
 ```
 
@@ -30,7 +30,7 @@ Do not use Agent Store paths (`/cursor/stores/…`) or absolute `/workspace/…`
 cd modules/study-plan-30-days/src
 npm install
 npm run dev      # http://localhost:5173
-npm run build    # → dist/ (Netlify publish)
+npm run build    # → dist/ (Vercel output)
 ```
 
 The app loads markdown from sibling `../content` at build time (Vite alias `@plan`).
@@ -42,7 +42,7 @@ The app loads markdown from sibling `../content` at build time (Vite alias `@pla
 | **Local** | Owner after unlock | `localStorage` — editable only in **Edit** mode |
 | **Share link** | Anyone with the URL | Compact day bitmask (`?share=…`) — **view-only**, does not overwrite local |
 | **Public file** | Anyone | Optional [`src/public/progress.json`](./src/public/progress.json) → `/progress.json` after deploy (commit + redeploy to update) |
-| **Cloud (Blobs)** | Anyone can read; Parker publishes | Live sync via Netlify Functions + Blobs — no always-on backend |
+| **Cloud (Blob)** | Anyone can read; Parker publishes | Live sync via Vercel Functions + Blob — no always-on backend |
 | **Export / Import** | Owner after unlock | JSON backup from the UI |
 
 ### Edit mode gate (passcode)
@@ -56,7 +56,7 @@ On first visit (per browser tab), a modal asks for a **6-digit passcode**. The c
 
 Unlock is remembered for the tab via `sessionStorage` (flag + short-lived `editToken` from the API). Closing the tab clears it. The raw passcode is never written to `localStorage`.
 
-### Cloud sync (Netlify Functions + Blobs)
+### Cloud sync (Vercel Serverless + Blob)
 
 API (after deploy):
 
@@ -68,32 +68,35 @@ API (after deploy):
 
 **Parker setup (once):**
 
-1. Netlify UI → Site configuration → Environment variables:
-   - `EDIT_PASSCODE` = your 6-digit code (e.g. `YOUR_6_DIGIT_CODE`) — **never commit it**
+1. Create a Vercel project from this GitHub repo.
+2. Set **Root Directory** to `modules/study-plan-30-days/src` (Build/Output are already in [`src/vercel.json`](./src/vercel.json)).
+3. Storage → create a **Blob** store → connect it to the project (sets `BLOB_READ_WRITE_TOKEN`).
+4. Project → Settings → Environment Variables:
+   - `EDIT_PASSCODE` = your 6-digit code — **never commit it**
    - `PROGRESS_WRITE_TOKEN` = long random secret (optional fallback for publish without passcode session)
    - Optional: `EDIT_TOKEN_SECRET` = HMAC key for edit tokens (derived automatically if unset)
-2. Redeploy so Functions pick up the env vars.
-3. On the live UI, enter the passcode → **Edit** mode → check off days → **Publish to cloud** (uses the session `editToken`; no need to paste `PROGRESS_WRITE_TOKEN` unless you prefer that path).
+5. Redeploy so Functions pick up the env vars.
+6. On the live UI, enter the passcode → **Edit** mode → check off days → **Publish to cloud** (uses the session `editToken`; no need to paste `PROGRESS_WRITE_TOKEN` unless you prefer that path).
 
 **Visitors:** open the site → **Chỉ xem** (or wrong code) → **Load cloud** / share links. No passcode needed to follow progress.
 
-**Free-plan caveat:** Functions and Blobs use Netlify Free credits. Fine for light personal study sync; heavy traffic or large blobs can hit limits — see [Netlify pricing](https://www.netlify.com/pricing/).
+**Free-plan caveat:** Vercel Functions + Blob have Free-tier limits. Fine for light personal study sync — see [Vercel pricing](https://vercel.com/pricing).
 
-Function sources: [`src/netlify/functions/auth-edit.js`](./src/netlify/functions/auth-edit.js), [`src/netlify/functions/progress.js`](./src/netlify/functions/progress.js). Full write tests need a Netlify deploy; locally run `npm run smoke` in `src/`.
+Function sources: [`src/api/auth/edit.js`](./src/api/auth/edit.js), [`src/api/progress.js`](./src/api/progress.js). Blob helper: [`src/server/progressStore.js`](./src/server/progressStore.js) (single key `progress.json`). Full write tests need a Vercel deploy; locally run `npm run smoke` in `src/`.
 
-## Deploy (Netlify)
+## Deploy (Vercel)
 
-Root [`netlify.toml`](../../netlify.toml) currently points at this module:
+[`src/vercel.json`](./src/vercel.json) + Vercel project settings:
 
 | Setting | Value |
 |---|---|
-| Base directory | `modules/study-plan-30-days/src` |
-| Build command | `npm run build` |
-| Publish directory | `dist` |
-| Functions directory | `netlify/functions` (relative to base) |
-| Env (site) | `EDIT_PASSCODE` (6-digit), `PROGRESS_WRITE_TOKEN` (optional write fallback), optional `EDIT_TOKEN_SECRET` |
+| Root Directory | `modules/study-plan-30-days/src` |
+| Build command | `npm run build` (in `vercel.json`) |
+| Output directory | `dist` (in `vercel.json`) |
+| Framework preset | Other (`framework: null`) |
+| Env | `EDIT_PASSCODE`, `BLOB_READ_WRITE_TOKEN` (via Blob store), optional `PROGRESS_WRITE_TOKEN`, optional `EDIT_TOKEN_SECRET` |
 
-Live site: [parker-interview-documents.netlify.app](https://parker-interview-documents.netlify.app)
+Migrated from Netlify (previous host + Blobs) — Netlify config removed from this repo.
 
 ## Key content
 

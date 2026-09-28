@@ -170,7 +170,7 @@ async function loadCloudProgress() {
 }
 
 /**
- * Publish local progress to Netlify Blobs.
+ * Publish local progress to Vercel Blob.
  * Prefers short-lived editToken from passcode unlock; falls back to PROGRESS_WRITE_TOKEN.
  * @param {string} [tokenOverride] — if empty, uses editToken / sessionStorage / prompt
  */

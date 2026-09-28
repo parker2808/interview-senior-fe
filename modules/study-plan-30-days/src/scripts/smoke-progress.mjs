@@ -2,7 +2,7 @@
  * Local smoke checks for progress codec, edit-auth helpers, and API payload shape.
  * Run: npm run smoke
  * Uses a fake EDIT_PASSCODE (never the real owner code).
- * (Blobs write still needs a Netlify deploy + env secrets.)
+ * (Blob write still needs a Vercel deploy + BLOB_READ_WRITE_TOKEN.)
  */
 import assert from 'node:assert/strict'
 
@@ -25,7 +25,7 @@ import {
   safeEqualString,
   verifyEditToken,
   verifyPasscode,
-} from '../netlify/lib/editAuth.js'
+} from '../server/editAuth.js'
 
 function normalizeLikeFunction(raw) {
   if (!raw || typeof raw !== 'object') return null
