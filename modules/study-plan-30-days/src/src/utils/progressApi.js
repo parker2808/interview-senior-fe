@@ -1,5 +1,5 @@
 /**
- * Client for /api/progress and /api/auth/edit (Netlify Functions).
+ * Client for /api/progress and /api/auth/edit (Vercel Serverless Functions).
  */
 
 const WRITE_TOKEN_SESSION_KEY = 'progress-write-token'

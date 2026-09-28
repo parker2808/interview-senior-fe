@@ -1,5 +1,5 @@
 /**
- * Public progress API backed by Netlify Blobs.
+ * Public progress API backed by Vercel Blob (key: progress.json).
  *
  * GET  /api/progress  — public read (no auth)
  * PUT|POST /api/progress — write; requires either:
@@ -7,37 +7,22 @@
  *   - header x-edit-token (or x-progress-token) = valid short-lived editToken
  *     from POST /api/auth/edit after EDIT_PASSCODE unlock
  *
- * Env (Netlify UI only — never commit):
- *   PROGRESS_WRITE_TOKEN — long-lived publish secret
+ * Env (Vercel project — never commit):
+ *   BLOB_READ_WRITE_TOKEN — Vercel Blob store token (link a Blob store)
+ *   PROGRESS_WRITE_TOKEN — long-lived publish secret (optional)
  *   EDIT_PASSCODE — 6-digit owner unlock (used by /api/auth/edit)
  *   EDIT_TOKEN_SECRET — optional HMAC key for edit tokens
  */
 
-import { getStore } from '@netlify/blobs'
-import { safeEqualString, verifyEditToken } from '../lib/editAuth.js'
+import { safeEqualString, verifyEditToken } from '../server/editAuth.js'
+import { header, readJsonBody, sendJson, setCors } from '../server/http.js'
+import {
+  emptyProgress,
+  readProgress,
+  writeProgress,
+} from '../server/progressStore.js'
 
-const STORE_NAME = 'study-progress'
-const BLOB_KEY = 'parker'
 const DAY_COUNT = 30
-
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers':
-    'Content-Type, x-progress-token, x-edit-token',
-  'Access-Control-Allow-Methods': 'GET, PUT, POST, OPTIONS',
-}
-
-function json(body, status = 200, extra = {}) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'no-store',
-      ...CORS,
-      ...extra,
-    },
-  })
-}
 
 /** Normalize / validate body to progress schema. */
 function normalizePayload(raw) {
@@ -69,26 +54,16 @@ function normalizePayload(raw) {
   return payload
 }
 
-function emptyProgress() {
-  return {
-    version: 1,
-    updatedAt: '',
-    owner: 'Parker',
-    completed: [],
-    note: 'No cloud progress published yet.',
-  }
-}
-
 /**
  * Accept PROGRESS_WRITE_TOKEN or a valid edit session token.
  */
 function assertWriteAuth(req) {
-  const editHeader = req.headers.get('x-edit-token') || ''
+  const editHeader = header(req, 'x-edit-token')
   if (editHeader && verifyEditToken(editHeader)) {
     return { ok: true, via: 'edit-token' }
   }
 
-  const progressHeader = req.headers.get('x-progress-token') || ''
+  const progressHeader = header(req, 'x-progress-token')
   if (progressHeader && verifyEditToken(progressHeader)) {
     return { ok: true, via: 'edit-token' }
   }
@@ -114,54 +89,77 @@ function assertWriteAuth(req) {
   }
 }
 
-export default async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { status: 204, headers: CORS })
+function blobMissingResponse(res, err) {
+  if (err?.code === 'BLOB_TOKEN_MISSING') {
+    sendJson(res, 503, {
+      error:
+        'BLOB_READ_WRITE_TOKEN is not configured — create a Vercel Blob store and link it to this project',
+    })
+    return true
   }
+  return false
+}
 
-  const store = getStore({ name: STORE_NAME, consistency: 'strong' })
+export default async function handler(req, res) {
+  setCors(res, 'GET, PUT, POST, OPTIONS', 'x-progress-token, x-edit-token')
+
+  if (req.method === 'OPTIONS') {
+    res.statusCode = 204
+    res.end()
+    return
+  }
 
   if (req.method === 'GET') {
     try {
-      const data = await store.get(BLOB_KEY, { type: 'json' })
-      return json(data && typeof data === 'object' ? data : emptyProgress())
+      const data = await readProgress()
+      sendJson(res, 200, data && typeof data === 'object' ? data : emptyProgress())
     } catch (err) {
-      return json(
-        { error: 'Failed to read progress', detail: String(err?.message || err) },
+      if (blobMissingResponse(res, err)) return
+      sendJson(
+        res,
         500,
+        { error: 'Failed to read progress', detail: String(err?.message || err) },
       )
     }
+    return
   }
 
   if (req.method === 'PUT' || req.method === 'POST') {
     const auth = assertWriteAuth(req)
-    if (!auth.ok) return json({ error: auth.error }, auth.status)
+    if (!auth.ok) {
+      sendJson(res, auth.status, { error: auth.error })
+      return
+    }
 
     let raw
     try {
-      raw = await req.json()
+      raw = await readJsonBody(req)
     } catch {
-      return json({ error: 'Body must be JSON' }, 400)
+      sendJson(res, 400, { error: 'Body must be JSON' })
+      return
     }
 
     const payload = normalizePayload(raw)
     if (!payload) {
-      return json(
-        { error: 'Invalid schema: need { completed: number[] } (days 1–30)' },
-        400,
-      )
+      sendJson(res, 400, {
+        error: 'Invalid schema: need { completed: number[] } (days 1–30)',
+      })
+      return
     }
 
     try {
-      await store.setJSON(BLOB_KEY, payload)
-      return json({ ok: true, progress: payload })
+      await writeProgress(payload)
+      sendJson(res, 200, { ok: true, progress: payload })
     } catch (err) {
-      return json(
-        { error: 'Failed to write progress', detail: String(err?.message || err) },
+      if (blobMissingResponse(res, err)) return
+      sendJson(
+        res,
         500,
+        { error: 'Failed to write progress', detail: String(err?.message || err) },
       )
     }
+    return
   }
 
-  return json({ error: `Method ${req.method} not allowed` }, 405)
+  sendJson(res, 405, { error: `Method ${req.method} not allowed` })
 }

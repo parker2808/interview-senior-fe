@@ -2,7 +2,7 @@
 
 Vite + Vue 3 app for the **study-plan-30-days** module — browse days and check off progress.
 
-- **Live / Demo:** [https://parker-interview-documents.netlify.app](https://parker-interview-documents.netlify.app)
+- **Live / Demo:** connect a Vercel project to this repo (Parker) — former Netlify URL retired after migration
 - App root: `modules/study-plan-30-days/src/`
 - Markdown: sibling `../content/` (Vite `@plan` alias)
 - Shared interview KB: `documents/en`, `documents/vi` (linked from content; not bundled — UI opens GitHub blob on `main`)
@@ -24,7 +24,7 @@ npm run build
 npm run preview
 ```
 
-Output: `dist/` — Netlify publish directory (see repo-root `netlify.toml`).
+Output: `dist/` — Vercel output directory (see [`vercel.json`](./vercel.json)).
 
 ## Progress sources
 
@@ -33,7 +33,7 @@ Output: `dist/` — Netlify publish directory (see repo-root `netlify.toml`).
 | **Local** | `localStorage` key `senior-fe-30day-progress-v1` — editable only after passcode unlock |
 | **Share link** | `?share=<base36-bitmask>` — view-only banner; local data untouched |
 | **Public file** | `GET /progress.json` (from `public/progress.json`) — view-only after deploy |
-| **Cloud (Blobs)** | `GET /api/progress` public read; **Publish** needs edit session or write token |
+| **Cloud (Blob)** | `GET /api/progress` public read; **Publish** needs edit session or write token |
 | **Export / Import** | Download anytime from local; import requires Edit mode |
 
 Opening a share link never silently overwrites local progress.
@@ -44,18 +44,18 @@ Opening a share link never silently overwrites local progress.
 - Success → Edit mode + short-lived `editToken` in `sessionStorage` (not the raw passcode)
 - Skip / wrong → View mode (badge **Chế độ: Xem**)
 
-### Cloud API (Netlify)
+### Cloud API (Vercel)
 
-- Functions: [`netlify/functions/auth-edit.js`](./netlify/functions/auth-edit.js), [`netlify/functions/progress.js`](./netlify/functions/progress.js)
-- Routes (via root `netlify.toml`): `/api/auth/edit`, `/api/progress`
-- Env (Netlify UI only — never commit):
+- Functions: [`api/auth/edit.js`](./api/auth/edit.js), [`api/progress.js`](./api/progress.js)
+- Routes: `/api/auth/edit`, `/api/progress` (same paths the Vue app calls)
+- Env (Vercel project settings — never commit):
   - **`EDIT_PASSCODE`** — 6-digit owner unlock (`YOUR_6_DIGIT_CODE`)
+  - **`BLOB_READ_WRITE_TOKEN`** — from a linked [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) store (Storage → Blob → Connect)
   - **`PROGRESS_WRITE_TOKEN`** — optional long-lived publish fallback
   - **`EDIT_TOKEN_SECRET`** — optional HMAC key for edit tokens
 - Progress write accepts `x-edit-token` (from unlock) **or** `x-progress-token` === `PROGRESS_WRITE_TOKEN`
 - Visitors: **Load cloud** (GET, no token) after choosing view mode
-- Free plan: Functions/Blobs credits apply — light personal use only
 
 ```bash
-npm run smoke   # codec + edit-auth helpers + payload shape (no Netlify needed)
+npm run smoke   # codec + edit-auth helpers + payload shape (no Vercel needed)
 ```

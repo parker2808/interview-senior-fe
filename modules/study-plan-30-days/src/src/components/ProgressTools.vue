@@ -26,13 +26,13 @@ const sourceLabel = {
   local: 'Local (máy này)',
   share: 'Share link (chỉ đọc)',
   public: 'Public file (chỉ đọc)',
-  cloud: 'Cloud Blobs (chỉ đọc)',
+  cloud: 'Cloud Blob (chỉ đọc)',
 }
 
 const bannerTitle = {
   share: 'Đang xem tiến độ đã share',
   public: 'Đang xem tiến độ public từ repo',
-  cloud: 'Đang xem tiến độ cloud (Netlify Blobs)',
+  cloud: 'Đang xem tiến độ cloud (Vercel Blob)',
 }
 
 function onFileChange(e) {
