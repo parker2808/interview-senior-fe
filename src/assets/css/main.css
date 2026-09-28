@@ -21,6 +21,16 @@
 }
 
 @layer base {
+  html {
+    scroll-padding-top: 5.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    html {
+      scroll-padding-top: 4rem;
+    }
+  }
+
   html,
   body {
     @apply min-h-full antialiased;
@@ -53,15 +63,15 @@
   }
 
   .prose-doc h2 {
-    @apply mb-3 mt-8 scroll-mt-24 border-b border-[var(--line)] pb-2 text-xl font-semibold sm:text-2xl;
+    @apply mb-3 mt-8 border-b border-[var(--line)] pb-2 text-xl font-semibold sm:text-2xl;
   }
 
   .prose-doc h3 {
-    @apply mb-2 mt-6 scroll-mt-24 text-lg font-semibold;
+    @apply mb-2 mt-6 text-lg font-semibold;
   }
 
   .prose-doc h4 {
-    @apply mb-2 mt-4 scroll-mt-24 text-base font-semibold;
+    @apply mb-2 mt-4 text-base font-semibold;
   }
 
   .prose-doc p,

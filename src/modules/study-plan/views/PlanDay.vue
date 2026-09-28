@@ -10,6 +10,7 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+const { t } = useI18n()
 const day = computed(() => getDay(props.dayNumber))
 
 const {
@@ -27,7 +28,7 @@ function openDoc(path: string) {
   if (path.startsWith('documents/')) {
     const m = path.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
     if (m) {
-      router.push(`/docs/${m[1]}/${m[2]}`)
+      router.push(`/docs/${m[1]}/${m[2]}?from=plan`)
       return
     }
   }
@@ -35,14 +36,13 @@ function openDoc(path: string) {
 }
 
 function openDocs(payload: { lang: string; slug: string; hash?: string }) {
-  router.push(
-    `/docs/${payload.lang}/${payload.slug}${payload.hash ? `#${payload.hash}` : ''}`,
-  )
+  const hash = payload.hash ? `#${payload.hash}` : ''
+  router.push(`/docs/${payload.lang}/${payload.slug}?from=plan${hash}`)
 }
 </script>
 
 <template>
-  <div class="mx-auto min-h-screen max-w-hub px-4 py-5 sm:px-6 sm:py-8">
+  <div class="mx-auto min-h-screen max-w-hub pb-10">
     <EditGateModal
       :open="modalOpen"
       :unlocking="unlocking"
@@ -51,21 +51,25 @@ function openDocs(payload: { lang: string; slug: string; hash?: string }) {
       @skip="skipUnlock"
     />
 
-    <div class="mb-4">
-      <BackLink to="/plan" label="Danh sách ngày" />
+    <div
+      class="sticky top-0 z-20 border-b border-line bg-surface/95 px-4 py-3 backdrop-blur sm:px-6"
+    >
+      <BackLink to="/plan" :label="t('plan.backDayList')" />
     </div>
 
-    <DayDetail
-      v-if="day"
-      :day="day"
-      :done="isDone(day.day)"
-      :read-only="readOnly"
-      @toggle="toggleDone(day.day)"
-      @prev="router.push(`/plan/day/${day.day - 1}`)"
-      @next="router.push(`/plan/day/${day.day + 1}`)"
-      @open-doc="openDoc"
-      @open-docs="openDocs"
-    />
-    <p v-else class="text-ink-muted">Không tìm thấy ngày.</p>
+    <div class="px-4 pt-4 sm:px-6 sm:pt-6">
+      <DayDetail
+        v-if="day"
+        :day="day"
+        :done="isDone(day.day)"
+        :read-only="readOnly"
+        @toggle="toggleDone(day.day)"
+        @prev="router.push(`/plan/day/${day.day - 1}`)"
+        @next="router.push(`/plan/day/${day.day + 1}`)"
+        @open-doc="openDoc"
+        @open-docs="openDocs"
+      />
+      <p v-else class="text-ink-muted">Không tìm thấy ngày.</p>
+    </div>
   </div>
 </template>

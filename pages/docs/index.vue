@@ -7,10 +7,17 @@ definePageMeta({
   name: DocsRoute.Index,
 })
 
+const route = useRoute()
 const { locale } = useI18n()
 
+const lang = String(locale.value || DEFAULT_DOC_LANG)
+const query = { ...route.query }
+
 await navigateTo(
-  `/docs/${locale.value || DEFAULT_DOC_LANG}/${DEFAULT_DOC_SLUG}`,
+  {
+    path: `/docs/${lang}/${DEFAULT_DOC_SLUG}`,
+    query,
+  },
   { replace: true },
 )
 </script>

@@ -17,14 +17,18 @@ watch(
   (open) => {
     if (open) digits.value = ''
     if (import.meta.client) {
-      document.body.style.overflow = open ? 'hidden' : ''
+      document.documentElement.classList.toggle('overflow-hidden', open)
+      document.body.classList.toggle('overflow-hidden', open)
     }
   },
   { immediate: true },
 )
 
 onBeforeUnmount(() => {
-  if (import.meta.client) document.body.style.overflow = ''
+  if (import.meta.client) {
+    document.documentElement.classList.remove('overflow-hidden')
+    document.body.classList.remove('overflow-hidden')
+  }
 })
 
 function onInput(e: Event) {
