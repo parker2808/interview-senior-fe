@@ -33,7 +33,7 @@ Output: `dist/` — Vercel output directory (see [`vercel.json`](./vercel.json))
 | **Local** | `localStorage` key `senior-fe-30day-progress-v1` — editable only after passcode unlock |
 | **Share link** | `?share=<base36-bitmask>` — view-only banner; local data untouched |
 | **Public file** | `GET /progress.json` (from `public/progress.json`) — view-only after deploy |
-| **Cloud (Blob)** | `GET /api/progress` public read; **Publish** needs edit session or write token |
+| **Cloud (private Blob)** | `GET /api/progress` (Function reads private blob); **Publish** needs edit session or write token |
 | **Export / Import** | Download anytime from local; import requires Edit mode |
 
 Opening a share link never silently overwrites local progress.
@@ -50,7 +50,7 @@ Opening a share link never silently overwrites local progress.
 - Routes: `/api/auth/edit`, `/api/progress` (same paths the Vue app calls)
 - Env (Vercel project settings — never commit):
   - **`EDIT_PASSCODE`** — 6-digit owner unlock (`YOUR_6_DIGIT_CODE`)
-  - **`BLOB_READ_WRITE_TOKEN`** — from a linked [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) store (Storage → Blob → Connect)
+  - **`BLOB_READ_WRITE_TOKEN`** — from a linked **private** [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) store (Storage → Blob → Private → Connect). On Vercel, OIDC (`BLOB_STORE_ID`) works without the static token.
   - **`PROGRESS_WRITE_TOKEN`** — optional long-lived publish fallback
   - **`EDIT_TOKEN_SECRET`** — optional HMAC key for edit tokens
 - Progress write accepts `x-edit-token` (from unlock) **or** `x-progress-token` === `PROGRESS_WRITE_TOKEN`

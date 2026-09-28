@@ -22,7 +22,7 @@ npm run dev      # local: http://localhost:5173
 npm run build    # → dist/ (Vercel output)
 ```
 
-Progress: default **View** mode; Parker unlocks **Edit** with a 6-digit passcode via `POST /api/auth/edit` (set `EDIT_PASSCODE` in Vercel — never commit). Cloud: Serverless + Blob (`GET/PUT /api/progress`; publish with session `editToken` or `PROGRESS_WRITE_TOKEN`; requires `BLOB_READ_WRITE_TOKEN`). Share URL / `progress.json` / export-import still available. Visitors: **View only** → **Load cloud**. Details: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). The app loads markdown from `content/` at build time (`@plan` alias). Shared interview topics live under [`documents/`](./documents/) (not owned by the module).
+Progress: default **View** mode; Parker unlocks **Edit** with a 6-digit passcode via `POST /api/auth/edit` (set `EDIT_PASSCODE` in Vercel — never commit). Cloud: Serverless + **private** Blob (`GET/PUT /api/progress`; publish with session `editToken` or `PROGRESS_WRITE_TOKEN`; requires `BLOB_READ_WRITE_TOKEN` or OIDC). Share URL / `progress.json` / export-import still available. Visitors: **View only** → **Load cloud**. Details: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). The app loads markdown from `content/` at build time (`@plan` alias). Shared interview topics live under [`documents/`](./documents/) (not owned by the module).
 
 ---
 

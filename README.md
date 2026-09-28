@@ -22,7 +22,7 @@ npm run dev      # local: http://localhost:5173
 npm run build    # → dist/ (Vercel output)
 ```
 
-Tiến độ: mặc định **chế độ Xem**; Parker mở **chế độ Sửa** bằng mã 6 số qua `POST /api/auth/edit` (env `EDIT_PASSCODE` trên Vercel — không commit). Cloud: Serverless + Blob (`GET/PUT /api/progress`; publish dùng `editToken` hoặc `PROGRESS_WRITE_TOKEN`; cần `BLOB_READ_WRITE_TOKEN`). Share URL / `progress.json` / export-import vẫn có. Khách: **Chỉ xem** → **Load cloud**. Chi tiết: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). UI import markdown từ `content/` lúc build (alias `@plan`). Knowledge base dùng chung nằm ở [`documents/`](./documents/) (không thuộc module).
+Tiến độ: mặc định **chế độ Xem**; Parker mở **chế độ Sửa** bằng mã 6 số qua `POST /api/auth/edit` (env `EDIT_PASSCODE` trên Vercel — không commit). Cloud: Serverless + **private** Blob (`GET/PUT /api/progress`; publish dùng `editToken` hoặc `PROGRESS_WRITE_TOKEN`; cần `BLOB_READ_WRITE_TOKEN` hoặc OIDC). Share URL / `progress.json` / export-import vẫn có. Khách: **Chỉ xem** → **Load cloud**. Chi tiết: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). UI import markdown từ `content/` lúc build (alias `@plan`). Knowledge base dùng chung nằm ở [`documents/`](./documents/) (không thuộc module).
 
 ---
 
