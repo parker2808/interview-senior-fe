@@ -2,10 +2,10 @@
 
 Vite + Vue 3 app for the **study-plan-30-days** module — browse days and check off progress.
 
-- **Live / Demo:** connect a Vercel project to this repo (Parker) — former Netlify URL retired after migration
+- **Live / Demo:** https://parker-interview-senior-fe.vercel.app/
 - App root: `modules/study-plan-30-days/src/`
-- Markdown: sibling `../content/` (Vite `@plan` alias)
-- Shared interview KB: `documents/en`, `documents/vi` (linked from content; not bundled — UI opens GitHub blob on `main`)
+- Markdown: sibling `../content/` (Vite `@plan`) + repo `documents/{en,vi}/` (Vite `@kb`, bundled)
+- Vercel: **Root Directory = `.` (repo root)** — see [`/vercel.json`](../../../vercel.json). Do not set Root Directory to this `src/` folder.
 
 ## Run
 
@@ -24,7 +24,7 @@ npm run build
 npm run preview
 ```
 
-Output: `dist/` — Vercel output directory (see [`vercel.json`](./vercel.json)).
+Output: `dist/` — referenced from root `vercel.json` as `modules/study-plan-30-days/src/dist`.
 
 ## Progress sources
 
@@ -46,8 +46,8 @@ Opening a share link never silently overwrites local progress.
 
 ### Cloud API (Vercel)
 
-- Functions: [`api/auth/edit.js`](./api/auth/edit.js), [`api/progress.js`](./api/progress.js)
-- Routes: `/api/auth/edit`, `/api/progress` (same paths the Vue app calls)
+- Implementation: [`api/auth/edit.js`](./api/auth/edit.js), [`api/progress.js`](./api/progress.js)
+- Deploy routes (repo root): [`/api/auth/edit.js`](../../../api/auth/edit.js), [`/api/progress.js`](../../../api/progress.js) → same paths the Vue app calls
 - Env (Vercel project settings — never commit):
   - **`EDIT_PASSCODE`** — 6-digit owner unlock (`YOUR_6_DIGIT_CODE`)
   - **`BLOB_READ_WRITE_TOKEN`** — from a linked **private** [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) store (Storage → Blob → Private → Connect). On Vercel, OIDC (`BLOB_STORE_ID`) works without the static token.

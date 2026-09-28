@@ -10,31 +10,33 @@ Tài liệu tổng hợp kiến thức chuẩn **Senior Frontend Developer**, t�
 
 Module: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/)
 
-- **Live / Demo:** deploy trên [Vercel](https://vercel.com/) (Parker gắn project) — đã migrate khỏi Netlify
+- **Live / Demo:** https://parker-interview-senior-fe.vercel.app/ — [Vercel](https://vercel.com/) (Parker gắn project)
 - **Plan & artifacts:** [`content/`](./modules/study-plan-30-days/content/) — bắt đầu từ [daily-index.md](./modules/study-plan-30-days/content/daily-index.md) hoặc [30-day-study-plan.md](./modules/study-plan-30-days/content/30-day-study-plan.md)
 - **UI theo dõi:** Vite + Vue 3 trong [`modules/study-plan-30-days/src/`](./modules/study-plan-30-days/src/)
-- **Deploy:** [Vercel](https://vercel.com/) — [`vercel.json`](./modules/study-plan-30-days/src/vercel.json). Project: Root Directory = `modules/study-plan-30-days/src`, Build = `npm run build`, Output = `dist`.
+- **Deploy:** [Vercel](https://vercel.com/) — root [`vercel.json`](./vercel.json). **Root Directory = `.` (repo root)** — không dùng `modules/study-plan-30-days/src`. Build/Output nằm trong `vercel.json`. Live: https://parker-interview-senior-fe.vercel.app/
 
 ```bash
 cd modules/study-plan-30-days/src
 npm install
 npm run dev      # local: http://localhost:5173
-npm run build    # → dist/ (Vercel output)
+npm run build    # → dist/ (Vercel outputDirectory trỏ tới đây)
 ```
 
-Tiến độ: mặc định **chế độ Xem**; Parker mở **chế độ Sửa** bằng mã 6 số qua `POST /api/auth/edit` (env `EDIT_PASSCODE` trên Vercel — không commit). Cloud: Serverless + **private** Blob (`GET/PUT /api/progress`; publish dùng `editToken` hoặc `PROGRESS_WRITE_TOKEN`; cần `BLOB_READ_WRITE_TOKEN` hoặc OIDC). Share URL / `progress.json` / export-import vẫn có. Khách: **Chỉ xem** → **Load cloud**. Chi tiết: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). UI import markdown từ `content/` lúc build (alias `@plan`). Knowledge base dùng chung nằm ở [`documents/`](./documents/) (không thuộc module).
+Tiến độ: mặc định **chế độ Xem**; Parker mở **chế độ Sửa** bằng mã 6 số qua `POST /api/auth/edit` (env `EDIT_PASSCODE` trên Vercel — không commit). Cloud: Serverless + **private** Blob (`GET/PUT /api/progress`; publish dùng `editToken` hoặc `PROGRESS_WRITE_TOKEN`; cần `BLOB_READ_WRITE_TOKEN` hoặc OIDC). Share URL / `progress.json` / export-import vẫn có. Khách: **Chỉ xem** → **Load cloud**. Chi tiết: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). UI import markdown từ `content/` (`@plan`) **và** [`documents/en|vi`](./documents/) (`@kb`) lúc build — một cây KB canonical, không copy vào module.
 
 ---
 
 ## 📁 Cấu trúc repo
 
 ```
-documents/                      # shared interview KB only
+vercel.json                     # Vercel: Root Directory = repo root
+api/                            # thin /api adapters → module handlers
+documents/                      # shared interview KB only (bundled into UI)
   en/ · vi/
 modules/
   study-plan-30-days/           # module: plan + Capstone + Vue UI
     content/
-    src/                        # Vite app + vercel.json + /api serverless
+    src/                        # Vite app + module api/ + server/
 ```
 
 Cách thêm module mới: [`modules/README.md`](./modules/README.md).
