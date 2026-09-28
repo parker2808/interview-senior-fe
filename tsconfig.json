@@ -1,0 +1,10 @@
+{
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@plan/*": ["./modules/study-plan-30-days/content/*"],
+      "@kb/*": ["./documents/*"]
+    }
+  }
+}

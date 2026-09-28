@@ -8,37 +8,36 @@ Complete knowledge base for **Senior Frontend Developer** interviews, focusing o
 
 ## 🗓️ 30-day study plan
 
-Module: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/)
+Content track: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/) · UI: [`src/modules/study-plan/`](./src/modules/study-plan/) · Route: `/plan`
 
-- **Live / Demo:** https://parker-interview-senior-fe.vercel.app/ — [Vercel](https://vercel.com/) (Parker connects the project)
-- **Plan & artifacts:** [`content/`](./modules/study-plan-30-days/content/) — start with [daily-index.md](./modules/study-plan-30-days/content/daily-index.md) or [30-day-study-plan.md](./modules/study-plan-30-days/content/30-day-study-plan.md)
-- **Follow / check-off UI:** Vite + Vue 3 in [`modules/study-plan-30-days/src/`](./modules/study-plan-30-days/src/)
-- **Deploy:** [Vercel](https://vercel.com/) — root [`vercel.json`](./vercel.json). **Root Directory = `.` (repo root)** — do **not** use `modules/study-plan-30-days/src`. Build/Output are set in `vercel.json`. Live: https://parker-interview-senior-fe.vercel.app/
+- **Live / Demo:** https://parker-interview-senior-fe.vercel.app/
+- **Stack:** Nuxt 3 + TypeScript + Tailwind — see [STRUCTURE.md](./STRUCTURE.md)
+- **Hub:** `/` · **Knowledge Base:** `/docs/:lang/:slug` · **Plan:** `/plan`
 
 ```bash
-cd modules/study-plan-30-days/src
 npm install
-npm run dev      # local: http://localhost:5173
-npm run build    # → dist/ (Vercel outputDirectory points here)
+npm run dev      # http://localhost:3000
+npm run build
 ```
 
-Progress: default **View** mode; Parker unlocks **Edit** with a 6-digit passcode via `POST /api/auth/edit` (set `EDIT_PASSCODE` in Vercel — never commit). Cloud: Serverless + **private** Blob (`GET/PUT /api/progress`; publish with session `editToken` or `PROGRESS_WRITE_TOKEN`; requires `BLOB_READ_WRITE_TOKEN` or OIDC). Share URL / `progress.json` / export-import still available. Visitors: **View only** → **Load cloud**. Details: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). The app loads markdown from `content/` (`@plan`) **and** [`documents/en|vi`](./documents/) (`@kb`) at build time — one canonical KB tree, not copied into the module.
+Progress: default **View** mode; unlock **Edit** with a 6-digit passcode via `POST /api/auth/edit` (env `EDIT_PASSCODE`). Cloud: Nitro + **private** Blob (`GET/PUT /api/progress`).
 
 ---
 
 ## 📁 Repo layout
 
 ```
-vercel.json                     # Vercel: Root Directory = repo root
-api/                            # thin /api adapters → module handlers
-documents/                      # shared interview KB only (bundled into UI)
-  en/ · vi/
-modules/
-  study-plan-30-days/           # module: plan + Capstone + Vue UI
-    content/
-    src/                        # Vite app + module api/ + server/
+STRUCTURE.md                    # UI module conventions (src/modules)
+nuxt.config.ts · app.vue
+pages/                          # thin routes
+src/modules/{hub,knowledge-base,study-plan,core}/
+documents/                      # shared KB vi|en
+modules/study-plan-30-days/content/
+server/api/                     # progress + edit auth
+i18n/locales/
 ```
-How to add another module: [`modules/README.md`](./modules/README.md).
+
+Add a UI module: [STRUCTURE.md](./STRUCTURE.md). Content tracks: [`modules/README.md`](./modules/README.md).
 
 ---
 

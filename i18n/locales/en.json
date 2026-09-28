@@ -1,0 +1,46 @@
+{
+  "hub": {
+    "brand": "Senior FE Interview Prep",
+    "headline": "Prepare for Senior Frontend interviews systematically",
+    "sub": "A hub for the bilingual knowledge base and the 30-day study plan.",
+    "docsTitle": "Knowledge Base",
+    "docsDesc": "19 vi/en topics across 5 groups — reread everything with a sidebar and quick search.",
+    "docsCta": "Open docs",
+    "planTitle": "30-day study plan",
+    "planDesc": "Track daily progress, worksheets, and Capstone — from product to ship.",
+    "planCta": "Open plan",
+    "locale": "Language"
+  },
+  "docs": {
+    "brand": "Knowledge Base",
+    "onThisPage": "On this page",
+    "searchPlaceholder": "Search topics…",
+    "searchHint": "⌘K / Ctrl+K",
+    "recent": "Recent",
+    "prev": "Prev",
+    "next": "Next",
+    "openNav": "Contents",
+    "closeNav": "Close",
+    "noToc": "No headings",
+    "notFound": "Document not found",
+    "groups": {
+      "core": "I. Core Web",
+      "vue": "II. Vue Ecosystem",
+      "practices": "III. Dev Practices",
+      "infra": "IV. Infrastructure",
+      "pro": "V. Professional"
+    },
+    "backHub": "Hub",
+    "emptySearch": "No results"
+  },
+  "plan": {
+    "title": "30-day study plan",
+    "eyebrow": "Senior FE · 03/10 → 01/11/2026",
+    "backHub": "Hub",
+    "openDocs": "Knowledge Base"
+  },
+  "common": {
+    "vi": "VI",
+    "en": "EN"
+  }
+}

@@ -8,38 +8,36 @@ Tài liệu tổng hợp kiến thức chuẩn **Senior Frontend Developer**, t�
 
 ## 🗓️ Kế hoạch ôn 30 ngày
 
-Module: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/)
+Module content: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/) · UI: [`src/modules/study-plan/`](./src/modules/study-plan/) · Route: `/plan`
 
-- **Live / Demo:** https://parker-interview-senior-fe.vercel.app/ — [Vercel](https://vercel.com/) (Parker gắn project)
-- **Plan & artifacts:** [`content/`](./modules/study-plan-30-days/content/) — bắt đầu từ [daily-index.md](./modules/study-plan-30-days/content/daily-index.md) hoặc [30-day-study-plan.md](./modules/study-plan-30-days/content/30-day-study-plan.md)
-- **UI theo dõi:** Vite + Vue 3 trong [`modules/study-plan-30-days/src/`](./modules/study-plan-30-days/src/)
-- **Deploy:** [Vercel](https://vercel.com/) — root [`vercel.json`](./vercel.json). **Root Directory = `.` (repo root)** — không dùng `modules/study-plan-30-days/src`. Build/Output nằm trong `vercel.json`. Live: https://parker-interview-senior-fe.vercel.app/
+- **Live / Demo:** https://parker-interview-senior-fe.vercel.app/
+- **Stack:** Nuxt 3 + TypeScript + Tailwind — xem [STRUCTURE.md](./STRUCTURE.md)
+- **Hub:** `/` · **Knowledge Base:** `/docs/:lang/:slug` · **Plan:** `/plan`
 
 ```bash
-cd modules/study-plan-30-days/src
 npm install
-npm run dev      # local: http://localhost:5173
-npm run build    # → dist/ (Vercel outputDirectory trỏ tới đây)
+npm run dev      # http://localhost:3000
+npm run build
 ```
 
-Tiến độ: mặc định **chế độ Xem**; Parker mở **chế độ Sửa** bằng mã 6 số qua `POST /api/auth/edit` (env `EDIT_PASSCODE` trên Vercel — không commit). Cloud: Serverless + **private** Blob (`GET/PUT /api/progress`; publish dùng `editToken` hoặc `PROGRESS_WRITE_TOKEN`; cần `BLOB_READ_WRITE_TOKEN` hoặc OIDC). Share URL / `progress.json` / export-import vẫn có. Khách: **Chỉ xem** → **Load cloud**. Chi tiết: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). UI import markdown từ `content/` (`@plan`) **và** [`documents/en|vi`](./documents/) (`@kb`) lúc build — một cây KB canonical, không copy vào module.
+Tiến độ: mặc định **chế độ Xem**; mở **chế độ Sửa** bằng mã 6 số qua `POST /api/auth/edit` (env `EDIT_PASSCODE`). Cloud: Nitro + **private** Blob (`GET/PUT /api/progress`).
 
 ---
 
 ## 📁 Cấu trúc repo
 
 ```
-vercel.json                     # Vercel: Root Directory = repo root
-api/                            # thin /api adapters → module handlers
-documents/                      # shared interview KB only (bundled into UI)
-  en/ · vi/
-modules/
-  study-plan-30-days/           # module: plan + Capstone + Vue UI
-    content/
-    src/                        # Vite app + module api/ + server/
+STRUCTURE.md                    # UI module conventions (src/modules)
+nuxt.config.ts · app.vue
+pages/                          # thin routes
+src/modules/{hub,knowledge-base,study-plan,core}/
+documents/                      # shared KB vi|en
+modules/study-plan-30-days/content/
+server/api/                     # progress + edit auth
+i18n/locales/
 ```
 
-Cách thêm module mới: [`modules/README.md`](./modules/README.md).
+Cách thêm UI module: [STRUCTURE.md](./STRUCTURE.md). Content track: [`modules/README.md`](./modules/README.md).
 
 ---
 

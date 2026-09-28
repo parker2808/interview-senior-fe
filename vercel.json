@@ -1,13 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "npm ci --prefix modules/study-plan-30-days/src",
-  "buildCommand": "npm run build --prefix modules/study-plan-30-days/src",
-  "outputDirectory": "modules/study-plan-30-days/src/dist",
-  "framework": null,
-  "rewrites": [
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
-    }
-  ]
+  "framework": "nuxtjs",
+  "installCommand": "npm ci",
+  "buildCommand": "npm run build"
 }
