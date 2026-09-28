@@ -87,7 +87,7 @@ export function createAppNav(routeRef, { isDay, isDoc, onNavigate }) {
   function syncUrl(route, { replace }) {
     const url = new URL(window.location.href)
     url.hash = routeToHash(route).replace(/^#/, '')
-    const next = url.pathname + url.search + (url.hash ? `#${url.hash}` : '')
+    const next = url.pathname + url.search + url.hash
     if (replace) {
       // Keep prior `back` when replacing (e.g. day prev/next)
       const prevBack = snapshot(window.history.state?.back) ?? null
