@@ -130,13 +130,23 @@ function scoreEntry(query: string, entry: IndexEntry): number {
   if (hay.includes(q)) return 120
 
   // word prefix (hois → hoisting)
-  const words = h.split(/[\s/-]+/)
+  const words = h.split(/[\s/-]+/).filter(Boolean)
   for (const w of words) {
     if (w.startsWith(q)) return 150
   }
 
-  if (q.length >= 3 && subsequenceMatch(q, h)) return 90
-  if (q.length >= 3 && subsequenceMatch(q, hay)) return 70
+  // fuzzy only within a single word that shares the first letter
+  if (q.length >= 3) {
+    for (const w of words) {
+      if (
+        w.length >= q.length &&
+        w[0] === q[0] &&
+        subsequenceMatch(q, w)
+      ) {
+        return 90
+      }
+    }
+  }
 
   return 0
 }
