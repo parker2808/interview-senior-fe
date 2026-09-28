@@ -643,7 +643,7 @@ Tạo folder khi Day 1 bắt đầu (`03/10/2026`).
 | CSS / Responsive | [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) |
 | Web APIs | [`documents/vi/web-apis.md`](../../../documents/vi/web-apis.md) |
 | Vue / Nuxt / State | [`documents/vi/vue3.md`](../../../documents/vi/vue3.md), [`documents/vi/nuxt.md`](../../../documents/vi/nuxt.md), [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) |
-| React / Next | [`documents/vi/react.md`](../../../documents/vi/react.md), [`documents/vi/nextjs.md`](../../../documents/vi/nextjs.md) |
+| React / Next / State | [`documents/vi/react.md`](../../../documents/vi/react.md), [`documents/vi/nextjs.md`](../../../documents/vi/nextjs.md), [`documents/vi/state-management-react.md`](../../../documents/vi/state-management-react.md) |
 | Testing / Perf / Security / A11y | [`documents/vi/testing.md`](../../../documents/vi/testing.md), [`documents/vi/performance.md`](../../../documents/vi/performance.md), [`documents/vi/security.md`](../../../documents/vi/security.md), [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md) |
 | Build / Net / DevOps | [`documents/vi/build-tools.md`](../../../documents/vi/build-tools.md), [`documents/vi/networking.md`](../../../documents/vi/networking.md), [`documents/vi/devops.md`](../../../documents/vi/devops.md) |
 | Arch / System / Leadership | [`documents/vi/architecture.md`](../../../documents/vi/architecture.md), [`documents/vi/system-design.md`](../../../documents/vi/system-design.md), [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) |

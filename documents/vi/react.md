@@ -354,7 +354,8 @@ Tách logic stateful vào `useX` — cùng vai trò composable Vue. Luôn đặt
 
 Context đủ cho theme/locale/auth ít đổi. Store khi state cross-route / tần suất cao / cần debug mạnh.
 
-Xem thêm [State Management](./state-management.md) (thiên Vue) và đối chiếu khi phỏng vấn.
+Chi tiết (các tầng state, Query/SWR, Next, map Vuex/Pinia): [State Management (React)](./state-management-react.md).  
+Store thiên Vue: [State Management](./state-management.md).
 
 ---
 

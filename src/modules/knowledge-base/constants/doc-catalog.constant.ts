@@ -42,6 +42,14 @@ export const DOC_CATALOG: DocGroup[] = [
     topics: [
       { slug: 'react', title: { vi: 'React', en: 'React' }, group: 'react' },
       { slug: 'nextjs', title: { vi: 'Next.js', en: 'Next.js' }, group: 'react' },
+      {
+        slug: 'state-management-react',
+        title: {
+          vi: 'State Management (React)',
+          en: 'State Management (React)',
+        },
+        group: 'react',
+      },
     ],
   },
   {

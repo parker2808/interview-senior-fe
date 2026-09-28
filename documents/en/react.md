@@ -469,7 +469,8 @@ function Dialog({ children }: { children: React.ReactNode }) {
 **When Context is enough:** low-frequency theme/locale/auth session.  
 **When you need a store:** high-frequency client cache, complex cross-route state, time-travel/debug needs.
 
-Also see shared notes in [State Management](./state-management.md) (Vue-first) and compare concepts when interviewing.
+Full deep-dive (layers, Query/SWR, Next patterns, Vuex/Pinia map): [State Management (React)](./state-management-react.md).  
+Vue-first store notes: [State Management](./state-management.md).
 
 ---
 

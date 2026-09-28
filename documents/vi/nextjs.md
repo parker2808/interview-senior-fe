@@ -262,7 +262,8 @@ Cùng bài toán **Nuxt vs Vue SPA thuần**.
 2. So **Nuxt `useAsyncData`** với **async Server Component fetch**.
 3. Chiến lược **cache/revalidate** cho trang product.
 4. Map Composition API → **Hooks** (xem [React](./react.md)).
-5. Kế hoạch migrate dần: giữ API, viết lại UI React/Next theo module.
+5. Tách **URL / RSC / Query / Zustand** — xem [State Management (React)](./state-management-react.md).
+6. Kế hoạch migrate dần: giữ API, viết lại UI React/Next theo module.
 
 ---
 

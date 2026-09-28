@@ -2,6 +2,8 @@
 
 Quản lý state trong Vue applications với Vuex và Pinia.
 
+Bản React / Next (Zustand, Redux Toolkit, TanStack Query, RSC): [State Management (React)](./state-management-react.md).
+
 ---
 
 ## Table of Contents

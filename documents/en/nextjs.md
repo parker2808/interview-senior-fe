@@ -273,7 +273,8 @@ Same decision as **Nuxt vs pure Vue SPA**.
 2. Compare **Nuxt `useAsyncData`** vs **async Server Component fetch**.
 3. Discuss **cache/revalidate** strategy for a product page.
 4. Map your Vue Composition skills to **Hooks** (see [React](./react.md)).
-5. Describe a migration plan: Vue SPA → keep API, rewrite UI in React/Next incrementally.
+5. Separate **URL / RSC / Query / Zustand** — see [State Management (React)](./state-management-react.md).
+6. Describe a migration plan: Vue SPA → keep API, rewrite UI in React/Next incrementally.
 
 ---
 

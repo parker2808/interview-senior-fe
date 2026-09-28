@@ -7,9 +7,10 @@
 - [x] Update README topic index (VI + EN) → 6 groups / 21 topics
 - [x] Point study-plan Day 8/18/28 at new KB paths
 - [x] Verify `/docs` loads react + nextjs; commit + PR
+- [x] Add `state-management-react` (RTK/Zustand/Jotai/Query + Next) → 22 topics
 
 ## Review
 - `npm run build` succeeds (Nitro vercel preset)
-- Manual QA: hub shows 21/6; `/docs/vi|en/react` + `/docs/vi/nextjs` render; sidebar group III. React Ecosystem
+- Manual QA: hub shows 21/6 then 22/6; `/docs/vi|en/react` + `/docs/vi/nextjs` + state-management-react
 - Demo: `/opt/cursor/artifacts/react-next-kb-demo.mp4` + screenshots
 - PR: https://github.com/parker2808/interview-senior-fe/pull/11
