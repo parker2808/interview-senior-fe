@@ -1,14 +1,15 @@
 /**
- * Public progress API backed by Vercel Blob (key: progress.json).
+ * Progress API backed by a **private** Vercel Blob store (key: progress.json).
+ * Server auth to Blob uses BLOB_READ_WRITE_TOKEN or OIDC; clients never hit the blob URL.
  *
- * GET  /api/progress  — public read (no auth)
+ * GET  /api/progress  — unauthenticated HTTP read (function loads private blob)
  * PUT|POST /api/progress — write; requires either:
  *   - header x-progress-token === PROGRESS_WRITE_TOKEN, or
  *   - header x-edit-token (or x-progress-token) = valid short-lived editToken
  *     from POST /api/auth/edit after EDIT_PASSCODE unlock
  *
  * Env (Vercel project — never commit):
- *   BLOB_READ_WRITE_TOKEN — Vercel Blob store token (link a Blob store)
+ *   BLOB_READ_WRITE_TOKEN — Blob store token (or OIDC when store is connected on Vercel)
  *   PROGRESS_WRITE_TOKEN — long-lived publish secret (optional)
  *   EDIT_PASSCODE — 6-digit owner unlock (used by /api/auth/edit)
  *   EDIT_TOKEN_SECRET — optional HMAC key for edit tokens
@@ -93,7 +94,7 @@ function blobMissingResponse(res, err) {
   if (err?.code === 'BLOB_TOKEN_MISSING') {
     sendJson(res, 503, {
       error:
-        'BLOB_READ_WRITE_TOKEN is not configured — create a Vercel Blob store and link it to this project',
+        'Blob auth is not configured — create a private Vercel Blob store, link it to this project (BLOB_READ_WRITE_TOKEN or OIDC)',
     })
     return true
   }

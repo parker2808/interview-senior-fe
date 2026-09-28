@@ -42,7 +42,7 @@ The app loads markdown from sibling `../content` at build time (Vite alias `@pla
 | **Local** | Owner after unlock | `localStorage` — editable only in **Edit** mode |
 | **Share link** | Anyone with the URL | Compact day bitmask (`?share=…`) — **view-only**, does not overwrite local |
 | **Public file** | Anyone | Optional [`src/public/progress.json`](./src/public/progress.json) → `/progress.json` after deploy (commit + redeploy to update) |
-| **Cloud (Blob)** | Anyone can read; Parker publishes | Live sync via Vercel Functions + Blob — no always-on backend |
+| **Cloud (Blob)** | Anyone can read via API; Parker publishes | Live sync via Vercel Functions + **private** Blob (`progress.json`) — no always-on backend |
 | **Export / Import** | Owner after unlock | JSON backup from the UI |
 
 ### Edit mode gate (passcode)
@@ -63,14 +63,14 @@ API (after deploy):
 | Method | Path | Auth |
 |---|---|---|
 | `POST` | `/api/auth/edit` | Body `{ "passcode": "******" }` — must match env `EDIT_PASSCODE` (exactly 6 digits) → `{ ok, token, expiresAt }` |
-| `GET` | `/api/progress` | Public — visitors use **Load cloud** |
+| `GET` | `/api/progress` | Unauthenticated HTTP — Function loads **private** Blob; visitors use **Load cloud** |
 | `PUT` / `POST` | `/api/progress` | `x-edit-token` (session token from unlock) **or** `x-progress-token` === `PROGRESS_WRITE_TOKEN` |
 
 **Parker setup (once):**
 
 1. Create a Vercel project from this GitHub repo.
 2. Set **Root Directory** to `modules/study-plan-30-days/src` (Build/Output are already in [`src/vercel.json`](./src/vercel.json)).
-3. Storage → create a **Blob** store → connect it to the project (sets `BLOB_READ_WRITE_TOKEN`).
+3. Storage → create a **private** Blob store → connect it to the project (sets `BLOB_READ_WRITE_TOKEN`; on Vercel, OIDC + `BLOB_STORE_ID` also work).
 4. Project → Settings → Environment Variables:
    - `EDIT_PASSCODE` = your 6-digit code — **never commit it**
    - `PROGRESS_WRITE_TOKEN` = long random secret (optional fallback for publish without passcode session)
@@ -82,7 +82,7 @@ API (after deploy):
 
 **Free-plan caveat:** Vercel Functions + Blob have Free-tier limits. Fine for light personal study sync — see [Vercel pricing](https://vercel.com/pricing).
 
-Function sources: [`src/api/auth/edit.js`](./src/api/auth/edit.js), [`src/api/progress.js`](./src/api/progress.js). Blob helper: [`src/server/progressStore.js`](./src/server/progressStore.js) (single key `progress.json`). Full write tests need a Vercel deploy; locally run `npm run smoke` in `src/`.
+Function sources: [`src/api/auth/edit.js`](./src/api/auth/edit.js), [`src/api/progress.js`](./src/api/progress.js). Blob helper: [`src/server/progressStore.js`](./src/server/progressStore.js) — **private** store (`access: 'private'`), reads via authenticated `get()`, pathname `progress.json`. Full write tests need a Vercel deploy; locally run `npm run smoke` in `src/`.
 
 ## Deploy (Vercel)
 
@@ -94,7 +94,7 @@ Function sources: [`src/api/auth/edit.js`](./src/api/auth/edit.js), [`src/api/pr
 | Build command | `npm run build` (in `vercel.json`) |
 | Output directory | `dist` (in `vercel.json`) |
 | Framework preset | Other (`framework: null`) |
-| Env | `EDIT_PASSCODE`, `BLOB_READ_WRITE_TOKEN` (via Blob store), optional `PROGRESS_WRITE_TOKEN`, optional `EDIT_TOKEN_SECRET` |
+| Env | `EDIT_PASSCODE`, `BLOB_READ_WRITE_TOKEN` (via **private** Blob store; OIDC OK on Vercel), optional `PROGRESS_WRITE_TOKEN`, optional `EDIT_TOKEN_SECRET` |
 
 Migrated from Netlify (previous host + Blobs) — Netlify config removed from this repo.
 

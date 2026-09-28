@@ -2,7 +2,7 @@
  * Local smoke checks for progress codec, edit-auth helpers, and API payload shape.
  * Run: npm run smoke
  * Uses a fake EDIT_PASSCODE (never the real owner code).
- * (Blob write still needs a Vercel deploy + BLOB_READ_WRITE_TOKEN.)
+ * (Private Blob write still needs a Vercel deploy + BLOB_READ_WRITE_TOKEN / OIDC.)
  */
 import assert from 'node:assert/strict'
 
