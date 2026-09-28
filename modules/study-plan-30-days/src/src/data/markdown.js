@@ -1,4 +1,10 @@
-const modules = import.meta.glob('@plan/**/*.md', {
+const planModules = import.meta.glob('@plan/**/*.md', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+})
+
+const kbModules = import.meta.glob('@kb/{en,vi}/**/*.md', {
   query: '?raw',
   import: 'default',
   eager: true,
@@ -12,9 +18,22 @@ function toPlanPath(key) {
   return key.slice(idx + marker.length)
 }
 
-const byPath = Object.fromEntries(
-  Object.entries(modules).map(([key, content]) => [toPlanPath(key), content]),
-)
+/** Normalize KB glob keys to repo-root paths like `documents/vi/vue3.md` */
+function toKbPath(key) {
+  const marker = '/documents/'
+  const idx = key.indexOf(marker)
+  if (idx === -1) return key.replace(/^\.?\/+/, '')
+  return `documents/${key.slice(idx + marker.length)}`
+}
+
+const byPath = {
+  ...Object.fromEntries(
+    Object.entries(planModules).map(([key, content]) => [toPlanPath(key), content]),
+  ),
+  ...Object.fromEntries(
+    Object.entries(kbModules).map(([key, content]) => [toKbPath(key), content]),
+  ),
+}
 
 export function loadMarkdown(relativePath) {
   const content = byPath[relativePath]

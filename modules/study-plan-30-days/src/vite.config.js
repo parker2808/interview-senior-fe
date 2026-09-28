@@ -2,20 +2,24 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { fileURLToPath, URL } from 'node:url'
 
-// Vercel (and local) serve from site root `/`.
-// Module markdown lives in ../content; shared KB is ../../../documents (not bundled).
+const planRoot = fileURLToPath(new URL('../content', import.meta.url))
+const kbRoot = fileURLToPath(new URL('../../../documents', import.meta.url))
+const repoRoot = fileURLToPath(new URL('../../..', import.meta.url))
+
+// Vercel Root Directory = repo root (see /vercel.json) so Vite can glob
+// both module content/ and shared documents/{en,vi}/.
 export default defineConfig({
   base: '/',
   plugins: [vue()],
   resolve: {
     alias: {
-      '@plan': fileURLToPath(new URL('../content', import.meta.url)),
+      '@plan': planRoot,
+      '@kb': kbRoot,
     },
   },
   server: {
     fs: {
-      // Allow importing markdown from sibling `content/` during vite / build
-      allow: ['..'],
+      allow: [planRoot, kbRoot, repoRoot],
     },
   },
 })

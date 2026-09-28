@@ -2,25 +2,31 @@
 
 Senior FE interview prep calendar (03/10 → 01/11/2026): markdown plan, starters, Capstone worksheets, and a Vite + Vue follow/check UI.
 
-**Live / Demo:** deploy on Vercel (Parker connects the project) — migrated from Netlify.
+**Live / Demo:** https://parker-interview-senior-fe.vercel.app/ — deploy on Vercel (Parker connects the project).
 
 ## Layout
 
 ```text
 modules/study-plan-30-days/
   content/     # plan, daily starters, artifacts, Capstone stubs
-  src/         # Vite + Vue 3 progress UI + Vercel serverless APIs
+  src/         # Vite + Vue 3 progress UI + module serverless handlers
   README.md
+
+# Deploy adapters (repo root — not inside this module)
+vercel.json    # Root Directory = repo root; build/output paths below
+api/           # thin /api/* re-exports → src/api/*
+documents/     # shared interview KB (canonical; bundled via Vite @kb)
 ```
 
-Shared interview topics stay in repo [`documents/en`](../../documents/en) and [`documents/vi`](../../documents/vi) — linked from content with relative paths (not owned by this module).
+Shared interview topics stay in repo [`documents/en`](../../documents/en) and [`documents/vi`](../../documents/vi) — linked from content with relative paths (not owned by this module). The Vite build **bundles** `documents/{en,vi}/**/*.md` so the live UI can open them in-app.
 
 ## Markdown links (GitHub + in-app)
 
 | Target | In `.md` files | In the Vue follow UI |
 |---|---|---|
 | Module `content/` | Relative links between files | In-app navigation (`#day/N`, `#doc/…`) |
-| Shared `documents/` / root `README.md` / `jd1.md` | Relative paths from the file (e.g. `../../../documents/vi/…`) | Opens [GitHub blob on `main`](https://github.com/parker2808/interview-senior-fe/blob/main/documents/) (KB is not bundled) |
+| Shared `documents/{en,vi}/` | Relative paths (e.g. `../../../documents/vi/…`) | **In-app** (bundled via `@kb` at build time) |
+| Root `README.md` / `jd1.md` (not bundled) | Relative paths from the file | Opens [GitHub blob on `main`](https://github.com/parker2808/interview-senior-fe/blob/main/) |
 
 Do not use Agent Store paths (`/cursor/stores/…`) or absolute `/workspace/…` paths in repo files.
 
@@ -30,10 +36,10 @@ Do not use Agent Store paths (`/cursor/stores/…`) or absolute `/workspace/…`
 cd modules/study-plan-30-days/src
 npm install
 npm run dev      # http://localhost:5173
-npm run build    # → dist/ (Vercel output)
+npm run build    # → dist/
 ```
 
-The app loads markdown from sibling `../content` at build time (Vite alias `@plan`).
+The app loads markdown from sibling `../content` (`@plan`) and repo-root `documents/` (`@kb`) at build time.
 
 ## Progress sources
 
@@ -66,37 +72,41 @@ API (after deploy):
 | `GET` | `/api/progress` | Unauthenticated HTTP — Function loads **private** Blob; visitors use **Load cloud** |
 | `PUT` / `POST` | `/api/progress` | `x-edit-token` (session token from unlock) **or** `x-progress-token` === `PROGRESS_WRITE_TOKEN` |
 
-**Parker setup (once):**
+**Parker setup (once / after this change):**
 
-1. Create a Vercel project from this GitHub repo.
-2. Set **Root Directory** to `modules/study-plan-30-days/src` (Build/Output are already in [`src/vercel.json`](./src/vercel.json)).
+1. Vercel project → Settings → General → **Root Directory** = **`.`** (repo root / empty — **not** `modules/study-plan-30-days/src`).
+2. Build & Output are already in root [`vercel.json`](../../vercel.json):
+   - Install: `npm ci --prefix modules/study-plan-30-days/src`
+   - Build: `npm run build --prefix modules/study-plan-30-days/src`
+   - Output: `modules/study-plan-30-days/src/dist`
 3. Storage → create a **private** Blob store → connect it to the project (sets `BLOB_READ_WRITE_TOKEN`; on Vercel, OIDC + `BLOB_STORE_ID` also work).
 4. Project → Settings → Environment Variables:
    - `EDIT_PASSCODE` = your 6-digit code — **never commit it**
    - `PROGRESS_WRITE_TOKEN` = long random secret (optional fallback for publish without passcode session)
    - Optional: `EDIT_TOKEN_SECRET` = HMAC key for edit tokens (derived automatically if unset)
-5. Redeploy so Functions pick up the env vars.
+5. Redeploy so Functions pick up the env vars + new Root Directory.
 6. On the live UI, enter the passcode → **Edit** mode → check off days → **Publish to cloud** (uses the session `editToken`; no need to paste `PROGRESS_WRITE_TOKEN` unless you prefer that path).
 
 **Visitors:** open the site → **Chỉ xem** (or wrong code) → **Load cloud** / share links. No passcode needed to follow progress.
 
 **Free-plan caveat:** Vercel Functions + Blob have Free-tier limits. Fine for light personal study sync — see [Vercel pricing](https://vercel.com/pricing).
 
-Function sources: [`src/api/auth/edit.js`](./src/api/auth/edit.js), [`src/api/progress.js`](./src/api/progress.js). Blob helper: [`src/server/progressStore.js`](./src/server/progressStore.js) — **private** store (`access: 'private'`), reads via authenticated `get()`, pathname `progress.json`. Full write tests need a Vercel deploy; locally run `npm run smoke` in `src/`.
+Function sources (implementation): [`src/api/auth/edit.js`](./src/api/auth/edit.js), [`src/api/progress.js`](./src/api/progress.js). Deploy entrypoints (routes): [`api/auth/edit.js`](../../api/auth/edit.js), [`api/progress.js`](../../api/progress.js). Blob helper: [`src/server/progressStore.js`](./src/server/progressStore.js) — **private** store (`access: 'private'`), reads via authenticated `get()`, pathname `progress.json`. Full write tests need a Vercel deploy; locally run `npm run smoke` in `src/`.
 
 ## Deploy (Vercel)
 
-[`src/vercel.json`](./src/vercel.json) + Vercel project settings:
+Root [`vercel.json`](../../vercel.json) + Vercel project settings:
 
 | Setting | Value |
 |---|---|
-| Root Directory | `modules/study-plan-30-days/src` |
-| Build command | `npm run build` (in `vercel.json`) |
-| Output directory | `dist` (in `vercel.json`) |
+| **Root Directory** | **`.`** (repository root) — **required** so the build can see `documents/` |
+| Install command | `npm ci --prefix modules/study-plan-30-days/src` (in `vercel.json`) |
+| Build command | `npm run build --prefix modules/study-plan-30-days/src` (in `vercel.json`) |
+| Output directory | `modules/study-plan-30-days/src/dist` (in `vercel.json`) |
 | Framework preset | Other (`framework: null`) |
 | Env | `EDIT_PASSCODE`, `BLOB_READ_WRITE_TOKEN` (via **private** Blob store; OIDC OK on Vercel), optional `PROGRESS_WRITE_TOKEN`, optional `EDIT_TOKEN_SECRET` |
 
-Migrated from Netlify (previous host + Blobs) — Netlify config removed from this repo.
+SPA rewrite + `/api/*` routes stay intact (rewrite excludes `api/`).
 
 ## Key content
 

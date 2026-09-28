@@ -28,10 +28,10 @@ export function resolveRelative(fromPath, href) {
 /**
  * @param {string} fromPath plan-relative path of the current markdown file
  * @param {string} href raw href from <a>
- * @param {(path: string) => boolean} isPlanPath whether path loads from @plan
+ * @param {(path: string) => boolean} isBundledPath whether path loads from @plan / @kb
  * @returns {{ kind: 'ignore' } | { kind: 'hash', href: string } | { kind: 'external', url: string } | { kind: 'plan', path: string } | { kind: 'github', url: string }}
  */
-export function classifyMarkdownHref(fromPath, href, isPlanPath) {
+export function classifyMarkdownHref(fromPath, href, isBundledPath) {
   if (!href || href.startsWith('mailto:')) return { kind: 'ignore' }
   if (href.startsWith('http://') || href.startsWith('https://')) {
     return { kind: 'external', url: href }
@@ -47,7 +47,12 @@ export function classifyMarkdownHref(fromPath, href, isPlanPath) {
 
   const resolved = resolveRelative(fromPath, pathPart)
 
-  // Escaped out of content/ into shared KB or repo root
+  // Bundled plan content or shared KB (documents/en|vi) → in-app navigation
+  if (isBundledPath(resolved)) {
+    return { kind: 'plan', path: resolved, hash: hash || undefined }
+  }
+
+  // Repo-root files not in the Vite bundle → GitHub blob on main
   if (
     resolved.startsWith('documents/') ||
     resolved === 'README.md' ||
@@ -57,11 +62,6 @@ export function classifyMarkdownHref(fromPath, href, isPlanPath) {
   ) {
     const url = GITHUB_BLOB_MAIN + resolved + (hash ? `#${hash}` : '')
     return { kind: 'github', url }
-  }
-
-  // Still under plan content
-  if (isPlanPath(resolved)) {
-    return { kind: 'plan', path: resolved }
   }
 
   // Relative path that walked above content via ../../../documents already caught;

@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "module",
+  "description": "Repo-root package marker for Vercel ESM /api adapters. App deps live under modules/study-plan-30-days/src."
+}

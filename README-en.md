@@ -10,33 +10,34 @@ Complete knowledge base for **Senior Frontend Developer** interviews, focusing o
 
 Module: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/)
 
-- **Live / Demo:** deploy on [Vercel](https://vercel.com/) (Parker connects the project) — migrated from Netlify
+- **Live / Demo:** https://parker-interview-senior-fe.vercel.app/ — [Vercel](https://vercel.com/) (Parker connects the project)
 - **Plan & artifacts:** [`content/`](./modules/study-plan-30-days/content/) — start with [daily-index.md](./modules/study-plan-30-days/content/daily-index.md) or [30-day-study-plan.md](./modules/study-plan-30-days/content/30-day-study-plan.md)
 - **Follow / check-off UI:** Vite + Vue 3 in [`modules/study-plan-30-days/src/`](./modules/study-plan-30-days/src/)
-- **Deploy:** [Vercel](https://vercel.com/) — [`vercel.json`](./modules/study-plan-30-days/src/vercel.json). Project: Root Directory = `modules/study-plan-30-days/src`, Build = `npm run build`, Output = `dist`.
+- **Deploy:** [Vercel](https://vercel.com/) — root [`vercel.json`](./vercel.json). **Root Directory = `.` (repo root)** — do **not** use `modules/study-plan-30-days/src`. Build/Output are set in `vercel.json`. Live: https://parker-interview-senior-fe.vercel.app/
 
 ```bash
 cd modules/study-plan-30-days/src
 npm install
 npm run dev      # local: http://localhost:5173
-npm run build    # → dist/ (Vercel output)
+npm run build    # → dist/ (Vercel outputDirectory points here)
 ```
 
-Progress: default **View** mode; Parker unlocks **Edit** with a 6-digit passcode via `POST /api/auth/edit` (set `EDIT_PASSCODE` in Vercel — never commit). Cloud: Serverless + **private** Blob (`GET/PUT /api/progress`; publish with session `editToken` or `PROGRESS_WRITE_TOKEN`; requires `BLOB_READ_WRITE_TOKEN` or OIDC). Share URL / `progress.json` / export-import still available. Visitors: **View only** → **Load cloud**. Details: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). The app loads markdown from `content/` at build time (`@plan` alias). Shared interview topics live under [`documents/`](./documents/) (not owned by the module).
+Progress: default **View** mode; Parker unlocks **Edit** with a 6-digit passcode via `POST /api/auth/edit` (set `EDIT_PASSCODE` in Vercel — never commit). Cloud: Serverless + **private** Blob (`GET/PUT /api/progress`; publish with session `editToken` or `PROGRESS_WRITE_TOKEN`; requires `BLOB_READ_WRITE_TOKEN` or OIDC). Share URL / `progress.json` / export-import still available. Visitors: **View only** → **Load cloud**. Details: [`modules/study-plan-30-days/README.md`](./modules/study-plan-30-days/README.md). The app loads markdown from `content/` (`@plan`) **and** [`documents/en|vi`](./documents/) (`@kb`) at build time — one canonical KB tree, not copied into the module.
 
 ---
 
 ## 📁 Repo layout
 
 ```
-documents/                      # shared interview KB only
+vercel.json                     # Vercel: Root Directory = repo root
+api/                            # thin /api adapters → module handlers
+documents/                      # shared interview KB only (bundled into UI)
   en/ · vi/
 modules/
   study-plan-30-days/           # module: plan + Capstone + Vue UI
     content/
-    src/                        # Vite app + vercel.json + /api serverless
+    src/                        # Vite app + module api/ + server/
 ```
-
 How to add another module: [`modules/README.md`](./modules/README.md).
 
 ---
