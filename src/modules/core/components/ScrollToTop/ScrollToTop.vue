@@ -1,45 +1,67 @@
 <script setup lang="ts">
 const visible = ref(false)
-const mainSelector = '.docs-main'
 
-function scrollParent(): HTMLElement | Window {
-  if (!import.meta.client) return window
-  if (window.matchMedia('(min-width: 1024px)').matches) {
-    const main = document.querySelector(mainSelector) as HTMLElement | null
-    if (main && main.scrollHeight > main.clientHeight + 8) return main
+const DOCS_MAIN = '.docs-main'
+
+function docsMain(): HTMLElement | null {
+  if (!import.meta.client) return null
+  return document.querySelector(DOCS_MAIN) as HTMLElement | null
+}
+
+/** Prefer inner docs scroller on desktop/tablet layout; else window. */
+function scrollTargets(): Array<Window | HTMLElement> {
+  const targets: Array<Window | HTMLElement> = [window]
+  const main = docsMain()
+  if (main) targets.unshift(main)
+  return targets
+}
+
+function maxScrollTop(): { el: Window | HTMLElement; top: number } {
+  let best: { el: Window | HTMLElement; top: number } = { el: window, top: window.scrollY }
+  const main = docsMain()
+  if (main && main.scrollTop >= best.top) {
+    best = { el: main, top: main.scrollTop }
   }
-  return window
+  return best
 }
 
 function onScroll() {
-  const el = scrollParent()
-  const top = el === window ? window.scrollY : (el as HTMLElement).scrollTop
-  visible.value = top > 360
+  visible.value = maxScrollTop().top > 280
 }
 
 function scrollTop() {
-  const el = scrollParent()
+  const { el } = maxScrollTop()
   if (el === window) window.scrollTo({ top: 0, behavior: 'smooth' })
   else (el as HTMLElement).scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-let removeScroll: (() => void) | null = null
+const cleanups: Array<() => void> = []
 
-onMounted(() => {
-  const bind = () => {
-    removeScroll?.()
-    const el = scrollParent()
-    const target: Window | HTMLElement = el
+function bindAll() {
+  while (cleanups.length) cleanups.pop()?.()
+  for (const target of scrollTargets()) {
     const handler = () => onScroll()
     target.addEventListener('scroll', handler, { passive: true })
-    removeScroll = () => target.removeEventListener('scroll', handler)
-    onScroll()
+    cleanups.push(() => target.removeEventListener('scroll', handler))
   }
-  bind()
-  window.addEventListener('resize', bind)
+  onScroll()
+}
+
+onMounted(() => {
+  bindAll()
+  window.addEventListener('resize', bindAll)
+  // Re-bind when navigating between hub/docs/plan (main appears/disappears)
+  let timer: ReturnType<typeof setTimeout> | null = null
+  const mo = new MutationObserver(() => {
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => bindAll(), 80)
+  })
+  mo.observe(document.body, { childList: true, subtree: true })
   onUnmounted(() => {
-    removeScroll?.()
-    window.removeEventListener('resize', bind)
+    mo.disconnect()
+    if (timer) clearTimeout(timer)
+    window.removeEventListener('resize', bindAll)
+    while (cleanups.length) cleanups.pop()?.()
   })
 })
 </script>

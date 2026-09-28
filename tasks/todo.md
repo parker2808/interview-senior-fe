@@ -1,13 +1,15 @@
-# UX: header overlap, dark mode, scroll-top, links, lang scroll
+# Hub grid, docs scroll, search upgrade
 
 ## Plan
-- [x] Fix sticky header covering content after reload/nav (scroll restoration)
-- [x] Dark mode (CSS vars + toggle + persist)
-- [x] Scroll-to-top FAB
-- [x] Fix/enhance markdown hyperlink handling (autolink bare `.md` paths)
-- [x] Keep scroll position when switching language
-- [x] Verify + PR
+- [x] Fix hub tablet grid stretch (`flex-1` / min-heights)
+- [x] Docs shell: true `h-dvh` + `min-h-0` inner scroll; ScrollToTop listens to `.docs-main`
+- [x] Remove Recent from docs sidebar
+- [x] Keyword search over headings (current lang) + jump to hash
+- [ ] Verify + PR
 
 ## Review
-- Playwright: dark toggle OK; day1 checkbox below sticky; md link → `/plan/doc/...`; FAB works; VI→EN keeps mid-page scroll
-- PR: https://github.com/parker2808/interview-senior-fe/pull/13
+- Hub cards: drop `min-h-screen`/`flex-1`/`justify-between` so tablet grid hugs content
+- Docs: `h-dvh` shell + `overflow-y-auto` on `.docs-main` all breakpoints; lock html/body scroll
+- ScrollToTop binds window + `.docs-main`
+- Sidebar Recent removed
+- DocSearch indexes headings via same markdown→HTML pipeline; fuzzy/prefix match; jump to hash

@@ -14,9 +14,8 @@
   "docs": {
     "brand": "Knowledge Base",
     "onThisPage": "On this page",
-    "searchPlaceholder": "Search topics…",
+    "searchPlaceholder": "Search keywords… (e.g. hoisting)",
     "searchHint": "⌘K / Ctrl+K",
-    "recent": "Recent",
     "prev": "Prev",
     "next": "Next",
     "openNav": "Contents",
