@@ -5,7 +5,7 @@
 - [x] Docs shell: true `h-dvh` + `min-h-0` inner scroll; ScrollToTop listens to `.docs-main`
 - [x] Remove Recent from docs sidebar
 - [x] Keyword search over headings (current lang) + jump to hash
-- [ ] Verify + PR
+- [x] Verify + PR
 
 ## Review
 - Hub cards: drop `min-h-screen`/`flex-1`/`justify-between` so tablet grid hugs content
@@ -13,3 +13,4 @@
 - ScrollToTop binds window + `.docs-main`
 - Sidebar Recent removed
 - DocSearch indexes headings via same markdown→HTML pipeline; fuzzy/prefix match; jump to hash
+- Verified: hub card heights ~200–226px; window scrollY=0 on docs; FAB on main scroll; `hois` → Hoisting hash
