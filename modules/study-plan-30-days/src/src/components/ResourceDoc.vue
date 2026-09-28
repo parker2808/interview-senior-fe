@@ -6,12 +6,20 @@ import { classifyMarkdownHref } from '../utils/markdownLinks.js'
 
 const props = defineProps({
   path: { type: String, required: true },
+  backLabel: { type: String, default: '← Quay lại' },
 })
 
 const emit = defineEmits(['back', 'open-doc'])
 
 const loaded = computed(() => loadMarkdown(props.path))
 const html = computed(() => marked.parse(loaded.value.text, { async: false }))
+
+const isKb = computed(() => props.path.startsWith('documents/'))
+const title = computed(() => {
+  if (isKb.value) return props.path.replace(/^documents\//, '')
+  return props.path
+})
+const eyebrow = computed(() => (isKb.value ? 'Knowledge base' : 'Tài liệu'))
 
 function onDocClick(e) {
   const a = e.target.closest('a')
@@ -36,8 +44,11 @@ function onDocClick(e) {
 <template>
   <article class="doc">
     <header>
-      <p class="eyebrow">Tài liệu</p>
-      <h2>{{ path }}</h2>
+      <button type="button" class="doc-back" @click="emit('back')">
+        {{ backLabel }}
+      </button>
+      <p class="eyebrow">{{ eyebrow }}</p>
+      <h2>{{ title }}</h2>
     </header>
     <div class="md" v-html="html" @click="onDocClick"></div>
   </article>
@@ -51,6 +62,23 @@ function onDocClick(e) {
   padding: 1.1rem 1rem 1.4rem;
   box-shadow: var(--shadow);
   animation: fade-up 0.28s var(--ease) both;
+}
+
+.doc-back {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  margin-bottom: 0.65rem;
+  border: 1px solid var(--line);
+  background: #f7faf9;
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .eyebrow {

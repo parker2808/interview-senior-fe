@@ -1,8 +1,12 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { DAYS, RESOURCES, WEEK_LABELS, getDay } from './data/days.js'
 import { loadMarkdown } from './data/markdown.js'
 import { useProgress } from './composables/useProgress.js'
+import {
+  createAppNav,
+  labelForRoute,
+} from './composables/useAppNav.js'
 import DayList from './components/DayList.vue'
 import DayDetail from './components/DayDetail.vue'
 import ResourceDoc from './components/ResourceDoc.vue'
@@ -38,8 +42,11 @@ const {
   openUnlockModal,
 } = useProgress()
 
-const view = ref('list') // list | day | resource
-const selectedDay = ref(null)
+/** @type {import('vue').Ref<import('./composables/useAppNav.js').AppRoute>} */
+const route = ref({ view: 'list' })
+/** @type {import('vue').Ref<import('./composables/useAppNav.js').AppRoute | null>} */
+const backTarget = ref(null)
+
 const weekFilter = ref(0)
 const celebrate = ref(false)
 const navExpanded = ref(true)
@@ -61,6 +68,23 @@ function toggleNav() {
   }
 }
 
+function scrollTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const { navigate, goBack, bind } = createAppNav(route, {
+  isDay: (n) => Boolean(getDay(n)),
+  isDoc: (path) =>
+    loadMarkdown(path).ok || RESOURCES.some((r) => r.path === path),
+  onNavigate: scrollTop,
+})
+
+let unbind = () => {}
+onMounted(() => {
+  unbind = bind(backTarget) || (() => {})
+})
+onUnmounted(() => unbind())
+
 const filteredDays = computed(() =>
   weekFilter.value === 0
     ? DAYS
@@ -69,24 +93,50 @@ const filteredDays = computed(() =>
 
 const weekProgress = computed(() => weekStats(weekFilter.value))
 
-function openDay(day) {
-  selectedDay.value = day
-  view.value = 'day'
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+const view = computed(() => route.value.view)
+const selectedDay = computed(() =>
+  route.value.view === 'day' ? route.value.day : null,
+)
+const resourcePath = computed(() =>
+  route.value.view === 'resource' ? route.value.path : RESOURCES[0].path,
+)
+
+const currentMeta = computed(() =>
+  selectedDay.value ? getDay(selectedDay.value) : null,
+)
+
+const backLabel = computed(() => {
+  if (view.value === 'list') return ''
+  return labelForRoute(backTarget.value)
+})
+
+const showBack = computed(() => view.value !== 'list')
+
+const navTitle = computed(() => {
+  if (view.value === 'resource') {
+    const match = RESOURCES.find((r) => r.path === resourcePath.value)
+    if (match) return match.label
+    if (resourcePath.value.startsWith('documents/')) {
+      return resourcePath.value.replace(/^documents\//, '')
+    }
+    return 'Tài liệu'
+  }
+  if (view.value === 'day' && currentMeta.value) {
+    return `Ngày ${currentMeta.value.day}`
+  }
+  return 'Điều hướng'
+})
+
+function openDay(day, { replace = false } = {}) {
+  navigate({ view: 'day', day }, { replace })
 }
 
-function openResource(path) {
-  selectedDay.value = null
-  view.value = 'resource'
-  resourcePath.value = path
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+function openResource(path, { replace = false } = {}) {
+  navigate({ view: 'resource', path }, { replace })
 }
 
-const resourcePath = ref(RESOURCES[0].path)
-
-function backToList() {
-  view.value = 'list'
-  selectedDay.value = null
+function onBack() {
+  goBack()
 }
 
 function onToggle(day) {
@@ -103,67 +153,13 @@ function onToggle(day) {
 
 function goPrev() {
   if (!selectedDay.value || selectedDay.value <= 1) return
-  openDay(selectedDay.value - 1)
+  openDay(selectedDay.value - 1, { replace: true })
 }
 
 function goNext() {
   if (!selectedDay.value || selectedDay.value >= 30) return
-  openDay(selectedDay.value + 1)
+  openDay(selectedDay.value + 1, { replace: true })
 }
-
-const currentMeta = computed(() =>
-  selectedDay.value ? getDay(selectedDay.value) : null,
-)
-
-const navTitle = computed(() => {
-  if (view.value === 'resource') {
-    const match = RESOURCES.find((r) => r.path === resourcePath.value)
-    return match?.label ?? 'Tài liệu'
-  }
-  if (view.value === 'day' && currentMeta.value) {
-    return `Ngày ${currentMeta.value.day}`
-  }
-  return 'Điều hướng'
-})
-
-const hashSync = () => {
-  const hash = window.location.hash.slice(1)
-  if (!hash) {
-    view.value = 'list'
-    return
-  }
-  const dayMatch = hash.match(/^day\/(\d+)$/)
-  if (dayMatch) {
-    const n = Number(dayMatch[1])
-    if (getDay(n)) {
-      selectedDay.value = n
-      view.value = 'day'
-      return
-    }
-  }
-  if (hash.startsWith('doc/')) {
-    const path = decodeURIComponent(hash.slice(4))
-    if (loadMarkdown(path).ok || RESOURCES.some((r) => r.path === path)) {
-      resourcePath.value = path
-      view.value = 'resource'
-    }
-  }
-}
-
-watch([view, selectedDay, resourcePath], () => {
-  const url = new URL(window.location.href)
-  if (view.value === 'day' && selectedDay.value) {
-    url.hash = `day/${selectedDay.value}`
-  } else if (view.value === 'resource') {
-    url.hash = `doc/${encodeURIComponent(resourcePath.value)}`
-  } else {
-    url.hash = ''
-  }
-  history.replaceState(null, '', url.pathname + url.search + url.hash)
-})
-
-hashSync()
-window.addEventListener('hashchange', hashSync)
 </script>
 
 <template>
@@ -179,12 +175,12 @@ window.addEventListener('hashchange', hashSync)
     <header class="top">
       <div class="brand-row">
         <button
-          v-if="view !== 'list'"
+          v-if="showBack"
           type="button"
           class="back"
-          @click="backToList"
+          @click="onBack"
         >
-          ← Danh sách
+          {{ backLabel }}
         </button>
         <div class="brand">
           <p class="eyebrow">Senior FE · 03/10 → 01/11/2026</p>
@@ -297,7 +293,8 @@ window.addEventListener('hashchange', hashSync)
       <ResourceDoc
         v-else-if="view === 'resource'"
         :path="resourcePath"
-        @back="backToList"
+        :back-label="backLabel"
+        @back="onBack"
         @open-doc="openResource"
       />
     </main>
@@ -342,6 +339,11 @@ window.addEventListener('hashchange', hashSync)
   border-radius: 8px;
   padding: 0.35rem 0.7rem;
   font-size: 0.9rem;
+  font-weight: 600;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .eyebrow {

@@ -4,7 +4,8 @@ const planModules = import.meta.glob('@plan/**/*.md', {
   eager: true,
 })
 
-const kbModules = import.meta.glob('@kb/{en,vi}/**/*.md', {
+// Entire shared KB under documents/ (en/, vi/, README) — single canonical tree
+const kbModules = import.meta.glob('@kb/**/*.md', {
   query: '?raw',
   import: 'default',
   eager: true,
@@ -36,17 +37,24 @@ const byPath = {
 }
 
 export function loadMarkdown(relativePath) {
-  const content = byPath[relativePath]
+  const normalized = String(relativePath || '')
+    .replace(/^\.?\/+/, '')
+    .replace(/^\/+/, '')
+  const content = byPath[normalized]
   if (typeof content !== 'string') {
     return {
       ok: false,
-      path: relativePath,
-      text: `_Không tìm thấy file: \`${relativePath}\`_`,
+      path: normalized,
+      text: `_Không tìm thấy file: \`${normalized}\`_`,
     }
   }
-  return { ok: true, path: relativePath, text: content }
+  return { ok: true, path: normalized, text: content }
 }
 
 export function listLoadedPaths() {
   return Object.keys(byPath).sort()
+}
+
+export function isBundledPath(relativePath) {
+  return loadMarkdown(relativePath).ok
 }

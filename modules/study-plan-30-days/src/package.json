@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "smoke": "node ./scripts/smoke-progress.mjs"
+    "smoke": "node ./scripts/smoke-progress.mjs",
+    "audit:links": "node ./scripts/audit-markdown-links.mjs"
   },
   "dependencies": {
     "@vercel/blob": "^2.8.0",

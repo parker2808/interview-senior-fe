@@ -4,7 +4,8 @@ Vite + Vue 3 app for the **study-plan-30-days** module — browse days and check
 
 - **Live / Demo:** https://parker-interview-senior-fe.vercel.app/
 - App root: `modules/study-plan-30-days/src/`
-- Markdown: sibling `../content/` (Vite `@plan`) + repo `documents/{en,vi}/` (Vite `@kb`, bundled)
+- Markdown: sibling `../content/` (Vite `@plan`) + repo `documents/**` (Vite `@kb`, bundled)
+- In-app Back: `history.pushState` stack — **← Quay lại Day N** returns from KB/doc to the prior plan view (browser back works too)
 - Vercel: **Root Directory = `.` (repo root)** — see [`/vercel.json`](../../../vercel.json). Do not set Root Directory to this `src/` folder.
 
 ## Run
@@ -57,5 +58,6 @@ Opening a share link never silently overwrites local progress.
 - Visitors: **Load cloud** (GET, no token) after choosing view mode
 
 ```bash
-npm run smoke   # codec + edit-auth helpers + payload shape (no Vercel needed)
+npm run smoke        # codec + edit-auth helpers + payload shape (no Vercel needed)
+npm run audit:links  # content/ markdown → disk + in-app classifier
 ```
