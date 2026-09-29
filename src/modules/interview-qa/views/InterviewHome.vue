@@ -75,7 +75,7 @@ const gateOpen = computed(() => !unlocked.value)
 </script>
 
 <template>
-  <div class="mx-auto min-h-screen max-w-hub pb-10">
+  <div class="mx-auto min-h-screen max-w-hub overflow-x-hidden pb-10">
     <InterviewPinGate
       :open="gateOpen"
       :unlocking="unlocking || loadingQuestions"
@@ -179,7 +179,7 @@ const gateOpen = computed(() => !unlocked.value)
       </p>
 
       <div
-        class="mt-4 rounded-2xl border border-line bg-surface-elevated px-3 sm:px-5"
+        class="mt-4 min-w-0 overflow-hidden rounded-2xl border border-line bg-surface-elevated px-3 sm:px-5"
       >
         <QuestionCard
           v-for="item in filtered"

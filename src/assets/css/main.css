@@ -94,7 +94,8 @@ html[data-theme='dark'] {
 
 @layer components {
   .prose-doc {
-    @apply text-[0.95rem] leading-relaxed text-[var(--ink)] sm:text-base;
+    @apply max-w-full min-w-0 break-words text-[0.95rem] leading-relaxed text-[var(--ink)] sm:text-base;
+    overflow-wrap: anywhere;
   }
 
   .prose-doc h1 {
@@ -146,10 +147,16 @@ html[data-theme='dark'] {
   .prose-doc code {
     @apply rounded bg-[var(--accent-soft)] px-1 py-0.5 text-[0.9em] text-[var(--accent-ink)];
     font-family: var(--mono);
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 
   .prose-doc pre code {
     @apply bg-transparent p-0 text-inherit;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
   .prose-doc a {

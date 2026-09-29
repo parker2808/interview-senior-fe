@@ -1,13 +1,16 @@
-# Plan clarity: Theory/Practice + Lab tab + Algo problems
+# Fix Interview Q&A mobile overflow
 
 ## Plan
-- [x] Rewrite plan without v1/v2 — Theory vs Practice every day
-- [x] Full algo problem statements + flow docs
-- [x] Third tab Lab setup + lab-template companion repo
-- [x] Wire DayMeta.lab + DayDetail tabs
-- [ ] Commit + update PR
+- [x] Harden `.prose-doc` so long inline code/paths wrap (root cause)
+- [x] Contain overflow on Interview card / open panel
+- [x] Verify on narrow viewport
+- [x] Commit + PR
+
+## Notes
+Screenshot: `modules/customers/{pages,components,api,model,tests}` teal inline code spills past viewport on mobile.
 
 ## Review
-- Hub = theory/worksheets/đề; Lab repo = code push daily
-- Algo: artifacts/algo/problems/day-NN.md → senior-fe-lab/algo/day-NN
-- Template at modules/study-plan-30-days/lab-template/
+- Root cause: `.prose-doc code` had no wrap; long paths blew out card width
+- Fix: `overflow-wrap: anywhere` on prose + inline code; `min-w-0` / overflow containment on interview list/card
+- Verified at 390px: `scrollWidth === clientWidth`, path wraps (~40px tall), right edge stays inside card
+- PR: https://github.com/parker2808/interview-senior-fe/pull/18
