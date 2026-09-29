@@ -1,0 +1,15 @@
+{
+  "name": "senior-fe-lab",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "algo"
+  ],
+  "scripts": {
+    "algo:test": "npm run test -w algo",
+    "algo:test:day": "npm run test:day -w algo --",
+    "dev:react": "npm run dev -w apps/react",
+    "dev:next": "npm run dev -w apps/next",
+    "dev:vue": "npm run dev -w apps/vue-spike"
+  }
+}

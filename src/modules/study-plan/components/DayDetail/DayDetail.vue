@@ -20,7 +20,8 @@ const emit = defineEmits<{
   'open-docs': [payload: { lang: string; slug: string; hash?: string }]
 }>()
 
-const tab = ref<'starter' | 'worksheet'>('starter')
+type DayTab = 'starter' | 'worksheet' | 'lab'
+const tab = ref<DayTab>('starter')
 
 watch(
   () => props.day.day,
@@ -29,9 +30,11 @@ watch(
   },
 )
 
-const activePath = computed(() =>
-  tab.value === 'starter' ? props.day.starter : props.day.worksheet,
-)
+const activePath = computed(() => {
+  if (tab.value === 'worksheet') return props.day.worksheet
+  if (tab.value === 'lab') return props.day.lab
+  return props.day.starter
+})
 
 const html = computed(() => {
   const raw = marked.parse(loadMarkdown(activePath.value).text, {
@@ -99,24 +102,36 @@ function onDocClick(e: MouseEvent) {
       </label>
     </header>
 
-    <div class="mb-3 flex gap-2" role="tablist">
+    <div class="mb-3 flex flex-wrap gap-2" role="tablist">
       <button
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
         :class="tab === 'starter' ? 'bg-accent text-white' : 'bg-white border border-line'"
+        :aria-selected="tab === 'starter'"
         @click="tab = 'starter'"
       >
-        Starter
+        Hướng dẫn
       </button>
       <button
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
         :class="tab === 'worksheet' ? 'bg-accent text-white' : 'bg-white border border-line'"
+        :aria-selected="tab === 'worksheet'"
         @click="tab = 'worksheet'"
       >
         Worksheet
+      </button>
+      <button
+        type="button"
+        role="tab"
+        class="min-h-10 rounded-lg px-3 text-sm font-semibold"
+        :class="tab === 'lab' ? 'bg-accent text-white' : 'bg-white border border-line'"
+        :aria-selected="tab === 'lab'"
+        @click="tab = 'lab'"
+      >
+        Lab setup
       </button>
     </div>
 

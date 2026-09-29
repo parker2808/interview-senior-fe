@@ -1,28 +1,40 @@
-# Bắt đầu đây — Day 3 (05/10/2026)
+# Day 3 — Hướng dẫn (05/10/2026)
 
-**Timebox:** 90–120 phút · Promises + Forms
+**Chủ đề:** Promises + Forms  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Spec form state machine + viết controlled form React.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-03-form-states.md`](./artifacts/day-03-form-states.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: form Profile (name, email) controlled, validate on blur + submit, disable button khi invalid. So với v-model.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Contains Duplicate — Set.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/javascript.md — Promise/async
 - documents/vi/accessibility.md — forms
 - documents/vi/vue3.md — v-model
 - documents/vi/react.md — controlled inputs
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 3: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 3 khi:** Form React chạy được validation; state machine ghi đủ transitions; Set solution O(n).
+### 1) Capstone / FE craft
+Map field→rule→error UI→disable Save. State machine pristine→dirty→validating→invalid→submitting→success|error.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-03-form-states.md`](./artifacts/day-03-form-states.md)
+
+### 2) React / Next lab
+Lab: form Profile (name, email) controlled, validate on blur + submit, disable button khi invalid. So với v-model.
+
+→ Setup & path: tab **Lab setup** [`lab/day-03-lab.md`](./lab/day-03-lab.md)
+
+### 3) Thuật toán
+**Contains Duplicate** (Easy) · pattern **Set**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-03.md`](./artifacts/algo/problems/day-03.md)  
+→ Code + test trong lab repo: `algo/day-03/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Form React chạy được validation; state machine ghi đủ transitions; Set solution O(n).
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

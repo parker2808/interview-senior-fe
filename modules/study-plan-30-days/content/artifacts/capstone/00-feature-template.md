@@ -1,6 +1,5 @@
 # Capstone 00 — Feature Template (điền)
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** Day 7 · 09/10/2026 · **Timebox:** một phần của 90–120′  
 **Mục tiêu:** Điền Feature Template cho toàn Capstone (Goal → Risks).  
@@ -124,51 +123,28 @@
 
 Quay lại: [Day 7 starter](../../day-07-starter.md) · [Plan](../../30-day-study-plan.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Điền Feature Template Capstone; wireframe text 3 màn List/Detail/Config.
+
+### React / Next (chi tiết Lab tab)
 Lab: Card/Layout components dùng children; so với slots Vue. Không prop-drill title+body nếu dùng composition.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../../algorithms-track.md)
-
-**Bài:** Weekly review: re-solve Two Sum + Parentheses trong 15′ (timed).
+### Algo
+**[Week 1 timed review](../../artifacts/algo/problems/day-07.md)** · Review · Easy
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-07.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Feature Template + wireframes; hiểu composition React (children).
-
+### Checkpoint
 - [ ] Template + wireframes xong; composition lab PR/commit; timed algo OK.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

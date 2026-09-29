@@ -1,26 +1,38 @@
-# Bắt đầu đây — Day 18 (20/10/2026)
+# Day 18 — Hướng dẫn (20/10/2026)
 
-**Timebox:** 90–120 phút · Race conditions + AbortController
+**Chủ đề:** Race conditions + AbortController  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Biết stale response; cleanup useEffect đúng.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-18-debug-stale-ui.md`](./artifacts/day-18-debug-stale-ui.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: search-as-you-type với AbortController; verify request cũ bị abort khi gõ tiếp.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Number of Islands — Graph BFS/DFS trên grid.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/javascript.md — abort/race
 - documents/vi/react.md — useEffect cleanup
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 18: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 18 khi:** Có fix pattern ghi trong Capstone notes; lab abort hoạt động; Islands OK.
+### 1) Capstone / FE craft
+Viết investigation log “search race”: reproduce, root cause, fix (ignore stale / abort / seq id).
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-18-debug-stale-ui.md`](./artifacts/day-18-debug-stale-ui.md)
+
+### 2) React / Next lab
+Lab: search-as-you-type với AbortController; verify request cũ bị abort khi gõ tiếp.
+
+→ Setup & path: tab **Lab setup** [`lab/day-18-lab.md`](./lab/day-18-lab.md)
+
+### 3) Thuật toán
+**Number of Islands** (Medium) · pattern **Grid BFS/DFS**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-18.md`](./artifacts/algo/problems/day-18.md)  
+→ Code + test trong lab repo: `algo/day-18/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Có fix pattern ghi trong Capstone notes; lab abort hoạt động; Islands OK.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

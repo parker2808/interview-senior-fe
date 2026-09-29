@@ -1,27 +1,39 @@
-# Bắt đầu đây — Day 15 (17/10/2026)
+# Day 15 — Hướng dẫn (17/10/2026)
 
-**Timebox:** 90–120 phút · API contract + React Query
+**Chủ đề:** API contract + React Query  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Contract GET/PATCH Capstone; fetch với cache/stale policy.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-15-api-contract.md`](./artifacts/day-15-api-contract.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: dùng @tanstack/react-query (hoặc SWR) load customers mock; loading/error/success states.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Binary Tree Level Order — BFS queue.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/networking.md
 - documents/vi/react.md — data fetching
 - documents/vi/nextjs.md — skim fetch
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 15: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 15 khi:** Contract review được; query lab không race khi remount nhanh; BFS đúng.
+### 1) Capstone / FE craft
+Viết contract endpoints List/Detail/Patch + error shape → capstone/06.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-15-api-contract.md`](./artifacts/day-15-api-contract.md)
+
+### 2) React / Next lab
+Lab: dùng @tanstack/react-query (hoặc SWR) load customers mock; loading/error/success states.
+
+→ Setup & path: tab **Lab setup** [`lab/day-15-lab.md`](./lab/day-15-lab.md)
+
+### 3) Thuật toán
+**Binary Tree Level Order Traversal** (Medium) · pattern **BFS queue**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-15.md`](./artifacts/algo/problems/day-15.md)  
+→ Code + test trong lab repo: `algo/day-15/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Contract review được; query lab không race khi remount nhanh; BFS đúng.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

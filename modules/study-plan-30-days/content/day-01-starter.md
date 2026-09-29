@@ -1,28 +1,40 @@
-# Bắt đầu đây — Day 1 (03/10/2026)
+# Day 1 — Hướng dẫn (03/10/2026)
 
-**Timebox:** 90–120 phút · JS core + User flow
+**Chủ đề:** JS core + User flow  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Nắm closures/scope đủ giải thích phỏng vấn + có user flow Capstone rõ.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-01-user-flow.md`](./artifacts/day-01-user-flow.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Đọc mental model React vs Vue (component = function). Tạo app Vite React+TS skeleton (hoặc note Day 6 setup nếu chưa kịp). Viết 1 component Hello + props.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Two Sum (Easy) — HashMap pattern. Ghi O(n)/O(n).
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/javascript.md — scope, closures, hoisting
 - capstone-brief.md
 - react-next-track.md (overview)
 - algorithms-track.md (overview)
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 1: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 1 khi:** Giải thích closure bằng 1 ví dụ; show flow Capstone; code Two Sum chạy đúng 2 test.
+### 1) Capstone / FE craft
+Vẽ Capstone flow List→Filter→Select→View→Edit→Save; liệt kê persona, happy path, 5 edge cases, AC draft.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-01-user-flow.md`](./artifacts/day-01-user-flow.md)
+
+### 2) React / Next lab
+Đọc mental model React vs Vue (component = function). Tạo app Vite React+TS skeleton (hoặc note Day 6 setup nếu chưa kịp). Viết 1 component Hello + props.
+
+→ Setup & path: tab **Lab setup** [`lab/day-01-lab.md`](./lab/day-01-lab.md)
+
+### 3) Thuật toán
+**Two Sum** (Easy) · pattern **HashMap**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-01.md`](./artifacts/algo/problems/day-01.md)  
+→ Code + test trong lab repo: `algo/day-01/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Giải thích closure bằng 1 ví dụ; show flow Capstone; code Two Sum chạy đúng 2 test.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

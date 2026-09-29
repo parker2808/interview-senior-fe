@@ -1,6 +1,5 @@
 # Day 21 — CI / T-shaped wrap
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 23/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** CI quality gates + 1 ADR ngắn.  
@@ -87,51 +86,28 @@ Plan Day 21: [30-day-study-plan.md — Day 21](../30-day-study-plan.md#day-21--2
 
 Quay lại: [Day 21 starter](../day-21-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+ADR ½ trang: chọn test gate (lint/typecheck/unit) + lý do. Pipeline checklist.
+
+### React / Next (chi tiết Lab tab)
 Lab Next: fetch mock với `revalidate` / `no-store`; ghi bảng “khi nào cache”.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Week 3 review: Islands + Climbing Stairs timed 20′.
+### Algo
+**[Week 3 timed review](../artifacts/algo/problems/day-21.md)** · Review · Mixed
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-21.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** CI gates ngắn; hiểu cache Next fetch.
-
+### Checkpoint
 - [ ] ADR + CI list; cache table ≥4 rows; timed algo xong.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

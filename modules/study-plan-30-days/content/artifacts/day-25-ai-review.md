@@ -1,6 +1,5 @@
 # Day 25 — AI prompt + review
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 27/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Prompt đủ context + audit AI output (không blind merge).  
@@ -94,51 +93,28 @@ Copy → [`capstone/13-ai-evidence.md`](./capstone/13-ai-evidence.md)
 
 Quay lại: [Day 25 starter](../day-25-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Prompt AI implement 1 util; audit bugs/security; ghi evidence → capstone/13.
+
+### React / Next (chi tiết Lab tab)
 Lab Next: form submit qua Server Action (mock), progressive enhancement note.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Weak-topic drill: chọn pattern yếu nhất tuần 1–3, 2 bài.
+### Algo
+**[Weak-topic drill #1](../artifacts/algo/problems/day-25.md)** · Remedial · Mixed
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-25.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Dùng AI có audit trail; thử Server Action Next.
-
+### Checkpoint
 - [ ] AI evidence trước/sau; Server Action chạy; weak drill note.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

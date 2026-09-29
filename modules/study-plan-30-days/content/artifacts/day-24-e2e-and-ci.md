@@ -1,6 +1,5 @@
 # Day 24 — E2E + CI gates
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 26/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** 1 E2E scenario critical + gắn CI gates.  
@@ -86,51 +85,28 @@ Cập nhật [`capstone/12-test-plan.md`](./capstone/12-test-plan.md) với E2E 
 
 Quay lại: [Day 24 starter](../day-24-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Spec Playwright scenario: login(/mock) → filter → open detail → save. Ghi CI gate.
+
+### React / Next (chi tiết Lab tab)
 Lab: chạy E2E trên Next/React lab (1 smoke) HOẶC script manual checklist nếu chưa cài PW.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Live sim 45′: làm 2 bài (1 Easy + 1 Medium từ tuần 1–3) không xem lời giải. Chấm sau.
+### Algo
+**[Live coding simulation](../artifacts/algo/problems/day-24.md)** · Interview sim · Mixed
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-24.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** 1 E2E critical path; 45′ live coding giả lập.
-
+### Checkpoint
 - [ ] E2E spec/CI note; có điểm self-score algo (pass/partial/fail).
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

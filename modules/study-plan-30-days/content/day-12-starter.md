@@ -1,26 +1,38 @@
-# Bắt đầu đây — Day 12 (14/10/2026)
+# Day 12 — Hướng dẫn (14/10/2026)
 
-**Timebox:** 90–120 phút · Responsive trade-offs
+**Chủ đề:** Responsive trade-offs  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Chọn strategy table mobile; CSS layout React lab.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-12-responsive-tradeoffs.md`](./artifacts/day-12-responsive-tradeoffs.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: cùng data, breakpoint chuyển table→cards (CSS hoặc matchMedia hook).
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Reverse Linked List (iterative) — nếu chưa có LL util, implement ListNode.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/css-layout.md
 - capstone/08-responsive-strategy.md
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 12: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 12 khi:** Có quyết định responsive ghi rõ trade-off; lab đổi layout; reverse list OK.
+### 1) Capstone / FE craft
+So sánh scroll-x vs hide cols vs card stack — chọn 1 + anti-patterns → capstone/08.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-12-responsive-tradeoffs.md`](./artifacts/day-12-responsive-tradeoffs.md)
+
+### 2) React / Next lab
+Lab: cùng data, breakpoint chuyển table→cards (CSS hoặc matchMedia hook).
+
+→ Setup & path: tab **Lab setup** [`lab/day-12-lab.md`](./lab/day-12-lab.md)
+
+### 3) Thuật toán
+**Reverse Linked List** (Easy) · pattern **Linked list**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-12.md`](./artifacts/algo/problems/day-12.md)  
+→ Code + test trong lab repo: `algo/day-12/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Có quyết định responsive ghi rõ trade-off; lab đổi layout; reverse list OK.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

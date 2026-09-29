@@ -1,26 +1,38 @@
-# Bắt đầu đây — Day 10 (12/10/2026)
+# Day 10 — Hướng dẫn (12/10/2026)
 
-**Timebox:** 90–120 phút · Data flow + TypeScript
+**Chủ đề:** Data flow + TypeScript  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** DTO + Save flow typed; useReducer form phức tạp.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-10-types-and-flow.md`](./artifacts/day-10-types-and-flow.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: form FieldConfig dùng useReducer (update_field | validate | submit_*).
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Longest Substring Without Repeating — Sliding Window.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/typescript.md — discriminated unions
 - documents/vi/react.md — useReducer
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 10: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 10 khi:** Types compile; reducer transitions rõ; sliding window O(n).
+### 1) Capstone / FE craft
+Định nghĩa types Customer, FieldConfig, ApiError. Sequence Save (optimistic vs pessimistic).
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-10-types-and-flow.md`](./artifacts/day-10-types-and-flow.md)
+
+### 2) React / Next lab
+Lab: form FieldConfig dùng useReducer (update_field | validate | submit_*).
+
+→ Setup & path: tab **Lab setup** [`lab/day-10-lab.md`](./lab/day-10-lab.md)
+
+### 3) Thuật toán
+**Longest Substring Without Repeating Characters** (Medium) · pattern **Sliding window**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-10.md`](./artifacts/algo/problems/day-10.md)  
+→ Code + test trong lab repo: `algo/day-10/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Types compile; reducer transitions rõ; sliding window O(n).
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

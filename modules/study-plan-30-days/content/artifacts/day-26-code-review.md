@@ -1,6 +1,5 @@
 # Day 26 — Code review + AI before/after
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 28/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Checklist review Capstone + before/after AI notes.  
@@ -85,51 +84,28 @@ Copy → [`capstone/14-code-review-checklist.md`](./capstone/14-code-review-chec
 
 Quay lại: [Day 26 starter](../day-26-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Checklist review (correctness, a11y, security, perf, tests) → capstone/14. Self-review lab.
+
+### React / Next (chi tiết Lab tab)
 Lab Next: Customers List page theo AC Day 5 (mock data) — loading/empty/error/table.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Weak-topic drill #2 (15′).
+### Algo
+**[Weak-topic drill #2](../artifacts/algo/problems/day-26.md)** · Remedial · Mixed
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-26.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Review checklist; dựng 1 page Capstone trên Next.
-
+### Checkpoint
 - [ ] Checklist dùng được; List page Next demo; drill xong.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

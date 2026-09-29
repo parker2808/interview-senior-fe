@@ -1,6 +1,5 @@
 # Day 23 — Form/API tests (Vue+React)
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 25/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Có pseudo/code tests cho validation + 409 + 403 trên cả hai mindset.  
@@ -103,51 +102,28 @@ Form/API nào? (Field Config Save gợi ý)
 
 Quay lại: [Day 23 starter](../day-23-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Viết pseudo + real snippet: 1 test Vue + 1 test React cùng behavior “save success toast”.
+
+### React / Next (chi tiết Lab tab)
 Lab: MSW (hoặc mock fetch) cho PATCH success/401; assert UI.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Mock set warm-up: 1 Easy tự chọn (≤10′).
+### Algo
+**[Warm-up Easy (tự chọn)](../artifacts/algo/problems/day-23.md)** · Warm-up · Easy
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-23.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** So sánh VTU vs RTL; mock API (MSW hoặc vi.mock).
-
+### Checkpoint
 - [ ] Bảng so sánh VTU/RTL; React test 401 path; warm-up xong.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

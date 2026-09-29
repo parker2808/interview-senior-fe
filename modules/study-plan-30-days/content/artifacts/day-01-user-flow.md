@@ -1,6 +1,5 @@
 # Day 1 — User flow (Customer Verification)
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 03/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Biến requirement Customer Verification thành user flow + edge cases rõ.  
@@ -146,51 +145,28 @@ Bullet thô — “Given / When / Then” hoặc “User can…”. Day 5 sẽ r
 
 Quay lại: [Day 1 starter](../day-01-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Vẽ Capstone flow List→Filter→Select→View→Edit→Save; liệt kê persona, happy path, 5 edge cases, AC draft.
+
+### React / Next (chi tiết Lab tab)
 Đọc mental model React vs Vue (component = function). Tạo app Vite React+TS skeleton (hoặc note Day 6 setup nếu chưa kịp). Viết 1 component Hello + props.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Two Sum (Easy) — HashMap pattern. Ghi O(n)/O(n).
+### Algo
+**[Two Sum](../artifacts/algo/problems/day-01.md)** · HashMap · Easy
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-01.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Nắm closures/scope đủ giải thích phỏng vấn + có user flow Capstone rõ.
-
+### Checkpoint
 - [ ] Giải thích closure bằng 1 ví dụ; show flow Capstone; code Two Sum chạy đúng 2 test.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

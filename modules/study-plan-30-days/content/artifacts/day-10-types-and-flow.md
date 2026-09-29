@@ -1,6 +1,5 @@
 # Day 10 — Data flow + TypeScript
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 12/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Model type Field Config + diagram Save flow.  
@@ -93,51 +92,28 @@ Race? Unmount khi pending? Double-submit?
 
 Quay lại: [Day 10 starter](../day-10-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Định nghĩa types Customer, FieldConfig, ApiError. Sequence Save (optimistic vs pessimistic).
+
+### React / Next (chi tiết Lab tab)
 Lab: form FieldConfig dùng useReducer (update_field | validate | submit_*).
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Longest Substring Without Repeating — Sliding Window.
+### Algo
+**[Longest Substring Without Repeating Characters](../artifacts/algo/problems/day-10.md)** · Sliding window · Medium
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-10.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** DTO + Save flow typed; useReducer form phức tạp.
-
+### Checkpoint
 - [ ] Types compile; reducer transitions rõ; sliding window O(n).
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

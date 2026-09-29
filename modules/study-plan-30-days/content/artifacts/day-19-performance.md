@@ -1,6 +1,5 @@
 # Day 19 — Performance
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 21/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Phân loại bottleneck + proposal cho list lớn / live search.  
@@ -81,51 +80,28 @@ Copy → [`capstone/11-performance-review.md`](./capstone/11-performance-review.
 
 Quay lại: [Day 19 starter](../day-19-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Perf review: 3 bottleneck + đo giả định + fix → capstone/11.
+
+### React / Next (chi tiết Lab tab)
 Lab: list chậm giả lập; tối ưu bằng memo hóa row; profile bằng React Profiler (DevTools) — ghi trước/sau.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Climbing Stairs — DP intro.
+### Algo
+**[Climbing Stairs](../artifacts/algo/problems/day-19.md)** · DP · Easy
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-19.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Bottleneck list Capstone; biết khi nào memo/useMemo có ích.
-
+### Checkpoint
 - [ ] Perf sheet có số; Profiler screenshot/note; DP stairs O(n).
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

@@ -1,6 +1,5 @@
 # Day 4 — Data-heavy table strategy
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 06/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Quyết định chiến lược table 500 rows (cột, filter, pagination).  
@@ -114,51 +113,28 @@ Chọn **một** primary strategy cho Capstone desktop:
 
 Quay lại: [Day 4 starter](../day-04-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Spec table Capstone: columns, filter, sort, pagination vs virtualize — chọn 1 approach + lý do.
+
+### React / Next (chi tiết Lab tab)
 Lab: render table 50 rows từ mock data typed bằng TS interface; filter client-side; giải thích key ổn định.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Group Anagrams — map sorted key / count key.
+### Algo
+**[Group Anagrams](../artifacts/algo/problems/day-04.md)** · HashMap + sorted key · Medium
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-04.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Type được row model; chiến lược table 500+ rows; list React có key đúng.
-
+### Checkpoint
 - [ ] Có TS type cho CustomerRow; table React filter được; Group Anagrams đúng.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

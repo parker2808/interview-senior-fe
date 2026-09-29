@@ -1,6 +1,5 @@
 # Day 27 — Capstone Vue spike
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 29/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Implement một slice (List+filter hoặc Field Config) bằng Vue/TS — không full app.  
@@ -89,51 +88,28 @@ Khớp docs Day 9 / 15 không? Diff?
 
 Quay lại: [Day 27 starter](../day-27-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Code spike Vue: fetch mock + table + filter + empty/error. README ghi trade-offs.
+
+### React / Next (chi tiết Lab tab)
 Parity note: liệt kê API/composable sẽ map sang hooks ngày mai (bảng Vue→React).
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Off / flashcard Big-O 10′ (giữ sức cho spike).
+### Algo
+**[Big-O flashcards](../artifacts/algo/problems/day-27.md)** · Theory · Easy
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-27.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Ship 1 vertical slice Vue/TS (List hoặc Field Config).
-
+### Checkpoint
 - [ ] Spike Vue chạy được happy path; parity table sẵn cho Day 28.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

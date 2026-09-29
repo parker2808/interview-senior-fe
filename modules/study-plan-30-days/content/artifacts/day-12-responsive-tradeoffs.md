@@ -1,6 +1,5 @@
 # Day 12 — Responsive table trade-offs
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 14/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Chọn strategy mobile cho table 10 cột + ghi trade-off.  
@@ -76,51 +75,28 @@ Copy → [`capstone/08-responsive-strategy.md`](./capstone/08-responsive-strateg
 
 Quay lại: [Day 12 starter](../day-12-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+So sánh scroll-x vs hide cols vs card stack — chọn 1 + anti-patterns → capstone/08.
+
+### React / Next (chi tiết Lab tab)
 Lab: cùng data, breakpoint chuyển table→cards (CSS hoặc matchMedia hook).
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Reverse Linked List (iterative) — nếu chưa có LL util, implement ListNode.
+### Algo
+**[Reverse Linked List](../artifacts/algo/problems/day-12.md)** · Linked list · Easy
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-12.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Chọn strategy table mobile; CSS layout React lab.
-
+### Checkpoint
 - [ ] Có quyết định responsive ghi rõ trade-off; lab đổi layout; reverse list OK.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

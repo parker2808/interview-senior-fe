@@ -1,6 +1,5 @@
 # Day 17 — FE security
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 19/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Security checklist Capstone (XSS, authz, storage).  
@@ -91,51 +90,28 @@ Copy → [`capstone/10-security-checklist.md`](./capstone/10-security-checklist.
 
 Quay lại: [Day 17 starter](../day-17-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Checklist security Capstone (token storage, XSS surfaces, CSRF nếu cookie) → capstone/10.
+
+### React / Next (chi tiết Lab tab)
 Lab: cố ý render HTML string an toàn (escape) vs dangerouslySetInnerHTML — ghi khi nào được phép.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Lowest Common Ancestor of BST (hoặc Binary Tree) — chọn 1.
+### Algo
+**[Lowest Common Ancestor of a BST](../artifacts/algo/problems/day-17.md)** · BST property · Medium
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-17.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** XSS/authz/storage checklist Capstone; biết nguy cơ React XSS.
-
+### Checkpoint
 - [ ] Checklist ≥8 items actionable; XSS note rõ; LCA pass sample.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

@@ -1,6 +1,5 @@
 # Day 18 — Debug stale UI + race
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 20/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Có investigation log cho “Save OK nhưng UI stale” + mitigation race.  
@@ -109,51 +108,28 @@ Pseudo (framework-agnostic):
 
 Quay lại: [Day 18 starter](../day-18-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Viết investigation log “search race”: reproduce, root cause, fix (ignore stale / abort / seq id).
+
+### React / Next (chi tiết Lab tab)
 Lab: search-as-you-type với AbortController; verify request cũ bị abort khi gõ tiếp.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Number of Islands — Graph BFS/DFS trên grid.
+### Algo
+**[Number of Islands](../artifacts/algo/problems/day-18.md)** · Grid BFS/DFS · Medium
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-18.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Biết stale response; cleanup useEffect đúng.
-
+### Checkpoint
 - [ ] Có fix pattern ghi trong Capstone notes; lab abort hoạt động; Islands OK.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

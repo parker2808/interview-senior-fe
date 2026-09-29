@@ -1,6 +1,5 @@
 # Day 8 — Component architecture
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 10/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Component tree Customer List với responsibility rõ từng node.  
@@ -92,51 +91,28 @@ Copy → [`capstone/04-component-architecture.md`](./capstone/04-component-archi
 
 Quay lại: [Day 8 starter](../day-08-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Vẽ component tree List page (smart vs dumb). Ghi props/events từng node → capstone/04.
+
+### React / Next (chi tiết Lab tab)
 Lab: tách CustomerTable (dumb) + CustomersPage (smart fetch mock). Không fetch trong dumb.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Binary Search (sorted array) — iterative.
+### Algo
+**[Binary Search](../artifacts/algo/problems/day-08.md)** · Binary search · Easy
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-08.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Component tree Capstone + trách nhiệm rõ; mirror tree bên React.
-
+### Checkpoint
 - [ ] Tree 2 phía Vue-thinking + React lab khớp trách nhiệm; binary search O(log n).
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

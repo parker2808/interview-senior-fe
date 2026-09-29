@@ -1,26 +1,38 @@
-# Bắt đầu đây — Day 25 (27/10/2026)
+# Day 25 — Hướng dẫn (27/10/2026)
 
-**Timebox:** 90–120 phút · AI-assisted + Server Actions
+**Chủ đề:** AI-assisted + Server Actions  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Dùng AI có audit trail; thử Server Action Next.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-25-ai-review.md`](./artifacts/day-25-ai-review.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab Next: form submit qua Server Action (mock), progressive enhancement note.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Weak-topic drill: chọn pattern yếu nhất tuần 1–3, 2 bài.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/practical-questions.md
 - documents/vi/nextjs.md — server actions
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 25: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 25 khi:** AI evidence trước/sau; Server Action chạy; weak drill note.
+### 1) Capstone / FE craft
+Prompt AI implement 1 util; audit bugs/security; ghi evidence → capstone/13.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-25-ai-review.md`](./artifacts/day-25-ai-review.md)
+
+### 2) React / Next lab
+Lab Next: form submit qua Server Action (mock), progressive enhancement note.
+
+→ Setup & path: tab **Lab setup** [`lab/day-25-lab.md`](./lab/day-25-lab.md)
+
+### 3) Thuật toán
+**Weak-topic drill #1** (Mixed) · pattern **Remedial**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-25.md`](./artifacts/algo/problems/day-25.md)  
+→ Code + test trong lab repo: `algo/day-25/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] AI evidence trước/sau; Server Action chạy; weak drill note.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

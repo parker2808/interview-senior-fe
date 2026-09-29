@@ -1,26 +1,38 @@
-# Bắt đầu đây — Day 16 (18/10/2026)
+# Day 16 — Hướng dẫn (18/10/2026)
 
-**Timebox:** 90–120 phút · Error matrix + Error Boundary
+**Chủ đề:** Error matrix + Error Boundary  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Map status→UX; Error Boundary + 401 refresh flow notes.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-16-error-matrix.md`](./artifacts/day-16-error-matrix.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: ErrorBoundary class (hoặc library) bọc page; fallback UI + retry. Note: boundary không bắt lỗi async event.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Maximum Depth of Binary Tree — DFS.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/practical-questions.md — debug
 - documents/vi/react.md — error boundaries
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 16: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 16 khi:** Matrix đủ 6 status; Boundary demo; DFS depth đúng.
+### 1) Capstone / FE craft
+Matrix 400/401/403/404/422/500 → toast/inline/full-page/retry → capstone/07.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-16-error-matrix.md`](./artifacts/day-16-error-matrix.md)
+
+### 2) React / Next lab
+Lab: ErrorBoundary class (hoặc library) bọc page; fallback UI + retry. Note: boundary không bắt lỗi async event.
+
+→ Setup & path: tab **Lab setup** [`lab/day-16-lab.md`](./lab/day-16-lab.md)
+
+### 3) Thuật toán
+**Maximum Depth of Binary Tree** (Easy) · pattern **DFS recursion**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-16.md`](./artifacts/algo/problems/day-16.md)  
+→ Code + test trong lab repo: `algo/day-16/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Matrix đủ 6 status; Boundary demo; DFS depth đúng.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

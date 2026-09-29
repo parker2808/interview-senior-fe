@@ -1,26 +1,38 @@
-# Bắt đầu đây — Day 22 (24/10/2026)
+# Day 22 — Hướng dẫn (24/10/2026)
 
-**Timebox:** 90–120 phút · Test pyramid + RTL
+**Chủ đề:** Test pyramid + RTL  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Map behaviors→layers; viết test RTL đầu tiên.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-22-test-plan.md`](./artifacts/day-22-test-plan.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: RTL test form validate (userEvent). Không test implementation detail.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   DP review: House Robber (Easy/Medium) hoặc re-do Coin Change.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/testing.md
 - documents/vi/react.md — testing library mindset
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 22: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 22 khi:** Pyramid map; ≥2 RTL tests green; DP OK.
+### 1) Capstone / FE craft
+Test plan Capstone: unit/component/E2E cho Save flow → capstone/12.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-22-test-plan.md`](./artifacts/day-22-test-plan.md)
+
+### 2) React / Next lab
+Lab: RTL test form validate (userEvent). Không test implementation detail.
+
+→ Setup & path: tab **Lab setup** [`lab/day-22-lab.md`](./lab/day-22-lab.md)
+
+### 3) Thuật toán
+**House Robber** (Medium) · pattern **DP 1D**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-22.md`](./artifacts/algo/problems/day-22.md)  
+→ Code + test trong lab repo: `algo/day-22/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Pyramid map; ≥2 RTL tests green; DP OK.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

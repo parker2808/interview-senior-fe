@@ -1,27 +1,39 @@
-# Bắt đầu đây — Day 4 (06/10/2026)
+# Day 4 — Hướng dẫn (06/10/2026)
 
-**Timebox:** 90–120 phút · TS + Data-heavy table
+**Chủ đề:** TS + Data-heavy table  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Type được row model; chiến lược table 500+ rows; list React có key đúng.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-04-data-heavy.md`](./artifacts/day-04-data-heavy.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: render table 50 rows từ mock data typed bằng TS interface; filter client-side; giải thích key ổn định.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Group Anagrams — map sorted key / count key.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/typescript.md — interfaces, unions, generics cơ bản
 - documents/vi/performance.md — list virtualization skim
 - documents/vi/react.md — lists & keys
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 4: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 4 khi:** Có TS type cho CustomerRow; table React filter được; Group Anagrams đúng.
+### 1) Capstone / FE craft
+Spec table Capstone: columns, filter, sort, pagination vs virtualize — chọn 1 approach + lý do.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-04-data-heavy.md`](./artifacts/day-04-data-heavy.md)
+
+### 2) React / Next lab
+Lab: render table 50 rows từ mock data typed bằng TS interface; filter client-side; giải thích key ổn định.
+
+→ Setup & path: tab **Lab setup** [`lab/day-04-lab.md`](./lab/day-04-lab.md)
+
+### 3) Thuật toán
+**Group Anagrams** (Medium) · pattern **HashMap + sorted key**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-04.md`](./artifacts/algo/problems/day-04.md)  
+→ Code + test trong lab repo: `algo/day-04/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Có TS type cho CustomerRow; table React filter được; Group Anagrams đúng.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

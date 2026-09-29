@@ -1,26 +1,38 @@
-# Bắt đầu đây — Day 9 (11/10/2026)
+# Day 9 — Hướng dẫn (11/10/2026)
 
-**Timebox:** 90–120 phút · State ownership
+**Chủ đề:** State ownership  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Map source of truth Capstone; Context vs Zustand quyết định có lý do.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-09-state-map.md`](./artifacts/day-09-state-map.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: lift filter state lên page; thử Context cho theme/auth mock; viết note khi nào cần Zustand.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Two Sum II / Two Pointers trên sorted array.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/state-management.md
 - documents/vi/state-management-react.md
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 9: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 9 khi:** State map không còn “mọi thứ trong page”; Context demo chạy; two pointers đúng.
+### 1) Capstone / FE craft
+Bảng state: data · owner · who writes · who reads · sync server? → capstone/05.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-09-state-map.md`](./artifacts/day-09-state-map.md)
+
+### 2) React / Next lab
+Lab: lift filter state lên page; thử Context cho theme/auth mock; viết note khi nào cần Zustand.
+
+→ Setup & path: tab **Lab setup** [`lab/day-09-lab.md`](./lab/day-09-lab.md)
+
+### 3) Thuật toán
+**Two Sum II (sorted)** (Medium) · pattern **Two pointers**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-09.md`](./artifacts/algo/problems/day-09.md)  
+→ Code + test trong lab repo: `algo/day-09/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] State map không còn “mọi thứ trong page”; Context demo chạy; two pointers đúng.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

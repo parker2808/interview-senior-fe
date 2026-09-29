@@ -1,6 +1,5 @@
 # Day 13 — A11y modal
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 15/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Spec Edit Field modal dùng được hoàn toàn bằng keyboard.  
@@ -92,51 +91,28 @@ Seed → [`capstone/09-a11y-checklist.md`](./capstone/09-a11y-checklist.md)
 
 Quay lại: [Day 13 starter](../day-13-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Checklist: focus trap, Esc, return focus, aria-modal, labelledby → bắt đầu capstone/09.
+
+### React / Next (chi tiết Lab tab)
 Lab: Modal bằng createPortal; Esc đóng; focus nút đầu; restore focus khi unmount.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Linked List Cycle — Floyd.
+### Algo
+**[Linked List Cycle](../artifacts/algo/problems/day-13.md)** · Floyd two pointers · Easy
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-13.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Modal a11y checklist + implement dialog React (focus trap tối thiểu).
-
+### Checkpoint
 - [ ] Modal lab đạt 4/5 a11y checks; checklist Capstone update; Floyd OK.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

@@ -1,6 +1,5 @@
 # Day 15 — API contract
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 17/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Draft contract GET/PATCH fields đủ pagination/filter/sort/nullable.  
@@ -114,51 +113,28 @@ Copy → [`capstone/06-api-contract.md`](./capstone/06-api-contract.md)
 
 Quay lại: [Day 15 starter](../day-15-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Viết contract endpoints List/Detail/Patch + error shape → capstone/06.
+
+### React / Next (chi tiết Lab tab)
 Lab: dùng @tanstack/react-query (hoặc SWR) load customers mock; loading/error/success states.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Binary Tree Level Order — BFS queue.
+### Algo
+**[Binary Tree Level Order Traversal](../artifacts/algo/problems/day-15.md)** · BFS queue · Medium
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-15.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Contract GET/PATCH Capstone; fetch với cache/stale policy.
-
+### Checkpoint
 - [ ] Contract review được; query lab không race khi remount nhanh; BFS đúng.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

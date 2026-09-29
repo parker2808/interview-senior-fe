@@ -1,6 +1,5 @@
 # Day 3 — Form states & validation
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 05/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Spec form Edit Profile với validation + state machine rõ.  
@@ -117,51 +116,28 @@ Bullet rõ ràng (boolean logic OK):
 
 Quay lại: [Day 3 starter](../day-03-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Map field→rule→error UI→disable Save. State machine pristine→dirty→validating→invalid→submitting→success|error.
+
+### React / Next (chi tiết Lab tab)
 Lab: form Profile (name, email) controlled, validate on blur + submit, disable button khi invalid. So với v-model.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Contains Duplicate — Set.
+### Algo
+**[Contains Duplicate](../artifacts/algo/problems/day-03.md)** · Set · Easy
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-03.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Spec form state machine + viết controlled form React.
-
+### Checkpoint
 - [ ] Form React chạy được validation; state machine ghi đủ transitions; Set solution O(n).
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

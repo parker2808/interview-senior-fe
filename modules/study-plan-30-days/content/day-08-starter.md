@@ -1,27 +1,39 @@
-# Bắt đầu đây — Day 8 (10/10/2026)
+# Day 8 — Hướng dẫn (10/10/2026)
 
-**Timebox:** 90–120 phút · Component architecture
+**Chủ đề:** Component architecture  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Component tree Capstone + trách nhiệm rõ; mirror tree bên React.
 
-## Làm theo thứ tự (4 khối)
-
-1. Mở **worksheet** và làm khối FE Craft:  
-   → [`artifacts/day-08-component-tree.md`](./artifacts/day-08-component-tree.md)
-2. **React / Next Lab** (chi tiết trong worksheet + plan):  
-   Lab: tách CustomerTable (dumb) + CustomersPage (smart fetch mock). Không fetch trong dumb.
-3. **Algo Drill** (xem [algorithms-track.md](./algorithms-track.md)):  
-   Binary Search (sorted array) — iterative.
-4. Tự tick **Checkpoint** trong worksheet trước khi mark done.
-
-## Đọc nhanh
+## Lý thuyết — học gì hôm nay
 
 - documents/vi/architecture.md
 - documents/vi/vue3.md — component design
 - documents/vi/react.md — presentational vs container
 
-## Links
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Plan Day 8: [30-day-study-plan.md](./30-day-study-plan.md)
-- React track: [react-next-track.md](./react-next-track.md)
-- Algo track: [algorithms-track.md](./algorithms-track.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 8 khi:** Tree 2 phía Vue-thinking + React lab khớp trách nhiệm; binary search O(log n).
+### 1) Capstone / FE craft
+Vẽ component tree List page (smart vs dumb). Ghi props/events từng node → capstone/04.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-08-component-tree.md`](./artifacts/day-08-component-tree.md)
+
+### 2) React / Next lab
+Lab: tách CustomerTable (dumb) + CustomersPage (smart fetch mock). Không fetch trong dumb.
+
+→ Setup & path: tab **Lab setup** [`lab/day-08-lab.md`](./lab/day-08-lab.md)
+
+### 3) Thuật toán
+**Binary Search** (Easy) · pattern **Binary search**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-08.md`](./artifacts/algo/problems/day-08.md)  
+→ Code + test trong lab repo: `algo/day-08/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Tree 2 phía Vue-thinking + React lab khớp trách nhiệm; binary search O(log n).
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

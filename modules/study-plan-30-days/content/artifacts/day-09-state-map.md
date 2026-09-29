@@ -1,6 +1,5 @@
 # Day 9 — State ownership
 
-> Plan v2 tracks: React/Next lab + Algo drill + Checkpoint nằm ở cuối file.
 
 **Ngày:** 11/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Map state filter page — ai là source of truth.  
@@ -86,51 +85,28 @@ Copy → [`capstone/05-state-ownership.md`](./capstone/05-state-ownership.md)
 
 Quay lại: [Day 9 starter](../day-09-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
 
-<!-- PLAN_V2_TRACKS_START -->
-## Plan v2 — React / Next Lab
 
-**Timebox:** 25–35′ · Chi tiết track: [react-next-track.md](../react-next-track.md)
 
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Bảng state: data · owner · who writes · who reads · sync server? → capstone/05.
+
+### React / Next (chi tiết Lab tab)
 Lab: lift filter state lên page; thử Context cho theme/auth mock; viết note khi nào cần Zustand.
 
-### Lab log
-
-- Repo / path:
-- Commands chạy được:
-- So sánh với Vue (3–5 dòng):
-
-> 
-
----
-
-## Plan v2 — Algo Drill
-
-**Timebox:** 15–25′ · [algorithms-track.md](../algorithms-track.md)
-
-**Bài:** Two Sum II / Two Pointers trên sorted array.
+### Algo
+**[Two Sum II (sorted)](../artifacts/algo/problems/day-09.md)** · Two pointers · Medium
 
 | Mục | Ghi |
 |---|---|
 | Pattern | |
 | Time / Space | |
-| Edge cases đã test | |
-| Lỗi hay gặp / học được | |
+| Edge cases | |
+| Link commit lab | |
 
-Code (dán hoặc link `artifacts/algo/day-09.ts`):
-
-```ts
-// ...
-```
-
----
-
-## Plan v2 — Checkpoint
-
-**Mục tiêu ngày:** Map source of truth Capstone; Context vs Zustand quyết định có lý do.
-
+### Checkpoint
 - [ ] State map không còn “mọi thứ trong page”; Context demo chạy; two pointers đúng.
-- [ ] FE Craft / Capstone phần chính đã ghi vào worksheet
-- [ ] React/Next lab chạy được (hoặc ghi blocker rõ)
-- [ ] Algo có lời giải + Big-O
 
-<!-- PLAN_V2_TRACKS_END -->
+<!-- PLAN_TRACKS_END -->

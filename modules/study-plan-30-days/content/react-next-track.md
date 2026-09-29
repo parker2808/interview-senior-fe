@@ -1,6 +1,8 @@
 # React / Next.js track — dành cho Vue specialist
 
-**Mục tiêu sau 30 ngày:** Đọc và viết được React + Next App Router ở mức senior-interview: giải thích được lifecycle/hooks, state ownership, data fetching, RSC vs client, và code được 1 slice Capstone bằng React/Next.
+**Mục tiêu sau 30 ngày:** Đọc và viết được React + Next App Router ở mức senior-interview: hooks, state ownership, data fetching, RSC vs client, và code được 1 slice Capstone bằng React/Next.
+
+Code practice nằm trong **companion lab repo** — xem [lab-repo.md](./lab-repo.md). Mỗi ngày mở tab **Lab setup** để biết folder/lệnh.
 
 ## Bản đồ tư duy Vue → React
 
