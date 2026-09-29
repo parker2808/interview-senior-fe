@@ -9,6 +9,9 @@
     "planTitle": "Kế hoạch 30 ngày",
     "planDesc": "30 ngày: Capstone + lab React/Next + thuật toán — có checkpoint từng ngày.",
     "planCta": "Mở kế hoạch",
+    "interviewTitle": "Interview Q&A",
+    "interviewDesc": "Câu hỏi phỏng vấn thực tế + câu trả lời mẫu — khoá PIN.",
+    "interviewCta": "Mở Q&A",
     "locale": "Ngôn ngữ"
   },
   "docs": {
@@ -41,6 +44,29 @@
     "openDocs": "Knowledge Base",
     "backPlan": "Quay lại Plan",
     "backDayList": "Danh sách ngày"
+  },
+  "interview": {
+    "title": "Interview Q&A",
+    "eyebrow": "Practical interview bank",
+    "headline": "Trả lời câu hỏi phỏng vấn thực tế",
+    "sub": "Soft · Technical · Situational (EU/APAC). Nội dung khoá bằng mã 6 số (INTERVIEW_PASSCODE hoặc EDIT_PASSCODE).",
+    "backHub": "Hub",
+    "pinTitle": "Nhập mã để xem Interview Q&A",
+    "pinHint": "Dùng mã 6 số trong biến môi trường INTERVIEW_PASSCODE (hoặc EDIT_PASSCODE).",
+    "pinLabel": "Mã 6 số",
+    "unlock": "Mở khoá",
+    "unlocking": "Đang mở…",
+    "lock": "Khoá lại",
+    "searchPlaceholder": "Tìm câu hỏi, tag, nội dung…",
+    "allCategories": "Tất cả",
+    "expandAll": "Mở hết",
+    "collapseAll": "Thu hết",
+    "questionCount": "câu hỏi",
+    "answer": "Câu trả lời",
+    "example": "Ví dụ / story",
+    "followUps": "Follow-up hay gặp",
+    "empty": "Không có câu hỏi khớp.",
+    "loading": "Đang tải…"
   },
   "common": {
     "vi": "VI",

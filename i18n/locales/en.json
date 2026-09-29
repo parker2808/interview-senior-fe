@@ -9,6 +9,9 @@
     "planTitle": "30-day study plan",
     "planDesc": "30 days: Capstone + React/Next labs + algorithms — with daily checkpoints.",
     "planCta": "Open plan",
+    "interviewTitle": "Interview Q&A",
+    "interviewDesc": "Real interview questions with model answers — PIN locked.",
+    "interviewCta": "Open Q&A",
     "locale": "Language"
   },
   "docs": {
@@ -41,6 +44,29 @@
     "openDocs": "Knowledge Base",
     "backPlan": "Back to Plan",
     "backDayList": "Day list"
+  },
+  "interview": {
+    "title": "Interview Q&A",
+    "eyebrow": "Practical interview bank",
+    "headline": "Answer real interview questions",
+    "sub": "Soft · Technical · Situational (EU/APAC). Locked with a 6-digit PIN (INTERVIEW_PASSCODE or EDIT_PASSCODE).",
+    "backHub": "Hub",
+    "pinTitle": "Enter PIN to view Interview Q&A",
+    "pinHint": "Use the 6-digit code from INTERVIEW_PASSCODE (or EDIT_PASSCODE) in env.",
+    "pinLabel": "6-digit code",
+    "unlock": "Unlock",
+    "unlocking": "Unlocking…",
+    "lock": "Lock",
+    "searchPlaceholder": "Search questions, tags, answers…",
+    "allCategories": "All",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "questionCount": "questions",
+    "answer": "Answer",
+    "example": "Example / story",
+    "followUps": "Likely follow-ups",
+    "empty": "No matching questions.",
+    "loading": "Loading…"
   },
   "common": {
     "vi": "VI",

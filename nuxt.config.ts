@@ -32,7 +32,7 @@ export default defineNuxtConfig({
         {
           name: 'description',
           content:
-            'Hub, knowledge base, and 30-day study plan for Senior Frontend interview prep.',
+            'Hub, knowledge base, 30-day plan, and PIN-locked interview Q&A for Senior Frontend prep.',
         },
       ],
     },
