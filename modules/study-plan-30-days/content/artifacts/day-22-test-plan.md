@@ -1,12 +1,13 @@
 # Day 22 — Test pyramid
 
-**Ngày:** 24/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 24/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Map behavior Capstone → đúng tầng test (không E2E hết).  
 **Capstone link:** Deliverable 12 → [`capstone/12-test-plan.md`](./capstone/12-test-plan.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈20′) — testing pyramid (Vue/Vitest/Playwright trong repo); đối chiếu Jest/Vitest + Testing Library.
 2. **Map** behavior → tầng: ~5 unit, 4 component, 2 integration, 1 critical E2E.
@@ -19,7 +20,7 @@
 | Nguồn | Path | Ghi chú |
 |---|---|---|
 | Testing | [`documents/vi/testing.md`](../../../../documents/vi/testing.md) | unit / component / E2E / coverage / TDD |
-| React practice | *(không có path repo)* | cùng pyramid + Testing Library ≈ VTU |
+| React practice | [`documents/vi/react.md`](../../../../documents/vi/react.md) / [`documents/vi/nextjs.md`](../../../../documents/vi/nextjs.md) | cùng pyramid + Testing Library ≈ VTU |
 
 Plan Day 22: [30-day-study-plan.md — Day 22](../30-day-study-plan.md#day-22--24102026--test-pyramid)
 
@@ -88,3 +89,29 @@ E2E hết? Test implementation detail?
 Copy → [`capstone/12-test-plan.md`](./capstone/12-test-plan.md)
 
 Quay lại: [Day 22 starter](../day-22-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Test plan Capstone: unit/component/E2E cho Save flow → capstone/12.
+
+### React / Next (chi tiết Lab tab)
+Lab: RTL test form validate (userEvent). Không test implementation detail.
+
+### Algo
+**[House Robber](../artifacts/algo/problems/day-22.md)** · DP 1D · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Pyramid map; ≥2 RTL tests green; DP OK.
+
+<!-- PLAN_TRACKS_END -->

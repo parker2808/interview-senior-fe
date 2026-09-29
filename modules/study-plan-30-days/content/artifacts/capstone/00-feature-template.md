@@ -1,6 +1,7 @@
 # Capstone 00 — Feature Template (điền)
 
-**Ngày:** Day 7 · 09/10/2026 · **Timebox:** một phần của 60–90′  
+
+**Ngày:** Day 7 · 09/10/2026 · **Timebox:** một phần của 90–120′  
 **Mục tiêu:** Điền Feature Template cho toàn Capstone (Goal → Risks).  
 **Nguồn template:** [`feature-template.md`](../../feature-template.md)  
 **Brief:** [`capstone-brief.md`](../../capstone-brief.md) · JD: [`jd1.md`](../../../../../jd1.md)
@@ -115,9 +116,35 @@
 
 - [ ] Docs-first tuần 1–3
 - [ ] Spike Vue tuần 4 (Day 27)
-- [ ] Spike React tuần 4 (Day 28) — không có file React trong repo drill
+- [ ] Spike React tuần 4 (Day 28) — dùng KB React/Next trong repo drill
 - [ ] Khác:
 
 > *(điền)*
 
 Quay lại: [Day 7 starter](../../day-07-starter.md) · [Plan](../../30-day-study-plan.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Điền Feature Template Capstone; wireframe text 3 màn List/Detail/Config.
+
+### React / Next (chi tiết Lab tab)
+Lab: Card/Layout components dùng children; so với slots Vue. Không prop-drill title+body nếu dùng composition.
+
+### Algo
+**[Week 1 timed review](../../artifacts/algo/problems/day-07.md)** · Review · Easy
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Template + wireframes xong; composition lab PR/commit; timed algo OK.
+
+<!-- PLAN_TRACKS_END -->

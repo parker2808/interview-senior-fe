@@ -1,16 +1,38 @@
-# Bắt đầu đây — Day 12 (14/10/2026)
+# Day 12 — Hướng dẫn (14/10/2026)
 
-**Timebox:** 60–90 phút · Responsive table trade-offs
+**Chủ đề:** Responsive trade-offs  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Chọn strategy table mobile; CSS layout React lab.
 
-## Làm theo thứ tự
+## Lý thuyết — học gì hôm nay
 
-1. Mở [`artifacts/day-12-responsive-tradeoffs.md`](./artifacts/day-12-responsive-tradeoffs.md)
-2. Đọc [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) + notes Day 4
-3. Copy sang [`artifacts/capstone/08-responsive-strategy.md`](./artifacts/capstone/08-responsive-strategy.md)
+- documents/vi/css-layout.md
+- capstone/08-responsive-strategy.md
 
-## Links plan
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 12](./30-day-study-plan.md#day-12--14102026--responsive-table)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 12 khi:** so sánh 3 hướng, chốt desktop/tablet/mobile; copy sang capstone/08.
+### 1) Capstone / FE craft
+So sánh scroll-x vs hide cols vs card stack — chọn 1 + anti-patterns → capstone/08.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-12-responsive-tradeoffs.md`](./artifacts/day-12-responsive-tradeoffs.md)
+
+### 2) React / Next lab
+Lab: cùng data, breakpoint chuyển table→cards (CSS hoặc matchMedia hook).
+
+→ Setup & path: tab **Lab setup** [`lab/day-12-lab.md`](./lab/day-12-lab.md)
+
+### 3) Thuật toán
+**Reverse Linked List** (Easy) · pattern **Linked list**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-12.md`](./artifacts/algo/problems/day-12.md)  
+→ Code + test trong lab repo: `algo/day-12/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Có quyết định responsive ghi rõ trade-off; lab đổi layout; reverse list OK.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

@@ -1,20 +1,40 @@
-# Bắt đầu đây — Day 3 (05/10/2026)
+# Day 3 — Hướng dẫn (05/10/2026)
 
-**Timebox:** 60–90 phút · Forms validation
+**Chủ đề:** Promises + Forms  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Spec form state machine + viết controlled form React.
 
-## Làm theo thứ tự
+## Lý thuyết — học gì hôm nay
 
-1. Mở **worksheet**:
-   → [`artifacts/day-03-form-states.md`](./artifacts/day-03-form-states.md)
-2. Đọc:
-   - [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md)
-   - [`documents/vi/vue3.md`](../../../documents/vi/vue3.md)
-   - React: đối chiếu controlled inputs (không có file React trong repo)
-3. Điền field map + state machine trong worksheet.
+- documents/vi/javascript.md — Promise/async
+- documents/vi/accessibility.md — forms
+- documents/vi/vue3.md — v-model
+- documents/vi/react.md — controlled inputs
 
-## Links plan
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 3](./30-day-study-plan.md#day-3--05102026--forms)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 3 khi:** có field→rule→error map, Save disable rules, và state machine pristine→…→success|error.
+### 1) Capstone / FE craft
+Map field→rule→error UI→disable Save. State machine pristine→dirty→validating→invalid→submitting→success|error.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-03-form-states.md`](./artifacts/day-03-form-states.md)
+
+### 2) React / Next lab
+Lab: form Profile (name, email) controlled, validate on blur + submit, disable button khi invalid. So với v-model.
+
+→ Setup & path: tab **Lab setup** [`lab/day-03-lab.md`](./lab/day-03-lab.md)
+
+### 3) Thuật toán
+**Contains Duplicate** (Easy) · pattern **Set**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-03.md`](./artifacts/algo/problems/day-03.md)  
+→ Code + test trong lab repo: `algo/day-03/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Form React chạy được validation; state machine ghi đủ transitions; Set solution O(n).
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

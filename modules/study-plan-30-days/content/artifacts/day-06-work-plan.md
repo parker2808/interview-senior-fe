@@ -1,12 +1,13 @@
 # Day 6 — Personal work management
 
-**Ngày:** 08/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 08/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Break Capstone thành sub-tasks + estimate theo uncertainty.  
 **Capstone link:** Lịch docs-first → spike tuần 4 (xem preferences).
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15′) — quản lý dự án + communication.
 2. **Break** Capstone ~12 task nhỏ theo chuỗi gợi ý plan.
@@ -88,3 +89,29 @@ Theo preferences: docs tuần 1–3, Vue+React spike tuần 4. Việc nào cố 
 
 
 Quay lại: [Day 6 starter](../day-06-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Work plan: task id, estimate (S/M/L), dependency, risk. Highlight 3 task critical path.
+
+### React / Next (chi tiết Lab tab)
+Chốt setup: fe-react-lab (Vite) + (optional) fe-next-lab. README lab: scripts, folder day-NN convention.
+
+### Algo
+**[Valid Parentheses](../artifacts/algo/problems/day-06.md)** · Stack · Easy
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Work plan ≥10 tasks; repo lab chạy `npm run dev`; Parentheses pass.
+
+<!-- PLAN_TRACKS_END -->

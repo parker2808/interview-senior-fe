@@ -1,12 +1,13 @@
 # Day 21 — CI / T-shaped wrap
 
-**Ngày:** 23/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 23/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** CI quality gates + 1 ADR ngắn.  
 **Capstone link:** Milestone tuần 3: 06, 07, 10, 11.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈20′) — devops high-level; Git flow; ADR; architecture decisions.
 2. **Pipeline:** install → lint → typecheck → unit → build → deploy → smoke.
@@ -84,3 +85,29 @@ Plan Day 21: [30-day-study-plan.md — Day 21](../30-day-study-plan.md#day-21--2
 
 
 Quay lại: [Day 21 starter](../day-21-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+ADR ½ trang: chọn test gate (lint/typecheck/unit) + lý do. Pipeline checklist.
+
+### React / Next (chi tiết Lab tab)
+Lab Next: fetch mock với `revalidate` / `no-store`; ghi bảng “khi nào cache”.
+
+### Algo
+**[Week 3 timed review](../artifacts/algo/problems/day-21.md)** · Review · Mixed
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] ADR + CI list; cache table ≥4 rows; timed algo xong.
+
+<!-- PLAN_TRACKS_END -->

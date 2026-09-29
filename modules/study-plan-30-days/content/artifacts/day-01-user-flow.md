@@ -1,12 +1,13 @@
 # Day 1 — User flow (Customer Verification)
 
-**Ngày:** 03/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 03/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Biến requirement Customer Verification thành user flow + edge cases rõ.  
 **Capstone link:** Deliverable 01 → copy kết quả sang [`capstone/01-user-flow.md`](./capstone/01-user-flow.md) khi xong.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15–20′) — mở các path ở mục Đọc bên dưới.
 2. **Trả lời trước khi “code”** — điền các section bên dưới; để trống chỗ `>` nếu chưa chắc, không bỏ section.
@@ -143,3 +144,29 @@ Bullet thô — “Given / When / Then” hoặc “User can…”. Day 5 sẽ r
 - [ ] Đã copy sang [`capstone/01-user-flow.md`](./capstone/01-user-flow.md)
 
 Quay lại: [Day 1 starter](../day-01-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Vẽ Capstone flow List→Filter→Select→View→Edit→Save; liệt kê persona, happy path, 5 edge cases, AC draft.
+
+### React / Next (chi tiết Lab tab)
+Đọc mental model React vs Vue (component = function). Tạo app Vite React+TS skeleton (hoặc note Day 6 setup nếu chưa kịp). Viết 1 component Hello + props.
+
+### Algo
+**[Two Sum](../artifacts/algo/problems/day-01.md)** · HashMap · Easy
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Giải thích closure bằng 1 ví dụ; show flow Capstone; code Two Sum chạy đúng 2 test.
+
+<!-- PLAN_TRACKS_END -->

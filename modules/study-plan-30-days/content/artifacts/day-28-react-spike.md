@@ -1,12 +1,13 @@
 # Day 28 — Capstone React spike
 
-**Ngày:** 30/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 30/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Cùng slice tương đương bằng React/TS (parallel, không clone full Vue app).  
 **Capstone link:** Code dưới [`capstone/spikes/react/`](./capstone/spikes/react/) — sandbox React ngoài app Nuxt; KB concept trong [`documents/vi/react.md`](../../../../documents/vi/react.md).
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** concept Days 8–10 + 15–16 (agnostic); đối chiếu note Vue spike Day 27 + [`documents/vi/react.md`](../../../../documents/vi/react.md).
 2. **Không invent** `src/**/react*.md` — code practice ngoài app Nuxt; dùng KB React/Next.
@@ -82,3 +83,29 @@ Diff cố ý:
 
 
 Quay lại: [Day 28 starter](../day-28-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Spike React/Next đạt parity feature Vue spike. README: khác biệt DX, bundling, data fetching.
+
+### React / Next (chi tiết Lab tab)
+Đây là ngày React chính: hoàn thiện slice + 1 test RTL smoke + note RSC/client boundary.
+
+### Algo
+**[Cooldown Easy](../artifacts/algo/problems/day-28.md)** · Cooldown · Easy
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Demo 2 spike cạnh nhau; nói được 3 khác biệt Vue vs React/Next.
+
+<!-- PLAN_TRACKS_END -->

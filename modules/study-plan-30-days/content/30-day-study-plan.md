@@ -1,655 +1,800 @@
-# Plan ôn tập 30 ngày — Senior Front-End (Parker)
+# Kế hoạch ôn 30 ngày — Senior Front-End
 
-**Lịch:** Day 1 = **03/10/2026** → Day 30 = **01/11/2026** (DD/MM/YYYY)  
-**Thời lượng:** 60–90 phút/ngày · ~30% đọc / 50% làm / 20% ghi artifact  
-**Mục tiêu:** Senior FE — mindset **framework-agnostic** trước; drill **Vue + React + TypeScript** (repo có Vue/TS/React/Next notes; code React spike practice ngoài app Nuxt)
+**Lịch:** Day 1 = **03/10/2026** → Day 30 = **01/11/2026**  
+**Timebox:** **90–120 phút/ngày**  
+**Mục tiêu:** Vững FE senior (product→ship) · bổ sung **React/Next** (nền Vue) · đủ **coding round Easy→Medium**.
 
-**Repo drill:** [`interview-senior-fe`](https://github.com/parker2808/interview-senior-fe) — ưu tiên files dưới `documents/vi/`, JD map [`jd1.md`](../../../jd1.md)  
-**Artifact nộp:** [`artifacts/`](./artifacts/) (module plan; có thể sync sang Context store)
+### Tài liệu
 
-### Tài liệu kèm (đọc khi ngày bảo “dùng template”)
-
-| Tên | File |
+| | |
 |---|---|
-| [Feature Template](./feature-template.md) | Copy mỗi feature / Capstone |
-| [Definition of Done](./definition-of-done.md) | Checklist trước khi coi xong |
-| [Self-check questions](./self-check-questions.md) | Câu hỏi tự kiểm cuối tuần / mock |
-| [Capstone brief](./capstone-brief.md) | Scope + 15 deliverables |
+| Capstone | [capstone-brief.md](./capstone-brief.md) |
+| React/Next track | [react-next-track.md](./react-next-track.md) |
+| Algorithms (flow + bank đề) | [algorithms-track.md](./algorithms-track.md) |
+| Companion lab repo | [lab-repo.md](./lab-repo.md) |
+| Feature / DoD / Self-check | [feature-template.md](./feature-template.md) · [definition-of-done.md](./definition-of-done.md) · [self-check-questions.md](./self-check-questions.md) |
 
 ---
 
-## Cách đọc plan này
+## Cách dùng 3 tab mỗi ngày
 
-Mỗi ngày làm đúng 4 ô:
-
-1. **Mục tiêu** — 1 câu (xong ngày khi đạt được điều này)
-2. **Đọc** — file repo / brief (path thật, đã verify)
-3. **Làm gì** — bài tập cụ thể (diagram, checklist, hoặc code spike)
-4. **Artifact** — file nộp dưới [`artifacts/`](./artifacts/) (tên đã gợi ý)
-
-**Capstone xuyên tháng**
-
-- Tuần 1–3: **docs-first** (flow → AC → architecture → API → a11y/security/perf checklists) — xem [Capstone brief](./capstone-brief.md)
-- Tuần 4: spike **Vue** và **React/TS** cùng một slice nhỏ (List hoặc Field Config), rồi đóng DoD + mock
-
-**Vue vs React trong plan**
-
-| Khi ngày ghi… | Ý nghĩa |
+| Tab | Nội dung |
 |---|---|
-| **Vue drill** | Đọc [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) / [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) / [`documents/vi/testing.md`](../../../documents/vi/testing.md) rồi áp dụng concept |
-| **React practice** | Repo **không có** file React — luyện từ concept agnostic + **đối chiếu** với note Vue trong repo (hooks ≈ composables, Context/Zustand ≈ Pinia, Testing Library ≈ VTU) |
-| **TS** | [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) dùng chung cho cả hai |
+| **Hướng dẫn** | Lý thuyết cần học + Thực hành cần làm + Checkpoint |
+| **Worksheet** | Artifact Capstone / điền tay (docs) |
+| **Lab setup** | Setup môi trường, path trong lab repo, lệnh dev/test, chỗ push code |
 
-**Không còn tham chiếu “§20 / §21”** — mọi template nằm trong file có tên rõ ở bảng trên.
+**Code không lưu trong hub plan** — push vào companion repo (xem [lab-repo.md](./lab-repo.md)).
+
+### Phân bổ thời gian gợi ý
+
+| Khối | Phút | Thuộc |
+|---|---:|---|
+| Lý thuyết (đọc KB) | 20–25 | Theory |
+| Thực hành Capstone / FE craft | 25–35 | Practice |
+| Thực hành React/Next lab | 25–35 | Practice |
+| Thực hành Algo | 15–25 | Practice |
+| Checkpoint | 5 | — |
+
+**Escape hatch (chỉ còn ~75′):** Craft → React lab → Algo. Không skip React 2 ngày liên tiếp.
 
 ---
 
-## Luồng tháng (nhìn nhanh)
+## Calendar
 
-```mermaid
-flowchart LR
-  W1["Tuần 1<br/>03–09/10<br/>Product + UI"] --> W2["Tuần 2<br/>10–16/10<br/>Arch + A11y"]
-  W2 --> W3["Tuần 3<br/>17–23/10<br/>API + Perf"]
-  W3 --> W4["Tuần 4<br/>24/10–01/11<br/>Test + AI + Capstone"]
-
-  W1 -.-> C1["Capstone: flow + AC + template"]
-  W2 -.-> C2["Capstone: tree + state + responsive + a11y"]
-  W3 -.-> C3["Capstone: API + error + security + perf"]
-  W4 -.-> C4["Capstone: tests + Vue/React spikes + DoD"]
-```
-
-| Tuần | Ngày lịch | Theme | Capstone milestone | Template dùng |
-|---|---|---|---|---|
-| **1** | 03/10 – 09/10 | Product + FE/UI-UX + work loop | Deliverables 01–03 + mở Feature Template | [Feature Template](./feature-template.md) (Day 7) |
-| **2** | 10/10 – 16/10 | Component, state, responsive, a11y | 04, 05, 08, 09 | Self-check Architecture / A11y |
-| **3** | 17/10 – 23/10 | API, security, debug, perf, obs | 06, 07, 10, 11 | — |
-| **4** | 24/10 – 01/11 | Testing, AI, review, **Vue+React spikes**, mock | 12–15 + DoD | [DoD](./definition-of-done.md) + [Self-check](./self-check-questions.md) |
-
-### Calendar 30 ngày
-
-| Day | Ngày | Chủ đề ngắn |
+| Day | Ngày | Chủ đề |
 |---:|---|---|
-| 1 | 03/10/2026 | User flow Product |
-| 2 | 04/10/2026 | UI hierarchy critique |
-| 3 | 05/10/2026 | Forms validation |
-| 4 | 06/10/2026 | Data-heavy table |
-| 5 | 07/10/2026 | Product review + AC |
-| 6 | 08/10/2026 | Work management |
-| 7 | 09/10/2026 | Capstone kickoff + Feature Template |
+| 1 | 03/10/2026 | JS core + User flow |
+| 2 | 04/10/2026 | this/event loop + UI critique |
+| 3 | 05/10/2026 | Promises + Forms |
+| 4 | 06/10/2026 | TS + Data-heavy table |
+| 5 | 07/10/2026 | Product AC + custom hooks |
+| 6 | 08/10/2026 | Work management + React lab setup |
+| 7 | 09/10/2026 | Capstone kickoff + composition |
 | 8 | 10/10/2026 | Component architecture |
 | 9 | 11/10/2026 | State ownership |
 | 10 | 12/10/2026 | Data flow + TypeScript |
-| 11 | 13/10/2026 | Empty/error + design system |
-| 12 | 14/10/2026 | Responsive table trade-offs |
+| 11 | 13/10/2026 | Design system primitives |
+| 12 | 14/10/2026 | Responsive trade-offs |
 | 13 | 15/10/2026 | A11y modal |
-| 14 | 16/10/2026 | Keyboard review |
-| 15 | 17/10/2026 | API contract |
-| 16 | 18/10/2026 | Error matrix + 401 |
+| 14 | 16/10/2026 | Keyboard review + week pack |
+| 15 | 17/10/2026 | API contract + React Query |
+| 16 | 18/10/2026 | Error matrix + Error Boundary |
 | 17 | 19/10/2026 | FE security |
-| 18 | 20/10/2026 | Debug stale UI + race |
-| 19 | 21/10/2026 | Performance |
-| 20 | 22/10/2026 | Bundle + observability |
-| 21 | 23/10/2026 | CI / T-shaped wrap |
-| 22 | 24/10/2026 | Test pyramid |
-| 23 | 25/10/2026 | Form/API tests (Vue+React) |
-| 24 | 26/10/2026 | E2E + CI gates |
-| 25 | 27/10/2026 | AI prompt + review |
-| 26 | 28/10/2026 | Code review + AI before/after |
+| 18 | 20/10/2026 | Race conditions + AbortController |
+| 19 | 21/10/2026 | Performance + React memo |
+| 20 | 22/10/2026 | Observability + Next App Router |
+| 21 | 23/10/2026 | CI + Next data caching |
+| 22 | 24/10/2026 | Test pyramid + RTL |
+| 23 | 25/10/2026 | Form/API tests Vue+React |
+| 24 | 26/10/2026 | E2E + coding interview sim |
+| 25 | 27/10/2026 | AI-assisted + Server Actions |
+| 26 | 28/10/2026 | Code review + Next Capstone page |
 | 27 | 29/10/2026 | Capstone Vue spike |
-| 28 | 30/10/2026 | Capstone React spike |
+| 28 | 30/10/2026 | Capstone React/Next spike |
 | 29 | 31/10/2026 | DoD + delivery notes |
-| 30 | 01/11/2026 | Mock interview |
+| 30 | 01/11/2026 | Full mock interview |
 
 ---
 
-# Tuần 1 — Product + FE/UI (03/10 – 09/10)
+# Tuần 1 · Foundations + Product (03/10/2026 – 09/10/2026)
 
-### Day 1 — 03/10/2026 · User flow
+### Day 1 — 03/10/2026 · JS core + User flow
 
-**Mục tiêu:** Biến requirement Customer Verification thành user flow + edge cases rõ.
+**Mục tiêu ngày:** Nắm closures/scope đủ giải thích phỏng vấn + có user flow Capstone rõ.
 
-**Đọc**
-- [Capstone brief](./capstone-brief.md) (scope)
-- [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) — quy trình / bug vs feature
-- [`README.md`](../../../README.md) — map chủ đề repo
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Trả lời trước khi code: user nào? goal? happy path? permission? API fail thì sao?
-- Vẽ flow: List → Filter → Select → View → Edit → Validate → Save → Feedback → Refresh
+- documents/vi/javascript.md — scope, closures, hoisting
+- capstone-brief.md
+- react-next-track.md (overview)
+- algorithms-track.md (overview)
 
-**Artifact:** [`artifacts/day-01-user-flow.md`](./artifacts/day-01-user-flow.md)  
-*(đồng thời copy sang [`artifacts/capstone/01-user-flow.md`](./artifacts/capstone/01-user-flow.md))*
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Vẽ Capstone flow List→Filter→Select→View→Edit→Save; liệt kê persona, happy path, 5 edge cases, AC draft.
+2. **React / Next lab:** Đọc mental model React vs Vue (component = function). Tạo app Vite React+TS skeleton (hoặc note Day 6 setup nếu chưa kịp). Viết 1 component Hello + props.
+3. **Algo:** [Two Sum](./artifacts/algo/problems/day-01.md) — pattern **HashMap**
 
-### Day 2 — 04/10/2026 · UI hierarchy
+#### Checkpoint
 
-**Mục tiêu:** Chỉ ra được primary action + 10 UX issues trên một admin UI.
+- Giải thích closure bằng 1 ví dụ; show flow Capstone; code Two Sum chạy đúng 2 test.
 
-**Đọc**
-- [`documents/vi/architecture.md`](../../../documents/vi/architecture.md) — Presentational vs Container
-
-**Làm gì**
-- Critique 1 admin page quen: hierarchy, empty/loading/error, wording consistency
-- Sketch redesign 1 màn (ASCII/wireframe text OK)
-
-**Artifact:** [`artifacts/day-02-ui-critique.md`](./artifacts/day-02-ui-critique.md)
+**Files:** [Hướng dẫn](./day-01-starter.md) · [Worksheet](./artifacts/day-01-user-flow.md) · [Lab setup](./lab/day-01-lab.md) · [Đề algo](./artifacts/algo/problems/day-01.md)
 
 ---
 
-### Day 3 — 05/10/2026 · Forms
+### Day 2 — 04/10/2026 · this/event loop + UI critique
 
-**Mục tiêu:** Spec form Edit Profile với validation + state machine rõ.
+**Mục tiêu ngày:** Giải thích this + micro/macrotask; critique UI admin có hierarchy rõ.
 
-**Đọc**
-- [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md) — forms / labels
-- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) — v-model, props *(Vue drill)*
-- React practice: đối chiếu controlled inputs / form state (không có file React trong repo)
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Map field → rule → chỗ hiện error → khi nào disable Save
-- Viết state: `pristine → dirty → validating → invalid → submitting → success|error`
+- documents/vi/javascript.md — this, event loop
+- documents/vi/architecture.md — presentational vs container
+- documents/vi/react.md — rendering mental model
 
-**Artifact:** [`artifacts/day-03-form-states.md`](./artifacts/day-03-form-states.md)
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Critique 1 admin page: primary action, empty/loading/error, 8–10 UX issues + sketch redesign.
+2. **React / Next lab:** Lab: useState counter + conditional render. So sánh với ref Vue. Giải thích re-render khi setState.
+3. **Algo:** [Valid Anagram](./artifacts/algo/problems/day-02.md) — pattern **Frequency map**
 
-### Day 4 — 06/10/2026 · Data-heavy UI
+#### Checkpoint
 
-**Mục tiêu:** Quyết định chiến lược table 500 rows (cột, filter, pagination).
+- Nói được thứ tự log của 1 snippet Promise/setTimeout; có UI critique; Anagram pass.
 
-**Đọc**
-- [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) — Flex/Grid + responsive strategy
-
-**Làm gì**
-- Ưu tiên cột always-visible vs optional; search vs filter; pagination vs infinite scroll
-
-**Artifact:** [`artifacts/day-04-data-heavy.md`](./artifacts/day-04-data-heavy.md)
+**Files:** [Hướng dẫn](./day-02-starter.md) · [Worksheet](./artifacts/day-02-ui-critique.md) · [Lab setup](./lab/day-02-lab.md) · [Đề algo](./artifacts/algo/problems/day-02.md)
 
 ---
 
-### Day 5 — 07/10/2026 · Product review + AC
+### Day 3 — 05/10/2026 · Promises + Forms
 
-**Mục tiêu:** Có Acceptance Criteria v1 cho List + Field Config.
+**Mục tiêu ngày:** Spec form state machine + viết controlled form React.
 
-**Đọc**
-- [Self-check questions](./self-check-questions.md) — phần Product + UI/UX
-- [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) — ước lượng độ phức tạp
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Tự trả lời self-check Product/UI cho flow Day 1
-- Viết 3 metric sau release (vd: time-to-verify, config error rate)
+- documents/vi/javascript.md — Promise/async
+- documents/vi/accessibility.md — forms
+- documents/vi/vue3.md — v-model
+- documents/vi/react.md — controlled inputs
 
-**Artifact:** [`artifacts/day-05-product-review.md`](./artifacts/day-05-product-review.md) + [`artifacts/capstone/03-acceptance-criteria.md`](./artifacts/capstone/03-acceptance-criteria.md)
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Map field→rule→error UI→disable Save. State machine pristine→dirty→validating→invalid→submitting→success|error.
+2. **React / Next lab:** Lab: form Profile (name, email) controlled, validate on blur + submit, disable button khi invalid. So với v-model.
+3. **Algo:** [Contains Duplicate](./artifacts/algo/problems/day-03.md) — pattern **Set**
 
-### Day 6 — 08/10/2026 · Personal work management
+#### Checkpoint
 
-**Mục tiêu:** Break Capstone thành sub-tasks + estimate theo uncertainty.
+- Form React chạy được validation; state machine ghi đủ transitions; Set solution O(n).
 
-**Đọc**
-- [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) — quản lý dự án
-- [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) — mentorship / communication
-
-**Làm gì**
-- Break ~12 task nhỏ (flow → UI → API → list → filter → edit → validation → states → permission → a11y → tests → docs)
-- Daily loop: 1 main outcome / blockers / end-of-day note
-
-**Artifact:** [`artifacts/day-06-work-plan.md`](./artifacts/day-06-work-plan.md)
+**Files:** [Hướng dẫn](./day-03-starter.md) · [Worksheet](./artifacts/day-03-form-states.md) · [Lab setup](./lab/day-03-lab.md) · [Đề algo](./artifacts/algo/problems/day-03.md)
 
 ---
 
-### Day 7 — 09/10/2026 · Capstone kickoff
+### Day 4 — 06/10/2026 · TS + Data-heavy table
 
-**Mục tiêu:** Điền [Feature Template](./feature-template.md) cho toàn Capstone; chốt docs-first + Vue/React spike sau.
+**Mục tiêu ngày:** Type được row model; chiến lược table 500+ rows; list React có key đúng.
 
-**Đọc**
-- [Feature Template](./feature-template.md)
-- [Capstone brief](./capstone-brief.md)
-- [`jd1.md`](../../../jd1.md) — JD ưu tiên (Vue-heavy; vẫn ôn React song song)
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Copy template → điền Goal → Risks cho Capstone
-- Wireframe outline 3 màn: List / Detail / Field Config
-- Ghi assumption stack: docs bắt buộc; code spike Vue **và** React ở tuần 4
+- documents/vi/typescript.md — interfaces, unions, generics cơ bản
+- documents/vi/performance.md — list virtualization skim
+- documents/vi/react.md — lists & keys
 
-**Artifact:** [`artifacts/capstone/00-feature-template.md`](./artifacts/capstone/00-feature-template.md) + [`artifacts/capstone/02-wireframes.md`](./artifacts/capstone/02-wireframes.md)  
-**Milestone:** deliverables 01–03 sẵn sàng review
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Spec table Capstone: columns, filter, sort, pagination vs virtualize — chọn 1 approach + lý do.
+2. **React / Next lab:** Lab: render table 50 rows từ mock data typed bằng TS interface; filter client-side; giải thích key ổn định.
+3. **Algo:** [Group Anagrams](./artifacts/algo/problems/day-04.md) — pattern **HashMap + sorted key**
+
+#### Checkpoint
+
+- Có TS type cho CustomerRow; table React filter được; Group Anagrams đúng.
+
+**Files:** [Hướng dẫn](./day-04-starter.md) · [Worksheet](./artifacts/day-04-data-heavy.md) · [Lab setup](./lab/day-04-lab.md) · [Đề algo](./artifacts/algo/problems/day-04.md)
 
 ---
 
-# Tuần 2 — Architecture, State, Responsive, A11y (10/10 – 16/10)
+### Day 5 — 07/10/2026 · Product AC + custom hooks
+
+**Mục tiêu ngày:** AC v1 Capstone testable; viết custom hook React đầu tiên.
+
+#### Lý thuyết (học gì)
+
+- self-check-questions.md — Product
+- documents/vi/react.md — custom hooks
+- capstone 03-acceptance-criteria.md
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Viết AC Given/When/Then cho List filter + Edit save (ít nhất 6 AC). Copy sang capstone/03.
+2. **React / Next lab:** Lab: extract useLocalStorage(key, initial) hoặc useToggle — dùng trong form Day 3.
+3. **Algo:** [Top K Frequent Elements](./artifacts/algo/problems/day-05.md) — pattern **HashMap + bucket/sort**
+
+#### Checkpoint
+
+- AC đo được (pass/fail); hook tái sử dụng được; Top K chạy sample.
+
+**Files:** [Hướng dẫn](./day-05-starter.md) · [Worksheet](./artifacts/day-05-product-review.md) · [Lab setup](./lab/day-05-lab.md) · [Đề algo](./artifacts/algo/problems/day-05.md)
+
+---
+
+### Day 6 — 08/10/2026 · Work management + React lab setup
+
+**Mục tiêu ngày:** Break Capstone thành ~12 tasks; lab React/Next sẵn sàng xuyên tháng.
+
+#### Lý thuyết (học gì)
+
+- documents/vi/leadership.md — estimate / prioritization skim
+- react-next-track.md — setup
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Work plan: task id, estimate (S/M/L), dependency, risk. Highlight 3 task critical path.
+2. **React / Next lab:** Chốt setup: fe-react-lab (Vite) + (optional) fe-next-lab. README lab: scripts, folder day-NN convention.
+3. **Algo:** [Valid Parentheses](./artifacts/algo/problems/day-06.md) — pattern **Stack**
+
+#### Checkpoint
+
+- Work plan ≥10 tasks; repo lab chạy `npm run dev`; Parentheses pass.
+
+**Files:** [Hướng dẫn](./day-06-starter.md) · [Worksheet](./artifacts/day-06-work-plan.md) · [Lab setup](./lab/day-06-lab.md) · [Đề algo](./artifacts/algo/problems/day-06.md)
+
+---
+
+### Day 7 — 09/10/2026 · Capstone kickoff + composition
+
+**Mục tiêu ngày:** Feature Template + wireframes; hiểu composition React (children).
+
+#### Lý thuyết (học gì)
+
+- feature-template.md
+- capstone/00 + 02
+- documents/vi/react.md — composition / children
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Điền Feature Template Capstone; wireframe text 3 màn List/Detail/Config.
+2. **React / Next lab:** Lab: Card/Layout components dùng children; so với slots Vue. Không prop-drill title+body nếu dùng composition.
+3. **Algo:** [Week 1 timed review](./artifacts/algo/problems/day-07.md) — pattern **Review**
+
+#### Checkpoint
+
+- Template + wireframes xong; composition lab PR/commit; timed algo OK.
+
+**Files:** [Hướng dẫn](./day-07-starter.md) · [Worksheet](./artifacts/capstone/00-feature-template.md) · [Lab setup](./lab/day-07-lab.md) · [Đề algo](./artifacts/algo/problems/day-07.md)
+
+---
+
+# Tuần 2 · Architecture + React (10/10/2026 – 16/10/2026)
 
 ### Day 8 — 10/10/2026 · Component architecture
 
-**Mục tiêu:** Component tree Customer List với responsibility rõ từng node.
+**Mục tiêu ngày:** Component tree Capstone + trách nhiệm rõ; mirror tree bên React.
 
-**Đọc**
-- [`documents/vi/architecture.md`](../../../documents/vi/architecture.md) — patterns, SOLID
-- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) — Composition API, provide/inject *(Vue drill)*
-- React practice: đối chiếu hooks / compound components / container vs presentational
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Chia: `Search + FilterBar + Table + Pagination + DetailDrawer`
-- Bảng: component | trách nhiệm | không làm gì
+- documents/vi/architecture.md
+- documents/vi/vue3.md — component design
+- documents/vi/react.md — presentational vs container
 
-**Artifact:** [`artifacts/day-08-component-tree.md`](./artifacts/day-08-component-tree.md) → copy `capstone/04-component-architecture.md`
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Vẽ component tree List page (smart vs dumb). Ghi props/events từng node → capstone/04.
+2. **React / Next lab:** Lab: tách CustomerTable (dumb) + CustomersPage (smart fetch mock). Không fetch trong dumb.
+3. **Algo:** [Binary Search](./artifacts/algo/problems/day-08.md) — pattern **Binary search**
+
+#### Checkpoint
+
+- Tree 2 phía Vue-thinking + React lab khớp trách nhiệm; binary search O(log n).
+
+**Files:** [Hướng dẫn](./day-08-starter.md) · [Worksheet](./artifacts/day-08-component-tree.md) · [Lab setup](./lab/day-08-lab.md) · [Đề algo](./artifacts/algo/problems/day-08.md)
 
 ---
 
 ### Day 9 — 11/10/2026 · State ownership
 
-**Mục tiêu:** Map state filter page — ai là source of truth.
+**Mục tiêu ngày:** Map source of truth Capstone; Context vs Zustand quyết định có lý do.
 
-**Đọc**
-- [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) — flow, global vs local, Pinia/Vuex *(Vue drill)*
-- React practice: local state vs URL vs server cache (React Query/SWR mindset) vs Context — **đối chiếu** note Vue, không invent path repo
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Classify: query string, selected row, modal open, API cache, form draft
+- documents/vi/state-management.md
+- documents/vi/state-management-react.md
 
-**Artifact:** [`artifacts/day-09-state-map.md`](./artifacts/day-09-state-map.md) → `capstone/05-state-ownership.md`
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Bảng state: data · owner · who writes · who reads · sync server? → capstone/05.
+2. **React / Next lab:** Lab: lift filter state lên page; thử Context cho theme/auth mock; viết note khi nào cần Zustand.
+3. **Algo:** [Two Sum II (sorted)](./artifacts/algo/problems/day-09.md) — pattern **Two pointers**
+
+#### Checkpoint
+
+- State map không còn “mọi thứ trong page”; Context demo chạy; two pointers đúng.
+
+**Files:** [Hướng dẫn](./day-09-starter.md) · [Worksheet](./artifacts/day-09-state-map.md) · [Lab setup](./lab/day-09-lab.md) · [Đề algo](./artifacts/algo/problems/day-09.md)
 
 ---
 
 ### Day 10 — 12/10/2026 · Data flow + TypeScript
 
-**Mục tiêu:** Model type Field Config + diagram Save flow.
+**Mục tiêu ngày:** DTO + Save flow typed; useReducer form phức tạp.
 
-**Đọc**
-- [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) — interface/type, generics, narrowing, utilities
-- [`documents/vi/javascript.md`](../../../documents/vi/javascript.md) — Promise/async, event loop
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- DTO vs UI model; `VerificationStatus` union; tránh `any`
-- Vẽ: UI event → state → request → response → cache → render
+- documents/vi/typescript.md — discriminated unions
+- documents/vi/react.md — useReducer
 
-**Artifact:** [`artifacts/day-10-types-and-flow.md`](./artifacts/day-10-types-and-flow.md)
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Định nghĩa types Customer, FieldConfig, ApiError. Sequence Save (optimistic vs pessimistic).
+2. **React / Next lab:** Lab: form FieldConfig dùng useReducer (update_field | validate | submit_*).
+3. **Algo:** [Longest Substring Without Repeating Characters](./artifacts/algo/problems/day-10.md) — pattern **Sliding window**
 
-### Day 11 — 13/10/2026 · Empty/error UI + design system
+#### Checkpoint
 
-**Mục tiêu:** Chuẩn hóa 4 primitives dùng lại cho Capstone.
+- Types compile; reducer transitions rõ; sliding window O(n).
 
-**Đọc**
-- [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) — component library
-- [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) — error boundaries
-
-**Làm gì**
-- Spec API props: `Button`, `FormField`, `EmptyState`, `ErrorState`
-- Note refactor 1 “god component”
-
-**Artifact:** [`artifacts/day-11-design-primitives.md`](./artifacts/day-11-design-primitives.md)
+**Files:** [Hướng dẫn](./day-10-starter.md) · [Worksheet](./artifacts/day-10-types-and-flow.md) · [Lab setup](./lab/day-10-lab.md) · [Đề algo](./artifacts/algo/problems/day-10.md)
 
 ---
 
-### Day 12 — 14/10/2026 · Responsive table
+### Day 11 — 13/10/2026 · Design system primitives
 
-**Mục tiêu:** Chọn strategy mobile cho table 10 cột + ghi trade-off.
+**Mục tiêu ngày:** Spec Button/FormField/Empty/Error; compound component pattern React.
 
-**Đọc**
-- [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) — responsive strategy
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- So 3 hướng: horizontal scroll / hide columns / card stack
-- Chốt Capstone: desktop full / tablet / mobile (không ép parity)
+- documents/vi/css-layout.md — skim tokens
+- documents/vi/react.md — compound components
 
-**Artifact:** [`artifacts/day-12-responsive-tradeoffs.md`](./artifacts/day-12-responsive-tradeoffs.md) → `capstone/08-responsive-strategy.md`
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Spec 4 primitives: API props, variants, a11y notes, empty/error copy.
+2. **React / Next lab:** Lab: <Tabs> compound (Tabs, TabsList, TabsTrigger, TabsContent) bằng Context nội bộ.
+3. **Algo:** [Min Stack](./artifacts/algo/problems/day-11.md) — pattern **Stack design**
 
-### Day 13 — 15/10/2026 · Modal accessibility
+#### Checkpoint
 
-**Mục tiêu:** Spec Edit Field modal dùng được hoàn toàn bằng keyboard.
+- Spec đủ để handoff; Tabs lab keyboard-ish; Min Stack đúng.
 
-**Đọc**
-- [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md) — ARIA, keyboard, semantic, WCAG
-- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) — Teleport *(Vue drill)*
-- React practice: portal + focus trap pattern (đối chiếu concept)
-
-**Làm gì**
-- Focus trap, Esc, return focus, `aria-modal`, labelledby, announce error
-
-**Artifact:** [`artifacts/day-13-modal-a11y.md`](./artifacts/day-13-modal-a11y.md) → bắt đầu `capstone/09-a11y-checklist.md`
+**Files:** [Hướng dẫn](./day-11-starter.md) · [Worksheet](./artifacts/day-11-design-primitives.md) · [Lab setup](./lab/day-11-lab.md) · [Đề algo](./artifacts/algo/problems/day-11.md)
 
 ---
 
-### Day 14 — 16/10/2026 · Keyboard review (wrap tuần 2)
+### Day 12 — 14/10/2026 · Responsive trade-offs
 
-**Mục tiêu:** Có kết quả keyboard-test + pack artifacts tuần 2.
+**Mục tiêu ngày:** Chọn strategy table mobile; CSS layout React lab.
 
-**Đọc**
-- [Self-check questions](./self-check-questions.md) — Responsive + Accessibility
-- Review notes Days 8–13
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Đi keyboard path trên spec/prototype; ghi fail
-- Gom: tree, state map, responsive, a11y
+- documents/vi/css-layout.md
+- capstone/08-responsive-strategy.md
 
-**Artifact:** [`artifacts/day-14-keyboard-result.md`](./artifacts/day-14-keyboard-result.md)  
-**Milestone:** 04, 05, 08, 09 khá hoàn chỉnh
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** So sánh scroll-x vs hide cols vs card stack — chọn 1 + anti-patterns → capstone/08.
+2. **React / Next lab:** Lab: cùng data, breakpoint chuyển table→cards (CSS hoặc matchMedia hook).
+3. **Algo:** [Reverse Linked List](./artifacts/algo/problems/day-12.md) — pattern **Linked list**
 
-# Tuần 3 — API, Security, Debug, Performance (17/10 – 23/10)
+#### Checkpoint
 
-### Day 15 — 17/10/2026 · API contract
+- Có quyết định responsive ghi rõ trade-off; lab đổi layout; reverse list OK.
 
-**Mục tiêu:** Draft contract `GET/PATCH fields` đủ pagination/filter/sort/nullable.
-
-**Đọc**
-- [`documents/vi/networking.md`](../../../documents/vi/networking.md) — REST vs WebSocket
-- [`documents/vi/javascript.md`](../../../documents/vi/javascript.md) — async
-- [`documents/vi/nuxt.md`](../../../documents/vi/nuxt.md) — CSR/SSR/SSG *(high-level T-shaped; không bắt buộc Nuxt)*
-
-**Làm gì**
-- Viết paths, query, body, response, conflict (409)
-
-**Artifact:** [`artifacts/day-15-api-contract.md`](./artifacts/day-15-api-contract.md) → `capstone/06-api-contract.md`
+**Files:** [Hướng dẫn](./day-12-starter.md) · [Worksheet](./artifacts/day-12-responsive-tradeoffs.md) · [Lab setup](./lab/day-12-lab.md) · [Đề algo](./artifacts/algo/problems/day-12.md)
 
 ---
 
-### Day 16 — 18/10/2026 · Error handling matrix
+### Day 13 — 15/10/2026 · A11y modal
 
-**Mục tiêu:** Mỗi status code có UX + retry + log rõ.
+**Mục tiêu ngày:** Modal a11y checklist + implement dialog React (focus trap tối thiểu).
 
-**Đọc**
-- [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) — handling 401
-- [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) — Sentry / logging
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Matrix: 400, 401, 403, 404, 409, 422, 429, 500, timeout, offline  
-- Phân biệt field error vs toast vs full-page
+- documents/vi/accessibility.md
+- documents/vi/react.md — portals
 
-**Artifact:** [`artifacts/day-16-error-matrix.md`](./artifacts/day-16-error-matrix.md) → `capstone/07-error-matrix.md`
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Checklist: focus trap, Esc, return focus, aria-modal, labelledby → bắt đầu capstone/09.
+2. **React / Next lab:** Lab: Modal bằng createPortal; Esc đóng; focus nút đầu; restore focus khi unmount.
+3. **Algo:** [Linked List Cycle](./artifacts/algo/problems/day-13.md) — pattern **Floyd two pointers**
+
+#### Checkpoint
+
+- Modal lab đạt 4/5 a11y checks; checklist Capstone update; Floyd OK.
+
+**Files:** [Hướng dẫn](./day-13-starter.md) · [Worksheet](./artifacts/day-13-modal-a11y.md) · [Lab setup](./lab/day-13-lab.md) · [Đề algo](./artifacts/algo/problems/day-13.md)
+
+---
+
+### Day 14 — 16/10/2026 · Keyboard review + week pack
+
+**Mục tiêu ngày:** Keyboard test Capstone screens; đóng gói artifact tuần 2; React a11y pass.
+
+#### Lý thuyết (học gì)
+
+- documents/vi/accessibility.md — keyboard
+- self-check Architecture/A11y
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Test Tab/Shift+Tab/Enter/Esc trên flow chính; ghi bug list; pack artifacts 04/05/08/09.
+2. **React / Next lab:** Lab: audit Day 13 Modal + form Day 3 bằng keyboard only; sửa 2 issue.
+3. **Algo:** [Week 2 timed review](./artifacts/algo/problems/day-14.md) — pattern **Review**
+
+#### Checkpoint
+
+- Có keyboard result sheet; ≥1 bug fixed trong lab; timed algo xong.
+
+**Files:** [Hướng dẫn](./day-14-starter.md) · [Worksheet](./artifacts/day-14-keyboard-result.md) · [Lab setup](./lab/day-14-lab.md) · [Đề algo](./artifacts/algo/problems/day-14.md)
+
+---
+
+# Tuần 3 · Quality + Next.js (17/10/2026 – 23/10/2026)
+
+### Day 15 — 17/10/2026 · API contract + React Query
+
+**Mục tiêu ngày:** Contract GET/PATCH Capstone; fetch với cache/stale policy.
+
+#### Lý thuyết (học gì)
+
+- documents/vi/networking.md
+- documents/vi/react.md — data fetching
+- documents/vi/nextjs.md — skim fetch
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Viết contract endpoints List/Detail/Patch + error shape → capstone/06.
+2. **React / Next lab:** Lab: dùng @tanstack/react-query (hoặc SWR) load customers mock; loading/error/success states.
+3. **Algo:** [Binary Tree Level Order Traversal](./artifacts/algo/problems/day-15.md) — pattern **BFS queue**
+
+#### Checkpoint
+
+- Contract review được; query lab không race khi remount nhanh; BFS đúng.
+
+**Files:** [Hướng dẫn](./day-15-starter.md) · [Worksheet](./artifacts/day-15-api-contract.md) · [Lab setup](./lab/day-15-lab.md) · [Đề algo](./artifacts/algo/problems/day-15.md)
+
+---
+
+### Day 16 — 18/10/2026 · Error matrix + Error Boundary
+
+**Mục tiêu ngày:** Map status→UX; Error Boundary + 401 refresh flow notes.
+
+#### Lý thuyết (học gì)
+
+- documents/vi/practical-questions.md — debug
+- documents/vi/react.md — error boundaries
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Matrix 400/401/403/404/422/500 → toast/inline/full-page/retry → capstone/07.
+2. **React / Next lab:** Lab: ErrorBoundary class (hoặc library) bọc page; fallback UI + retry. Note: boundary không bắt lỗi async event.
+3. **Algo:** [Maximum Depth of Binary Tree](./artifacts/algo/problems/day-16.md) — pattern **DFS recursion**
+
+#### Checkpoint
+
+- Matrix đủ 6 status; Boundary demo; DFS depth đúng.
+
+**Files:** [Hướng dẫn](./day-16-starter.md) · [Worksheet](./artifacts/day-16-error-matrix.md) · [Lab setup](./lab/day-16-lab.md) · [Đề algo](./artifacts/algo/problems/day-16.md)
 
 ---
 
 ### Day 17 — 19/10/2026 · FE security
 
-**Mục tiêu:** Security checklist Capstone (XSS, authz, storage).
+**Mục tiêu ngày:** XSS/authz/storage checklist Capstone; biết nguy cơ React XSS.
 
-**Đọc**
-- [`documents/vi/security.md`](../../../documents/vi/security.md) — XSS, CSRF, auth, validation, CORS
-- [`documents/vi/performance.md`](../../../documents/vi/performance.md) — localStorage vs session vs cookie
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Threat model: HTML render, Viewer/Editor/Admin, “permission chỉ check UI?”
+- documents/vi/security.md
+- documents/vi/react.md — dangerouslySetInnerHTML
 
-**Artifact:** [`artifacts/day-17-security.md`](./artifacts/day-17-security.md) → `capstone/10-security-checklist.md`
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Checklist security Capstone (token storage, XSS surfaces, CSRF nếu cookie) → capstone/10.
+2. **React / Next lab:** Lab: cố ý render HTML string an toàn (escape) vs dangerouslySetInnerHTML — ghi khi nào được phép.
+3. **Algo:** [Lowest Common Ancestor of a BST](./artifacts/algo/problems/day-17.md) — pattern **BST property**
 
-### Day 18 — 20/10/2026 · Debug stale UI + search race
+#### Checkpoint
 
-**Mục tiêu:** Có investigation log cho “Save OK nhưng UI stale” + mitigation race.
+- Checklist ≥8 items actionable; XSS note rõ; LCA pass sample.
 
-**Đọc**
-- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md) — debug component bugs *(Vue drill)*
-- [`documents/vi/javascript.md`](../../../documents/vi/javascript.md) — event loop
-- [`documents/vi/performance.md`](../../../documents/vi/performance.md) — debounce/throttle
-- React practice: stale closure / abort controller / query key invalidation — đối chiếu
-
-**Làm gì**
-- Framework debug: reproduce → hypothesis → evidence → fix options (cache, optimistic, refetch)
-- Case search race: request cũ ghi đè request mới
-
-**Artifact:** [`artifacts/day-18-debug-stale-ui.md`](./artifacts/day-18-debug-stale-ui.md)
+**Files:** [Hướng dẫn](./day-17-starter.md) · [Worksheet](./artifacts/day-17-security.md) · [Lab setup](./lab/day-17-lab.md) · [Đề algo](./artifacts/algo/problems/day-17.md)
 
 ---
 
-### Day 19 — 21/10/2026 · Performance
+### Day 18 — 20/10/2026 · Race conditions + AbortController
 
-**Mục tiêu:** Phân loại bottleneck + proposal cho list lớn / live search.
+**Mục tiêu ngày:** Biết stale response; cleanup useEffect đúng.
 
-**Đọc**
-- [`documents/vi/performance.md`](../../../documents/vi/performance.md) — optimization, case studies, code splitting
-- [`documents/vi/web-apis.md`](../../../documents/vi/web-apis.md) — Intersection Observer, Workers
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Render vs network vs bundle; virtualize? debounce? cancel in-flight?
+- documents/vi/javascript.md — abort/race
+- documents/vi/react.md — useEffect cleanup
 
-**Artifact:** [`artifacts/day-19-performance.md`](./artifacts/day-19-performance.md) → `capstone/11-performance-review.md`
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Viết investigation log “search race”: reproduce, root cause, fix (ignore stale / abort / seq id).
+2. **React / Next lab:** Lab: search-as-you-type với AbortController; verify request cũ bị abort khi gõ tiếp.
+3. **Algo:** [Number of Islands](./artifacts/algo/problems/day-18.md) — pattern **Grid BFS/DFS**
 
-### Day 20 — 22/10/2026 · Bundle + observability
+#### Checkpoint
 
-**Mục tiêu:** Observability plan + lazy-load candidates.
+- Có fix pattern ghi trong Capstone notes; lab abort hoạt động; Islands OK.
 
-**Đọc**
-- [`documents/vi/build-tools.md`](../../../documents/vi/build-tools.md) — Vite vs Webpack
-- [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) — performance monitoring
-- [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) — caching
-
-**Làm gì**
-- Plan: error log, request ID, breadcrumb, Core Web Vitals
-- List route/component lazy cho Capstone
-
-**Artifact:** [`artifacts/day-20-observability.md`](./artifacts/day-20-observability.md)
+**Files:** [Hướng dẫn](./day-18-starter.md) · [Worksheet](./artifacts/day-18-debug-stale-ui.md) · [Lab setup](./lab/day-18-lab.md) · [Đề algo](./artifacts/algo/problems/day-18.md)
 
 ---
 
-### Day 21 — 23/10/2026 · CI + T-shaped wrap
+### Day 19 — 21/10/2026 · Performance + React memo
 
-**Mục tiêu:** CI quality gates + 1 ADR ngắn.
+**Mục tiêu ngày:** Bottleneck list Capstone; biết khi nào memo/useMemo có ích.
 
-**Đọc**
-- [`documents/vi/devops.md`](../../../documents/vi/devops.md) — GitOps high-level
-- [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) — Git flow
-- [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) — ADR template
-- [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) — architecture decisions
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Pipeline: install → lint → typecheck → unit → build → deploy → smoke
-- ADR: “URL state cho filters” hoặc “global store vs local cho Field Config” (**agnostic** — áp dụng được Vue và React)
+- documents/vi/performance.md
+- documents/vi/react.md — memo, useMemo, useCallback
 
-**Artifact:** [`artifacts/day-21-ci-and-adr.md`](./artifacts/day-21-ci-and-adr.md)  
-**Milestone tuần 3:** 06, 07, 10, 11 sẵn sàng
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Perf review: 3 bottleneck + đo giả định + fix → capstone/11.
+2. **React / Next lab:** Lab: list chậm giả lập; tối ưu bằng memo hóa row; profile bằng React Profiler (DevTools) — ghi trước/sau.
+3. **Algo:** [Climbing Stairs](./artifacts/algo/problems/day-19.md) — pattern **DP**
 
-# Tuần 4 — Testing, AI, Vue+React spikes, đóng Capstone (24/10 – 01/11)
+#### Checkpoint
 
-### Day 22 — 24/10/2026 · Test pyramid
+- Perf sheet có số; Profiler screenshot/note; DP stairs O(n).
 
-**Mục tiêu:** Map behavior Capstone → đúng tầng test (không E2E hết).
-
-**Đọc**
-- [`documents/vi/testing.md`](../../../documents/vi/testing.md) — unit / component / E2E / coverage / TDD *(Vue + Vitest / Playwright trong repo)*
-- React practice: cùng pyramid với Jest/Vitest + Testing Library — đối chiếu VTU
-
-**Làm gì**
-- Chọn ~5 unit, 4 component, 2 integration, 1 critical E2E
-
-**Artifact:** [`artifacts/day-22-test-plan.md`](./artifacts/day-22-test-plan.md) → `capstone/12-test-plan.md`
+**Files:** [Hướng dẫn](./day-19-starter.md) · [Worksheet](./artifacts/day-19-performance.md) · [Lab setup](./lab/day-19-lab.md) · [Đề algo](./artifacts/algo/problems/day-19.md)
 
 ---
 
-### Day 23 — 25/10/2026 · Form & API error tests (Vue + React)
+### Day 20 — 22/10/2026 · Observability + Next App Router
 
-**Mục tiêu:** Có pseudo/code tests cho validation + 409 + 403 trên **cả hai** mindset.
+**Mục tiêu ngày:** Logging/CWV plan; tạo Next app router đầu tiên.
 
-**Đọc**
-- [`documents/vi/testing.md`](../../../documents/vi/testing.md) — mocking async, Vue Test Utils
-- React: Testing Library patterns (ngoài repo; đối chiếu)
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Viết hoặc pseudo: Save success, conflict 409, permission 403
-- Cột so sánh: Vue test vs React test cho cùng behavior
+- documents/vi/monitoring.md
+- documents/vi/nextjs.md — App Router, layouts
+- documents/vi/build-tools.md — skim bundle
 
-**Artifact:** [`artifacts/day-23-test-snippets-vue-react.md`](./artifacts/day-23-test-snippets-vue-react.md)
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Plan: gì log ở FE, correlation id, error reporting; lazy route list.
+2. **React / Next lab:** Lab Next: app/ layout + page customers (RSC mặc định) + 1 Client Component interactive filter.
+3. **Algo:** [Coin Change](./artifacts/algo/problems/day-20.md) — pattern **DP unbounded knapsack**
 
-### Day 24 — 26/10/2026 · Critical E2E + CI
+#### Checkpoint
 
-**Mục tiêu:** 1 E2E scenario critical + gắn CI gates.
+- Obs notes; Next /customers render; phân biệt Server vs Client component được.
 
-**Đọc**
-- [`documents/vi/testing.md`](../../../documents/vi/testing.md) — Playwright
-
-**Làm gì**
-- Scenario: Editor → edit field → save → list cập nhật
-- Cập nhật pipeline Day 21
-
-**Artifact:** [`artifacts/day-24-e2e-and-ci.md`](./artifacts/day-24-e2e-and-ci.md) · Capstone **12** gần final
+**Files:** [Hướng dẫn](./day-20-starter.md) · [Worksheet](./artifacts/day-20-observability.md) · [Lab setup](./lab/day-20-lab.md) · [Đề algo](./artifacts/algo/problems/day-20.md)
 
 ---
 
-### Day 25 — 27/10/2026 · AI-assisted delivery
+### Day 21 — 23/10/2026 · CI + Next data caching
 
-**Mục tiêu:** Prompt đủ context + audit AI output (không blind merge).
+**Mục tiêu ngày:** CI gates ngắn; hiểu cache Next fetch.
 
-**Đọc**
-- [`documents/vi/performance.md`](../../../documents/vi/performance.md) — code review checklist
-- [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) — review tips
-- [Feature Template](./feature-template.md) mục AI Usage
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Prompt AI generate Field Config edit (AC, states, a11y, roles) — có thể xin **Vue hoặc React**
-- Audit: correctness, architecture, security, a11y, performance, tests
+- documents/vi/devops.md
+- documents/vi/nextjs.md — caching, revalidate
 
-**Artifact:** [`artifacts/day-25-ai-review.md`](./artifacts/day-25-ai-review.md) → `capstone/13-ai-evidence.md`
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** ADR ½ trang: chọn test gate (lint/typecheck/unit) + lý do. Pipeline checklist.
+2. **React / Next lab:** Lab Next: fetch mock với `revalidate` / `no-store`; ghi bảng “khi nào cache”.
+3. **Algo:** [Week 3 timed review](./artifacts/algo/problems/day-21.md) — pattern **Review**
+
+#### Checkpoint
+
+- ADR + CI list; cache table ≥4 rows; timed algo xong.
+
+**Files:** [Hướng dẫn](./day-21-starter.md) · [Worksheet](./artifacts/day-21-ci-and-adr.md) · [Lab setup](./lab/day-21-lab.md) · [Đề algo](./artifacts/algo/problems/day-21.md)
 
 ---
 
-### Day 26 — 28/10/2026 · Code review mindset
+# Tuần 4 · Test + Spikes (24/10/2026 – 30/10/2026)
 
-**Mục tiêu:** Checklist review Capstone + before/after AI notes.
+### Day 22 — 24/10/2026 · Test pyramid + RTL
 
-**Đọc**
-- [Self-check questions](./self-check-questions.md) — AI + Testing
-- [Definition of Done](./definition-of-done.md) (đọc trước)
+**Mục tiêu ngày:** Map behaviors→layers; viết test RTL đầu tiên.
 
-**Làm gì**
-- Review “PR giả định” (AI draft): null, double-click, permission, unmount khi pending
-- Ghi lỗi AI hay gặp
+#### Lý thuyết (học gì)
 
-**Artifact:** [`artifacts/day-26-code-review.md`](./artifacts/day-26-code-review.md) → `capstone/14-code-review-checklist.md`
+- documents/vi/testing.md
+- documents/vi/react.md — testing library mindset
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Test plan Capstone: unit/component/E2E cho Save flow → capstone/12.
+2. **React / Next lab:** Lab: RTL test form validate (userEvent). Không test implementation detail.
+3. **Algo:** [House Robber](./artifacts/algo/problems/day-22.md) — pattern **DP 1D**
+
+#### Checkpoint
+
+- Pyramid map; ≥2 RTL tests green; DP OK.
+
+**Files:** [Hướng dẫn](./day-22-starter.md) · [Worksheet](./artifacts/day-22-test-plan.md) · [Lab setup](./lab/day-22-lab.md) · [Đề algo](./artifacts/algo/problems/day-22.md)
+
+---
+
+### Day 23 — 25/10/2026 · Form/API tests Vue+React
+
+**Mục tiêu ngày:** So sánh VTU vs RTL; mock API (MSW hoặc vi.mock).
+
+#### Lý thuyết (học gì)
+
+- documents/vi/testing.md
+- documents/vi/vue3.md — testing skim
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Viết pseudo + real snippet: 1 test Vue + 1 test React cùng behavior “save success toast”.
+2. **React / Next lab:** Lab: MSW (hoặc mock fetch) cho PATCH success/401; assert UI.
+3. **Algo:** [Warm-up Easy (tự chọn)](./artifacts/algo/problems/day-23.md) — pattern **Warm-up**
+
+#### Checkpoint
+
+- Bảng so sánh VTU/RTL; React test 401 path; warm-up xong.
+
+**Files:** [Hướng dẫn](./day-23-starter.md) · [Worksheet](./artifacts/day-23-test-snippets-vue-react.md) · [Lab setup](./lab/day-23-lab.md) · [Đề algo](./artifacts/algo/problems/day-23.md)
+
+---
+
+### Day 24 — 26/10/2026 · E2E + coding interview sim
+
+**Mục tiêu ngày:** 1 E2E critical path; 45′ live coding giả lập.
+
+#### Lý thuyết (học gì)
+
+- documents/vi/testing.md — E2E
+- algorithms-track.md
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Spec Playwright scenario: login(/mock) → filter → open detail → save. Ghi CI gate.
+2. **React / Next lab:** Lab: chạy E2E trên Next/React lab (1 smoke) HOẶC script manual checklist nếu chưa cài PW.
+3. **Algo:** [Live coding simulation](./artifacts/algo/problems/day-24.md) — pattern **Interview sim**
+
+#### Checkpoint
+
+- E2E spec/CI note; có điểm self-score algo (pass/partial/fail).
+
+**Files:** [Hướng dẫn](./day-24-starter.md) · [Worksheet](./artifacts/day-24-e2e-and-ci.md) · [Lab setup](./lab/day-24-lab.md) · [Đề algo](./artifacts/algo/problems/day-24.md)
+
+---
+
+### Day 25 — 27/10/2026 · AI-assisted + Server Actions
+
+**Mục tiêu ngày:** Dùng AI có audit trail; thử Server Action Next.
+
+#### Lý thuyết (học gì)
+
+- documents/vi/practical-questions.md
+- documents/vi/nextjs.md — server actions
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Prompt AI implement 1 util; audit bugs/security; ghi evidence → capstone/13.
+2. **React / Next lab:** Lab Next: form submit qua Server Action (mock), progressive enhancement note.
+3. **Algo:** [Weak-topic drill #1](./artifacts/algo/problems/day-25.md) — pattern **Remedial**
+
+#### Checkpoint
+
+- AI evidence trước/sau; Server Action chạy; weak drill note.
+
+**Files:** [Hướng dẫn](./day-25-starter.md) · [Worksheet](./artifacts/day-25-ai-review.md) · [Lab setup](./lab/day-25-lab.md) · [Đề algo](./artifacts/algo/problems/day-25.md)
+
+---
+
+### Day 26 — 28/10/2026 · Code review + Next Capstone page
+
+**Mục tiêu ngày:** Review checklist; dựng 1 page Capstone trên Next.
+
+#### Lý thuyết (học gì)
+
+- definition-of-done.md
+- documents/vi/leadership.md — review
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Checklist review (correctness, a11y, security, perf, tests) → capstone/14. Self-review lab.
+2. **React / Next lab:** Lab Next: Customers List page theo AC Day 5 (mock data) — loading/empty/error/table.
+3. **Algo:** [Weak-topic drill #2](./artifacts/algo/problems/day-26.md) — pattern **Remedial**
+
+#### Checkpoint
+
+- Checklist dùng được; List page Next demo; drill xong.
+
+**Files:** [Hướng dẫn](./day-26-starter.md) · [Worksheet](./artifacts/day-26-code-review.md) · [Lab setup](./lab/day-26-lab.md) · [Đề algo](./artifacts/algo/problems/day-26.md)
 
 ---
 
 ### Day 27 — 29/10/2026 · Capstone Vue spike
 
-**Mục tiêu:** Implement **một slice** (List+filter hoặc Field Config) bằng Vue/TS — không full app.
+**Mục tiêu ngày:** Ship 1 vertical slice Vue/TS (List hoặc Field Config).
 
-**Đọc**
-- [`documents/vi/vue3.md`](../../../documents/vi/vue3.md), [`documents/vi/state-management.md`](../../../documents/vi/state-management.md), [`documents/vi/typescript.md`](../../../documents/vi/typescript.md)
-- Artifacts Capstone 01–11 (docs đã làm)
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- Spike nhỏ: đủ loading/empty/error + 1 action save
-- Bám [Feature Template](./feature-template.md) sections UI States / State / API
+- documents/vi/vue3.md
+- documents/vi/state-management.md
+- artifacts/capstone/spikes/vue/README.md
 
-**Artifact:** [`artifacts/capstone/spikes/vue/`](./artifacts/capstone/spikes/vue/) + note [`artifacts/day-27-vue-spike.md`](./artifacts/day-27-vue-spike.md)
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Code spike Vue: fetch mock + table + filter + empty/error. README ghi trade-offs.
+2. **React / Next lab:** Parity note: liệt kê API/composable sẽ map sang hooks ngày mai (bảng Vue→React).
+3. **Algo:** [Big-O flashcards](./artifacts/algo/problems/day-27.md) — pattern **Theory**
+
+#### Checkpoint
+
+- Spike Vue chạy được happy path; parity table sẵn cho Day 28.
+
+**Files:** [Hướng dẫn](./day-27-starter.md) · [Worksheet](./artifacts/day-27-vue-spike.md) · [Lab setup](./lab/day-27-lab.md) · [Đề algo](./artifacts/algo/problems/day-27.md)
+
+---
+
+### Day 28 — 30/10/2026 · Capstone React/Next spike
+
+**Mục tiêu ngày:** Cùng slice với Day 27 bằng React + Next (ưu tiên Next nếu đã có lab).
+
+#### Lý thuyết (học gì)
+
+- documents/vi/react.md
+- documents/vi/nextjs.md
+- documents/vi/state-management-react.md
+- artifacts/capstone/spikes/react/README.md
+
+#### Thực hành (làm gì)
+
+1. **Capstone / FE craft:** Spike React/Next đạt parity feature Vue spike. README: khác biệt DX, bundling, data fetching.
+2. **React / Next lab:** Đây là ngày React chính: hoàn thiện slice + 1 test RTL smoke + note RSC/client boundary.
+3. **Algo:** [Cooldown Easy](./artifacts/algo/problems/day-28.md) — pattern **Cooldown**
+
+#### Checkpoint
+
+- Demo 2 spike cạnh nhau; nói được 3 khác biệt Vue vs React/Next.
+
+**Files:** [Hướng dẫn](./day-28-starter.md) · [Worksheet](./artifacts/day-28-react-spike.md) · [Lab setup](./lab/day-28-lab.md) · [Đề algo](./artifacts/algo/problems/day-28.md)
 
 ---
 
-### Day 28 — 30/10/2026 · Capstone React spike
-
-**Mục tiêu:** Cùng slice tương đương bằng React/TS (parallel, không clone full Vue app).
-
-**Đọc**
-- Concept Day 8–10 + 15–16 (agnostic)
-- Đối chiếu note Vue spike Day 27 + KB [`documents/vi/react.md`](../../../documents/vi/react.md) / [`documents/vi/nextjs.md`](../../../documents/vi/nextjs.md) — **không** invent `src/**/react*.md` (code spike ngoài app Nuxt)
-
-**Làm gì**
-- Cùng behavior: filter/list hoặc field edit
-- Ghi bảng so sánh: state, effects, test approach Vue vs React
-
-**Artifact:** [`artifacts/capstone/spikes/react/`](./artifacts/capstone/spikes/react/) + [`artifacts/day-28-react-spike.md`](./artifacts/day-28-react-spike.md)  
-Cũng hoàn thiện evidence responsive/a11y/security còn thiếu → 08–11
-
----
+# Tuần 5 · Close + Mock (31/10/2026 – 01/11/2026)
 
 ### Day 29 — 31/10/2026 · DoD + delivery notes
 
-**Mục tiêu:** Tick trung thực [Definition of Done](./definition-of-done.md); đủ 15 deliverables index.
+**Mục tiêu ngày:** Tick DoD; index deliverables 01–15; polish spike.
 
-**Đọc**
-- [Definition of Done](./definition-of-done.md)
-- [Capstone brief](./capstone-brief.md) — bảng 15 mục
+#### Lý thuyết (học gì)
 
-**Làm gì**
-- README Capstone: architecture, API, tests, limitations, risks, link Vue/React spikes
-- Index `01`…`15` — mục nào thiếu thì bổ sung ngắn
+- definition-of-done.md
+- capstone/15-delivery-notes.md
 
-**Artifact:** [`artifacts/capstone/15-delivery-notes.md`](./artifacts/capstone/15-delivery-notes.md) + DoD checklist đã tick
+#### Thực hành (làm gì)
 
----
+1. **Capstone / FE craft:** Điền delivery notes; đánh dấu thiếu sót; polish README spikes.
+2. **React / Next lab:** Polish Next page: empty/error copy, basic a11y, remove console noise.
+3. **Algo:** [8 patterns flashcards + 1 random](./artifacts/algo/problems/day-29.md) — pattern **Review**
 
-### Day 30 — 01/11/2026 · Mock interview
+#### Checkpoint
 
-**Mục tiêu:** Giải thích Capstone ~10–15′ không nhìn code; có weak-topic list.
+- DoD ≥80% tick; delivery notes thẳng thắn về gap; flashcards xong.
 
-**Đọc**
-- [Self-check questions](./self-check-questions.md) (full)
-- Skim yếu: chọn 1 trong [`documents/vi/system-design.md`](../../../documents/vi/system-design.md) / [`documents/vi/architecture.md`](../../../documents/vi/architecture.md) / [`documents/en/practical-questions.md`](../../../documents/en/practical-questions.md) (EN wording)
-
-**Làm gì**
-- Mock: product → state → API → a11y → test → AI review → Vue vs React trade-off bạn vừa spike
-- 5′ triage nếu thời gian còn lại trong tháng
-
-**Artifact:** [`artifacts/day-30-mock-outline.md`](./artifacts/day-30-mock-outline.md)
+**Files:** [Hướng dẫn](./day-29-starter.md) · [Worksheet](./artifacts/capstone/15-delivery-notes.md) · [Lab setup](./lab/day-29-lab.md) · [Đề algo](./artifacts/algo/problems/day-29.md)
 
 ---
 
-## Nếu thiếu thời gian (lịch từ 03/10)
+### Day 30 — 01/11/2026 · Full mock interview
 
-Giữ **P0 mindset**; cắt độ sâu P2 và full code.
+**Mục tiêu ngày:** Mock 60–90′: Capstone walkthrough + React Q + live coding.
 
-| Còn bao nhiêu | Làm gì (theo lịch) |
-|---|---|
-| **Đủ 30 ngày** | Days 1–30 như trên |
-| **~3 tuần** (bắt đầu muộn / skip weekend sâu) | Ưu tiên: 03–09/10, 10–11/10, 14–20/10, 24–28/10, 31/10–01/11; Capstone docs đủ 15; **một** spike (Vue **hoặc** React) |
-| **~2 tuần** | Tuần A: Product+UI+flow+component/state · Tuần B: API+debug+security+a11y+responsive · rồi Testing+perf ngắn · AI review + Capstone docs + 1 spike |
-| **~1 tuần** | 03/10 flow · 11/10 state · 17–20/10 API/error/security/debug · 24/10 test plan · 27/10 AI · 31/10 DoD |
-| **Chỉ 30′/ngày** | 10′ đọc path ngày đó → 15′ 1 artifact nhỏ → 5′ 2 câu [Self-check](./self-check-questions.md) |
+#### Lý thuyết (học gì)
 
-**Không cắt:** user flow, state ownership, error matrix, modal a11y, XSS/authz, stale-UI debug, test pyramid, AI review.  
-**Cắt trước:** ArgoCD sâu, Nuxt rendering sâu, mapped types nâng cao, E2E setup thật (giữ scenario text), spike framework thứ hai nếu chỉ còn 1 tuần.
+- self-check-questions.md
+- algorithms-track.md
 
----
+#### Thực hành (làm gì)
 
-## Folder artifacts gợi ý
+1. **Capstone / FE craft:** Outline trả lời 10–15′ Capstone (problem→constraints→architecture→trade-offs→tests). Ghi weak list hậu mock.
+2. **React / Next lab:** Chuẩn bị 5 câu: hooks rules, useEffect deps, RSC vs client, key reconciliation, state library choice.
+3. **Algo:** [Mock interview live coding](./artifacts/algo/problems/day-30.md) — pattern **Mock**
 
-```text
-artifacts/
-  day-01-user-flow.md
-  …
-  day-30-mock-outline.md
-  capstone/
-    00-feature-template.md
-    01-user-flow.md … 15-delivery-notes.md
-    spikes/
-      vue/
-      react/
-```
+#### Checkpoint
 
-Tạo folder khi Day 1 bắt đầu (`03/10/2026`).
+- Ghi điểm 3 phần (Capstone/React/Algo) + 5 việc ôn tiếp 7 ngày sau.
+
+**Files:** [Hướng dẫn](./day-30-starter.md) · [Worksheet](./artifacts/day-30-mock-outline.md) · [Lab setup](./lab/day-30-lab.md) · [Đề algo](./artifacts/algo/problems/day-30.md)
 
 ---
 
-## Bản đồ repo (đã verify — không invent path)
+## Thành công sau Day 30
 
-| Chủ đề | Path |
-|---|---|
-| Index | [`README.md`](../../../README.md), [`README-en.md`](../../../README-en.md) |
-| JD map | [`jd1.md`](../../../jd1.md) |
-| JS / TS | [`documents/vi/javascript.md`](../../../documents/vi/javascript.md), [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) |
-| CSS / Responsive | [`documents/vi/css-layout.md`](../../../documents/vi/css-layout.md) |
-| Web APIs | [`documents/vi/web-apis.md`](../../../documents/vi/web-apis.md) |
-| Vue / Nuxt / State | [`documents/vi/vue3.md`](../../../documents/vi/vue3.md), [`documents/vi/nuxt.md`](../../../documents/vi/nuxt.md), [`documents/vi/state-management.md`](../../../documents/vi/state-management.md) |
-| React / Next / State | [`documents/vi/react.md`](../../../documents/vi/react.md), [`documents/vi/nextjs.md`](../../../documents/vi/nextjs.md), [`documents/vi/state-management-react.md`](../../../documents/vi/state-management-react.md) |
-| Testing / Perf / Security / A11y | [`documents/vi/testing.md`](../../../documents/vi/testing.md), [`documents/vi/performance.md`](../../../documents/vi/performance.md), [`documents/vi/security.md`](../../../documents/vi/security.md), [`documents/vi/accessibility.md`](../../../documents/vi/accessibility.md) |
-| Build / Net / DevOps | [`documents/vi/build-tools.md`](../../../documents/vi/build-tools.md), [`documents/vi/networking.md`](../../../documents/vi/networking.md), [`documents/vi/devops.md`](../../../documents/vi/devops.md) |
-| Arch / System / Leadership | [`documents/vi/architecture.md`](../../../documents/vi/architecture.md), [`documents/vi/system-design.md`](../../../documents/vi/system-design.md), [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) |
-| Practical / Monitoring | [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md), [`documents/vi/monitoring.md`](../../../documents/vi/monitoring.md) |
-| EN twins | cùng tên dưới `documents/en/` |
-
----
-
-**Done tháng (01/11/2026) khi:** đủ 15 Capstone deliverables (docs) + ít nhất một cặp spike Vue & React cùng slice + [DoD](./definition-of-done.md) tick trung thực + giải thích Capstone ~10′.
+- [ ] Walkthrough Capstone 10–15′ có trade-offs
+- [ ] Demo spike Vue + React/Next
+- [ ] ≥12 bài algo Easy/Medium có test xanh trong lab repo
+- [ ] Trả lời được hooks rules, RSC vs client, controlled inputs, Error Boundary
+- [ ] Weak-topic list + kế hoạch 7 ngày tiếp

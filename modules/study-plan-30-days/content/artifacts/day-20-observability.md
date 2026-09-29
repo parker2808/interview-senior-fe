@@ -1,12 +1,13 @@
 # Day 20 — Bundle + observability
 
-**Ngày:** 22/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 22/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Observability plan + lazy-load candidates.  
 **Capstone link:** Observability + lazy-load — bổ trợ perf/security stories.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈20′) — Vite vs Webpack; monitoring perf; caching.
 2. **Observability plan:** error log, request ID, breadcrumb, Core Web Vitals.
@@ -71,3 +72,29 @@ HTTP cache / SWR / memory — gì áp dụng Capstone?
 
 
 Quay lại: [Day 20 starter](../day-20-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Plan: gì log ở FE, correlation id, error reporting; lazy route list.
+
+### React / Next (chi tiết Lab tab)
+Lab Next: app/ layout + page customers (RSC mặc định) + 1 Client Component interactive filter.
+
+### Algo
+**[Coin Change](../artifacts/algo/problems/day-20.md)** · DP unbounded knapsack · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Obs notes; Next /customers render; phân biệt Server vs Client component được.
+
+<!-- PLAN_TRACKS_END -->

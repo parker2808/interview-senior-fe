@@ -1,17 +1,38 @@
-# Bắt đầu đây — Day 29 (31/10/2026)
+# Day 29 — Hướng dẫn (31/10/2026)
 
-**Timebox:** 60–90 phút · DoD + delivery notes
+**Chủ đề:** DoD + delivery notes  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Tick DoD; index deliverables 01–15; polish spike.
 
-## Làm theo thứ tự
+## Lý thuyết — học gì hôm nay
 
-1. Đọc [definition-of-done.md](./definition-of-done.md) + [capstone-brief.md](./capstone-brief.md) (bảng 15 mục)
-2. Điền delivery notes + index:
-   → [`artifacts/capstone/15-delivery-notes.md`](./artifacts/capstone/15-delivery-notes.md)
-3. Tick DoD trung thực trong file trên; bổ sung deliverable thiếu (ngắn).
+- definition-of-done.md
+- capstone/15-delivery-notes.md
 
-## Links plan
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 29](./30-day-study-plan.md#day-29--31102026--dod-delivery-notes)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 29 khi:** 15-delivery-notes + DoD tick trung thực + index 01…15.
+### 1) Capstone / FE craft
+Điền delivery notes; đánh dấu thiếu sót; polish README spikes.
+
+→ Làm trên tab **Worksheet**: [`artifacts/capstone/15-delivery-notes.md`](./artifacts/capstone/15-delivery-notes.md)
+
+### 2) React / Next lab
+Polish Next page: empty/error copy, basic a11y, remove console noise.
+
+→ Setup & path: tab **Lab setup** [`lab/day-29-lab.md`](./lab/day-29-lab.md)
+
+### 3) Thuật toán
+**8 patterns flashcards + 1 random** (Mixed) · pattern **Review**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-29.md`](./artifacts/algo/problems/day-29.md)  
+→ Code + test trong lab repo: `algo/day-29/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] DoD ≥80% tick; delivery notes thẳng thắn về gap; flashcards xong.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

@@ -1,12 +1,13 @@
 # Day 15 — API contract
 
-**Ngày:** 17/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 17/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Draft contract GET/PATCH fields đủ pagination/filter/sort/nullable.  
 **Capstone link:** Deliverable 06 → [`capstone/06-api-contract.md`](./capstone/06-api-contract.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈20′) — REST vs WS; async; Nuxt CSR/SSR/SSG high-level (T-shaped, không bắt buộc Nuxt).
 2. **Draft** `GET/PATCH fields` — paths, query, body, response, nullable, 409.
@@ -111,3 +112,29 @@ Capstone admin: CSR đủ? Khi nào nghĩ SSR?
 Copy → [`capstone/06-api-contract.md`](./capstone/06-api-contract.md)
 
 Quay lại: [Day 15 starter](../day-15-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Viết contract endpoints List/Detail/Patch + error shape → capstone/06.
+
+### React / Next (chi tiết Lab tab)
+Lab: dùng @tanstack/react-query (hoặc SWR) load customers mock; loading/error/success states.
+
+### Algo
+**[Binary Tree Level Order Traversal](../artifacts/algo/problems/day-15.md)** · BFS queue · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Contract review được; query lab không race khi remount nhanh; BFS đúng.
+
+<!-- PLAN_TRACKS_END -->

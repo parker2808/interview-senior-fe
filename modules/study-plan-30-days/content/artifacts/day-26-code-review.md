@@ -1,12 +1,13 @@
 # Day 26 — Code review + AI before/after
 
-**Ngày:** 28/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 28/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Checklist review Capstone + before/after AI notes.  
 **Capstone link:** Deliverable 14 → [`capstone/14-code-review-checklist.md`](./capstone/14-code-review-checklist.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** Self-check AI + Testing; đọc trước Definition of Done.
 2. **Review “PR giả định”** (AI draft): null, double-click, permission, unmount khi pending.
@@ -82,3 +83,29 @@ Lỗi AI hay gặp (list):
 Copy → [`capstone/14-code-review-checklist.md`](./capstone/14-code-review-checklist.md)
 
 Quay lại: [Day 26 starter](../day-26-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Checklist review (correctness, a11y, security, perf, tests) → capstone/14. Self-review lab.
+
+### React / Next (chi tiết Lab tab)
+Lab Next: Customers List page theo AC Day 5 (mock data) — loading/empty/error/table.
+
+### Algo
+**[Weak-topic drill #2](../artifacts/algo/problems/day-26.md)** · Remedial · Mixed
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Checklist dùng được; List page Next demo; drill xong.
+
+<!-- PLAN_TRACKS_END -->

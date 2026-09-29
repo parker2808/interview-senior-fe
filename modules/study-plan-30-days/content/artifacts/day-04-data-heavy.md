@@ -1,12 +1,13 @@
 # Day 4 — Data-heavy table strategy
 
-**Ngày:** 06/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 06/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Quyết định chiến lược table 500 rows (cột, filter, pagination).  
 **Capstone link:** Nền cho Capstone List; responsive sâu ở Day 12 → `capstone/08`.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15′) — Flex/Grid + responsive strategy.
 2. **Giả định** Customer List ~500 rows, nhiều cột.
@@ -111,3 +112,29 @@ Chọn **một** primary strategy cho Capstone desktop:
 
 
 Quay lại: [Day 4 starter](../day-04-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Spec table Capstone: columns, filter, sort, pagination vs virtualize — chọn 1 approach + lý do.
+
+### React / Next (chi tiết Lab tab)
+Lab: render table 50 rows từ mock data typed bằng TS interface; filter client-side; giải thích key ổn định.
+
+### Algo
+**[Group Anagrams](../artifacts/algo/problems/day-04.md)** · HashMap + sorted key · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Có TS type cho CustomerRow; table React filter được; Group Anagrams đúng.
+
+<!-- PLAN_TRACKS_END -->

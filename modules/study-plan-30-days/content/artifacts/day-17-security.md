@@ -1,12 +1,13 @@
 # Day 17 — FE security
 
-**Ngày:** 19/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 19/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Security checklist Capstone (XSS, authz, storage).  
 **Capstone link:** Deliverable 10 → [`capstone/10-security-checklist.md`](./capstone/10-security-checklist.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈20′) — XSS/CSRF/auth/CORS; storage notes trong performance.
 2. **Threat model** Capstone: HTML render, roles, “permission chỉ check UI?”.
@@ -88,3 +89,29 @@ UI hide ≠ security:
 Copy → [`capstone/10-security-checklist.md`](./capstone/10-security-checklist.md)
 
 Quay lại: [Day 17 starter](../day-17-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Checklist security Capstone (token storage, XSS surfaces, CSRF nếu cookie) → capstone/10.
+
+### React / Next (chi tiết Lab tab)
+Lab: cố ý render HTML string an toàn (escape) vs dangerouslySetInnerHTML — ghi khi nào được phép.
+
+### Algo
+**[Lowest Common Ancestor of a BST](../artifacts/algo/problems/day-17.md)** · BST property · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Checklist ≥8 items actionable; XSS note rõ; LCA pass sample.
+
+<!-- PLAN_TRACKS_END -->

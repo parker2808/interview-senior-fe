@@ -1,19 +1,39 @@
-# Bắt đầu đây — Day 7 (09/10/2026)
+# Day 7 — Hướng dẫn (09/10/2026)
 
-**Timebox:** 60–90 phút · Capstone kickoff + Feature Template
+**Chủ đề:** Capstone kickoff + composition  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Feature Template + wireframes; hiểu composition React (children).
 
-## Làm theo thứ tự
+## Lý thuyết — học gì hôm nay
 
-1. Đọc [feature-template.md](./feature-template.md) + [capstone-brief.md](./capstone-brief.md) + [`jd1.md`](../../../jd1.md)
-2. Điền Feature Template:
-   → [`artifacts/capstone/00-feature-template.md`](./artifacts/capstone/00-feature-template.md)
-3. Outline wireframe 3 màn:
-   → [`artifacts/capstone/02-wireframes.md`](./artifacts/capstone/02-wireframes.md)
-4. Milestone: deliverables 01–03 sẵn sàng review (01 từ Day 1, 03 từ Day 5).
+- feature-template.md
+- capstone/00 + 02
+- documents/vi/react.md — composition / children
 
-## Links plan
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 7](./30-day-study-plan.md#day-7--09102026--capstone-kickoff)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 7 khi:** 00-feature-template + 02-wireframes đã điền Goal→Risks và outline 3 màn.
+### 1) Capstone / FE craft
+Điền Feature Template Capstone; wireframe text 3 màn List/Detail/Config.
+
+→ Làm trên tab **Worksheet**: [`artifacts/capstone/00-feature-template.md`](./artifacts/capstone/00-feature-template.md)
+
+### 2) React / Next lab
+Lab: Card/Layout components dùng children; so với slots Vue. Không prop-drill title+body nếu dùng composition.
+
+→ Setup & path: tab **Lab setup** [`lab/day-07-lab.md`](./lab/day-07-lab.md)
+
+### 3) Thuật toán
+**Week 1 timed review** (Easy) · pattern **Review**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-07.md`](./artifacts/algo/problems/day-07.md)  
+→ Code + test trong lab repo: `algo/day-07/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Template + wireframes xong; composition lab PR/commit; timed algo OK.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

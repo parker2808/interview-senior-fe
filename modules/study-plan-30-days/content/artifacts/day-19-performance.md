@@ -1,12 +1,13 @@
 # Day 19 — Performance
 
-**Ngày:** 21/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 21/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Phân loại bottleneck + proposal cho list lớn / live search.  
 **Capstone link:** Deliverable 11 → [`capstone/11-performance-review.md`](./capstone/11-performance-review.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈20′) — performance + Intersection Observer / Workers.
 2. **Phân loại** bottleneck: render vs network vs bundle.
@@ -78,3 +79,29 @@ Lazy images? Infinite sentinel?
 Copy → [`capstone/11-performance-review.md`](./capstone/11-performance-review.md)
 
 Quay lại: [Day 19 starter](../day-19-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Perf review: 3 bottleneck + đo giả định + fix → capstone/11.
+
+### React / Next (chi tiết Lab tab)
+Lab: list chậm giả lập; tối ưu bằng memo hóa row; profile bằng React Profiler (DevTools) — ghi trước/sau.
+
+### Algo
+**[Climbing Stairs](../artifacts/algo/problems/day-19.md)** · DP · Easy
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Perf sheet có số; Profiler screenshot/note; DP stairs O(n).
+
+<!-- PLAN_TRACKS_END -->

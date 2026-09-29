@@ -1,16 +1,38 @@
-# Bắt đầu đây — Day 10 (12/10/2026)
+# Day 10 — Hướng dẫn (12/10/2026)
 
-**Timebox:** 60–90 phút · Data flow + TypeScript
+**Chủ đề:** Data flow + TypeScript  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** DTO + Save flow typed; useReducer form phức tạp.
 
-## Làm theo thứ tự
+## Lý thuyết — học gì hôm nay
 
-1. Mở [`artifacts/day-10-types-and-flow.md`](./artifacts/day-10-types-and-flow.md)
-2. Đọc [`documents/vi/typescript.md`](../../../documents/vi/typescript.md) + [`documents/vi/javascript.md`](../../../documents/vi/javascript.md)
-3. Điền types + Save flow trong worksheet.
+- documents/vi/typescript.md — discriminated unions
+- documents/vi/react.md — useReducer
 
-## Links plan
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 10](./30-day-study-plan.md#day-10--12102026--data-flow-typescript)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 10 khi:** có DTO vs UI model, VerificationStatus union, và diagram UI→…→render.
+### 1) Capstone / FE craft
+Định nghĩa types Customer, FieldConfig, ApiError. Sequence Save (optimistic vs pessimistic).
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-10-types-and-flow.md`](./artifacts/day-10-types-and-flow.md)
+
+### 2) React / Next lab
+Lab: form FieldConfig dùng useReducer (update_field | validate | submit_*).
+
+→ Setup & path: tab **Lab setup** [`lab/day-10-lab.md`](./lab/day-10-lab.md)
+
+### 3) Thuật toán
+**Longest Substring Without Repeating Characters** (Medium) · pattern **Sliding window**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-10.md`](./artifacts/algo/problems/day-10.md)  
+→ Code + test trong lab repo: `algo/day-10/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Types compile; reducer transitions rõ; sliding window O(n).
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

@@ -1,16 +1,38 @@
-# Bắt đầu đây — Day 21 (23/10/2026)
+# Day 21 — Hướng dẫn (23/10/2026)
 
-**Timebox:** 60–90 phút · CI / T-shaped wrap
+**Chủ đề:** CI + Next data caching  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** CI gates ngắn; hiểu cache Next fetch.
 
-## Làm theo thứ tự
+## Lý thuyết — học gì hôm nay
 
-1. Mở [`artifacts/day-21-ci-and-adr.md`](./artifacts/day-21-ci-and-adr.md)
-2. Đọc [`documents/vi/devops.md`](../../../documents/vi/devops.md) + [`documents/vi/practical-questions.md`](../../../documents/vi/practical-questions.md) + [`documents/vi/leadership.md`](../../../documents/vi/leadership.md) + [`documents/vi/system-design.md`](../../../documents/vi/system-design.md)
-3. Viết pipeline + ADR trong worksheet.
+- documents/vi/devops.md
+- documents/vi/nextjs.md — caching, revalidate
 
-## Links plan
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 21](./30-day-study-plan.md#day-21--23102026--ci-t-shaped-wrap)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 21 khi:** pipeline install→…→smoke + 1 ADR agnostic (filters URL hoặc store vs local).
+### 1) Capstone / FE craft
+ADR ½ trang: chọn test gate (lint/typecheck/unit) + lý do. Pipeline checklist.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-21-ci-and-adr.md`](./artifacts/day-21-ci-and-adr.md)
+
+### 2) React / Next lab
+Lab Next: fetch mock với `revalidate` / `no-store`; ghi bảng “khi nào cache”.
+
+→ Setup & path: tab **Lab setup** [`lab/day-21-lab.md`](./lab/day-21-lab.md)
+
+### 3) Thuật toán
+**Week 3 timed review** (Mixed) · pattern **Review**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-21.md`](./artifacts/algo/problems/day-21.md)  
+→ Code + test trong lab repo: `algo/day-21/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] ADR + CI list; cache table ≥4 rows; timed algo xong.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

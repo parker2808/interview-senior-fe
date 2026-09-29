@@ -1,12 +1,13 @@
 # Day 30 — Mock interview
 
-**Ngày:** 01/11/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 01/11/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Giải thích Capstone ~10–15′ không nhìn code; có weak-topic list.  
 **Capstone link:** Rehearse từ [`capstone/15-delivery-notes.md`](./capstone/15-delivery-notes.md).
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** full Self-check; skim 1 weak topic (`system-design` / `architecture` / EN `practical-questions`).
 2. **Outline mock** 10–15′: product → state → API → a11y → test → AI → Vue vs React trade-off.
@@ -86,3 +87,29 @@ Nếu còn thời gian trong tháng — làm gì?
 
 
 Quay lại: [Day 30 starter](../day-30-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Outline trả lời 10–15′ Capstone (problem→constraints→architecture→trade-offs→tests). Ghi weak list hậu mock.
+
+### React / Next (chi tiết Lab tab)
+Chuẩn bị 5 câu: hooks rules, useEffect deps, RSC vs client, key reconciliation, state library choice.
+
+### Algo
+**[Mock interview live coding](../artifacts/algo/problems/day-30.md)** · Mock · Mixed
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Ghi điểm 3 phần (Capstone/React/Algo) + 5 việc ôn tiếp 7 ngày sau.
+
+<!-- PLAN_TRACKS_END -->

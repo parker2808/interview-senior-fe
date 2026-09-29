@@ -1,16 +1,40 @@
-# Bắt đầu đây — Day 28 (30/10/2026)
+# Day 28 — Hướng dẫn (30/10/2026)
 
-**Timebox:** 60–90 phút · Capstone React spike
+**Chủ đề:** Capstone React/Next spike  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Cùng slice với Day 27 bằng React + Next (ưu tiên Next nếu đã có lab).
 
-## Làm theo thứ tự
+## Lý thuyết — học gì hôm nay
 
-1. Mở [`artifacts/day-28-react-spike.md`](./artifacts/day-28-react-spike.md)
-2. Đối chiếu Day 27 + [`documents/vi/react.md`](../../../documents/vi/react.md) (concept Days 8–10, 15–16)
-3. Cập nhật [`artifacts/capstone/spikes/react/README.md`](./artifacts/capstone/spikes/react/README.md)
+- documents/vi/react.md
+- documents/vi/nextjs.md
+- documents/vi/state-management-react.md
+- artifacts/capstone/spikes/react/README.md
 
-## Links plan
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 28](./30-day-study-plan.md#day-28--30102026--capstone-react-spike)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 28 khi:** cùng behavior + bảng so sánh Vue vs React; spikes/react README cập nhật.
+### 1) Capstone / FE craft
+Spike React/Next đạt parity feature Vue spike. README: khác biệt DX, bundling, data fetching.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-28-react-spike.md`](./artifacts/day-28-react-spike.md)
+
+### 2) React / Next lab
+Đây là ngày React chính: hoàn thiện slice + 1 test RTL smoke + note RSC/client boundary.
+
+→ Setup & path: tab **Lab setup** [`lab/day-28-lab.md`](./lab/day-28-lab.md)
+
+### 3) Thuật toán
+**Cooldown Easy** (Easy) · pattern **Cooldown**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-28.md`](./artifacts/algo/problems/day-28.md)  
+→ Code + test trong lab repo: `algo/day-28/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Demo 2 spike cạnh nhau; nói được 3 khác biệt Vue vs React/Next.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

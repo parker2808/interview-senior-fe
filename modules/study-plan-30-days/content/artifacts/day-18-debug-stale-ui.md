@@ -1,12 +1,13 @@
 # Day 18 — Debug stale UI + race
 
-**Ngày:** 20/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 20/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Có investigation log cho “Save OK nhưng UI stale” + mitigation race.  
 **Capstone link:** Investigation log phục vụ spike + interview storytelling.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈20′) — Vue debug; event loop; debounce/throttle; đối chiếu React stale closure / AbortController / query invalidation.
 2. **Investigation log** “Save OK nhưng UI stale”.
@@ -21,7 +22,7 @@
 | Vue debug | [`documents/vi/vue3.md`](../../../../documents/vi/vue3.md) | Debug component bugs |
 | JS | [`documents/vi/javascript.md`](../../../../documents/vi/javascript.md) | Event loop |
 | Perf | [`documents/vi/performance.md`](../../../../documents/vi/performance.md) | debounce/throttle |
-| React practice | *(không có path repo)* | stale closure / abort / query keys |
+| React practice | [`documents/vi/react.md`](../../../../documents/vi/react.md) / [`documents/vi/nextjs.md`](../../../../documents/vi/nextjs.md) | stale closure / abort / query keys |
 
 Plan Day 18: [30-day-study-plan.md — Day 18](../30-day-study-plan.md#day-18--20102026--debug-stale-ui-search-race)
 
@@ -106,3 +107,29 @@ Pseudo (framework-agnostic):
 
 
 Quay lại: [Day 18 starter](../day-18-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Viết investigation log “search race”: reproduce, root cause, fix (ignore stale / abort / seq id).
+
+### React / Next (chi tiết Lab tab)
+Lab: search-as-you-type với AbortController; verify request cũ bị abort khi gõ tiếp.
+
+### Algo
+**[Number of Islands](../artifacts/algo/problems/day-18.md)** · Grid BFS/DFS · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Có fix pattern ghi trong Capstone notes; lab abort hoạt động; Islands OK.
+
+<!-- PLAN_TRACKS_END -->

@@ -1,12 +1,13 @@
 # Day 14 — Keyboard review
 
-**Ngày:** 16/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 16/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Có kết quả keyboard-test + pack artifacts tuần 2.  
 **Capstone link:** Milestone tuần 2: 04, 05, 08, 09.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** Self-check Responsive + Accessibility; skim notes Days 8–13.
 2. **Keyboard path** trên spec/prototype (hoặc walkthrough trên paper spec) — ghi pass/fail.
@@ -78,3 +79,29 @@ Gaps còn lại:
 
 
 Quay lại: [Day 14 starter](../day-14-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Test Tab/Shift+Tab/Enter/Esc trên flow chính; ghi bug list; pack artifacts 04/05/08/09.
+
+### React / Next (chi tiết Lab tab)
+Lab: audit Day 13 Modal + form Day 3 bằng keyboard only; sửa 2 issue.
+
+### Algo
+**[Week 2 timed review](../artifacts/algo/problems/day-14.md)** · Review · Mixed
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Có keyboard result sheet; ≥1 bug fixed trong lab; timed algo xong.
+
+<!-- PLAN_TRACKS_END -->

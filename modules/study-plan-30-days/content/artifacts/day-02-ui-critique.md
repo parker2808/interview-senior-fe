@@ -1,12 +1,13 @@
 # Day 2 — UI hierarchy critique
 
-**Ngày:** 04/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 04/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Chỉ ra được primary action + 10 UX issues trên một admin UI.  
 **Capstone link:** Ghi chú áp dụng cho List/Detail/Field Config (optional section cuối).
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15′) — Presentational vs Container trong architecture.
 2. **Chọn 1 admin page** quen (hoặc màn List Capstone) — screenshot/mental model OK.
@@ -121,3 +122,29 @@ Issue nào sẽ áp vào List / Detail / Field Config?
 
 
 Quay lại: [Day 2 starter](../day-02-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Critique 1 admin page: primary action, empty/loading/error, 8–10 UX issues + sketch redesign.
+
+### React / Next (chi tiết Lab tab)
+Lab: useState counter + conditional render. So sánh với ref Vue. Giải thích re-render khi setState.
+
+### Algo
+**[Valid Anagram](../artifacts/algo/problems/day-02.md)** · Frequency map · Easy
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Nói được thứ tự log của 1 snippet Promise/setTimeout; có UI critique; Anagram pass.
+
+<!-- PLAN_TRACKS_END -->

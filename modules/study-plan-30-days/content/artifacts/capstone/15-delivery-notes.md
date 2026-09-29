@@ -1,6 +1,7 @@
 # Capstone 15 — Delivery notes
 
-**Ngày:** Day 29 · 31/10/2026 · **Timebox:** 60–90′  
+
+**Ngày:** Day 29 · 31/10/2026 · **Timebox:** 90–120′  
 **Mục tiêu:** Tick trung thực DoD; đủ index 15 deliverables; README-style delivery notes.  
 **Đọc:** [definition-of-done.md](../../definition-of-done.md) · [capstone-brief.md](../../capstone-brief.md)
 
@@ -92,3 +93,29 @@ Mục chưa tick — lý do / plan:
 - React:  
 
 Quay lại: [Day 29 starter](../../day-29-starter.md) · [Plan](../../30-day-study-plan.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Điền delivery notes; đánh dấu thiếu sót; polish README spikes.
+
+### React / Next (chi tiết Lab tab)
+Polish Next page: empty/error copy, basic a11y, remove console noise.
+
+### Algo
+**[8 patterns flashcards + 1 random](../../artifacts/algo/problems/day-29.md)** · Review · Mixed
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] DoD ≥80% tick; delivery notes thẳng thắn về gap; flashcards xong.
+
+<!-- PLAN_TRACKS_END -->

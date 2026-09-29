@@ -1,12 +1,13 @@
 # Day 16 — Error matrix + 401
 
-**Ngày:** 18/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 18/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Mỗi status code có UX + retry + log rõ.  
 **Capstone link:** Deliverable 07 → [`capstone/07-error-matrix.md`](./capstone/07-error-matrix.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15′) — handling 401; Sentry/logging.
 2. **Matrix** đủ status + timeout/offline.
@@ -76,3 +77,29 @@ Redirect login? Refresh token? Giữ return URL?
 Copy → [`capstone/07-error-matrix.md`](./capstone/07-error-matrix.md)
 
 Quay lại: [Day 16 starter](../day-16-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Matrix 400/401/403/404/422/500 → toast/inline/full-page/retry → capstone/07.
+
+### React / Next (chi tiết Lab tab)
+Lab: ErrorBoundary class (hoặc library) bọc page; fallback UI + retry. Note: boundary không bắt lỗi async event.
+
+### Algo
+**[Maximum Depth of Binary Tree](../artifacts/algo/problems/day-16.md)** · DFS recursion · Easy
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Matrix đủ 6 status; Boundary demo; DFS depth đúng.
+
+<!-- PLAN_TRACKS_END -->

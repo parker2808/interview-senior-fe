@@ -1,12 +1,13 @@
 # Day 9 — State ownership
 
-**Ngày:** 11/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 11/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Map state filter page — ai là source of truth.  
 **Capstone link:** Deliverable 05 → [`capstone/05-state-ownership.md`](./capstone/05-state-ownership.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈20′) — state-management Vue; đối chiếu React Query/SWR / Context / URL state.
 2. **Classify** từng loại state trên filter page.
@@ -20,7 +21,7 @@
 | Nguồn | Path | Ghi chú |
 |---|---|---|
 | State (Vue) | [`documents/vi/state-management.md`](../../../../documents/vi/state-management.md) | global vs local, Pinia/Vuex |
-| React practice | *(không có path repo)* | local vs URL vs server cache vs Context |
+| React practice | [`documents/vi/react.md`](../../../../documents/vi/react.md) / [`documents/vi/nextjs.md`](../../../../documents/vi/nextjs.md) | local vs URL vs server cache vs Context |
 
 Plan Day 9: [30-day-study-plan.md — Day 9](../30-day-study-plan.md#day-9--11102026--state-ownership)
 
@@ -83,3 +84,29 @@ Filters sống ở URL? Store? Cả hai?
 Copy → [`capstone/05-state-ownership.md`](./capstone/05-state-ownership.md)
 
 Quay lại: [Day 9 starter](../day-09-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Bảng state: data · owner · who writes · who reads · sync server? → capstone/05.
+
+### React / Next (chi tiết Lab tab)
+Lab: lift filter state lên page; thử Context cho theme/auth mock; viết note khi nào cần Zustand.
+
+### Algo
+**[Two Sum II (sorted)](../artifacts/algo/problems/day-09.md)** · Two pointers · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] State map không còn “mọi thứ trong page”; Context demo chạy; two pointers đúng.
+
+<!-- PLAN_TRACKS_END -->

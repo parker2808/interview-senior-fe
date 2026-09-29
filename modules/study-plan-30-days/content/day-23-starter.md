@@ -1,16 +1,38 @@
-# Bắt đầu đây — Day 23 (25/10/2026)
+# Day 23 — Hướng dẫn (25/10/2026)
 
-**Timebox:** 60–90 phút · Form/API tests (Vue+React)
+**Chủ đề:** Form/API tests Vue+React  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** So sánh VTU vs RTL; mock API (MSW hoặc vi.mock).
 
-## Làm theo thứ tự
+## Lý thuyết — học gì hôm nay
 
-1. Mở [`artifacts/day-23-test-snippets-vue-react.md`](./artifacts/day-23-test-snippets-vue-react.md)
-2. Đọc [`documents/vi/testing.md`](../../../documents/vi/testing.md) (mocking/VTU); React Testing Library ngoài repo
-3. Viết pseudo tests + comparison table.
+- documents/vi/testing.md
+- documents/vi/vue3.md — testing skim
 
-## Links plan
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 23](./30-day-study-plan.md#day-23--25102026--form-api-error-tests-vue-react)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 23 khi:** có snippets success/409/403 + cột so sánh Vue vs React.
+### 1) Capstone / FE craft
+Viết pseudo + real snippet: 1 test Vue + 1 test React cùng behavior “save success toast”.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-23-test-snippets-vue-react.md`](./artifacts/day-23-test-snippets-vue-react.md)
+
+### 2) React / Next lab
+Lab: MSW (hoặc mock fetch) cho PATCH success/401; assert UI.
+
+→ Setup & path: tab **Lab setup** [`lab/day-23-lab.md`](./lab/day-23-lab.md)
+
+### 3) Thuật toán
+**Warm-up Easy (tự chọn)** (Easy) · pattern **Warm-up**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-23.md`](./artifacts/algo/problems/day-23.md)  
+→ Code + test trong lab repo: `algo/day-23/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Bảng so sánh VTU/RTL; React test 401 path; warm-up xong.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

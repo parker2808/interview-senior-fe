@@ -1,12 +1,13 @@
 # Day 24 — E2E + CI gates
 
-**Ngày:** 26/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 26/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** 1 E2E scenario critical + gắn CI gates.  
 **Capstone link:** Capstone 12 gần final.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** Playwright section trong testing.md.
 2. **Viết** 1 E2E scenario critical: Editor → edit field → save → list cập nhật.
@@ -83,3 +84,29 @@ Cập nhật [`capstone/12-test-plan.md`](./capstone/12-test-plan.md) với E2E 
 
 
 Quay lại: [Day 24 starter](../day-24-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Spec Playwright scenario: login(/mock) → filter → open detail → save. Ghi CI gate.
+
+### React / Next (chi tiết Lab tab)
+Lab: chạy E2E trên Next/React lab (1 smoke) HOẶC script manual checklist nếu chưa cài PW.
+
+### Algo
+**[Live coding simulation](../artifacts/algo/problems/day-24.md)** · Interview sim · Mixed
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] E2E spec/CI note; có điểm self-score algo (pass/partial/fail).
+
+<!-- PLAN_TRACKS_END -->

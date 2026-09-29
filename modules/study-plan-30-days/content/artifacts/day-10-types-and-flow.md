@@ -1,12 +1,13 @@
 # Day 10 — Data flow + TypeScript
 
-**Ngày:** 12/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 12/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Model type Field Config + diagram Save flow.  
 **Capstone link:** Types dùng lại khi spike Vue/React tuần 4.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈20′) — TS interface/generics/narrowing + JS Promise/event loop.
 2. **Model** Field Config types: DTO vs UI model; `VerificationStatus` union; tránh `any`.
@@ -90,3 +91,29 @@ Race? Unmount khi pending? Double-submit?
 
 
 Quay lại: [Day 10 starter](../day-10-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Định nghĩa types Customer, FieldConfig, ApiError. Sequence Save (optimistic vs pessimistic).
+
+### React / Next (chi tiết Lab tab)
+Lab: form FieldConfig dùng useReducer (update_field | validate | submit_*).
+
+### Algo
+**[Longest Substring Without Repeating Characters](../artifacts/algo/problems/day-10.md)** · Sliding window · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Types compile; reducer transitions rõ; sliding window O(n).
+
+<!-- PLAN_TRACKS_END -->

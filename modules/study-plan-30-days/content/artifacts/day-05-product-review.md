@@ -1,12 +1,13 @@
 # Day 5 — Product review + AC
 
-**Ngày:** 07/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 07/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Có Acceptance Criteria v1 cho List + Field Config.  
 **Capstone link:** Deliverable 03 → [`capstone/03-acceptance-criteria.md`](./capstone/03-acceptance-criteria.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15′) — Self-check Product + UI/UX; leadership ước lượng.
 2. **Self-check** flow Day 1 (trả lời ngắn trong section dưới).
@@ -107,3 +108,29 @@ Khi xong section 3–4, paste vào [`capstone/03-acceptance-criteria.md`](./caps
 Đã copy sang [`capstone/03-acceptance-criteria.md`](./capstone/03-acceptance-criteria.md)
 
 Quay lại: [Day 5 starter](../day-05-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Viết AC Given/When/Then cho List filter + Edit save (ít nhất 6 AC). Copy sang capstone/03.
+
+### React / Next (chi tiết Lab tab)
+Lab: extract useLocalStorage(key, initial) hoặc useToggle — dùng trong form Day 3.
+
+### Algo
+**[Top K Frequent Elements](../artifacts/algo/problems/day-05.md)** · HashMap + bucket/sort · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] AC đo được (pass/fail); hook tái sử dụng được; Top K chạy sample.
+
+<!-- PLAN_TRACKS_END -->

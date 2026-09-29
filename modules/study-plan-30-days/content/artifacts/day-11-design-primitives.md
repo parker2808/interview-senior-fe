@@ -1,12 +1,13 @@
 # Day 11 — Empty/error + design system
 
-**Ngày:** 13/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 13/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Chuẩn hóa 4 primitives dùng lại cho Capstone.  
 **Capstone link:** Primitives dùng xuyên Capstone UI states.
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** (≈15′) — component library + error boundaries / monitoring.
 2. **Spec props API** cho 4 primitives: Button, FormField, EmptyState, ErrorState.
@@ -100,3 +101,29 @@ Component nào đang ôm quá nhiều? Tách thành?
 
 
 Quay lại: [Day 11 starter](../day-11-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Spec 4 primitives: API props, variants, a11y notes, empty/error copy.
+
+### React / Next (chi tiết Lab tab)
+Lab: <Tabs> compound (Tabs, TabsList, TabsTrigger, TabsContent) bằng Context nội bộ.
+
+### Algo
+**[Min Stack](../artifacts/algo/problems/day-11.md)** · Stack design · Medium
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Spec đủ để handoff; Tabs lab keyboard-ish; Min Stack đúng.
+
+<!-- PLAN_TRACKS_END -->

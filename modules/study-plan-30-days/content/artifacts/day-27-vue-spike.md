@@ -1,12 +1,13 @@
 # Day 27 — Capstone Vue spike
 
-**Ngày:** 29/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 29/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Implement một slice (List+filter hoặc Field Config) bằng Vue/TS — không full app.  
 **Capstone link:** Code dưới [`capstone/spikes/vue/`](./capstone/spikes/vue/) (README + path sandbox).
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** vue3 + state-management + typescript; skim Capstone 01–11.
 2. **Chọn 1 slice:** List+filter **hoặc** Field Config.
@@ -86,3 +87,29 @@ Khớp docs Day 9 / 15 không? Diff?
 
 
 Quay lại: [Day 27 starter](../day-27-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Code spike Vue: fetch mock + table + filter + empty/error. README ghi trade-offs.
+
+### React / Next (chi tiết Lab tab)
+Parity note: liệt kê API/composable sẽ map sang hooks ngày mai (bảng Vue→React).
+
+### Algo
+**[Big-O flashcards](../artifacts/algo/problems/day-27.md)** · Theory · Easy
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] Spike Vue chạy được happy path; parity table sẵn cho Day 28.
+
+<!-- PLAN_TRACKS_END -->

@@ -1,6 +1,6 @@
 # Capstone — Customer Verification Admin Console
 
-**Cách làm:** docs-first trước (flow, AC, contract, checklist). Sau đó spike code nhỏ **Vue + React/TS** (song song từng slice, không làm hai app đầy đủ).
+**Cách làm (plan v2):** docs + **lab code sớm** (React/Next mỗi ngày). Spike lớn **Vue (Day 27) + React/Next (Day 28)** cùng một slice — không làm hai app đầy đủ. Song song: [algorithms-track.md](./algorithms-track.md).
 
 ## Phạm vi chức năng
 

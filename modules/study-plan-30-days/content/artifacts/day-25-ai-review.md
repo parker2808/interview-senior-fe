@@ -1,12 +1,13 @@
 # Day 25 — AI prompt + review
 
-**Ngày:** 27/10/2026 · **Timebox:** 60–90 phút  
+
+**Ngày:** 27/10/2026 · **Timebox:** 90–120 phút  
 **Mục tiêu ngày:** Prompt đủ context + audit AI output (không blind merge).  
 **Capstone link:** Deliverable 13 → [`capstone/13-ai-evidence.md`](./capstone/13-ai-evidence.md)
 
 ---
 
-## Hướng dẫn (làm gì trong 60–90′)
+## Hướng dẫn (làm gì trong 90–120′)
 
 1. **Đọc** code review checklist / review tips + Feature Template mục AI Usage.
 2. **Viết prompt** generate Field Config edit (AC, states, a11y, roles) — Vue **hoặc** React.
@@ -91,3 +92,29 @@ Link / paste ngắn những gì AI trả:
 Copy → [`capstone/13-ai-evidence.md`](./capstone/13-ai-evidence.md)
 
 Quay lại: [Day 25 starter](../day-25-starter.md) · [Plan](../30-day-study-plan.md) · [Project context](../project-context.md)
+
+
+
+<!-- PLAN_TRACKS_START -->
+## Thực hành — log nhanh
+
+### Capstone / FE craft
+Prompt AI implement 1 util; audit bugs/security; ghi evidence → capstone/13.
+
+### React / Next (chi tiết Lab tab)
+Lab Next: form submit qua Server Action (mock), progressive enhancement note.
+
+### Algo
+**[Weak-topic drill #1](../artifacts/algo/problems/day-25.md)** · Remedial · Mixed
+
+| Mục | Ghi |
+|---|---|
+| Pattern | |
+| Time / Space | |
+| Edge cases | |
+| Link commit lab | |
+
+### Checkpoint
+- [ ] AI evidence trước/sau; Server Action chạy; weak drill note.
+
+<!-- PLAN_TRACKS_END -->

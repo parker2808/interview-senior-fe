@@ -1,18 +1,39 @@
-# Bắt đầu đây — Day 2 (04/10/2026)
+# Day 2 — Hướng dẫn (04/10/2026)
 
-**Timebox:** 60–90 phút · UI hierarchy critique
+**Chủ đề:** this/event loop + UI critique  
+**Timebox:** 90–120 phút  
+**Mục tiêu:** Giải thích this + micro/macrotask; critique UI admin có hierarchy rõ.
 
-## Làm theo thứ tự
+## Lý thuyết — học gì hôm nay
 
-1. Mở **worksheet** và làm đúng hướng dẫn:
-   → [`artifacts/day-02-ui-critique.md`](./artifacts/day-02-ui-critique.md)
-2. Đọc repo (path đã verify trong worksheet):
-   - [`documents/vi/architecture.md`](../../../documents/vi/architecture.md) — Presentational vs Container
-3. Critique 1 admin page + sketch redesign trong worksheet.
+- documents/vi/javascript.md — this, event loop
+- documents/vi/architecture.md — presentational vs container
+- documents/vi/react.md — rendering mental model
 
-## Links plan
+> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
 
-- Mục tiêu / Đọc / Làm gì / Artifact: [30-day-study-plan.md — Day 2](./30-day-study-plan.md#day-2--04102026--ui-hierarchy)
-- Bối cảnh dự án: [project-context.md](./project-context.md)
+## Thực hành — làm gì hôm nay
 
-**Xong Day 2 khi:** có primary action rõ, ≥10 UX issues, và sketch redesign 1 màn.
+### 1) Capstone / FE craft
+Critique 1 admin page: primary action, empty/loading/error, 8–10 UX issues + sketch redesign.
+
+→ Làm trên tab **Worksheet**: [`artifacts/day-02-ui-critique.md`](./artifacts/day-02-ui-critique.md)
+
+### 2) React / Next lab
+Lab: useState counter + conditional render. So sánh với ref Vue. Giải thích re-render khi setState.
+
+→ Setup & path: tab **Lab setup** [`lab/day-02-lab.md`](./lab/day-02-lab.md)
+
+### 3) Thuật toán
+**Valid Anagram** (Easy) · pattern **Frequency map**
+
+→ Đề đầy đủ: [`artifacts/algo/problems/day-02.md`](./artifacts/algo/problems/day-02.md)  
+→ Code + test trong lab repo: `algo/day-02/`
+
+## Checkpoint (tick trước khi mark Day done)
+
+- [ ] Nói được thứ tự log của 1 snippet Promise/setTimeout; có UI critique; Anagram pass.
+
+## Links nhanh
+
+- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)

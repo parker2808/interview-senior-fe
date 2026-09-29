@@ -1,16 +1,13 @@
-# Hub grid, docs scroll, search upgrade
+# Plan clarity: Theory/Practice + Lab tab + Algo problems
 
 ## Plan
-- [x] Fix hub tablet grid stretch (`flex-1` / min-heights)
-- [x] Docs shell: true `h-dvh` + `min-h-0` inner scroll; ScrollToTop listens to `.docs-main`
-- [x] Remove Recent from docs sidebar
-- [x] Keyword search over headings (current lang) + jump to hash
-- [x] Verify + PR
+- [x] Rewrite plan without v1/v2 — Theory vs Practice every day
+- [x] Full algo problem statements + flow docs
+- [x] Third tab Lab setup + lab-template companion repo
+- [x] Wire DayMeta.lab + DayDetail tabs
+- [ ] Commit + update PR
 
 ## Review
-- Hub cards: drop `min-h-screen`/`flex-1`/`justify-between` so tablet grid hugs content
-- Docs: `h-dvh` shell + `overflow-y-auto` on `.docs-main` all breakpoints; lock html/body scroll
-- ScrollToTop binds window + `.docs-main`
-- Sidebar Recent removed
-- DocSearch indexes headings via same markdown→HTML pipeline; fuzzy/prefix match; jump to hash
-- Verified: hub card heights ~200–226px; window scrollY=0 on docs; FAB on main scroll; `hois` → Hoisting hash
+- Hub = theory/worksheets/đề; Lab repo = code push daily
+- Algo: artifacts/algo/problems/day-NN.md → senior-fe-lab/algo/day-NN
+- Template at modules/study-plan-30-days/lab-template/
