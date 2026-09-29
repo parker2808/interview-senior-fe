@@ -25,7 +25,7 @@ import { HUB_MODULES } from '@/modules/hub/constants/hub-modules.constant'
     </header>
 
     <section
-      class="mt-10 grid grid-cols-1 items-start gap-4 sm:mt-12 sm:gap-5 md:grid-cols-2"
+      class="mt-10 grid grid-cols-1 items-start gap-4 sm:mt-12 sm:gap-5 md:grid-cols-2 lg:grid-cols-3"
       aria-label="Modules"
     >
       <NuxtLink

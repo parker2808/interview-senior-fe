@@ -21,4 +21,11 @@ export const HUB_MODULES: HubModuleCard[] = [
     descKey: 'hub.planDesc',
     ctaKey: 'hub.planCta',
   },
+  {
+    id: 'interview-qa',
+    to: '/interview',
+    titleKey: 'hub.interviewTitle',
+    descKey: 'hub.interviewDesc',
+    ctaKey: 'hub.interviewCta',
+  },
 ]
