@@ -20,11 +20,13 @@ Next.js — meta-framework trên React (App Router, SSR/SSG, RSC, deploy product
 
 7. [Routing, layout, navigation](#217-routing-layout-navigation)
 
-8. [Server Actions & mutation](#218-server-actions--mutation)
+8. [Middleware](#218-middleware)
 
-9. [Cheat sheet render & cache](#219-cheat-sheet-render--cache)
+9. [Server Actions & mutation](#219-server-actions--mutation)
 
-10. [Khi nào chọn Next vs SPA React](#2110-khi-nào-chọn-next-vs-spa-react)
+10. [Cheat sheet render & cache](#2110-cheat-sheet-render--cache)
+
+11. [Khi nào chọn Next vs SPA React](#2111-khi-nào-chọn-next-vs-spa-react)
 
 ---
 
@@ -205,7 +207,77 @@ Dynamic: `[id]`, `[...slug]`, `[[...slug]]`.
 
 ---
 
-### 21.8. Server Actions & mutation
+### 21.8. Middleware
+
+**Senior-level Answer:**
+
+Next.js Middleware chạy trên **Edge** **trước khi** request hoàn tất (trước RSC/SSR HTML). Dùng để rewrite, redirect, set cookie/header, gate auth theo cookie — map gần với **Nuxt route middleware** + một phần concern của Nitro server middleware.
+
+File: `middleware.ts` (hoặc `src/middleware.ts`) ở root project.
+
+#### **Ví dụ auth redirect**
+
+```ts
+// middleware.ts
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('session')?.value
+  const { pathname } = request.nextUrl
+
+  const isAuthPage = pathname.startsWith('/login')
+  const isProtected = pathname.startsWith('/admin') || pathname.startsWith('/app')
+
+  if (isProtected && !token) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    url.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(url)
+  }
+
+  if (isAuthPage && token) {
+    return NextResponse.redirect(new URL('/app', request.url))
+  }
+
+  const res = NextResponse.next()
+  res.headers.set('x-pathname', pathname) // optional: truyền context xuống server
+  return res
+}
+
+export const config = {
+  matcher: ['/admin/:path*', '/app/:path*', '/login'],
+}
+```
+
+#### **`matcher` — bắt buộc nghĩ trước khi ship**
+
+- Middleware chạy trên Edge cho mọi path khớp matcher → **giữ mỏng**.
+- Exclude static assets (`_next/static`, images) để khỏi tốn cold start / latency.
+- Matcher sai = auth leak hoặc redirect loop.
+
+#### **Nên / không nên**
+
+| Nên | Không nên |
+|---|---|
+| Redirect/rewrite theo cookie | Query DB nặng / ORM |
+| A/B flag, geo, locale prefix | Secret nặng trong bundle middleware |
+| Set security headers nhẹ | Thay authorization API |
+| Gate UX sớm | Logic phụ thuộc Node-only APIs |
+
+#### **So với Nuxt / React SPA**
+
+| | Nuxt `middleware/` | Next `middleware.ts` | React SPA guard |
+|---|---|---|---|
+| Runtime | Server (SSR) + client nav | **Edge** trước response | Client (sau khi JS load) |
+| Input | `to` / `from` | `NextRequest` (URL, cookies, headers) | Router location + auth state |
+| Output | `navigateTo` / abort | `NextResponse` redirect/rewrite/next | `<Navigate />` / loader `redirect` |
+
+**Interview one-liner:** _Next middleware = edge gate trước HTML; Nuxt middleware = navigation gate SSR-aware; React SPA “middleware” = component/loader sau hydrate. Auth thật vẫn ở server._
+
+---
+
+### 21.9. Server Actions & mutation
 
 **Senior-level Answer:**
 
@@ -222,7 +294,7 @@ async function createItem(formData: FormData) {
 
 ---
 
-### 21.9. Cheat sheet render & cache
+### 21.10. Cheat sheet render & cache
 
 | Mục tiêu | Cách làm |
 |---|---|
@@ -236,7 +308,7 @@ async function createItem(formData: FormData) {
 
 ---
 
-### 21.10. Khi nào chọn Next vs SPA React
+### 21.11. Khi nào chọn Next vs SPA React
 
 **Chọn Next khi:**
 
@@ -263,7 +335,8 @@ Cùng bài toán **Nuxt vs Vue SPA thuần**.
 3. Chiến lược **cache/revalidate** cho trang product.
 4. Map Composition API → **Hooks** (xem [React](./react.md)).
 5. Tách **URL / RSC / Query / Zustand** — xem [State Management (React)](./state-management-react.md).
-6. Kế hoạch migrate dần: giữ API, viết lại UI React/Next theo module.
+6. So **Nuxt middleware** vs **Next `middleware.ts`** (SSR nav gate vs Edge).
+7. Kế hoạch migrate dần: giữ API, viết lại UI React/Next theo module.
 
 ---
 

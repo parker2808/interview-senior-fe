@@ -12,6 +12,8 @@ Nuxt.js framework - Vue meta-framework for SSR, SSG, and more.
 
 3. [CSR vs SSR vs SSG vs SPA](#63-csr-vs-ssr-vs-ssg-vs-spa)
 
+4. [Middleware](#64-middleware)
+
 ---
 
 ## 6. Nuxt.js
@@ -84,6 +86,82 @@ Nuxt.js is a **framework built on Vue** that makes **SSR, SSG, CSR, SPA** develo
 
 ---
 
+### 6.4. Middleware
+
+**Senior-level Answer:**
+
+Nuxt middleware runs **before a route is rendered** — auth, redirects, A/B, feature flags, headers/context. Same job as Vue Router guards, with file conventions and SSR-aware execution.
+
+#### **Three kinds**
+
+| Kind | Declaration | Scope |
+|---|---|---|
+| **Global** | `middleware/auth.global.ts` (`.global` suffix) | Every navigation |
+| **Named** | `middleware/admin.ts` | Via `definePageMeta({ middleware: 'admin' })` |
+| **Inline / route** | inside `definePageMeta({ middleware: [...] })` | That page only |
+
+Order: **global → named/route (array order)** → render page.
+
+#### **Auth + role example**
+
+```ts
+// middleware/auth.global.ts
+export default defineNuxtRouteMiddleware((to) => {
+  const { loggedIn, user } = useAuth() // your composable / auth module
+
+  if (to.path.startsWith('/login')) return
+
+  if (!loggedIn.value) {
+    return navigateTo({ path: '/login', query: { redirect: to.fullPath } })
+  }
+
+  if (to.meta.roles) {
+    const roles = to.meta.roles as string[]
+    if (!roles.some((r) => user.value?.roles?.includes(r))) {
+      return abortNavigation(
+        createError({ statusCode: 403, statusMessage: 'Forbidden' }),
+      )
+    }
+  }
+})
+```
+
+```vue
+<!-- pages/admin/index.vue -->
+<script setup lang="ts">
+definePageMeta({
+  middleware: ['admin'], // named, after globals
+  roles: ['admin'],
+})
+</script>
+```
+
+#### **Key helpers**
+
+| Helper | Purpose |
+|---|---|
+| `navigateTo(path)` | Redirect (can be external) |
+| `abortNavigation()` / `abortNavigation(error)` | Cancel navigation (optionally with error) |
+| `defineNuxtRouteMiddleware` | Typed middleware declaration |
+| `definePageMeta({ middleware })` | Attach middleware to a page |
+
+#### **SSR vs client — common interview points**
+
+1. Middleware may run on the **server** (first SSR request) **and** on the **client** (client navigations).
+2. Don’t assume `window` / `localStorage` — prefer cookies/headers or already-hydrated state.
+3. Avoid non-idempotent side effects (analytics “page view”) unless you branch on server vs client.
+4. Heavy / DB work belongs in **API / Nitro `server/middleware`**, not UI route middleware.
+5. Real authorization stays on the **backend**; FE middleware is UX gating + defense in depth.
+
+#### **Route middleware vs Nitro `server/middleware`**
+
+| | Route middleware (`middleware/`) | Nitro server middleware |
+|---|---|---|
+| Runs on | Navigating to a Nuxt page | Matching HTTP requests |
+| Purpose | Auth UI, page redirects | CORS, logging, API auth, rate limit |
+| Context | `to` / `from` routes | H3 `event` |
+
+**Interview one-liner:** _Nuxt middleware = SSR-aware navigation gate. Vue Router guards = SPA equivalent. Next `middleware.ts` ≈ edge gate before the response — closest map to Nuxt middleware plus some Nitro concerns._
 
 ---
 
