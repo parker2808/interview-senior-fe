@@ -1,13 +1,10 @@
-# Plan clarity: Theory/Practice + Lab tab + Algo problems
+# Fix Interview Q&A mobile overflow
 
 ## Plan
-- [x] Rewrite plan without v1/v2 — Theory vs Practice every day
-- [x] Full algo problem statements + flow docs
-- [x] Third tab Lab setup + lab-template companion repo
-- [x] Wire DayMeta.lab + DayDetail tabs
-- [ ] Commit + update PR
+- [ ] Harden `.prose-doc` so long inline code/paths wrap (root cause)
+- [ ] Contain overflow on Interview card / open panel
+- [ ] Verify on narrow viewport
+- [ ] Commit + PR
 
-## Review
-- Hub = theory/worksheets/đề; Lab repo = code push daily
-- Algo: artifacts/algo/problems/day-NN.md → senior-fe-lab/algo/day-NN
-- Template at modules/study-plan-30-days/lab-template/
+## Notes
+Screenshot: `modules/customers/{pages,components,api,model,tests}` teal inline code spills past viewport on mobile.

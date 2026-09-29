@@ -26,7 +26,7 @@ const exampleHtml = computed(() =>
 </script>
 
 <template>
-  <article class="border-b border-line last:border-b-0">
+  <article class="min-w-0 overflow-hidden border-b border-line last:border-b-0">
     <button
       type="button"
       class="flex w-full items-start gap-3 px-1 py-4 text-left"
@@ -40,7 +40,7 @@ const exampleHtml = computed(() =>
         {{ open ? '−' : '+' }}
       </span>
       <span class="min-w-0 flex-1">
-        <span class="block text-base font-semibold text-ink sm:text-lg">
+        <span class="block break-words text-base font-semibold text-ink sm:text-lg">
           {{ item.question[lang] }}
         </span>
         <span class="mt-1 flex flex-wrap gap-1.5">
@@ -55,15 +55,18 @@ const exampleHtml = computed(() =>
       </span>
     </button>
 
-    <div v-if="open" class="animate-fade-up space-y-4 pb-5 pl-9 pr-1">
-      <section>
+    <div
+      v-if="open"
+      class="animate-fade-up min-w-0 space-y-4 overflow-hidden pb-5 pl-9 pr-1"
+    >
+      <section class="min-w-0">
         <h3 class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
           {{ $t('interview.answer') }}
         </h3>
         <div class="prose-doc mt-2 text-sm sm:text-base" v-html="answerHtml" />
       </section>
 
-      <section v-if="item.example">
+      <section v-if="item.example" class="min-w-0">
         <h3 class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
           {{ $t('interview.example') }}
         </h3>
