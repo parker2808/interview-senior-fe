@@ -12,6 +12,8 @@ Nuxt.js framework - Vue meta-framework for SSR, SSG, and more.
 
 3. [CSR vs SSR vs SSG vs SPA](#63-csr-vs-ssr-vs-ssg-vs-spa)
 
+4. [Middleware](#64-middleware)
+
 ---
 
 ## 6. Nuxt.js
@@ -84,6 +86,82 @@ Nuxt.js là **framework xây dựng trên Vue** giúp phát triển **SSR, SSG, 
 
 ---
 
+### 6.4. Middleware
+
+**Senior-level Answer:**
+
+Nuxt middleware là hàm chạy **trước khi render một route** — dùng cho auth, redirect, A/B, feature flag, set headers/context. Tương đương Vue Router guards, nhưng có convention file + chạy được trong context SSR.
+
+#### **Ba loại**
+
+| Loại | Cách khai báo | Phạm vi |
+|---|---|---|
+| **Global** | `middleware/auth.global.ts` (hậu tố `.global`) | Mọi navigation |
+| **Named** | `middleware/admin.ts` | Gắn qua `definePageMeta({ middleware: 'admin' })` |
+| **Inline / route** | trong `definePageMeta({ middleware: [...] })` | Chỉ page đó |
+
+Thứ tự: **global → named/route (theo mảng)** → render page.
+
+#### **Ví dụ auth + role**
+
+```ts
+// middleware/auth.global.ts
+export default defineNuxtRouteMiddleware((to) => {
+  const { loggedIn, user } = useAuth() // composable của bạn / module auth
+
+  if (to.path.startsWith('/login')) return
+
+  if (!loggedIn.value) {
+    return navigateTo({ path: '/login', query: { redirect: to.fullPath } })
+  }
+
+  if (to.meta.roles) {
+    const roles = to.meta.roles as string[]
+    if (!roles.some((r) => user.value?.roles?.includes(r))) {
+      return abortNavigation(
+        createError({ statusCode: 403, statusMessage: 'Forbidden' }),
+      )
+    }
+  }
+})
+```
+
+```vue
+<!-- pages/admin/index.vue -->
+<script setup lang="ts">
+definePageMeta({
+  middleware: ['admin'], // named, sau global
+  roles: ['admin'],
+})
+</script>
+```
+
+#### **API quan trọng**
+
+| Helper | Việc |
+|---|---|
+| `navigateTo(path)` | Redirect (có thể external) |
+| `abortNavigation()` / `abortNavigation(error)` | Hủy navigation (kèm lỗi) |
+| `defineNuxtRouteMiddleware` | Khai báo typed middleware |
+| `definePageMeta({ middleware })` | Gắn middleware cho page |
+
+#### **SSR vs client — điểm hay hỏi phỏng vấn**
+
+1. Middleware có thể chạy trên **server** (SSR request đầu) **và** **client** (client navigation).
+2. Đừng assume `window` / `localStorage` luôn có — đọc cookie/header hoặc state đã hydrate.
+3. Tránh side-effect không idempotent (ghi analytics “page view”) trong middleware nếu chạy 2 lần (server + client) mà không phân biệt.
+4. Logic nặng / DB query → **server API / `server/middleware`** (Nitro), không nhồi vào route middleware UI.
+5. Authorization thật vẫn ở **backend**; middleware FE chỉ gate UX + giảm lộ UI.
+
+#### **Route middleware vs Nitro `server/middleware`**
+
+| | Route middleware (`middleware/`) | Nitro server middleware |
+|---|---|---|
+| Chạy khi | Navigate tới page Nuxt | Mọi (hoặc matcher) HTTP request |
+| Mục đích | Auth UI, redirect page | CORS, logging, auth API, rate limit |
+| Context | `to` / `from` route | `event` Node/H3 |
+
+**Interview one-liner:** _Nuxt middleware = navigation gate (SSR-aware). Vue Router guards = cùng ý trên SPA. Next `middleware.ts` ≈ edge gate trước response — map gần nhất với Nuxt middleware + một phần Nitro._
 
 ---
 

@@ -46,6 +46,8 @@ Kiến thức Vue 3 toàn diện từ cơ bản đến nâng cao cho Senior Fron
    
    2.6. [Provide / Inject](#526-provide--inject)
 
+   2.7. [Router Navigation Guards (middleware SPA)](#527-router-navigation-guards-middleware-spa)
+
 ---
 
 ## 3. Vue 3
@@ -1383,6 +1385,80 @@ export function useTheme(): Theme {
 ```
 
 ---
+
+#### 5.2.7. Router Navigation Guards (middleware SPA)
+
+**Senior-level Answer:**
+
+Trong Vue SPA (không Nuxt), “middleware” thường là **navigation guards** của Vue Router: chặn / chuyển hướng / kiểm tra quyền **trước khi** vào route. Nuxt bọc pattern này thành file `middleware/` — xem [Nuxt · Middleware](./nuxt.md#64-middleware).
+
+#### **Các tầng guard**
+
+| Tầng | API | Khi nào chạy |
+|---|---|---|
+| Global | `router.beforeEach` | Mọi navigation |
+| Per-route | `beforeEnter` trên route record | Khi vào đúng route đó |
+| In-component | `onBeforeRouteLeave` / `onBeforeRouteUpdate` | Trong component setup |
+| After | `router.afterEach` | Sau khi navigation xong (analytics, title) — **không** chặn được |
+
+#### **Global auth guard**
+
+```ts
+// router/index.ts
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    { path: '/login', component: () => import('@/pages/Login.vue') },
+    {
+      path: '/admin',
+      component: () => import('@/pages/Admin.vue'),
+      meta: { requiresAuth: true, roles: ['admin'] },
+    },
+  ],
+})
+
+router.beforeEach(async (to) => {
+  const auth = useAuthStore()
+  if (!auth.ready) await auth.hydrate() // tránh flash redirect
+
+  if (to.meta.requiresAuth && !auth.isLoggedIn) {
+    return { path: '/login', query: { redirect: to.fullPath } }
+  }
+
+  const roles = to.meta.roles as string[] | undefined
+  if (roles?.length && !roles.some((r) => auth.roles.includes(r))) {
+    return { path: '/403' }
+  }
+})
+```
+
+#### **In-component — unsaved changes**
+
+```ts
+import { onBeforeRouteLeave } from 'vue-router'
+import { ref } from 'vue'
+
+const dirty = ref(false)
+
+onBeforeRouteLeave(() => {
+  if (dirty.value && !window.confirm('Discard unsaved changes?')) {
+    return false // hủy navigation
+  }
+})
+```
+
+#### **Best practices (senior)**
+
+1. **Không** gọi API nặng / side-effect lâu trong mọi `beforeEach` — hydrate auth một lần, cache session.
+2. Dùng `meta` (`requiresAuth`, `roles`, `layout`) thay vì hard-code path list.
+3. Vue Router 4: **return** route / `false` thay vì `next()` callback (tránh double-call bug).
+4. Guard chỉ là **UX + defense in depth** — authorization thật vẫn phải ở API.
+5. Cần SSR/file convention → chuyển sang **Nuxt middleware** (global / named / route).
+
+**Interview one-liner:** _Guard = chặn navigation phía client; Nuxt middleware = cùng ý + chạy được ở server khi SSR; vẫn không thay auth backend._
 
 ---
 

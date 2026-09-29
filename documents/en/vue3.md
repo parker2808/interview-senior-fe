@@ -46,6 +46,8 @@ Comprehensive Vue 3 knowledge from basic to advanced for Senior Frontend Develop
    
    2.6. [Provide / Inject](#526-provide--inject)
 
+   2.7. [Router Navigation Guards (SPA middleware)](#527-router-navigation-guards-spa-middleware)
+
 ---
 
 ## 3. Vue 3
@@ -861,6 +863,82 @@ provide(ThemeKey, theme);
 // Child
 const theme = inject(ThemeKey); // Fully typed!
 ```
+
+---
+
+#### 5.2.7. Router Navigation Guards (SPA middleware)
+
+**Senior-level Answer:**
+
+In a Vue SPA (no Nuxt), “middleware” usually means **Vue Router navigation guards**: block / redirect / authorize **before** entering a route. Nuxt wraps the same idea as `middleware/` files — see [Nuxt · Middleware](./nuxt.md#64-middleware).
+
+#### **Guard layers**
+
+| Layer | API | When it runs |
+|---|---|---|
+| Global | `router.beforeEach` | Every navigation |
+| Per-route | `beforeEnter` on the route record | Entering that route |
+| In-component | `onBeforeRouteLeave` / `onBeforeRouteUpdate` | Inside `setup` |
+| After | `router.afterEach` | After navigation (analytics, title) — **cannot** cancel |
+
+#### **Global auth guard**
+
+```ts
+// router/index.ts
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes: [
+    { path: '/login', component: () => import('@/pages/Login.vue') },
+    {
+      path: '/admin',
+      component: () => import('@/pages/Admin.vue'),
+      meta: { requiresAuth: true, roles: ['admin'] },
+    },
+  ],
+})
+
+router.beforeEach(async (to) => {
+  const auth = useAuthStore()
+  if (!auth.ready) await auth.hydrate() // avoid redirect flash
+
+  if (to.meta.requiresAuth && !auth.isLoggedIn) {
+    return { path: '/login', query: { redirect: to.fullPath } }
+  }
+
+  const roles = to.meta.roles as string[] | undefined
+  if (roles?.length && !roles.some((r) => auth.roles.includes(r))) {
+    return { path: '/403' }
+  }
+})
+```
+
+#### **In-component — unsaved changes**
+
+```ts
+import { onBeforeRouteLeave } from 'vue-router'
+import { ref } from 'vue'
+
+const dirty = ref(false)
+
+onBeforeRouteLeave(() => {
+  if (dirty.value && !window.confirm('Discard unsaved changes?')) {
+    return false // cancel navigation
+  }
+})
+```
+
+#### **Senior best practices**
+
+1. Don’t hit heavy APIs on every `beforeEach` — hydrate auth once, cache the session.
+2. Prefer route `meta` (`requiresAuth`, `roles`) over hard-coded path lists.
+3. Vue Router 4: **return** a route / `false` instead of the `next()` callback (avoids double-call bugs).
+4. Guards are **UX + defense in depth** — real authorization still belongs on the API.
+5. Need SSR / file conventions → move to **Nuxt middleware** (global / named / route).
+
+**Interview one-liner:** _Guards gate client navigation; Nuxt middleware is the same idea plus SSR-capable hooks; neither replaces backend auth._
 
 ---
 

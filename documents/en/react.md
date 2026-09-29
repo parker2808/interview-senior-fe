@@ -50,6 +50,8 @@ React knowledge from basic to advanced for Senior Frontend Developer — written
 
    2.8. [Performance checklist for seniors](#2028-performance-checklist-for-seniors)
 
+   2.9. [Route guards / middleware (SPA)](#2029-route-guards--middleware-spa)
+
 ---
 
 ## 20. React
@@ -492,6 +494,69 @@ Vue often “feels faster to write optimized UI” because of fine-grained updat
 
 ---
 
+#### 20.2.9. Route guards / middleware (SPA)
+
+**Senior-level Answer:**
+
+A React SPA has **no built-in middleware** like Nuxt/Next. “Middleware” usually means one of:
+
+1. **Protected route component** (wrapper + redirect)
+2. **React Router loader / `redirect()`** (data APIs — closest to `beforeEnter`)
+3. **Layout-level auth check** (`<Outlet />` + context)
+
+True edge middleware (cookies, geo, rewrites before HTML) belongs to **Next.js** — see [Next.js · Middleware](./nextjs.md#218-middleware).
+
+#### **Pattern 1 — Protected route**
+
+```tsx
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { useAuth } from '@/auth'
+
+export function RequireAuth({ roles }: { roles?: string[] }) {
+  const { user, ready } = useAuth()
+  const location = useLocation()
+
+  if (!ready) return null // or skeleton — avoid login flash
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: location }} />
+  }
+  if (roles?.length && !roles.some((r) => user.roles.includes(r))) {
+    return <Navigate to="/403" replace />
+  }
+  return <Outlet />
+}
+
+// routes
+// <Route element={<RequireAuth roles={['admin']} />}>
+//   <Route path="/admin" element={<AdminPage />} />
+// </Route>
+```
+
+#### **Pattern 2 — React Router loader (v6.4+)**
+
+```ts
+import { redirect } from 'react-router-dom'
+
+export async function adminLoader() {
+  const session = await getSession()
+  if (!session) throw redirect('/login')
+  if (!session.roles.includes('admin')) throw redirect('/403')
+  return session
+}
+```
+
+#### **Vue / Nuxt bridge**
+
+| Vue / Nuxt | React SPA | Next.js |
+|---|---|---|
+| `router.beforeEach` | `RequireAuth` / loader | — |
+| Nuxt `middleware/` | no file convention | `middleware.ts` (Edge) |
+| `meta.requiresAuth` | route config / loader | matcher + cookies |
+
+**Best practices:** hydrate auth before redirect decisions; never trust UI alone; for SEO/SSR cookie auth use **Next middleware** or a server layout check.
+
+---
+
 ## Quick Vue → React cheat sheet
 
 | Vue 3 | React |
@@ -507,6 +572,7 @@ Vue often “feels faster to write optimized UI” because of fine-grained updat
 | `v-model` | controlled input |
 | `v-for` + `:key` | `.map` + `key` |
 | Pinia | Zustand / Redux Toolkit |
+| Router guards / Nuxt middleware | Protected route · RR loader · Next middleware |
 
 ---
 

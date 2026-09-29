@@ -50,6 +50,8 @@ Kiến thức React từ cơ bản đến nâng cao cho Senior Frontend — vi�
 
    2.8. [Checklist performance cho senior](#2028-checklist-performance-cho-senior)
 
+   2.9. [Route guards / middleware (SPA)](#2029-route-guards--middleware-spa)
+
 ---
 
 ## 20. React
@@ -373,6 +375,69 @@ Store thiên Vue: [State Management](./state-management.md).
 
 ---
 
+#### 20.2.9. Route guards / middleware (SPA)
+
+**Senior-level Answer:**
+
+React SPA **không có middleware built-in** như Nuxt/Next. “Middleware” thường là một trong các pattern:
+
+1. **Protected route component** (wrapper + redirect)
+2. **React Router loader / `redirect()`** (data API — gần `beforeEnter`)
+3. **Layout-level auth check** (`<Outlet />` + context)
+
+Edge middleware thật sự (cookie, geo, rewrite trước HTML) thuộc **Next.js** — xem [Next.js · Middleware](./nextjs.md#218-middleware).
+
+#### **Pattern 1 — Protected route**
+
+```tsx
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
+import { useAuth } from '@/auth'
+
+export function RequireAuth({ roles }: { roles?: string[] }) {
+  const { user, ready } = useAuth()
+  const location = useLocation()
+
+  if (!ready) return null // hoặc skeleton — tránh flash login
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: location }} />
+  }
+  if (roles?.length && !roles.some((r) => user.roles.includes(r))) {
+    return <Navigate to="/403" replace />
+  }
+  return <Outlet />
+}
+
+// routes
+// <Route element={<RequireAuth roles={['admin']} />}>
+//   <Route path="/admin" element={<AdminPage />} />
+// </Route>
+```
+
+#### **Pattern 2 — React Router loader (v6.4+)**
+
+```ts
+import { redirect } from 'react-router-dom'
+
+export async function adminLoader() {
+  const session = await getSession()
+  if (!session) throw redirect('/login')
+  if (!session.roles.includes('admin')) throw redirect('/403')
+  return session
+}
+```
+
+#### **Cầu nối Vue / Nuxt**
+
+| Vue / Nuxt | React SPA | Next.js |
+|---|---|---|
+| `router.beforeEach` | `RequireAuth` / loader | — |
+| Nuxt `middleware/` | không có file convention | `middleware.ts` (Edge) |
+| `meta.requiresAuth` | route config / loader | matcher + cookies |
+
+**Best practices:** hydrate auth trước khi quyết định redirect; đừng chỉ tin UI guard; với SEO/SSR auth cookie → dùng **Next middleware** hoặc server layout check.
+
+---
+
 ## Cheat sheet Vue → React
 
 | Vue 3 | React |
@@ -388,6 +453,7 @@ Store thiên Vue: [State Management](./state-management.md).
 | `v-model` | controlled input |
 | `v-for` + `:key` | `.map` + `key` |
 | Pinia | Zustand / Redux Toolkit |
+| Router guards / Nuxt middleware | Protected route · RR loader · Next middleware |
 
 ---
 

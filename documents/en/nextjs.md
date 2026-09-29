@@ -20,11 +20,13 @@ Next.js — React meta-framework for App Router, SSR/SSG, RSC, and production de
 
 7. [Routing, layouts, and navigation](#217-routing-layouts-and-navigation)
 
-8. [Server Actions & mutations](#218-server-actions--mutations)
+8. [Middleware](#218-middleware)
 
-9. [Rendering & caching cheat sheet](#219-rendering--caching-cheat-sheet)
+9. [Server Actions & mutations](#219-server-actions--mutations)
 
-10. [When to choose Next vs SPA React](#2110-when-to-choose-next-vs-spa-react)
+10. [Rendering & caching cheat sheet](#2110-rendering--caching-cheat-sheet)
+
+11. [When to choose Next vs SPA React](#2111-when-to-choose-next-vs-spa-react)
 
 ---
 
@@ -216,7 +218,77 @@ export function Nav() {
 
 ---
 
-### 21.8. Server Actions & mutations
+### 21.8. Middleware
+
+**Senior-level Answer:**
+
+Next.js Middleware runs on the **Edge** **before** the request finishes (before RSC/SSR HTML). Use it for rewrites, redirects, cookies/headers, and cookie-based auth gates — closest map to **Nuxt route middleware** plus some Nitro server-middleware concerns.
+
+File: `middleware.ts` (or `src/middleware.ts`) at the project root.
+
+#### **Auth redirect example**
+
+```ts
+// middleware.ts
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+export function middleware(request: NextRequest) {
+  const token = request.cookies.get('session')?.value
+  const { pathname } = request.nextUrl
+
+  const isAuthPage = pathname.startsWith('/login')
+  const isProtected = pathname.startsWith('/admin') || pathname.startsWith('/app')
+
+  if (isProtected && !token) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/login'
+    url.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(url)
+  }
+
+  if (isAuthPage && token) {
+    return NextResponse.redirect(new URL('/app', request.url))
+  }
+
+  const res = NextResponse.next()
+  res.headers.set('x-pathname', pathname) // optional: pass context downstream
+  return res
+}
+
+export const config = {
+  matcher: ['/admin/:path*', '/app/:path*', '/login'],
+}
+```
+
+#### **`matcher` — decide before you ship**
+
+- Middleware runs on the Edge for every matched path → **keep it thin**.
+- Exclude static assets (`_next/static`, images) to avoid latency / cold-start cost.
+- A wrong matcher means auth leaks or redirect loops.
+
+#### **Do / don’t**
+
+| Do | Don’t |
+|---|---|
+| Cookie-based redirect/rewrite | Heavy DB / ORM work |
+| A/B flags, geo, locale prefix | Put large secrets in the middleware bundle |
+| Light security headers | Replace API authorization |
+| Early UX gating | Depend on Node-only APIs |
+
+#### **Compared to Nuxt / React SPA**
+
+| | Nuxt `middleware/` | Next `middleware.ts` | React SPA guard |
+|---|---|---|---|
+| Runtime | Server (SSR) + client nav | **Edge** before response | Client (after JS loads) |
+| Input | `to` / `from` | `NextRequest` (URL, cookies, headers) | Router location + auth state |
+| Output | `navigateTo` / abort | `NextResponse` redirect/rewrite/next | `<Navigate />` / loader `redirect` |
+
+**Interview one-liner:** _Next middleware = edge gate before HTML; Nuxt middleware = SSR-aware navigation gate; React SPA “middleware” = component/loader after hydrate. Real auth still lives on the server._
+
+---
+
+### 21.9. Server Actions & mutations
 
 **Senior-level Answer:**
 
@@ -233,7 +305,7 @@ async function createItem(formData: FormData) {
 
 ---
 
-### 21.9. Rendering & caching cheat sheet
+### 21.10. Rendering & caching cheat sheet
 
 | Goal | Approach |
 |---|---|
@@ -247,7 +319,7 @@ async function createItem(formData: FormData) {
 
 ---
 
-### 21.10. When to choose Next vs SPA React
+### 21.11. When to choose Next vs SPA React
 
 **Choose Next when:**
 
@@ -274,7 +346,8 @@ Same decision as **Nuxt vs pure Vue SPA**.
 3. Discuss **cache/revalidate** strategy for a product page.
 4. Map your Vue Composition skills to **Hooks** (see [React](./react.md)).
 5. Separate **URL / RSC / Query / Zustand** — see [State Management (React)](./state-management-react.md).
-6. Describe a migration plan: Vue SPA → keep API, rewrite UI in React/Next incrementally.
+6. Compare **Nuxt middleware** vs **Next `middleware.ts`** (SSR nav gate vs Edge).
+7. Describe a migration plan: Vue SPA → keep API, rewrite UI in React/Next incrementally.
 
 ---
 
