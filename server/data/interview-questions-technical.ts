@@ -1724,24 +1724,24 @@ Nếu đi từ Vue/Nuxt sang, có thể so sánh gần đúng là đây là các
     answer: l(
       `Think in **route segments** rather than one giant page tree.
 
-- ` + '`layout.tsx`' + ` wraps a segment and can nest, similar to nested layouts in Nuxt.
-- ` + '`page.tsx`' + ` is the leaf route content for that segment.
-- ` + '`loading.tsx`' + ` gives a segment-level loading UI while server work is in flight.
-- ` + '`error.tsx`' + ` is a segment-level recovery boundary for rendering failures.
+- "layout.tsx" wraps a segment and can nest, similar to nested layouts in Nuxt.
+- "page.tsx" is the leaf route content for that segment.
+- "loading.tsx" gives a segment-level loading UI while server work is in flight.
+- "error.tsx" is a segment-level recovery boundary for rendering failures.
 
 The senior angle is not just memorizing file names. It is understanding that App Router lets you scope chrome, loading, and failure handling **per route segment** instead of treating the whole app as one spinner or one crash surface.
 
-For a Nuxt comparison: nested ` + '`layout.tsx`' + ` maps loosely to Nuxt layouts, while ` + '`loading.tsx`' + ` and ` + '`error.tsx`' + ` feel like first-class segment conventions for UX states that many Vue teams otherwise assemble more manually.`,
+For a Nuxt comparison: nested "layout.tsx" maps loosely to Nuxt layouts, while "loading.tsx" and "error.tsx" feel like first-class segment conventions for UX states that many Vue teams otherwise assemble more manually.`,
       `Hãy nghĩ theo **route segment** chứ không phải một page tree khổng lồ.
 
-- ` + '`layout.tsx`' + ` bọc một segment và có thể lồng nhau, khá giống nested layout trong Nuxt.
-- ` + '`page.tsx`' + ` là nội dung route lá của segment đó.
-- ` + '`loading.tsx`' + ` cho loading UI theo từng segment khi phần server đang xử lý.
-- ` + '`error.tsx`' + ` là boundary khôi phục lỗi render ở mức segment.
+- "layout.tsx" bọc một segment và có thể lồng nhau, khá giống nested layout trong Nuxt.
+- "page.tsx" là nội dung route lá của segment đó.
+- "loading.tsx" cho loading UI theo từng segment khi phần server đang xử lý.
+- "error.tsx" là boundary khôi phục lỗi render ở mức segment.
 
 Điểm senior không phải chỉ là nhớ tên file. Mà là hiểu App Router cho phép scope phần chrome, loading và xử lý failure **theo từng route segment**, thay vì biến cả app thành một spinner lớn hoặc một crash surface duy nhất.
 
-So với Nuxt: nested ` + '`layout.tsx`' + ` gần với layout lồng nhau trong Nuxt, còn ` + '`loading.tsx`' + ` và ` + '`error.tsx`' + ` giống những convention hạng nhất cho UX state mà nhiều team Vue nếu không có framework support sẽ phải ráp thủ công hơn.`,
+So với Nuxt: nested "layout.tsx" gần với layout lồng nhau trong Nuxt, còn "loading.tsx" và "error.tsx" giống những convention hạng nhất cho UX state mà nhiều team Vue nếu không có framework support sẽ phải ráp thủ công hơn.`,
     ),
   }),
   q({
@@ -1763,13 +1763,13 @@ Use a **Server Component** when:
 
 Use a **Client Component** when you need:
 
-- hooks like ` + '`useState`' + ` or ` + '`useEffect`' + `,
+- hooks like "useState" or "useEffect",
 - browser APIs,
 - event handlers and rich interaction.
 
-The senior rule is: keep the ` + '`use client`' + ` boundary as low as possible. Push interactivity down to small leaves so pages and layouts can stay server-first.
+The senior rule is: keep the "use client" boundary as low as possible. Push interactivity down to small leaves so pages and layouts can stay server-first.
 
-If you come from Nuxt, the rough mental bridge is `.client` / `.server` concerns plus SSR-aware data ownership, but App Router makes that boundary much more explicit.`,
+If you come from Nuxt, the rough mental bridge is the same kind of ".client" / ".server" concerns plus SSR-aware data ownership, but App Router makes that boundary much more explicit.`,
       `Mặc định hãy dùng **Server Component** trừ khi thật sự cần hành vi chỉ có ở browser.
 
 Dùng **Server Component** khi:
@@ -1780,13 +1780,13 @@ Dùng **Server Component** khi:
 
 Dùng **Client Component** khi cần:
 
-- hooks như ` + '`useState`' + ` hoặc ` + '`useEffect`' + `,
+- hooks như "useState" hoặc "useEffect",
 - browser API,
 - event handler và tương tác phong phú.
 
-Quy tắc kiểu senior là: giữ boundary ` + '`use client`' + ` xuống thấp nhất có thể. Đẩy tương tác xuống các leaf nhỏ để page và layout còn giữ được tính server-first.
+Quy tắc kiểu senior là: giữ boundary "use client" xuống thấp nhất có thể. Đẩy tương tác xuống các leaf nhỏ để page và layout còn giữ được tính server-first.
 
-Nếu đi từ Nuxt sang, cầu nối mental model gần đúng là concern `.client` / `.server` cộng với ownership dữ liệu kiểu SSR, nhưng App Router làm boundary đó tường minh hơn nhiều.`,
+Nếu đi từ Nuxt sang, cầu nối mental model gần đúng là concern kiểu ".client" / ".server" cộng với ownership dữ liệu kiểu SSR, nhưng App Router làm boundary đó tường minh hơn nhiều.`,
     ),
   }),
   q({
@@ -1802,24 +1802,24 @@ Nếu đi từ Nuxt sang, cầu nối mental model gần đúng là concern `.cl
 
 Common options:
 
-- ` + '`fetch(..., { cache: \'no-store\' })`' + ` or dynamic rendering for always-fresh personalized data,
-- ` + '`next: { revalidate: N }`' + ` for content that can be a little stale,
+- "fetch(..., { cache: 'no-store' })" or dynamic rendering for always-fresh personalized data,
+- "next: { revalidate: N }" for content that can be a little stale,
 - tag/path revalidation when mutations should selectively refresh cached results.
 
 The senior nuance is that Next caching is not “free performance.” It changes data freshness, invalidation, and operational complexity. You should be able to say what can be stale, for how long, and what event refreshes it.
 
-For Nuxt engineers, compare it to choosing between server fetch, cached SSR content, and explicit refresh flows such as ` + '`refreshNuxtData`' + ` or route-rule behavior, but with stronger built-in cache semantics around fetch itself.`,
+For Nuxt engineers, compare it to choosing between server fetch, cached SSR content, and explicit refresh flows such as "refreshNuxtData" or route-rule behavior, but with stronger built-in cache semantics around fetch itself.`,
       `Hãy bắt đầu bằng việc chốt **mức độ tươi mới cần có** của trang, chứ đừng copy bừa một snippet fetch.
 
 Các lựa chọn hay gặp:
 
-- ` + '`fetch(..., { cache: \'no-store\' })`' + ` hoặc dynamic rendering cho dữ liệu cá nhân hóa luôn phải mới,
-- ` + '`next: { revalidate: N }`' + ` cho nội dung có thể stale một chút,
+- "fetch(..., { cache: 'no-store' })" hoặc dynamic rendering cho dữ liệu cá nhân hóa luôn phải mới,
+- "next: { revalidate: N }" cho nội dung có thể stale một chút,
 - revalidate theo tag/path khi mutation cần làm mới có chọn lọc các kết quả đã cache.
 
 Nuance kiểu senior là cache trong Next không phải “free performance”. Nó làm thay đổi freshness, invalidation và độ phức tạp vận hành. Bạn phải nói rõ cái gì có thể stale, stale bao lâu và event nào sẽ refresh nó.
 
-Với người quen Nuxt, có thể so gần đúng với việc chọn giữa server fetch, SSR content có cache, và các flow refresh chủ động như ` + '`refreshNuxtData`' + ` hoặc route rules, nhưng Next đẩy cache semantics xuống tận lớp fetch một cách rõ ràng hơn.`,
+Với người quen Nuxt, có thể so gần đúng với việc chọn giữa server fetch, SSR content có cache, và các flow refresh chủ động như "refreshNuxtData" hoặc route rules, nhưng Next đẩy cache semantics xuống tận lớp fetch một cách rõ ràng hơn.`,
     ),
   }),
   q({
