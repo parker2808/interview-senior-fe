@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BackLink from '@/modules/core/components/BackLink/BackLink.vue'
+import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import InterviewPinGate from '@/modules/interview-qa/components/InterviewPinGate/InterviewPinGate.vue'
@@ -75,7 +75,7 @@ const gateOpen = computed(() => !unlocked.value)
 </script>
 
 <template>
-  <div class="mx-auto min-h-screen max-w-hub overflow-x-hidden pb-10">
+  <div class="mx-auto min-h-screen max-w-hub pb-10">
     <InterviewPinGate
       :open="gateOpen"
       :unlocking="unlocking || loadingQuestions"
@@ -83,16 +83,11 @@ const gateOpen = computed(() => !unlocked.value)
       @submit="submitPasscode"
     />
 
-    <div
-      class="sticky top-0 z-20 border-b border-line bg-surface-elevated backdrop-blur"
+    <AppTopBar
+      :title="$t('interview.title')"
+      :home-label="t('interview.backHub')"
     >
-      <div class="flex h-12 items-center gap-1.5 px-2 sm:gap-2 sm:px-4">
-        <BackLink :label="t('interview.backHub')" icon-only />
-        <div class="min-w-0 flex-1">
-          <p class="truncate text-sm font-semibold text-ink">
-            {{ $t('interview.title') }}
-          </p>
-        </div>
+      <template #actions>
         <button
           v-if="unlocked"
           type="button"
@@ -103,8 +98,8 @@ const gateOpen = computed(() => !unlocked.value)
         </button>
         <LocaleToggle />
         <ThemeToggle />
-      </div>
-    </div>
+      </template>
+    </AppTopBar>
 
     <div v-if="unlocked" class="px-4 pt-6 sm:px-6 lg:px-8">
       <header class="max-w-3xl">
