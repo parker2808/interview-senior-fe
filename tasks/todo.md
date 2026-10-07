@@ -7,7 +7,7 @@
 - [x] Add a large new set of detailed questions across JS, TypeScript, Vue/Nuxt, React, browser/perf, CSS/a11y, security, testing, system design, behavioral, and live-coding topics
 - [x] Keep the current bilingual `vi` / `en` structure, markdown format, and category/tag conventions intact
 - [x] Run the Nuxt build and fix any issues caused by the content expansion
-- [ ] Commit, push, and open/update the PR
+- [x] Commit, push, and open/update the PR
 
 ## Notes
 - Canonical source for the locked interview bank: `server/data/interview-questions.ts`
@@ -21,3 +21,4 @@
 - Improved all 26 existing questions and added 81 new ones across soft, technical, and situational categories
 - Split the server-side content into per-category files plus a shared helper so the data stays maintainable without changing how the UI or API consume it
 - Verified `npm run build` passes after installing repo dependencies; `npx nuxi typecheck` is not available in this repo because no Vue type-checker package is installed
+- Draft PR opened for the branch update
