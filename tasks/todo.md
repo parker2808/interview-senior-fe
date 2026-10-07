@@ -1,13 +1,10 @@
-# Expand Interview Q&A bank
+# Deepen priority interview questions
 
 ## Plan
-- [x] Inspect how interview Q&A content is stored, localized, served, and rendered
-- [x] Confirm the canonical data source and schema for question content
-- [x] Improve the existing interview questions with fuller, more accurate senior-level answers
-- [x] Add a large new set of detailed questions across JS, TypeScript, Vue/Nuxt, React, browser/perf, CSS/a11y, security, testing, system design, behavioral, and live-coding topics
-- [x] Keep the current bilingual `vi` / `en` structure, markdown format, and category/tag conventions intact
-- [x] Run the Nuxt build and fix any issues caused by the content expansion
-- [x] Commit, push, and open/update the PR
+- [x] Identify the highest-priority 20-30 interview questions for a senior Vue/Nuxt/TypeScript frontend candidate
+- [x] Deepen the selected answers with a more consistent structure: direct answer, why, trade-offs, concise example, and follow-ups
+- [x] Add any missing foundational frontend questions that are still absent from the interview bank
+- [x] Rebuild the site, verify the content change does not break the locked interview flow, and update the existing branch/PR
 
 ## Notes
 - Canonical source for the locked interview bank: `server/data/interview-questions.ts`
@@ -15,10 +12,10 @@
 - Answers/examples support markdown via `marked`; follow-ups are plain localized strings
 - Existing categories are `soft`, `technical`, and `situational`; keep that structure unless a change is clearly necessary
 - Search indexes question text, tags, and answers in both languages
+- Priority second-pass targets include self-intro/project/seniority, JS async + fundamentals, TypeScript design questions, Vue/Nuxt depth, React-for-Vue-dev basics, performance, testing, accessibility, and security
 
 ## Review
-- Expanded the interview bank from 26 questions to 107 questions while preserving the existing locked API shape and bilingual content format
-- Improved all 26 existing questions and added 81 new ones across soft, technical, and situational categories
-- Split the server-side content into per-category files plus a shared helper so the data stays maintainable without changing how the UI or API consume it
-- Verified `npm run build` passes after installing repo dependencies; `npx nuxi typecheck` is not available in this repo because no Vue type-checker package is installed
-- Draft PR opened for the branch update
+- Deepened 29 high-priority questions with a more interview-ready structure across vi/en: short direct answer, why, trade-offs, concise example, and likely follow-ups
+- Added 20 missing fundamentals across JavaScript, DOM events, CSS, HTTP/CORS, Vue basics, and React basics
+- Increased the bank from 107 to 127 total questions while keeping the same server-driven schema and locked interview UI flow
+- Verified `npm run build` still passes after the second-pass content update

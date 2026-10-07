@@ -258,29 +258,45 @@ Nếu code chỉ “chạy được” nhưng không thể reasoning nổi thì 
     tags: ['performance', 'table', 'system-design'],
     question: l('A table must show 50,000 records. How do you design UI and rendering?', 'Table cần hiển thị 50.000 records. Thiết kế UI và rendering thế nào?'),
     answer: l(
-      `Do not render 50,000 DOM rows eagerly.
+      `**Short answer:** Do **not** render 50,000 DOM rows eagerly. Default to server pagination or cursor pagination, then add virtualization only if the UX truly requires long scrolling.
 
-I would think in layers:
+**Why:**
 
-1. do users actually need all rows at once?
-2. prefer server pagination or cursor pagination by default,
-3. use virtualization if long scrolling is required,
-4. move sort/filter to the server for large datasets,
-5. keep rows lightweight and selection modeled by IDs, not duplicated objects.
+1. first ask whether users need all rows at once,
+2. keep data fetching paginated or cursor-based,
+3. virtualize if continuous scrolling is required,
+4. move sort/filter/search to the server when data volume is large,
+5. keep row rendering cheap and model selection by stable IDs.
 
-Senior answer also considers UX: search, bulk actions, export, and loading/error states.`,
-      `Đừng render eager 50.000 DOM row.
+**Trade-offs:**
 
-Em sẽ nghĩ theo nhiều lớp:
+- client-side flexibility feels nice but becomes expensive fast,
+- virtualization helps performance but complicates measurement, keyboard nav, and sticky UI,
+- bulk actions and export often need a separate backend strategy.
 
-1. user có thật sự cần thấy tất cả cùng lúc không?
-2. mặc định ưu tiên server pagination hoặc cursor pagination,
-3. nếu cần scroll dài thì dùng virtualization,
-4. sort/filter nên đưa về server với dataset lớn,
-5. giữ row nhẹ và model selection bằng ID, không nhân bản object.
+Senior answers also cover search UX, loading/error states, bulk actions, and export behavior.`,
+      `**Trả lời ngắn:** **Đừng** render eager 50.000 DOM row. Mặc định nên dùng server pagination hoặc cursor pagination, rồi chỉ thêm virtualization nếu UX thật sự cần scroll dài.
 
-Câu trả lời senior còn phải tính cả UX: search, bulk action, export và loading/error state.`,
+**Vì sao:**
+
+1. trước hết phải hỏi user có thật sự cần thấy tất cả cùng lúc không,
+2. giữ data fetching theo pagination hoặc cursor,
+3. virtualize nếu bắt buộc phải scroll liên tục,
+4. sort/filter/search nên đưa về server khi dữ liệu lớn,
+5. giữ row render rẻ và model selection bằng ID ổn định.
+
+**Trade-off:**
+
+- độ linh hoạt phía client nghe hấp dẫn nhưng sẽ rất đắt ở dataset lớn,
+- virtualization giúp performance nhưng làm phức tạp việc đo chiều cao, keyboard nav và sticky UI,
+- bulk action và export thường cần chiến lược backend riêng.
+
+Câu trả lời kiểu senior còn phải chạm tới search UX, loading/error state, bulk action và cách export.`,
     ),
+    followUps: [
+      l('When is virtualization worth the added complexity?', 'Khi nào virtualization đáng với độ phức tạp nó thêm vào?'),
+      l('How would you handle “select all” across server-paginated data?', 'Bạn xử lý “select all” trên dữ liệu phân trang ở server như thế nào?'),
+    ],
   }),
   q({
     id: 'lazy-loading-tradeoffs',
@@ -316,41 +332,57 @@ Kỹ năng thật nằm ở việc chọn đúng boundary và preload các bư�
     tags: ['dashboard', 'api', 'performance'],
     question: l('A dashboard loads data from 15 APIs. How do you optimize the loading experience?', 'Dashboard load từ 15 APIs. Tối ưu trải nghiệm loading thế nào?'),
     answer: l(
-      `I would optimize both architecture and UX.
+      `**Short answer:** Optimize both the **request architecture** and the **loading UX** so “15 APIs” does not become “one giant spinner”.
 
-Architecture:
+**Architecture:**
 
 - parallelize independent calls,
-- aggregate where waterfalls dominate,
-- cache appropriately,
-- isolate failures per widget.
+- aggregate or add a BFF where waterfalls dominate,
+- cache where freshness rules allow,
+- isolate failures per widget instead of failing the entire page.
 
-UX:
+**UX:**
 
 - prioritize above-the-fold content,
-- use per-widget skeletons,
-- let partial content appear instead of blocking the whole page,
-- distinguish loading from empty and error states.
+- use per-widget skeletons or placeholders,
+- show partial content as it becomes ready,
+- clearly separate loading, empty, stale, and error states.
 
-The key is to avoid making “15 APIs” equal “one giant spinner.”`,
-      `Em sẽ tối ưu cả kiến trúc lẫn UX.
+**Trade-offs:**
 
-Kiến trúc:
+- aggregating too much can create one massive slow endpoint,
+- per-widget independence helps resilience but can create visual jitter,
+- caching improves speed but can complicate freshness.
+
+The key is orchestrating data so the dashboard feels progressively useful, not all-or-nothing.`,
+      `**Trả lời ngắn:** Hãy tối ưu cả **kiến trúc request** lẫn **loading UX** để “15 API” không biến thành “một spinner khổng lồ”.
+
+**Kiến trúc:**
 
 - chạy song song các call độc lập,
-- aggregate ở chỗ waterfall quá nặng,
-- cache phù hợp,
-- cô lập lỗi theo từng widget.
+- aggregate hoặc thêm BFF ở nơi waterfall quá nặng,
+- cache ở những nơi freshness rule cho phép,
+- cô lập lỗi theo từng widget thay vì fail cả trang.
 
-UX:
+**UX:**
 
 - ưu tiên content ở vùng nhìn thấy đầu tiên,
-- dùng skeleton theo widget,
-- cho phép hiển thị partial content thay vì block cả trang,
-- phân biệt rõ loading với empty và error state.
+- dùng skeleton hoặc placeholder theo từng widget,
+- cho partial content hiện dần khi sẵn sàng,
+- tách rõ loading, empty, stale và error state.
 
-Điểm mấu chốt là đừng để “15 API” biến thành “một spinner khổng lồ”.`,
+**Trade-off:**
+
+- aggregate quá nhiều có thể tạo một endpoint lớn và chậm,
+- widget độc lập giúp resilience nhưng có thể gây visual jitter,
+- cache tăng tốc nhưng làm freshness phức tạp hơn.
+
+Điểm mấu chốt là orchestration sao cho dashboard hữu ích dần lên, không phải kiểu được ăn cả ngã về không.`,
     ),
+    followUps: [
+      l('When would you introduce a BFF for the dashboard?', 'Khi nào bạn sẽ thêm BFF cho dashboard?'),
+      l('How do you stop one flaky API from ruining the whole screen?', 'Bạn ngăn một API flaky làm hỏng cả màn hình như thế nào?'),
+    ],
   }),
   q({
     id: 'csrf-vs-xss',

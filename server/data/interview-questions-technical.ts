@@ -11,49 +11,61 @@ export const INTERVIEW_TECHNICAL_QUESTIONS: InterviewQuestion[] = [
       'Dựng một codebase frontend như nào, làm thế nào để scale nếu có hơn 100 features?',
     ),
     answer: l(
-      `I would start with a **modular monolith**, not micro-frontends.
+      `**Short answer:** Start with a **modular monolith** with strong feature boundaries, then scale through domain ownership, state policy, and architecture enforcement rather than jumping straight to micro-frontends.
 
-Useful baseline:
+**Why:**
 
-- \`app/\` or shell for routing, layouts, providers
-- \`modules/<feature>/\` for feature-owned pages, components, hooks/composables, API client, tests
-- \`shared/ui\` for reusable primitives
-- \`shared/lib\` for pure utilities
-- explicit import boundaries so features do not deep-import each other
+- \`app/\` or shell should own routing, layout, and providers.
+- \`modules/<feature>/\` should own feature pages, components, hooks/composables, API client, and tests.
+- \`shared/ui\` and \`shared/lib\` should stay small and intentional.
 
-To scale past 100 features:
+At scale, the big wins are:
 
-1. define domain ownership clearly,
-2. keep route-level lazy loading,
-3. standardize API contract typing,
-4. choose a state policy: URL for navigation/filter state, server-state cache for remote data, global client state only for real cross-cutting concerns,
-5. enforce architecture with linting, code review, and templates.
+1. clear domain ownership,
+2. route/feature-level lazy loading,
+3. typed API contracts,
+4. a written state policy,
+5. import boundaries enforced by tooling and review.
 
-The main failure mode at scale is not file count. It is **unclear ownership and accidental coupling**.`,
-      `Em sẽ bắt đầu bằng **modular monolith**, không nhảy ngay sang micro-frontend.
+**Trade-offs:**
 
-Baseline hữu ích:
+- too much “shared” code creates coupling,
+- too much fragmentation creates navigation overhead,
+- micro-frontends solve real org problems but add runtime and UX complexity.
 
-- \`app/\` hoặc shell cho routing, layout, provider
-- \`modules/<feature>/\` cho page, component, hook/composable, API client, test do feature đó ownership
-- \`shared/ui\` cho primitive dùng lại
-- \`shared/lib\` cho utility thuần
-- boundary import rõ ràng để các feature không deep-import nội bộ của nhau
+The main failure mode is not file count. It is **unclear ownership and accidental coupling**.`,
+      `**Trả lời ngắn:** Bắt đầu bằng **modular monolith** với feature boundary rõ, rồi scale bằng domain ownership, state policy và enforcement kiến trúc thay vì nhảy ngay sang micro-frontend.
 
-Để scale qua 100 feature:
+**Vì sao:**
 
-1. chốt domain ownership rõ,
-2. giữ lazy loading ở mức route/feature,
-3. chuẩn hóa typing của API contract,
-4. có state policy: URL cho navigation/filter state, server-state cache cho remote data, global client state chỉ cho concern cross-cutting thật sự,
-5. enforce architecture bằng lint, code review và template.
+- \`app/\` hoặc shell nên ownership routing, layout và provider.
+- \`modules/<feature>/\` nên ownership page, component, hook/composable, API client và test của feature đó.
+- \`shared/ui\` và \`shared/lib\` nên giữ nhỏ và có chủ đích.
 
-Failure mode chính khi scale không phải là số lượng file. Mà là **ownership mơ hồ và coupling vô tình tăng lên**.`,
+Khi scale, giá trị lớn nhất nằm ở:
+
+1. domain ownership rõ,
+2. lazy loading ở mức route/feature,
+3. API contract có type,
+4. state policy được viết rõ,
+5. boundary import được enforce bằng tooling và code review.
+
+**Trade-off:**
+
+- quá nhiều code “shared” sẽ tăng coupling,
+- tách quá vụn sẽ tăng chi phí điều hướng,
+- micro-frontend giải quyết bài toán tổ chức thật nhưng thêm complexity về runtime và UX.
+
+Failure mode chính không phải số lượng file, mà là **ownership mơ hồ và coupling vô tình**.`,
     ),
     example: l(
       `A good pattern is \`modules/customers/{pages,components,api,model,tests}\` with a public entry file. Other modules import the public API, not deep internals.`,
       `Pattern tốt là \`modules/customers/{pages,components,api,model,tests}\` kèm một public entry file. Module khác chỉ import public API, không chui sâu vào internals.`,
     ),
+    followUps: [
+      l('What belongs in URL state vs global store?', 'Cái gì nên nằm ở URL state và cái gì nên vào global store?'),
+      l('At what point would you seriously consider package splitting or micro-frontends?', 'Tới ngưỡng nào bạn mới cân nhắc tách package hoặc micro-frontend?'),
+    ],
   }),
   q({
     id: 'modal-nested',
@@ -202,37 +214,59 @@ Thường thì:
       'Khi nhận performance issue, debug và xử lý như nào? Biết FE hay BE ra sao?',
     ),
     answer: l(
-      `Performance debugging starts with measurement, not opinions.
+      `**Short answer:** Measure first, then split the problem into **network/TTFB**, **payload/bundle**, **main-thread scripting**, and **rendering** to see whether the bottleneck is FE, BE, or both.
 
-I would look at:
+**Why:**
 
-- field data: Web Vitals or RUM,
-- lab data: browser performance profiler, Lighthouse, Vue/React profiler,
-- waterfall: TTFB, payload size, parsing, scripting, rendering.
+- Field data tells you user pain.
+- Lab tools show where time is actually spent.
+- Waterfalls reveal serialization, payload size, and cache misses.
 
-Heuristics:
+My mental split:
 
-- high TTFB often means BE/network/cold start,
-- large JS and long scripting often mean FE bundle or render cost,
-- many sequential requests can mean FE orchestration problems or a missing aggregate endpoint.
+- high **TTFB** -> BE, network, cold start, or cache policy
+- large download / parse / compile -> FE bundle problem
+- long scripting or re-render time -> FE state/render problem
+- many sequential calls -> FE orchestration or BE API shape problem
 
-Fixes should target the bottleneck, not just “optimize everything.”`,
-      `Debug performance phải bắt đầu bằng đo đạc, không phải opinion.
+**Trade-offs:**
 
-Em sẽ nhìn:
+- do not guess from “the page feels slow”,
+- do not optimize render if TTFB is the real bottleneck,
+- do not hide architecture problems with spinners alone.
 
-- field data: Web Vitals hoặc RUM,
-- lab data: browser performance profiler, Lighthouse, Vue/React profiler,
-- waterfall: TTFB, payload, parsing, scripting, rendering.
+Fixes should target the dominant bottleneck, not “optimize everything.”`,
+      `**Trả lời ngắn:** Hãy đo trước, rồi tách bài toán thành **network/TTFB**, **payload/bundle**, **main-thread scripting** và **rendering** để biết bottleneck nằm ở FE, BE hay cả hai.
 
-Heuristic thường là:
+**Vì sao:**
 
-- TTFB cao thường nghiêng BE/network/cold start,
-- JS lớn và scripting lâu thường nghiêng bundle hoặc render cost phía FE,
-- nhiều request nối tiếp có thể là vấn đề orchestration phía FE hoặc thiếu aggregate endpoint ở BE.
+- Field data cho biết user đang đau ở đâu.
+- Lab tool cho biết thời gian thực sự bị tiêu ở bước nào.
+- Waterfall lộ ra vấn đề serialize request, payload lớn hay cache miss.
 
-Fix phải đánh đúng bottleneck, không phải kiểu “tối ưu tất cả mọi thứ”.`,
+Mental split của em:
+
+- **TTFB** cao -> BE, network, cold start hoặc cache policy
+- download / parse / compile lớn -> vấn đề bundle phía FE
+- scripting hoặc re-render lâu -> vấn đề state/render phía FE
+- nhiều call nối tiếp -> orchestration FE hoặc API shape từ BE
+
+**Trade-off:**
+
+- đừng đoán chỉ vì “trang thấy chậm”,
+- đừng tối ưu render nếu TTFB mới là bottleneck thật,
+- đừng che bài toán kiến trúc bằng spinner.
+
+Fix phải đánh vào bottleneck chính, không phải “tối ưu tất cả mọi thứ”.`,
     ),
+    example: l(
+      `A concise example: “If the API is fast but typing into a big table still causes long scripting blocks, I profile the main thread and look for repeated sort/filter work, unstable props, or over-rendering. If the wait is mostly before the first byte, I pivot toward BE, caching, or network analysis.”`,
+      `Một ví dụ ngắn: “Nếu API nhanh nhưng gõ vào một table lớn vẫn tạo scripting block dài, em sẽ profile main thread để tìm repeated sort/filter work, props không ổn định hoặc over-rendering. Nếu thời gian chủ yếu mất trước first byte thì em chuyển sang phân tích BE, caching hoặc network.”`,
+    ),
+    followUps: [
+      l('What tools would you use first in production vs local?', 'Bạn sẽ dùng tool gì đầu tiên ở production so với local?'),
+      l('Can you give an example where the issue looked like FE but was actually BE?', 'Bạn có ví dụ nào trông như lỗi FE nhưng thực ra là BE không?'),
+    ],
   }),
   q({
     id: 'usememo-usecallback',
@@ -268,37 +302,83 @@ Nhưng điểm quan trọng hơn là trade-off: memoization có overhead và tă
     tags: ['react', 'hooks', 'effects'],
     question: l('What is useEffect?', 'useEffect là gì?'),
     answer: l(
-      `\`useEffect\` is for synchronizing React with **external systems** after render: subscriptions, DOM APIs, timers, analytics, or network side effects.
+      `**Short answer:** \`useEffect\` is for synchronizing React with **external systems after render**, not for computing normal UI values.
 
-Important mental model:
+**Why:**
 
 - render should stay pure,
 - effects run after commit,
-- cleanup runs before re-running and on unmount.
+- cleanup runs before re-run and on unmount.
 
-Common mistakes:
+Good use cases:
 
-- using effects for derived UI data,
+- subscriptions,
+- DOM APIs,
+- timers,
+- analytics,
+- network side effects when not handled by a better data layer.
+
+**Trade-offs / common mistakes:**
+
+- using effects for derived values,
 - missing dependencies and creating stale closures,
-- fetching in effects without cancellation or cache strategy.
+- fetching without cancellation or caching strategy,
+- stuffing too much unrelated logic into one effect.
 
-As a Vue developer, the useful comparison is that React effects are closer to “sync with the outside world after render,” not a general replacement for computed logic.`,
-      `\`useEffect\` dùng để đồng bộ React với **hệ thống bên ngoài** sau khi render: subscription, DOM API, timer, analytics hoặc network side effect.
+For a Vue developer, a useful mental model is: effect is closer to “sync with the outside world after render,” not a replacement for \`computed\`.`,
+      `**Trả lời ngắn:** \`useEffect\` dùng để đồng bộ React với **hệ thống bên ngoài sau render**, không phải để tính các giá trị UI thông thường.
 
-Mental model quan trọng:
+**Vì sao:**
 
 - render phải giữ được purity,
-- effect chạy sau khi commit,
-- cleanup chạy trước lần chạy tiếp theo và khi unmount.
+- effect chạy sau commit,
+- cleanup chạy trước lần re-run và khi unmount.
 
-Lỗi hay gặp:
+Case dùng hợp lý:
 
-- dùng effect để tính derived UI data,
-- thiếu dependency dẫn tới stale closure,
-- fetch trong effect mà không có cancellation hoặc cache strategy.
+- subscription,
+- DOM API,
+- timer,
+- analytics,
+- network side effect khi chưa có data layer tốt hơn.
 
-Với người đi từ Vue sang, cách so sánh hữu ích là effect gần với “đồng bộ với thế giới bên ngoài sau render”, chứ không phải thứ thay thế cho computed logic.`,
+**Trade-off / lỗi hay gặp:**
+
+- dùng effect để tính derived value,
+- thiếu dependency tạo stale closure,
+- fetch mà không có cancel hoặc cache strategy,
+- nhét quá nhiều logic không liên quan vào một effect.
+
+Với người đi từ Vue sang, mental model hữu ích là: effect gần với “đồng bộ với thế giới bên ngoài sau render”, chứ không phải bản thay thế của \`computed\`.`,
     ),
+    example: l(
+      `\`\`\`tsx
+useEffect(() => {
+  const controller = new AbortController()
+
+  fetch(\`/api/search?q=\${query}\`, { signal: controller.signal })
+    .then((r) => r.json())
+    .then(setResults)
+
+  return () => controller.abort()
+}, [query])
+\`\`\``,
+      `\`\`\`tsx
+useEffect(() => {
+  const controller = new AbortController()
+
+  fetch(\`/api/search?q=\${query}\`, { signal: controller.signal })
+    .then((r) => r.json())
+    .then(setResults)
+
+  return () => controller.abort()
+}, [query])
+\`\`\``,
+    ),
+    followUps: [
+      l('When would you avoid fetching in useEffect entirely?', 'Khi nào bạn tránh fetch trong useEffect hoàn toàn?'),
+      l('Why do stale closures happen in effects?', 'Vì sao stale closure hay xảy ra trong effect?'),
+    ],
   }),
   q({
     id: 'jwt-login-flow',
@@ -370,41 +450,77 @@ Trong thực tế, nó rất hữu ích để cô lập widget để một lỗi
     tags: ['javascript', 'event-loop', 'async'],
     question: l('Explain the JavaScript event loop.', 'Giải thích JavaScript event loop.'),
     answer: l(
-      `JavaScript in the browser runs on a single main thread for most UI work, so concurrency is achieved through the **event loop**, not true parallel execution.
+      `**Short answer:** JavaScript achieves concurrency in the browser through the **event loop**: synchronous code runs on the call stack, async work is queued, and callbacks are scheduled back onto the main thread later.
 
-Key pieces:
+**Why:**
 
-- call stack for currently executing code,
-- Web APIs / runtime for timers, network, DOM events,
-- task queues,
-- microtask queue for promises and mutation observers.
+The main pieces are:
 
-The loop roughly does:
+- the **call stack** for running code,
+- browser/runtime APIs for timers, network, and DOM events,
+- the **task queue**,
+- the **microtask queue** for promises and mutation observers.
 
-1. run synchronous stack to completion,
+The rough order is:
+
+1. run synchronous code to completion,
 2. drain microtasks,
-3. allow rendering when possible,
-4. take the next task and repeat.
+3. allow rendering,
+4. pull the next task and repeat.
 
-Senior insight: many UI bugs come from misunderstanding when async callbacks run relative to rendering and state updates.`,
-      `JavaScript trong browser chủ yếu chạy trên một main thread cho phần UI, nên concurrency đến từ **event loop**, không phải chạy song song thật.
+**Trade-offs / common mistakes:**
 
-Các mảnh chính:
+- assuming \`setTimeout(..., 0)\` runs immediately,
+- forgetting that promises run before the next task,
+- creating long synchronous work that blocks input and paint.
 
-- call stack cho code đang chạy,
-- Web API / runtime cho timer, network, DOM event,
-- task queue,
-- microtask queue cho promise và mutation observer.
+Many UI bugs come from misunderstanding callback timing relative to rendering and state updates.`,
+      `**Trả lời ngắn:** JavaScript đạt được concurrency trong browser nhờ **event loop**: code đồng bộ chạy trên call stack, công việc async được đưa vào queue, rồi callback được đưa trở lại main thread ở thời điểm phù hợp.
 
-Vòng lặp thường là:
+**Vì sao:**
 
-1. chạy hết synchronous stack,
+Các mảnh chính là:
+
+- **call stack** cho code đang chạy,
+- browser/runtime API cho timer, network và DOM event,
+- **task queue**,
+- **microtask queue** cho promise và mutation observer.
+
+Thứ tự gần đúng là:
+
+1. chạy hết code đồng bộ,
 2. drain microtask,
-3. cho phép render nếu phù hợp,
+3. cho phép render,
 4. lấy task tiếp theo và lặp lại.
 
-Insight mức senior: rất nhiều bug UI xuất phát từ việc hiểu sai thời điểm callback async chạy so với render và state update.`,
+**Trade-off / lỗi hay gặp:**
+
+- tưởng \`setTimeout(..., 0)\` chạy ngay,
+- quên rằng promise chạy trước task tiếp theo,
+- tạo synchronous work quá dài làm block input và paint.
+
+Nhiều bug UI sinh ra từ việc hiểu sai timing của callback so với render và state update.`,
     ),
+    example: l(
+      `\`\`\`js
+console.log('A')
+setTimeout(() => console.log('B'), 0)
+Promise.resolve().then(() => console.log('C'))
+console.log('D')
+// A, D, C, B
+\`\`\``,
+      `\`\`\`js
+console.log('A')
+setTimeout(() => console.log('B'), 0)
+Promise.resolve().then(() => console.log('C'))
+console.log('D')
+// A, D, C, B
+\`\`\``,
+    ),
+    followUps: [
+      l('What is the difference between a task and a microtask?', 'Khác nhau giữa task và microtask là gì?'),
+      l('How does the event loop relate to input lag or INP?', 'Event loop liên quan thế nào tới input lag hoặc INP?'),
+    ],
   }),
   q({
     id: 'js-closures',
@@ -634,31 +750,68 @@ Câu trả lời mức senior nên chạm tới cả **cleanup trong code** lẫ
     tags: ['typescript', 'generics'],
     question: l('What are generics and why are they useful?', 'Generics là gì và vì sao hữu ích?'),
     answer: l(
-      `Generics let you write reusable logic while preserving type relationships.
+      `**Short answer:** Generics let you write reusable code while preserving **relationships between types**, not just accepting “anything”.
 
-Instead of saying “this function takes anything,” you say “this function works for many types, but the input and output are related.”
+**Why:**
 
-That is powerful for:
+They are valuable for:
 
 - API helpers,
 - reusable components,
-- data transformation utilities,
+- transformation utilities,
 - hooks/composables that should infer caller types.
 
-The goal is not maximum cleverness. Good generics keep types expressive without making the callsite unreadable.`,
-      `Generics cho phép viết logic dùng lại nhưng vẫn giữ được quan hệ type.
+Instead of “this takes anything”, generics let you say “this works for many types, and the input/output stay related”.
 
-Thay vì nói “function này nhận bất cứ thứ gì”, bạn nói “function này làm việc với nhiều type khác nhau, nhưng input và output có quan hệ với nhau”.
+**Trade-offs:**
+
+- over-generic APIs become unreadable,
+- sometimes a named domain type is clearer than a clever generic,
+- good inference matters more than type gymnastics.
+
+The goal is expressive and maintainable typing, not showing off.`,
+      `**Trả lời ngắn:** Generics cho phép viết code dùng lại nhưng vẫn giữ được **quan hệ giữa các type**, chứ không chỉ là chấp nhận “bất cứ thứ gì”.
+
+**Vì sao:**
 
 Nó rất hữu ích cho:
 
 - API helper,
 - component tái sử dụng,
 - utility transform data,
-- hook/composable cần infer type từ phía caller.
+- hook/composable cần infer type từ caller.
 
-Mục tiêu không phải làm type càng thông minh càng tốt. Generic tốt là generic diễn đạt được ý mà callsite vẫn dễ đọc.`,
+Thay vì “hàm này nhận gì cũng được”, generic giúp nói rằng “hàm này làm việc với nhiều type, và input/output vẫn giữ quan hệ với nhau”.
+
+**Trade-off:**
+
+- API quá generic sẽ khó đọc,
+- đôi khi một domain type có tên rõ ràng còn tốt hơn generic quá thông minh,
+- inference tốt quan trọng hơn type gymnastics.
+
+Mục tiêu là typing diễn đạt được ý và maintainable, không phải để khoe kỹ xảo.`,
     ),
+    example: l(
+      `\`\`\`ts
+function first<T>(items: T[]): T | undefined {
+  return items[0]
+}
+
+const n = first([1, 2, 3])       // number | undefined
+const s = first(['a', 'b'])      // string | undefined
+\`\`\``,
+      `\`\`\`ts
+function first<T>(items: T[]): T | undefined {
+  return items[0]
+}
+\nconst n = first([1, 2, 3])        // number | undefined
+const s = first(['a', 'b'])       // string | undefined
+\`\`\``,
+    ),
+    followUps: [
+      l('When is a generic overkill?', 'Khi nào generic là overkill?'),
+      l('How do you balance inference vs explicit type parameters?', 'Bạn cân bằng inference với explicit type parameter như thế nào?'),
+    ],
   }),
   q({
     id: 'ts-utility-types',
@@ -764,37 +917,69 @@ Trong codebase trưởng thành, nên ưu tiên \`unknown\` ở boundary thay v�
     tags: ['typescript', 'design'],
     question: l('How do you design good TypeScript types for APIs or component props?', 'Bạn thiết kế type TypeScript tốt cho API hoặc component props thế nào?'),
     answer: l(
-      `I optimize for three things:
+      `**Short answer:** Good TypeScript design optimizes for **correctness at boundaries**, **readability at the callsite**, and **flexibility without ambiguity**.
 
-1. correctness at boundaries,
-2. readability at the callsite,
-3. flexibility without ambiguity.
+**Why:**
 
-Practical rules:
+Practical rules I use:
 
 - model domain concepts, not just raw JSON,
 - use discriminated unions for mutually exclusive states,
 - avoid giant “do everything” prop types,
 - encode invariants where the compiler can help,
-- validate untrusted data at runtime because TypeScript alone is compile-time only.
+- validate untrusted data at runtime because TS is compile-time only.
 
-Good types should guide usage, not require a decoder ring.`,
-      `Em tối ưu cho ba thứ:
+**Trade-offs:**
 
-1. correctness ở boundary,
-2. readability ở callsite,
-3. flexibility nhưng không mơ hồ.
+- overly clever type systems can make components harder to use,
+- sometimes duplication is cheaper than abstracting too early,
+- runtime validation is still needed for real external data.
 
-Rule thực tế:
+Good types should guide correct usage instead of requiring a decoder ring.`,
+      `**Trả lời ngắn:** Thiết kế TypeScript tốt tối ưu cho **correctness ở boundary**, **readability ở callsite** và **flexibility nhưng không mơ hồ**.
 
-- model domain concept, không chỉ model raw JSON,
-- dùng discriminated union cho các state loại trừ nhau,
+**Vì sao:**
+
+Các rule thực tế em hay dùng:
+
+- model domain concept chứ không chỉ model raw JSON,
+- dùng discriminated union cho state loại trừ nhau,
 - tránh prop type khổng lồ “làm mọi thứ”,
 - encode invariant ở nơi compiler giúp được,
-- validate dữ liệu không tin cậy ở runtime vì TypeScript chỉ là compile-time.
+- validate dữ liệu bên ngoài ở runtime vì TS chỉ hoạt động lúc compile.
 
-Type tốt phải hướng dẫn được cách dùng, chứ không phải bắt người đọc giải mật mã.`,
+**Trade-off:**
+
+- type system quá khôn có thể làm component khó dùng hơn,
+- đôi khi duplication rẻ hơn abstract quá sớm,
+- dữ liệu ngoài đời vẫn cần runtime validation.
+
+Type tốt nên hướng người dùng tới cách dùng đúng thay vì bắt họ giải mật mã.`,
     ),
+    example: l(
+      `\`\`\`ts
+type AsyncState<T> =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: T }
+  | { status: 'error'; message: string }
+\`\`\`
+
+This is clearer than many booleans like \`isLoading\`, \`hasError\`, and nullable \`data\` drifting out of sync.`,
+      `\`\`\`ts
+type AsyncState<T> =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: T }
+  | { status: 'error'; message: string }
+\`\`\`
+
+Kiểu này rõ hơn nhiều so với nhiều boolean như \`isLoading\`, \`hasError\` và \`data\` nullable dễ bị lệch nhau.`,
+    ),
+    followUps: [
+      l('How do you validate API responses at runtime?', 'Bạn validate API response ở runtime như thế nào?'),
+      l('When would you choose a union over optional props?', 'Khi nào bạn chọn union thay vì prop optional?'),
+    ],
   }),
   q({
     id: 'vue-reactivity-internals',
@@ -802,21 +987,41 @@ Type tốt phải hướng dẫn được cách dùng, chứ không phải bắt
     tags: ['vue', 'reactivity'],
     question: l('How does Vue 3 reactivity work internally?', 'Vue 3 reactivity hoạt động bên dưới như thế nào?'),
     answer: l(
-      `At a high level, Vue 3 uses **Proxies** for reactive objects and dependency tracking based on **track** and **trigger**.
+      `**Short answer:** Vue 3 reactivity is built around **Proxy-based tracking**: reads are tracked, writes trigger dependent effects.
 
-When reactive state is read during an effect or computed, Vue tracks that dependency. When the property changes, Vue triggers only the effects that depend on it.
+**Why:**
 
-That is why Vue can update at a more fine-grained level than React's default component re-render model.
+- when a reactive property is read inside an effect/computed, Vue **tracks** that dependency,
+- when the property changes, Vue **triggers** only the effects that depend on it,
+- that gives Vue more fine-grained updates than React's default “rerun the whole component function” model.
 
-The important interview takeaway is not every internal detail. It is understanding why Vue can react to property access and why destructuring reactive state carelessly can break that connection.`,
-      `Ở mức cao, Vue 3 dùng **Proxy** cho reactive object và dependency tracking dựa trên **track** và **trigger**.
+**Trade-offs / common mistakes:**
 
-Khi reactive state được đọc trong effect hoặc computed, Vue sẽ track dependency đó. Khi property thay đổi, Vue chỉ trigger các effect phụ thuộc vào property đó.
+- destructuring reactive objects carelessly can break reactivity,
+- deep reactive graphs can still create hidden complexity,
+- “fine-grained” does not mean “free”; bad state design still hurts.
 
-Đó là lý do Vue có thể update mịn hơn so với model re-render component mặc định của React.
+The interview goal is not to recite all internals. It is to explain why property access matters and how that affects app design.`,
+      `**Trả lời ngắn:** Vue 3 reactivity dựa trên **Proxy + dependency tracking**: lần đọc được track, lần ghi sẽ trigger effect phụ thuộc.
 
-Điểm cần nắm khi phỏng vấn không phải mọi internal detail. Mà là hiểu vì sao Vue có thể phản ứng theo property access và vì sao destructure reactive state bất cẩn có thể làm mất liên kết đó.`,
+**Vì sao:**
+
+- khi một reactive property được đọc trong effect/computed, Vue sẽ **track** dependency đó,
+- khi property đổi, Vue **trigger** đúng các effect liên quan,
+- nhờ vậy Vue có update mịn hơn model mặc định của React là chạy lại function component.
+
+**Trade-off / lỗi hay gặp:**
+
+- destructure reactive object bất cẩn có thể làm mất reactivity,
+- graph reactive sâu vẫn có thể tạo hidden complexity,
+- “fine-grained” không có nghĩa là “không tốn gì”; state design tệ vẫn đau như thường.
+
+Mục tiêu trong phỏng vấn không phải đọc thuộc toàn bộ internals, mà là giải thích vì sao property access quan trọng và nó ảnh hưởng gì tới cách thiết kế app.`,
     ),
+    followUps: [
+      l('Why can destructuring break reactivity?', 'Vì sao destructuring có thể làm mất reactivity?'),
+      l('How is this different from React’s rendering model?', 'Điều này khác gì so với rendering model của React?'),
+    ],
   }),
   q({
     id: 'vue-ref-vs-reactive',
@@ -824,27 +1029,41 @@ Khi reactive state được đọc trong effect hoặc computed, Vue sẽ track 
     tags: ['vue', 'reactivity'],
     question: l('When do you use ref vs reactive?', 'Khi nào dùng ref và khi nào dùng reactive?'),
     answer: l(
-      `Use **ref** for single values and when you want explicit assignment semantics. Use **reactive** for object-like grouped state.
+      `**Short answer:** Use **ref** by default for single values and explicit ownership; use **reactive** when several fields truly belong together as one object.
 
-In practice:
+**Why:**
 
-- \`ref\` is often simpler and safer as a default,
-- \`reactive\` is convenient for cohesive objects,
-- avoid destructuring reactive objects carelessly,
-- use \`toRefs\` or \`storeToRefs\` when exposing reactive object fields individually.
+- \`ref\` is simple, explicit, and easy to type,
+- \`reactive\` is ergonomic for grouped state,
+- \`toRefs\` / \`storeToRefs\` help when you need to expose fields separately.
 
-Many teams default to \`ref\` more often because it is easier to reason about in composables and typing.`,
-      `Dùng **ref** cho giá trị đơn lẻ và khi muốn semantics gán giá trị rõ ràng. Dùng **reactive** cho state dạng object có tính kết dính.
+**Trade-offs:**
 
-Trong thực tế:
+- \`reactive\` is convenient but easier to misuse with destructuring,
+- mixing both styles randomly across a codebase hurts consistency,
+- some teams prefer \`ref\` more often because composables stay clearer.
 
-- \`ref\` thường đơn giản và an toàn hơn làm mặc định,
-- \`reactive\` tiện cho object state gắn kết,
-- tránh destructure reactive object bừa bãi,
-- dùng \`toRefs\` hoặc \`storeToRefs\` khi cần expose từng field riêng.
+The important part is not the rule itself; it is keeping state ownership obvious.`,
+      `**Trả lời ngắn:** Mặc định dùng **ref** cho giá trị đơn lẻ và ownership rõ ràng; dùng **reactive** khi nhiều field thực sự thuộc về cùng một object state.
 
-Nhiều team dùng \`ref\` thường xuyên hơn vì nó dễ reasoning hơn trong composable và typing.`,
+**Vì sao:**
+
+- \`ref\` đơn giản, explicit và dễ type,
+- \`reactive\` tiện cho grouped state,
+- \`toRefs\` / \`storeToRefs\` hữu ích khi cần expose từng field riêng.
+
+**Trade-off:**
+
+- \`reactive\` tiện nhưng dễ bị dùng sai khi destructure,
+- trộn hai style lung tung trong codebase sẽ làm giảm consistency,
+- nhiều team dùng \`ref\` thường xuyên hơn vì composable rõ ràng hơn.
+
+Điều quan trọng không phải là học thuộc rule, mà là giữ cho ownership của state luôn dễ nhìn.`,
     ),
+    followUps: [
+      l('Why do many teams default to ref more often?', 'Vì sao nhiều team lại default về ref nhiều hơn?'),
+      l('When would a reactive object be cleaner than many refs?', 'Khi nào một reactive object sạch hơn nhiều ref rời nhau?'),
+    ],
   }),
   q({
     id: 'vue-computed-watch-watcheffect',
@@ -852,29 +1071,59 @@ Nhiều team dùng \`ref\` thường xuyên hơn vì nó dễ reasoning hơn tro
     tags: ['vue', 'composition-api'],
     question: l('When should you use computed, watch, and watchEffect?', 'Khi nào dùng computed, watch và watchEffect?'),
     answer: l(
-      `- **computed** for derived state with caching,
-- **watch** when you need to react to a specific source and compare transitions,
-- **watchEffect** when dependencies can be discovered automatically from synchronous reads.
+      `**Short answer:** Use **computed** for derived values, **watch** for explicit source-driven side effects, and **watchEffect** when automatic dependency collection is the simplest fit.
 
-Good rule:
+**Why:**
 
-- derive values with \`computed\`,
-- synchronize side effects with \`watch\` / \`watchEffect\`,
-- avoid using watchers when simple declarative derivation would work.
+- \`computed\` is cached and declarative,
+- \`watch\` is precise when you care about a particular source or transition,
+- \`watchEffect\` is convenient when dependencies are naturally discovered from synchronous reads.
 
-Overusing watchers often makes state flow harder to reason about.`,
-      `- **computed** dùng cho derived state có cache,
-- **watch** khi cần phản ứng với source cụ thể và quan sát sự chuyển trạng thái,
-- **watchEffect** khi dependency có thể tự được thu thập từ các lần đọc đồng bộ.
+**Trade-offs:**
 
-Rule hữu ích:
+- plain methods are fine for uncached computations during render, but they rerun every render,
+- using \`watch\` for things that should be \`computed\` makes state flow harder to reason about,
+- \`watchEffect\` is convenient but less explicit,
+- too many watchers can create orchestration spaghetti.
 
-- tính giá trị bằng \`computed\`,
-- đồng bộ side effect bằng \`watch\` / \`watchEffect\`,
-- tránh dùng watcher nếu chỉ cần derive declarative là đủ.
+Good rule: derive with \`computed\`; synchronize side effects with \`watch\` or \`watchEffect\`.`,
+      `**Trả lời ngắn:** Dùng **computed** cho giá trị suy ra, **watch** cho side effect gắn với source rõ ràng, và **watchEffect** khi auto-collect dependency là cách gọn nhất.
 
-Dùng watcher quá nhiều thường làm state flow khó reasoning hơn.`,
+**Vì sao:**
+
+- \`computed\` có cache và mang tính declarative,
+- \`watch\` chính xác khi bạn quan tâm tới một source hoặc một transition cụ thể,
+- \`watchEffect\` tiện khi dependency tự lộ ra qua các lần đọc đồng bộ.
+
+**Trade-off:**
+
+- method thường cho tính toán không cần cache trong lúc render, nhưng nó sẽ chạy lại ở mỗi render,
+- dùng \`watch\` cho thứ đáng lẽ là \`computed\` sẽ làm state flow khó reasoning hơn,
+- \`watchEffect\` tiện nhưng ít explicit hơn,
+- watcher quá nhiều dễ biến thành orchestration spaghetti.
+
+Rule thực tế: derive bằng \`computed\`; đồng bộ side effect bằng \`watch\` hoặc \`watchEffect\`.`,
     ),
+    example: l(
+      `\`\`\`ts
+const fullName = computed(() => \`\${first.value} \${last.value}\`)
+
+watch(query, () => {
+  // fetch or sync external system
+})
+\`\`\``,
+      `\`\`\`ts
+const fullName = computed(() => \`\${first.value} \${last.value}\`)
+
+watch(query, () => {
+  // fetch hoặc đồng bộ hệ thống ngoài
+})
+\`\`\``,
+    ),
+    followUps: [
+      l('When is watchEffect too implicit?', 'Khi nào watchEffect trở nên quá implicit?'),
+      l('What bugs happen when people use watch for derived state?', 'Những bug nào hay xảy ra khi dùng watch cho derived state?'),
+    ],
   }),
   q({
     id: 'vue-composition-api-benefits',
@@ -910,29 +1159,47 @@ Composition API đặc biệt hữu ích khi component dần giống orchestrati
     tags: ['vue', 'composables', 'architecture'],
     question: l('What makes a good composable in Vue?', 'Composable tốt trong Vue cần những gì?'),
     answer: l(
-      `A good composable has a clear responsibility and a predictable API.
+      `**Short answer:** A good composable has **one clear responsibility**, a predictable API, and very few hidden side effects.
 
-I look for:
+**Why:**
+
+I usually want:
 
 - one main concern,
 - explicit inputs and outputs,
-- minimal hidden side effects,
-- cleanup when attaching listeners or async work,
-- testability without mounting a full app when possible.
+- cleanup for listeners, timers, or async work,
+- testability without mounting a whole app when possible.
 
-Bad composables often become mini-frameworks that fetch, mutate, navigate, and toast all at once.`,
-      `Composable tốt có responsibility rõ và API dễ đoán.
+**Trade-offs:**
 
-Em thường nhìn:
+- over-abstracting too early creates vague “utility composables”,
+- composables that fetch, mutate, navigate, and toast all at once become mini-frameworks,
+- convenience today can become hidden coupling tomorrow.
+
+Good composables make logic reusable **and** easier to reason about.`,
+      `**Trả lời ngắn:** Composable tốt phải có **một responsibility rõ ràng**, API dễ đoán và rất ít hidden side effect.
+
+**Vì sao:**
+
+Em thường muốn có:
 
 - một concern chính,
 - input và output rõ ràng,
-- ít hidden side effect,
-- có cleanup nếu gắn listener hoặc async work,
-- test được mà không cần mount nguyên app nếu có thể.
+- cleanup cho listener, timer hoặc async work,
+- khả năng test mà không cần mount cả app nếu có thể.
 
-Composable tệ thường biến thành mini-framework: vừa fetch, vừa mutate, vừa navigate, vừa toast mọi thứ cùng lúc.`,
+**Trade-off:**
+
+- abstract quá sớm sẽ tạo ra những “utility composable” mơ hồ,
+- composable vừa fetch, vừa mutate, vừa navigate, vừa toast sẽ thành mini-framework,
+- tiện hôm nay có thể thành hidden coupling ngày mai.
+
+Composable tốt phải làm logic vừa reusable **vừa** dễ reasoning hơn.`,
     ),
+    followUps: [
+      l('What would make you split a composable into two?', 'Dấu hiệu nào khiến bạn tách một composable thành hai?'),
+      l('How do you test composables that use lifecycle or async work?', 'Bạn test composable có lifecycle hoặc async work như thế nào?'),
+    ],
   }),
   q({
     id: 'pinia-design',
@@ -940,27 +1207,57 @@ Composable tệ thường biến thành mini-framework: vừa fetch, vừa mutat
     tags: ['vue', 'pinia', 'state-management'],
     question: l('How would you decide what belongs in Pinia?', 'Bạn quyết định cái gì nên nằm trong Pinia như thế nào?'),
     answer: l(
-      `Not all state belongs in a global store.
+      `**Short answer:** Put state in Pinia only when it is truly **shared, long-lived, and client-owned**. Do not use it as the default home for everything.
+
+**Why:**
 
 I usually ask:
 
-- is this state shared across distant parts of the app?
-- does it need to outlive a single page/component?
-- is URL a better source of truth?
-- is it actually server state and better handled by data-fetching cache?
+- is this shared across distant parts of the app?
+- does it outlive one page/component?
+- should URL be the source of truth instead?
+- is this really server state and better handled by a fetch/cache layer?
 
-Pinia is great for cross-cutting client state, auth/session UI state, feature flags, or workflow state. It is a bad dumping ground for every form field or every API response.`,
-      `Không phải state nào cũng nên vào global store.
+Good Pinia candidates:
+
+- auth/session UI state,
+- feature flags,
+- cross-step workflow state,
+- shared client preferences.
+
+**Trade-offs:**
+
+- too much store state makes data flow harder to trace,
+- putting server data in Pinia can duplicate caching concerns,
+- local state moved global too early hurts maintainability.`,
+      `**Trả lời ngắn:** Chỉ đưa state vào Pinia khi nó thực sự **được chia sẻ, sống lâu và do client sở hữu**. Đừng coi Pinia là chỗ mặc định cho mọi thứ.
+
+**Vì sao:**
 
 Em thường hỏi:
 
 - state này có được chia sẻ ở nhiều chỗ xa nhau không?
-- nó có cần sống lâu hơn một page/component không?
-- URL có phải source of truth tốt hơn không?
-- hay đây thực ra là server state và nên để data-fetching cache quản lý?
+- nó có sống lâu hơn một page/component không?
+- URL có nên là source of truth tốt hơn không?
+- hay đây thực ra là server state và nên để fetch/cache layer quản lý?
 
-Pinia rất hợp cho cross-cutting client state, auth/session UI state, feature flag hoặc workflow state. Nó là dumping ground rất tệ nếu nhét mọi form field hoặc mọi API response vào đó.`,
+Những thứ hợp với Pinia:
+
+- auth/session UI state,
+- feature flag,
+- workflow state qua nhiều bước,
+- shared client preference.
+
+**Trade-off:**
+
+- quá nhiều state trong store sẽ làm data flow khó trace,
+- nhét server data vào Pinia dễ bị trùng concern với caching,
+- state local bị đẩy global quá sớm sẽ hại maintainability.`,
     ),
+    followUps: [
+      l('What belongs in URL state instead of Pinia?', 'Những gì nên nằm ở URL state thay vì Pinia?'),
+      l('How do you avoid turning Pinia into a dumping ground?', 'Bạn tránh biến Pinia thành dumping ground bằng cách nào?'),
+    ],
   }),
   q({
     id: 'vue-ssr-hydration',
@@ -968,27 +1265,59 @@ Pinia rất hợp cho cross-cutting client state, auth/session UI state, feature
     tags: ['vue', 'nuxt', 'ssr', 'hydration'],
     question: l('What are SSR and hydration, and what commonly goes wrong?', 'SSR và hydration là gì, lỗi hay gặp là gì?'),
     answer: l(
-      `SSR renders HTML on the server for the first response. Hydration is the client attaching interactivity to that HTML and reconciling it with client-side state.
+      `**Short answer:** SSR renders the initial HTML on the server; hydration is the client attaching interactivity to that HTML and expecting the first client render to match it.
 
-Common problems:
+**Why:**
 
-- non-deterministic output such as \`Date.now()\`, random values, locale mismatch,
-- reading browser-only APIs during SSR,
-- client-only conditions changing the rendered tree,
-- async data arriving differently between server and client.
+This is valuable for:
 
-The safest mental model is: the first client render must logically match the server output.`,
-      `SSR là render HTML ở server cho response đầu tiên. Hydration là lúc client gắn interactivity vào HTML đó và đối chiếu nó với state phía client.
+- faster first content,
+- better SEO where needed,
+- easier sharing of route-level data work.
 
-Lỗi hay gặp:
+Common mismatch sources:
 
-- output không deterministic như \`Date.now()\`, random, locale lệch,
-- đọc browser-only API khi đang SSR,
-- điều kiện chỉ có ở client làm đổi cây render,
-- async data tới khác nhau giữa server và client.
+- non-deterministic values like \`Date.now()\` or random IDs,
+- browser-only APIs during SSR,
+- client-only branches changing the rendered tree,
+- data arriving differently between server and client.
 
-Mental model an toàn nhất là: lần render đầu ở client phải logic tương đương với output từ server.`,
+**Trade-offs:**
+
+- SSR adds complexity around environment boundaries,
+- hydration bugs are often subtle,
+- not every internal tool needs SSR.
+
+Safe mental model: the first client render must logically match the server output.`,
+      `**Trả lời ngắn:** SSR là render HTML ban đầu ở server; hydration là lúc client gắn interactivity vào HTML đó và đòi hỏi lần render đầu ở client phải khớp logic với HTML từ server.
+
+**Vì sao:**
+
+Điều này hữu ích cho:
+
+- first content nhanh hơn,
+- SEO tốt hơn ở nơi cần,
+- phối hợp data ở mức route dễ hơn.
+
+Nguồn mismatch hay gặp:
+
+- giá trị không deterministic như \`Date.now()\` hoặc random ID,
+- dùng browser-only API khi đang SSR,
+- branch chỉ chạy ở client làm đổi cây render,
+- dữ liệu tới khác nhau giữa server và client.
+
+**Trade-off:**
+
+- SSR tăng độ phức tạp ở boundary môi trường,
+- bug hydration thường khá khó nhìn,
+- không phải internal tool nào cũng cần SSR.
+
+Mental model an toàn là: lần render đầu ở client phải khớp logic với output từ server.`,
     ),
+    followUps: [
+      l('What is the first thing you check when you see a hydration mismatch warning?', 'Điều đầu tiên bạn kiểm tra khi thấy hydration mismatch warning là gì?'),
+      l('When would you choose CSR over SSR in Nuxt?', 'Khi nào bạn chọn CSR thay vì SSR trong Nuxt?'),
+    ],
   }),
   q({
     id: 'nuxt-rendering-modes',
@@ -996,27 +1325,45 @@ Mental model an toàn nhất là: lần render đầu ở client phải logic t�
     tags: ['nuxt', 'ssr', 'rendering'],
     question: l('What rendering modes does Nuxt 3 support and how would you choose?', 'Nuxt 3 hỗ trợ các rendering mode nào và bạn chọn ra sao?'),
     answer: l(
-      `Nuxt 3 can support SSR, SSG/prerender, client-heavy SPA behavior, and hybrid strategies with route rules.
+      `**Short answer:** Nuxt 3 supports SSR, SSG/prerender, CSR-heavy routes, and hybrid strategies. The right choice depends on **SEO, first-load UX, personalization, and cacheability**.
 
-How to choose:
+**Why:**
 
-- **SSR** when first-load UX, SEO, or authenticated personalization benefit from server rendering,
-- **SSG/prerender** for mostly static marketing or docs content,
-- **CSR-heavy** for internal tools where SEO is irrelevant and interactivity dominates,
-- **hybrid** when different routes need different caching or rendering behavior.
+- **SSR** helps when first render and SEO matter.
+- **SSG/prerender** fits mostly static marketing or docs content.
+- **CSR-heavy** is often enough for internal tools.
+- **Hybrid** is ideal when different routes need different behavior.
+
+**Trade-offs:**
+
+- SSR adds server complexity,
+- SSG is simple but can become stale,
+- CSR reduces server cost but can hurt first-load UX,
+- hybrid adds flexibility but needs discipline.
 
 Good answers tie rendering mode to product constraints, not framework preference.`,
-      `Nuxt 3 có thể hỗ trợ SSR, SSG/prerender, hành vi thiên về SPA phía client, và hybrid strategy qua route rules.
+      `**Trả lời ngắn:** Nuxt 3 hỗ trợ SSR, SSG/prerender, route thiên về CSR và cả chiến lược hybrid. Cách chọn đúng phụ thuộc vào **SEO, first-load UX, personalization và khả năng cache**.
 
-Cách chọn:
+**Vì sao:**
 
-- **SSR** khi first-load UX, SEO hoặc personalization được lợi từ server rendering,
-- **SSG/prerender** cho marketing/docs ít thay đổi,
-- **CSR-heavy** cho internal tool khi SEO không quan trọng và interactivity chiếm ưu thế,
-- **hybrid** khi từng route cần caching hoặc rendering behavior khác nhau.
+- **SSR** hợp khi first render và SEO quan trọng.
+- **SSG/prerender** hợp cho marketing/docs ít đổi.
+- **CSR-heavy** thường đủ cho internal tool.
+- **Hybrid** rất hợp khi từng route có nhu cầu khác nhau.
+
+**Trade-off:**
+
+- SSR tăng server complexity,
+- SSG đơn giản nhưng có thể stale,
+- CSR giảm chi phí server nhưng có thể làm first-load UX kém,
+- hybrid linh hoạt nhưng cần kỷ luật.
 
 Câu trả lời tốt là gắn rendering mode với constraint của product, không phải với sở thích framework.`,
     ),
+    followUps: [
+      l('Can one Nuxt app use different rendering strategies per route?', 'Một app Nuxt có thể dùng rendering strategy khác nhau theo route không?'),
+      l('When is SSR not worth the complexity?', 'Khi nào SSR không đáng với độ phức tạp nó mang lại?'),
+    ],
   }),
   q({
     id: 'nuxt-nitro',
@@ -1050,37 +1397,61 @@ Trong phỏng vấn, góc nhìn senior hữu ích là Nitro giúp frontend team 
     tags: ['nuxt', 'data-fetching'],
     question: l('How do useFetch and useAsyncData fit into Nuxt 3 data fetching?', 'useFetch và useAsyncData nằm ở đâu trong data fetching của Nuxt 3?'),
     answer: l(
-      `They help coordinate data fetching with Nuxt's SSR and payload system.
+      `**Short answer:** \`useAsyncData\` is the general Nuxt primitive for SSR-aware async data; \`useFetch\` is the convenient HTTP-flavored version built for common API calls.
 
-High-level view:
+**Why:**
 
-- \`useAsyncData\` is the more general primitive,
-- \`useFetch\` is convenient for HTTP-style fetching built on top of that mental model.
+They matter because Nuxt coordinates:
 
-Important concerns:
+- server rendering,
+- payload transfer,
+- client hydration,
+- caching/deduplication.
 
-- key stability for caching/deduplication,
-- avoiding duplicate fetches,
-- handling server/client differences intentionally,
-- understanding when data should block initial render vs load later.
+The questions I care about are:
 
-The senior point is not memorizing every option. It is reasoning about fetch timing, cache behavior, and UX.`,
-      `Chúng giúp phối hợp data fetching với SSR và payload system của Nuxt.
+- is the key stable?
+- will this fetch duplicate on client and server?
+- should this data block the initial render?
+- is this route personalized or cacheable?
 
-Nhìn ở mức cao:
+**Trade-offs:**
 
-- \`useAsyncData\` là primitive tổng quát hơn,
-- \`useFetch\` tiện cho các case fetch HTTP dựa trên cùng mental model đó.
+- blocking too much data hurts TTFB,
+- delaying too much data hurts perceived completeness,
+- unstable keys make caching behavior confusing.
 
-Concern quan trọng:
+The senior point is not memorizing options. It is reasoning about **timing, cache behavior, and UX**.`,
+      `**Trả lời ngắn:** \`useAsyncData\` là primitive tổng quát của Nuxt cho async data có awareness về SSR; \`useFetch\` là phiên bản tiện lợi hơn cho các API call HTTP phổ biến.
 
-- key ổn định để cache/dedupe,
-- tránh fetch trùng,
-- xử lý khác biệt server/client có chủ đích,
-- hiểu dữ liệu nào nên chặn initial render và dữ liệu nào có thể load sau.
+**Vì sao:**
 
-Điểm senior không phải nhớ mọi option, mà là reasoning về fetch timing, cache behavior và UX.`,
+Chúng quan trọng vì Nuxt đang phối hợp:
+
+- server rendering,
+- payload transfer,
+- client hydration,
+- caching/deduplication.
+
+Những câu hỏi em quan tâm là:
+
+- key có ổn định không?
+- fetch này có bị lặp ở server và client không?
+- dữ liệu này có nên chặn initial render không?
+- route này có personalized hay cache được không?
+
+**Trade-off:**
+
+- chặn quá nhiều data sẽ làm TTFB xấu đi,
+- trì hoãn quá nhiều data sẽ làm trang thiếu completeness,
+- key không ổn định sẽ làm caching khó hiểu.
+
+Điểm senior không phải là nhớ option, mà là reasoning về **timing, cache behavior và UX**.`,
     ),
+    followUps: [
+      l('When would you fetch on interaction instead of during initial render?', 'Khi nào bạn fetch theo interaction thay vì ngay lúc initial render?'),
+      l('How do you avoid duplicate fetching between server and client?', 'Bạn tránh duplicate fetch giữa server và client như thế nào?'),
+    ],
   }),
   q({
     id: 'nuxt-route-rules-caching',
@@ -1145,23 +1516,49 @@ Vue mặc định đã khá nhanh ở nhiều case, nên kỹ năng performance 
       'React re-render model khác gì so với reactivity model của Vue?',
     ),
     answer: l(
-      `Vue tracks fine-grained dependencies and can update based on reactive reads. React usually re-runs the entire component function when state or props change, then reconciles the resulting tree.
+      `**Short answer:** Vue tracks **fine-grained reactive dependencies**; React usually **re-runs the whole component function** when props or state change, then reconciles the result.
 
-That leads to different instincts:
+**Why that matters:**
 
-- in Vue, think about dependency tracking and reactive access,
-- in React, think about render frequency, identity stability, and component boundaries.
+- in Vue, you think more about reactive reads and dependency tracking,
+- in React, you think more about component boundaries, render frequency, and stable identities.
 
-As a Vue engineer learning React, this is one of the most important mental shifts: React embraces re-execution; optimization is about managing when that matters.`,
-      `Vue track dependency rất mịn và có thể update theo các lần đọc reactive. React thường chạy lại toàn bộ function component khi state hoặc props đổi, rồi reconcile cây kết quả.
+That changes how you optimize:
 
-Điều đó tạo ra thói quen khác nhau:
+- Vue often feels more automatic at the property level,
+- React makes reruns normal and pushes you to reason about state locality and memoization only when needed.
 
-- ở Vue, nghĩ nhiều về dependency tracking và reactive access,
-- ở React, nghĩ nhiều về tần suất re-render, sự ổn định của identity và boundary component.
+**Trade-offs:**
 
-Với người đi từ Vue sang React, đây là một trong những mental shift quan trọng nhất: React chấp nhận việc re-execution; tối ưu là quản lý lúc nào chuyện đó thực sự thành vấn đề.`,
+- Vue magic can hide dependency complexity,
+- React re-execution can surprise Vue developers at first,
+- neither model removes the need for good state design.
+
+For a Vue engineer learning React, this mental shift is more important than memorizing APIs.`,
+      `**Trả lời ngắn:** Vue track **dependency reactive rất mịn**; còn React thường **chạy lại toàn bộ function component** khi props hoặc state đổi, rồi reconcile cây kết quả.
+
+**Vì sao chuyện này quan trọng:**
+
+- ở Vue, bạn nghĩ nhiều hơn về reactive read và dependency tracking,
+- ở React, bạn nghĩ nhiều hơn về boundary của component, tần suất render và sự ổn định của identity.
+
+Vì vậy cách tối ưu cũng khác:
+
+- Vue thường cho cảm giác tự động hơn ở mức property,
+- React xem việc rerun là bình thường và buộc mình reasoning về state locality, memoization khi thật sự cần.
+
+**Trade-off:**
+
+- “magic” của Vue có thể che complexity về dependency,
+- việc re-execution trong React ban đầu dễ làm người từ Vue sang thấy lạ,
+- không có model nào thay thế được state design tốt.
+
+Với người đi từ Vue sang React, mental shift này quan trọng hơn nhiều so với học thuộc API.`,
     ),
+    followUps: [
+      l('Why do React developers care so much about stable object and function identities?', 'Vì sao React developer lại quan tâm nhiều tới stable object và function identity?'),
+      l('What mental habit from Vue hurts people most when moving to React?', 'Thói quen nào từ Vue dễ làm người ta vấp nhất khi sang React?'),
+    ],
   }),
   q({
     id: 'react-hooks-rules',
@@ -1169,23 +1566,40 @@ Với người đi từ Vue sang React, đây là một trong những mental shi
     tags: ['react', 'hooks'],
     question: l('Why do hooks need rules like “call at the top level”?', 'Vì sao hook có rule kiểu “gọi ở top level”?'),
     answer: l(
-      `React relies on hook call order to match hook state across renders. If you call hooks conditionally or inside loops, the order can shift and React will associate state with the wrong hook slot.
+      `**Short answer:** Hooks must be called in the same order on every render because React matches hook state by **call order**, not by variable name.
 
-That is why hooks must be called:
+**Why:**
 
-- at the top level of a component or custom hook,
-- in the same order on every render.
+- React stores hook state in ordered slots,
+- conditional or looped hook calls shift that order,
+- once the order shifts, state gets attached to the wrong hook.
 
-This is less about style and more about how the runtime tracks hook state internally.`,
-      `React dựa vào thứ tự gọi hook để gắn state của hook giữa các lần render. Nếu gọi hook có điều kiện hoặc trong loop, thứ tự có thể thay đổi và React sẽ gắn nhầm state vào “slot” khác.
+**Trade-offs / mistakes:**
 
-Vì vậy hook phải được gọi:
+- this feels restrictive at first,
+- but the predictability makes the hook runtime simple and fast,
+- if you need conditional behavior, put the condition **inside** the hook or effect body, not around the hook call.
 
-- ở top level của component hoặc custom hook,
-- cùng thứ tự ở mọi lần render.
+This is a runtime constraint, not just a style convention.`,
+      `**Trả lời ngắn:** Hook phải được gọi theo cùng một thứ tự ở mọi lần render vì React gắn state của hook theo **thứ tự gọi**, không phải theo tên biến.
 
-Đây không phải rule về style, mà là hệ quả trực tiếp của cách runtime theo dõi state của hook.`,
+**Vì sao:**
+
+- React lưu state của hook theo các slot có thứ tự,
+- gọi hook có điều kiện hoặc trong loop sẽ làm lệch thứ tự đó,
+- khi thứ tự lệch, state sẽ bị gắn nhầm sang hook khác.
+
+**Trade-off / lỗi hay gặp:**
+
+- ban đầu rule này có thể thấy hơi gò bó,
+- nhưng chính sự cố định đó giúp runtime của hook đơn giản và nhanh,
+- nếu cần behavior có điều kiện, hãy đặt điều kiện **bên trong** hook hoặc effect body, không đặt quanh lệnh gọi hook.
+
+Đây là ràng buộc của runtime, không chỉ là style rule.`,
     ),
+    followUps: [
+      l('How do you express conditional behavior without conditionally calling hooks?', 'Bạn biểu diễn behavior có điều kiện mà không gọi hook có điều kiện như thế nào?'),
+    ],
   }),
   q({
     id: 'react-controlled-vs-uncontrolled',
@@ -1193,35 +1607,55 @@ Vì vậy hook phải được gọi:
     tags: ['react', 'forms'],
     question: l('Controlled vs uncontrolled components: when would you choose each?', 'Controlled và uncontrolled component: khi nào chọn mỗi loại?'),
     answer: l(
-      `A controlled input keeps its value in React state. An uncontrolled input lets the DOM keep the live value and reads it when needed via refs or form submission.
+      `**Short answer:** Controlled inputs keep the current value in React state; uncontrolled inputs let the DOM own the live value and you read it via refs or form submission when needed.
 
-Choose controlled when:
+**Why:**
 
-- validation, conditional UI, or derived logic depends on current value,
-- you need full state synchronization.
+Choose **controlled** when:
 
-Choose uncontrolled when:
+- validation or UI logic depends on the current value,
+- multiple fields interact,
+- you need explicit state ownership.
+
+Choose **uncontrolled** when:
 
 - the form is simple,
-- performance matters for many fields,
-- you do not need every keystroke in React state.
+- you want less rerender overhead,
+- you only need the value at submit time.
 
-The senior answer is usually pragmatic, not ideological.`,
-      `Input controlled là input giữ value trong React state. Input uncontrolled là để DOM giữ value thực và chỉ đọc ra khi cần qua ref hoặc form submission.
+**Trade-offs:**
 
-Chọn controlled khi:
+- controlled gives visibility and flexibility but increases React work,
+- uncontrolled can be simpler and faster but is less transparent to React logic.
 
-- validation, conditional UI hoặc derived logic phụ thuộc vào value hiện tại,
-- bạn cần state đồng bộ hoàn toàn.
+A senior answer is pragmatic, not ideological.`,
+      `**Trả lời ngắn:** Input controlled giữ value hiện tại trong React state; input uncontrolled để DOM ownership value sống và chỉ đọc ra qua ref hoặc khi submit nếu cần.
 
-Chọn uncontrolled khi:
+**Vì sao:**
 
-- form đơn giản,
-- performance quan trọng với nhiều field,
-- bạn không cần từng keystroke nằm trong React state.
+Chọn **controlled** khi:
 
-Câu trả lời senior thường là thực dụng, không giáo điều.`,
+- validation hoặc UI logic phụ thuộc vào value hiện tại,
+- nhiều field ảnh hưởng lẫn nhau,
+- bạn muốn ownership state rõ ràng.
+
+Chọn **uncontrolled** khi:
+
+- form khá đơn giản,
+- muốn ít rerender hơn,
+- chỉ cần lấy value lúc submit.
+
+**Trade-off:**
+
+- controlled cho nhiều visibility và flexibility hơn nhưng tăng công việc cho React,
+- uncontrolled có thể đơn giản và nhanh hơn nhưng ít minh bạch hơn với logic của React.
+
+Câu trả lời kiểu senior nên thực dụng, không giáo điều.`,
     ),
+    followUps: [
+      l('Why do form libraries often mix both models?', 'Vì sao nhiều form library lại trộn cả hai mô hình?'),
+      l('How would you optimize a very large controlled form?', 'Bạn tối ưu một form controlled rất lớn như thế nào?'),
+    ],
   }),
   q({
     id: 'react-context-limits',
@@ -1325,33 +1759,53 @@ Hiểu pipeline này quan trọng vì performance frontend thường là bài to
     tags: ['performance', 'web-vitals'],
     question: l('What are Core Web Vitals and how do you improve them?', 'Core Web Vitals là gì và tối ưu ra sao?'),
     answer: l(
-      `The main vitals to discuss are:
+      `**Short answer:** The three Core Web Vitals to know are **LCP** for loading, **INP** for interactivity, and **CLS** for visual stability.
 
-- **LCP**: how quickly the main content becomes visible,
-- **INP**: how responsive the page feels to interactions,
-- **CLS**: how stable the layout is visually.
+**Why they matter:**
 
-Improvement examples:
+- **LCP** reflects how quickly the main content feels available,
+- **INP** reflects how responsive the UI feels to real interactions,
+- **CLS** reflects whether the page feels stable or “jumpy”.
 
-- LCP: reduce TTFB, optimize hero images, preload critical assets, reduce JS on the critical path,
-- INP: reduce main-thread blocking, split heavy work, debounce correctly, avoid huge synchronous renders,
-- CLS: reserve space for images/ads, avoid late layout shifts, stabilize fonts and async UI.
+**Typical improvement levers:**
 
-Senior answers connect metrics to actual user experience, not just Lighthouse scores.`,
-      `Các chỉ số chính nên nói là:
+- LCP -> reduce TTFB, optimize hero image, preload critical assets, cut blocking JS
+- INP -> reduce main-thread blocking, split heavy work, avoid long sync renders
+- CLS -> reserve layout space, stabilize fonts, avoid late-inserted UI shifts
 
-- **LCP**: nội dung chính hiện ra nhanh tới mức nào,
-- **INP**: trang phản hồi thao tác có nhanh không,
-- **CLS**: layout có bị nhảy lung tung không.
+**Trade-offs:**
 
-Ví dụ cách tối ưu:
+- optimizing lab scores without field data can be misleading,
+- improving one metric can hurt another if done carelessly,
+- perceived UX matters more than a vanity score.
 
-- LCP: giảm TTFB, tối ưu ảnh hero, preload critical asset, giảm JS trên critical path,
-- INP: giảm main-thread blocking, tách heavy work, debounce đúng chỗ, tránh render đồng bộ quá lớn,
-- CLS: chừa sẵn chỗ cho ảnh/ads, tránh layout shift đến muộn, ổn định font và UI async.
+Senior answers connect metrics to the actual user experience, not just Lighthouse numbers.`,
+      `**Trả lời ngắn:** Ba Core Web Vitals cần nắm là **LCP** cho loading, **INP** cho interactivity và **CLS** cho độ ổn định của layout.
 
-Câu trả lời senior luôn nối metric với trải nghiệm người dùng thật, không chỉ nói điểm Lighthouse.`,
+**Vì sao chúng quan trọng:**
+
+- **LCP** phản ánh việc nội dung chính xuất hiện nhanh tới mức nào,
+- **INP** phản ánh UI phản hồi thao tác có mượt không,
+- **CLS** phản ánh trang có bị “nhảy” gây khó chịu không.
+
+**Các đòn bẩy tối ưu phổ biến:**
+
+- LCP -> giảm TTFB, tối ưu ảnh hero, preload asset critical, cắt JS chặn render
+- INP -> giảm main-thread blocking, tách heavy work, tránh sync render quá dài
+- CLS -> chừa sẵn layout space, ổn định font, tránh UI tới muộn làm xô layout
+
+**Trade-off:**
+
+- tối ưu lab score mà không nhìn field data có thể gây lệch hướng,
+- cải thiện một metric có thể làm metric khác xấu đi nếu làm ẩu,
+- UX cảm nhận thật quan trọng hơn vanity score.
+
+Câu trả lời senior luôn nối metric với trải nghiệm thực của user, không chỉ là điểm Lighthouse.`,
     ),
+    followUps: [
+      l('How do you decide whether to trust field data or lab data first?', 'Bạn quyết định tin field data hay lab data trước bằng cách nào?'),
+      l('Can you give one example of a change that helps LCP but might hurt something else?', 'Bạn có ví dụ nào về thay đổi giúp LCP nhưng có thể làm xấu một thứ khác không?'),
+    ],
   }),
   q({
     id: 'bundling-code-splitting',
@@ -1413,29 +1867,47 @@ Frontend engineer mạnh xem CSS là một bài toán thiết kế hệ thống,
     tags: ['a11y', 'forms', 'keyboard'],
     question: l('What accessibility basics do you always check in forms and interactive UI?', 'Những điểm accessibility cơ bản nào bạn luôn kiểm tra ở form và interactive UI?'),
     answer: l(
-      `My default checklist:
+      `**Short answer:** My baseline is that the UI must be understandable and operable with **keyboard, semantics, labels, focus, and feedback**, not just visually attractive.
+
+**Checklist:**
 
 - every input has an accessible label,
-- errors are associated with fields and announced appropriately,
+- validation errors are associated with the right field,
 - keyboard navigation works end to end,
 - focus styles are visible,
-- semantics use real buttons/inputs instead of divs pretending to be controls,
+- native elements are preferred over divs pretending to be controls,
 - color is not the only signal,
-- disabled/loading states are communicated clearly.
+- loading/disabled states are communicated clearly.
 
-Senior FE work treats accessibility as interaction design quality, not only compliance.`,
-      `Checklist mặc định của em:
+**Trade-offs:**
+
+- custom components can give design freedom but raise a11y risk,
+- last-minute fixes are harder than building semantics in from the start.
+
+Senior FE work treats accessibility as interaction quality, not just compliance.`,
+      `**Trả lời ngắn:** Baseline của em là UI phải hiểu được và thao tác được bằng **keyboard, semantics, label, focus và feedback**, chứ không chỉ đẹp về mặt thị giác.
+
+**Checklist:**
 
 - mọi input có accessible label,
-- lỗi được gắn với field và được announce phù hợp,
-- keyboard navigation chạy trọn flow,
-- focus style nhìn thấy được,
-- semantic dùng button/input thật thay vì div giả làm control,
+- lỗi validation được gắn đúng field,
+- keyboard navigation đi hết được flow,
+- focus style nhìn thấy rõ,
+- ưu tiên native element thay vì div giả làm control,
 - màu không phải tín hiệu duy nhất,
-- disabled/loading state được truyền đạt rõ.
+- loading/disabled state được truyền đạt rõ.
 
-Làm FE kiểu senior xem accessibility là chất lượng của interaction design, không chỉ là compliance.`,
+**Trade-off:**
+
+- custom component cho nhiều tự do về design nhưng tăng risk a11y,
+- sửa a11y vào phút cuối luôn khó hơn việc đưa semantics vào ngay từ đầu.
+
+Làm FE kiểu senior xem accessibility là chất lượng của interaction, không chỉ là compliance.`,
     ),
+    followUps: [
+      l('What a11y issues do you see most often in custom component libraries?', 'Bạn thấy lỗi a11y nào xuất hiện nhiều nhất trong custom component library?'),
+      l('How would you test keyboard-only usability quickly?', 'Bạn sẽ test keyboard-only usability nhanh như thế nào?'),
+    ],
   }),
   q({
     id: 'security-xss-csrf-csp',
@@ -1443,29 +1915,55 @@ Làm FE kiểu senior xem accessibility là chất lượng của interaction de
     tags: ['security', 'xss', 'csrf', 'csp'],
     question: l('How do you explain XSS, CSRF, and CSP in frontend terms?', 'Bạn giải thích XSS, CSRF và CSP theo góc nhìn frontend thế nào?'),
     answer: l(
-      `- **XSS** means attacker-controlled script runs on your origin.
-- **CSRF** means another site tricks the browser into sending authenticated requests to your site.
-- **CSP** is a browser policy that restricts where scripts and other resources may come from, reducing XSS blast radius.
+      `**Short answer:** **XSS** is attacker script running on your origin, **CSRF** is a foreign site making the browser send authenticated requests to yours, and **CSP** is a browser policy that reduces what scripts/resources are allowed to run.
 
-Frontend responsibility:
+**Why this matters on the frontend:**
+
+- XSS turns any JS-readable secret into a liability,
+- CSRF matters especially when auth uses cookies,
+- CSP reduces XSS blast radius but does not replace safe coding.
+
+Frontend responsibilities:
 
 - avoid unsafe HTML injection,
-- sanitize when rendering untrusted rich content,
+- sanitize untrusted rich content,
 - store tokens safely,
-- use anti-CSRF patterns when cookie auth is involved,
-- keep CSP practical and strong where possible.`,
-      `- **XSS** là khi script do attacker kiểm soát chạy được trên origin của bạn.
-- **CSRF** là khi site khác lừa browser gửi request đã được xác thực tới site của bạn.
-- **CSP** là policy của browser giới hạn script và resource được phép tới từ đâu, giúp giảm blast radius của XSS.
+- use anti-CSRF patterns with cookie auth,
+- keep CSP practical and strong where possible.
+
+**Trade-offs:**
+
+- very strict CSP can complicate integrations,
+- unsafe convenience APIs can speed development but expand risk.
+
+Security answers are stronger when they explain attack mechanics, not just definitions.`,
+      `**Trả lời ngắn:** **XSS** là script của attacker chạy được trên origin của bạn, **CSRF** là site khác khiến browser gửi request đã xác thực tới site của bạn, còn **CSP** là policy của browser giúp giới hạn script/resource nào được phép chạy.
+
+**Vì sao chuyện này quan trọng với frontend:**
+
+- XSS biến mọi secret JS đọc được thành liability,
+- CSRF đặc biệt quan trọng khi auth bằng cookie,
+- CSP giúp giảm blast radius của XSS nhưng không thay thế việc viết code an toàn.
 
 Trách nhiệm phía frontend:
 
 - tránh chèn HTML không an toàn,
-- sanitize khi render rich content không tin cậy,
+- sanitize rich content không tin cậy,
 - lưu token an toàn,
-- dùng anti-CSRF pattern khi auth bằng cookie,
-- giữ CSP đủ mạnh nhưng vẫn thực tế.`,
+- dùng anti-CSRF pattern với cookie auth,
+- giữ CSP đủ mạnh nhưng vẫn thực tế.
+
+**Trade-off:**
+
+- CSP quá chặt có thể làm tích hợp khó hơn,
+- API tiện nhưng không an toàn có thể tăng tốc ngắn hạn nhưng mở rộng risk.
+
+Câu trả lời về security sẽ mạnh hơn khi giải thích được cơ chế tấn công, không chỉ định nghĩa.`,
     ),
+    followUps: [
+      l('Why doesn’t HttpOnly cookie solve CSRF by itself?', 'Vì sao HttpOnly cookie tự nó không giải quyết được CSRF?'),
+      l('When do you actually need HTML sanitization on the frontend?', 'Khi nào bạn thực sự cần sanitize HTML ở frontend?'),
+    ],
   }),
   q({
     id: 'auth-token-storage',
@@ -1473,29 +1971,41 @@ Trách nhiệm phía frontend:
     tags: ['security', 'auth'],
     question: l('Where should auth tokens live on the frontend?', 'Auth token nên được lưu ở đâu phía frontend?'),
     answer: l(
-      `There is no one-size-fits-all answer, but for web apps I usually prefer:
+      `**Short answer:** For web apps, I usually prefer **HttpOnly Secure SameSite cookies** for refresh/session and either cookie-based or short-lived in-memory access depending on the architecture.
 
-- refresh/session in **HttpOnly Secure SameSite cookies**,
-- access token either also cookie-based or in short-lived memory depending on architecture.
+**Why:**
 
-Why not blindly use LocalStorage?
+- tokens readable by JS are exposed to XSS,
+- long-lived bearer tokens increase blast radius,
+- cookies can reduce token exposure to JS when configured correctly.
 
-- anything readable by JS is exposed to XSS,
-- long-lived bearer tokens raise blast radius.
+**Trade-offs:**
 
-You then pair cookie auth with CSRF defenses and good session invalidation strategy.`,
-      `Không có một đáp án đúng cho mọi kiến trúc, nhưng với web app em thường ưu tiên:
+- cookie auth needs CSRF defenses,
+- in-memory access tokens avoid storage persistence but disappear on reload,
+- architecture and infra constraints still matter.
 
-- refresh/session trong **HttpOnly Secure SameSite cookie**,
-- access token hoặc cũng đi theo cookie, hoặc sống ngắn trong memory tùy kiến trúc.
+There is no universal answer, but “put JWT in LocalStorage by default” is usually not the safest choice.`,
+      `**Trả lời ngắn:** Với web app, em thường ưu tiên **HttpOnly Secure SameSite cookie** cho refresh/session, còn access token thì hoặc cũng đi theo cookie, hoặc sống ngắn trong memory tùy kiến trúc.
 
-Vì sao không nên nhắm mắt dùng LocalStorage?
+**Vì sao:**
 
-- thứ gì JS đọc được thì XSS cũng có thể đọc,
-- bearer token sống lâu làm blast radius lớn hơn.
+- token JS đọc được sẽ lộ cho XSS,
+- bearer token sống lâu làm blast radius lớn hơn,
+- cookie cấu hình đúng sẽ giảm bề mặt lộ token cho JS.
 
-Sau đó phải kết hợp cookie auth với chống CSRF và chiến lược invalid session hợp lý.`,
+**Trade-off:**
+
+- auth bằng cookie cần chống CSRF,
+- access token trong memory tránh lưu bền nhưng mất khi reload,
+- constraint của kiến trúc và hạ tầng vẫn ảnh hưởng tới lựa chọn.
+
+Không có một đáp án đúng cho mọi nơi, nhưng “mặc định nhét JWT vào LocalStorage” thường không phải lựa chọn an toàn nhất.`,
     ),
+    followUps: [
+      l('What changes if the app is mobile instead of web?', 'Điều gì thay đổi nếu app là mobile thay vì web?'),
+      l('How would you explain cookie auth + CSRF to a junior engineer?', 'Bạn giải thích cookie auth + CSRF cho junior như thế nào?'),
+    ],
   }),
   q({
     id: 'testing-pyramid',
@@ -1503,36 +2013,586 @@ Sau đó phải kết hợp cookie auth với chống CSRF và chiến lược i
     tags: ['testing', 'quality'],
     question: l('What is a good frontend testing strategy?', 'Chiến lược testing frontend tốt là gì?'),
     answer: l(
-      `I prefer a risk-based mix rather than dogmatic percentages.
+      `**Short answer:** A good frontend strategy is a **risk-based mix** of unit, component/integration, and a small number of E2E tests.
 
-Typical layers:
+**Why:**
 
-- unit tests for pure logic and small utilities,
-- component/integration tests for user behavior and state interactions,
-- a small number of E2E tests for critical journeys.
+- unit tests are cheap for pure logic,
+- component/integration tests give strong confidence in real user behavior,
+- E2E tests protect critical journeys across boundaries.
 
 What matters most:
 
 - test behavior, not implementation details,
-- put tests where regressions are expensive,
-- keep feedback loops fast enough that people actually run them.
+- place tests where regressions are expensive,
+- keep feedback loops fast enough that the team actually runs them.
 
-A senior testing strategy is about confidence per cost.`,
-      `Em thích một chiến lược dựa trên risk hơn là bám chặt tỷ lệ cố định.
+**Trade-offs:**
 
-Các tầng thường là:
+- too many E2E tests become slow and flaky,
+- too many low-value unit tests create noise,
+- not every path needs the same confidence level.
 
-- unit test cho pure logic và utility nhỏ,
-- component/integration test cho user behavior và tương tác giữa state,
-- một số ít E2E cho critical journey.
+Senior testing is about confidence per cost, not test count for its own sake.`,
+      `**Trả lời ngắn:** Chiến lược frontend tốt là một **risk-based mix** giữa unit, component/integration và một lượng nhỏ E2E cho các flow critical.
+
+**Vì sao:**
+
+- unit test rẻ cho pure logic,
+- component/integration test cho độ tin cậy cao ở mức user behavior,
+- E2E bảo vệ critical journey xuyên nhiều boundary.
 
 Điều quan trọng nhất:
 
-- test behavior, không phải implementation detail,
+- test behavior, không test implementation detail,
 - đặt test vào chỗ regressions đắt tiền,
-- giữ feedback loop đủ nhanh để mọi người thực sự chạy test.
+- giữ feedback loop đủ nhanh để cả team thực sự chạy test.
 
-Chiến lược test kiểu senior là tối ưu độ tin cậy theo chi phí.`,
+**Trade-off:**
+
+- quá nhiều E2E sẽ chậm và flaky,
+- quá nhiều unit test giá trị thấp sẽ thành noise,
+- không phải path nào cũng cần cùng mức độ confidence.
+
+Testing kiểu senior là tối ưu confidence theo chi phí, không phải tối đa số lượng test.`,
+    ),
+    followUps: [
+      l('What frontend behaviors are usually worth an E2E test?', 'Những behavior nào ở frontend thường đáng có E2E test?'),
+      l('How do you keep test suites from becoming noisy and slow?', 'Bạn giữ test suite khỏi bị noisy và chậm như thế nào?'),
+    ],
+  }),
+  q({
+    id: 'js-var-let-const',
+    category: 'technical',
+    tags: ['javascript', 'basics'],
+    question: l('What is the difference between var, let, and const?', 'Khác nhau giữa var, let và const là gì?'),
+    answer: l(
+      `**Short answer:** Prefer **const** by default, use **let** when reassignment is required, and avoid **var** in modern code.
+
+**Why:**
+
+- \`var\` is function-scoped and hoisted to \`undefined\`,
+- \`let\` and \`const\` are block-scoped,
+- \`const\` prevents reassignment of the binding, though nested object contents can still mutate.
+
+**Trade-offs / gotchas:**
+
+- \`const\` does **not** make an object deeply immutable,
+- \`var\` can create confusing bugs because of hoisting and lack of block scope.
+
+Modern style: use \`const\` unless the binding truly changes.`,
+      `**Trả lời ngắn:** Hãy ưu tiên **const** mặc định, dùng **let** khi thật sự cần gán lại, và tránh **var** trong code hiện đại.
+
+**Vì sao:**
+
+- \`var\` có function scope và được hoist lên \`undefined\`,
+- \`let\` và \`const\` có block scope,
+- \`const\` chỉ chặn việc gán lại binding, còn object lồng bên trong vẫn có thể mutate.
+
+**Trade-off / gotcha:**
+
+- \`const\` **không** làm object deep immutable,
+- \`var\` dễ tạo bug khó nhìn vì hoisting và thiếu block scope.
+
+Style hiện đại là: dùng \`const\` trừ khi binding đó thật sự phải thay đổi.`,
+    ),
+  }),
+  q({
+    id: 'js-loose-vs-strict-equality',
+    category: 'technical',
+    tags: ['javascript', 'basics'],
+    question: l('What is the difference between == and ===?', 'Khác nhau giữa == và === là gì?'),
+    answer: l(
+      `**Short answer:** \`===\` compares without type coercion; \`==\` allows coercion and can produce surprising results.
+
+Examples:
+
+- \`1 === '1'\` is false
+- \`1 == '1'\` is true
+- \`null == undefined\` is true
+
+Because coercion rules are non-trivial, most production code should prefer \`===\` and \`!==\` unless you intentionally want loose equality semantics.`,
+      `**Trả lời ngắn:** \`===\` so sánh không ép kiểu; \`==\` cho phép coercion nên dễ tạo kết quả bất ngờ.
+
+Ví dụ:
+
+- \`1 === '1'\` là false
+- \`1 == '1'\` là true
+- \`null == undefined\` là true
+
+Vì rule coercion khá rối, phần lớn production code nên ưu tiên \`===\` và \`!==\` trừ khi bạn cố ý muốn loose equality.`,
+    ),
+  }),
+  q({
+    id: 'js-data-types-typeof',
+    category: 'technical',
+    tags: ['javascript', 'basics'],
+    question: l('What basic JavaScript data type and typeof quirks should you know?', 'Những data type và typeof quirk cơ bản nào của JavaScript cần nhớ?'),
+    answer: l(
+      `Know the primitives: string, number, bigint, boolean, undefined, symbol, null, plus objects/functions.
+
+Common quirks:
+
+- \`typeof null === 'object'\` (legacy bug),
+- arrays are objects, so use \`Array.isArray\`,
+- functions return \`'function'\`,
+- \`NaN\` has type number.
+
+Interviewers ask this to check whether you know the language's sharp edges, not just the happy path.`,
+      `Hãy nhớ các primitive: string, number, bigint, boolean, undefined, symbol, null, cùng với object/function.
+
+Quirk hay gặp:
+
+- \`typeof null === 'object'\` (bug lịch sử),
+- array cũng là object nên dùng \`Array.isArray\`,
+- function trả về \`'function'\`,
+- \`NaN\` có type là number.
+
+Người phỏng vấn hỏi câu này để xem bạn có biết góc sắc của ngôn ngữ chứ không chỉ biết happy path.`,
+    ),
+  }),
+  q({
+    id: 'js-scope',
+    category: 'technical',
+    tags: ['javascript', 'basics'],
+    question: l('What is scope in JavaScript?', 'Scope trong JavaScript là gì?'),
+    answer: l(
+      `Scope determines where a variable can be accessed.
+
+Useful categories:
+
+- global scope,
+- function scope,
+- block scope,
+- lexical scope.
+
+Closures rely on lexical scope, and many bugs around \`var\` vs \`let\` come from misunderstanding scope boundaries.`,
+      `Scope quyết định nơi nào một biến có thể được truy cập.
+
+Các loại hữu ích cần nhớ:
+
+- global scope,
+- function scope,
+- block scope,
+- lexical scope.
+
+Closure dựa trực tiếp vào lexical scope, và rất nhiều bug quanh \`var\` vs \`let\` đến từ việc hiểu sai boundary của scope.`,
+    ),
+  }),
+  q({
+    id: 'dom-event-propagation-delegation',
+    category: 'technical',
+    tags: ['dom', 'events', 'basics'],
+    question: l('Explain event bubbling, capturing, delegation, preventDefault, and stopPropagation.', 'Giải thích event bubbling, capturing, delegation, preventDefault và stopPropagation.'),
+    answer: l(
+      `Events travel through the DOM in phases:
+
+1. **capturing**: top -> target
+2. **target**
+3. **bubbling**: target -> top
+
+Useful ideas:
+
+- **event delegation**: attach one listener on a parent and handle child interactions via event target matching
+- **preventDefault**: stop the browser's default behavior
+- **stopPropagation**: stop the event from continuing through the tree
+
+Delegation is great for dynamic lists, but stopping propagation carelessly can create hard-to-debug behavior.`,
+      `Event đi qua DOM theo các phase:
+
+1. **capturing**: từ trên xuống target
+2. **target**
+3. **bubbling**: từ target đi ngược lên trên
+
+Những ý quan trọng:
+
+- **event delegation**: gắn một listener ở parent rồi xử lý tương tác của child bằng cách kiểm tra event target
+- **preventDefault**: chặn hành vi mặc định của browser
+- **stopPropagation**: chặn event lan tiếp trong cây
+
+Delegation rất hợp cho list động, nhưng stopPropagation dùng bừa bãi sẽ tạo behavior khó debug.`,
+    ),
+  }),
+  q({
+    id: 'promise-basics',
+    category: 'technical',
+    tags: ['javascript', 'promises', 'basics'],
+    question: l('What is a Promise and what problem does it solve?', 'Promise là gì và nó giải quyết bài toán nào?'),
+    answer: l(
+      `A Promise represents the future result of an async operation.
+
+It helps by:
+
+- making async results composable,
+- avoiding deeply nested callback code,
+- providing explicit success/failure paths through \`.then\`, \`.catch\`, and \`.finally\`.
+
+The main states are pending, fulfilled, and rejected.`,
+      `Promise đại diện cho kết quả trong tương lai của một thao tác bất đồng bộ.
+
+Nó hữu ích vì:
+
+- làm kết quả async có thể compose được,
+- tránh callback lồng quá sâu,
+- cho đường đi thành công/thất bại rõ ràng qua \`.then\`, \`.catch\` và \`.finally\`.
+
+Ba trạng thái chính là pending, fulfilled và rejected.`,
+    ),
+  }),
+  q({
+    id: 'array-methods-map-filter-reduce',
+    category: 'technical',
+    tags: ['javascript', 'arrays', 'basics'],
+    question: l('When do you use map, filter, reduce, and forEach?', 'Khi nào dùng map, filter, reduce và forEach?'),
+    answer: l(
+      `- **map** transforms each item and returns a new array
+- **filter** keeps a subset based on a condition
+- **reduce** accumulates into one result or structure
+- **forEach** performs side effects and returns nothing useful
+
+Good interviews answers emphasize choosing the method that expresses intent most clearly, not using reduce for everything.`,
+      `- **map** biến đổi từng phần tử và trả về mảng mới
+- **filter** giữ lại tập con theo điều kiện
+- **reduce** gộp thành một kết quả hoặc cấu trúc
+- **forEach** làm side effect và không trả về kết quả hữu ích
+
+Câu trả lời tốt nên nhấn mạnh việc chọn method diễn đạt ý đồ rõ nhất, chứ không phải lạm dụng reduce cho mọi thứ.`,
+    ),
+  }),
+  q({
+    id: 'css-box-model',
+    category: 'technical',
+    tags: ['css', 'basics'],
+    question: l('What is the CSS box model?', 'CSS box model là gì?'),
+    answer: l(
+      `The box model consists of:
+
+- content,
+- padding,
+- border,
+- margin.
+
+By default, \`width\` and \`height\` describe the content box. With \`box-sizing: border-box\`, the declared width/height includes padding and border.
+
+This matters because many layout bugs are really box-model misunderstandings.`,
+      `Box model gồm:
+
+- content,
+- padding,
+- border,
+- margin.
+
+Mặc định, \`width\` và \`height\` mô tả content box. Với \`box-sizing: border-box\`, width/height khai báo sẽ bao gồm cả padding và border.
+
+Điều này quan trọng vì nhiều bug layout thực ra bắt nguồn từ việc hiểu sai box model.`,
+    ),
+  }),
+  q({
+    id: 'css-position',
+    category: 'technical',
+    tags: ['css', 'basics', 'layout'],
+    question: l('What do static, relative, absolute, fixed, and sticky mean in CSS positioning?', 'static, relative, absolute, fixed và sticky trong CSS positioning nghĩa là gì?'),
+    answer: l(
+      `- **static**: normal document flow
+- **relative**: still in flow, but can shift relative to its normal position
+- **absolute**: removed from normal flow and positioned relative to the nearest positioned ancestor
+- **fixed**: positioned relative to the viewport
+- **sticky**: behaves like relative until a scroll threshold, then sticks within its container context
+
+Most positioning bugs come from misunderstanding the containing block or stacking context.`,
+      `- **static**: luồng tài liệu bình thường
+- **relative**: vẫn ở trong flow nhưng có thể dịch tương đối so với vị trí gốc
+- **absolute**: ra khỏi flow và định vị theo positioned ancestor gần nhất
+- **fixed**: định vị theo viewport
+- **sticky**: ban đầu như relative, tới ngưỡng scroll thì “dính” trong context của container
+
+Phần lớn bug positioning đến từ việc hiểu sai containing block hoặc stacking context.`,
+    ),
+  }),
+  q({
+    id: 'css-flexbox-vs-grid',
+    category: 'technical',
+    tags: ['css', 'layout', 'basics'],
+    question: l('When should you use Flexbox vs Grid?', 'Khi nào dùng Flexbox và khi nào dùng Grid?'),
+    answer: l(
+      `Use **Flexbox** mainly for **one-dimensional** layout and **Grid** mainly for **two-dimensional** layout.
+
+Rule of thumb:
+
+- flex for nav bars, button groups, simple rows/columns
+- grid for page sections, card grids, dashboards, and explicit row/column placement
+
+They are complementary, not rivals. A common pattern is Grid for the page skeleton and Flexbox inside smaller components.`,
+      `Dùng **Flexbox** chủ yếu cho layout **một chiều** và **Grid** chủ yếu cho layout **hai chiều**.
+
+Rule of thumb:
+
+- flex cho nav bar, button group, hàng/cột đơn giản
+- grid cho page section, card grid, dashboard và chỗ cần placement theo hàng/cột rõ ràng
+
+Chúng bổ trợ nhau chứ không đối đầu nhau. Pattern rất phổ biến là dùng Grid cho page skeleton và Flexbox bên trong component nhỏ hơn.`,
+    ),
+  }),
+  q({
+    id: 'semantic-html-vs-aria-bem',
+    category: 'technical',
+    tags: ['html', 'css', 'a11y', 'basics'],
+    question: l('How do semantic HTML, ARIA, and BEM fit together?', 'Semantic HTML, ARIA và BEM liên quan với nhau như thế nào?'),
+    answer: l(
+      `Use **semantic HTML first** because native elements already provide behavior and accessibility meaning.
+
+- use ARIA to fill gaps, not to replace correct HTML,
+- use BEM or another naming system to make CSS structure predictable.
+
+Example:
+
+- prefer \`<button>\` over a clickable \`<div>\`,
+- add ARIA only when native semantics are insufficient,
+- use naming conventions so styling stays maintainable.
+
+Semantics solve meaning; ARIA augments accessibility; BEM solves CSS organization.`,
+      `Hãy ưu tiên **semantic HTML trước** vì native element đã có sẵn behavior và meaning cho accessibility.
+
+- dùng ARIA để lấp khoảng trống, không phải để thay thế HTML đúng,
+- dùng BEM hoặc naming system khác để CSS có cấu trúc dễ đoán.
+
+Ví dụ:
+
+- ưu tiên \`<button>\` hơn một \`<div>\` có click,
+- chỉ thêm ARIA khi native semantic chưa đủ,
+- dùng convention đặt tên để styling maintainable hơn.
+
+Semantics giải quyết meaning; ARIA tăng cường accessibility; BEM giải quyết tổ chức CSS.`,
+    ),
+  }),
+  q({
+    id: 'http-basics-status-codes',
+    category: 'technical',
+    tags: ['http', 'basics'],
+    question: l('What HTTP basics and status codes should frontend engineers know?', 'Frontend engineer nên nắm những HTTP basics và status code nào?'),
+    answer: l(
+      `Useful basics:
+
+- HTTP methods and their intent: GET, POST, PUT/PATCH, DELETE
+- headers, body, caching, cookies, and auth
+- idempotency vs non-idempotency
+
+Status codes worth knowing well:
+
+- 200/201/204 success variants
+- 301/302/307/308 redirects at a high level
+- 400/401/403/404 client-side outcomes
+- 409 conflict
+- 422 validation errors
+- 429 rate limiting
+- 500/502/503 server-side failures
+
+Frontend engineers do not need to memorize the whole spec, but they should know how these affect UI behavior.`,
+      `Những basics hữu ích:
+
+- HTTP method và intent của nó: GET, POST, PUT/PATCH, DELETE
+- header, body, caching, cookie và auth
+- idempotency vs non-idempotency
+
+Status code rất nên nắm:
+
+- 200/201/204 cho các kiểu thành công
+- 301/302/307/308 ở mức high-level cho redirect
+- 400/401/403/404 cho outcome phía client
+- 409 conflict
+- 422 validation error
+- 429 rate limit
+- 500/502/503 cho lỗi phía server
+
+Frontend engineer không cần thuộc cả spec, nhưng cần biết các mã này ảnh hưởng tới hành vi UI thế nào.`,
+    ),
+  }),
+  q({
+    id: 'cors-basics',
+    category: 'technical',
+    tags: ['http', 'security', 'basics'],
+    question: l('What is CORS at a practical level?', 'CORS là gì ở mức thực tế?'),
+    answer: l(
+      `CORS is the browser's cross-origin access policy for frontend requests.
+
+Practical meaning:
+
+- the server decides which origins/methods/headers are allowed,
+- the browser enforces that policy,
+- some requests trigger a preflight OPTIONS check.
+
+Important nuance: CORS is a browser-enforced policy, not a general backend security boundary by itself.`,
+      `CORS là policy truy cập cross-origin mà browser áp lên request từ frontend.
+
+Về thực tế:
+
+- server quyết định origin/method/header nào được phép,
+- browser là bên enforce policy đó,
+- một số request sẽ kích hoạt preflight OPTIONS.
+
+Nuance quan trọng: CORS là policy do browser enforce, không phải tự nó là security boundary tổng quát của backend.`,
+    ),
+  }),
+  q({
+    id: 'vue-lifecycle-nexttick-template-refs',
+    category: 'technical',
+    tags: ['vue', 'basics'],
+    question: l('When do you use onMounted, onUnmounted, nextTick, and template refs in Vue 3?', 'Khi nào dùng onMounted, onUnmounted, nextTick và template ref trong Vue 3?'),
+    answer: l(
+      `- **onMounted** when you need DOM-dependent work after mount
+- **onUnmounted** for cleanup
+- **nextTick** when you need to wait for the DOM to reflect a reactive update
+- **template refs** when you need imperative access to a DOM node or child instance
+
+The main caution is not to overuse imperative DOM access when declarative rendering is enough.`,
+      `- **onMounted** khi cần làm việc phụ thuộc DOM sau khi mount
+- **onUnmounted** để cleanup
+- **nextTick** khi cần chờ DOM phản ánh xong một reactive update
+- **template ref** khi cần truy cập imperative tới DOM node hoặc child instance
+
+Điểm cần cẩn thận là đừng lạm dụng imperative DOM access nếu render declarative đã đủ.`,
+    ),
+  }),
+  q({
+    id: 'vue-vif-vshow',
+    category: 'technical',
+    tags: ['vue', 'basics'],
+    question: l('When should you use v-if vs v-show?', 'Khi nào dùng v-if và khi nào dùng v-show?'),
+    answer: l(
+      `Use **v-if** when the condition changes less often and you want to mount/unmount the subtree. Use **v-show** when the element stays mounted but needs to toggle visibility frequently.
+
+Rule of thumb:
+
+- \`v-if\` has higher toggle cost, lower initial cost
+- \`v-show\` has lower toggle cost, higher initial cost
+
+This matters for both performance and lifecycle behavior.`,
+      `Dùng **v-if** khi điều kiện đổi không quá thường xuyên và bạn muốn mount/unmount subtree. Dùng **v-show** khi element vẫn nên giữ mounted nhưng cần bật/tắt hiển thị thường xuyên.
+
+Rule of thumb:
+
+- \`v-if\` tốn hơn khi toggle, rẻ hơn lúc ban đầu
+- \`v-show\` rẻ hơn khi toggle, nhưng tốn hơn lúc render ban đầu
+
+Điều này quan trọng cả về performance lẫn lifecycle behavior.`,
+    ),
+  }),
+  q({
+    id: 'vue-computed-vs-methods-watch',
+    category: 'technical',
+    tags: ['vue', 'basics', 'reactivity'],
+    question: l('How do computed, methods, and watch differ in Vue?', 'computed, methods và watch khác nhau thế nào trong Vue?'),
+    answer: l(
+      `- **computed** for derived values that benefit from caching
+- **methods** for actions or calculations you do not need to cache
+- **watch** for side effects when something changes
+
+Easy rule:
+
+- if you are deriving UI state, think computed first
+- if you are reacting to a change by doing outside work, think watch
+- if you just need callable logic, think method
+
+Many codebases get messy when watch is used for derivation that should be computed.`,
+      `- **computed** cho giá trị suy ra và có lợi từ cache
+- **methods** cho action hoặc tính toán không cần cache
+- **watch** cho side effect khi một giá trị thay đổi
+
+Rule dễ nhớ:
+
+- nếu đang suy ra UI state thì nghĩ tới computed trước
+- nếu đang phản ứng với thay đổi để làm việc bên ngoài thì nghĩ tới watch
+- nếu chỉ cần logic callable thì nghĩ tới method
+
+Nhiều codebase trở nên rối khi watch bị dùng cho việc suy ra dữ liệu đáng lẽ nên là computed.`,
+    ),
+  }),
+  q({
+    id: 'vue-props-emits-vmodel',
+    category: 'technical',
+    tags: ['vue', 'basics', 'components'],
+    question: l('How do props, emits, and v-model work together in Vue 3?', 'props, emits và v-model phối hợp với nhau như thế nào trong Vue 3?'),
+    answer: l(
+      `The core idea is **one-way data flow**:
+
+- parent passes data down via **props**
+- child notifies changes up via **emits**
+- \`v-model\` is convenient syntax for a prop + update event pair
+
+The source of truth should stay clear. Child components should not silently own data that the parent believes it owns.`,
+      `Ý cốt lõi là **one-way data flow**:
+
+- parent truyền data xuống qua **props**
+- child báo thay đổi đi lên qua **emits**
+- \`v-model\` là syntax tiện lợi cho một cặp prop + update event
+
+Source of truth phải luôn rõ. Child không nên âm thầm ownership data mà parent tưởng là mình đang ownership.`,
+    ),
+  }),
+  q({
+    id: 'vue-key-in-v-for',
+    category: 'technical',
+    tags: ['vue', 'basics', 'lists'],
+    question: l('Why does key matter in v-for?', 'Vì sao key quan trọng trong v-for?'),
+    answer: l(
+      `Keys help Vue preserve or reset DOM/component identity correctly across list updates.
+
+Good keys:
+
+- are stable,
+- unique among siblings,
+- come from real item identity when possible.
+
+Index keys can cause wrong state preservation when items are inserted, removed, or reordered.`,
+      `Key giúp Vue preserve hoặc reset đúng identity của DOM/component khi list thay đổi.
+
+Key tốt:
+
+- ổn định,
+- unique trong nhóm sibling,
+- đến từ identity thật của item nếu có thể.
+
+Dùng index làm key dễ gây preserve nhầm state khi item bị chèn, xóa hoặc reorder.`,
+    ),
+  }),
+  q({
+    id: 'react-props-state-lifecycle-hooks',
+    category: 'technical',
+    tags: ['react', 'basics'],
+    question: l('What are props, state, and “lifecycle with hooks” in React?', 'props, state và “lifecycle với hooks” trong React là gì?'),
+    answer: l(
+      `- **props** are inputs from parent to child
+- **state** is local mutable data owned by the component
+- with hooks, lifecycle concerns are expressed through render + effects rather than class lifecycle methods
+
+A useful mental model is:
+
+- render describes UI from current props/state
+- effects synchronize with the outside world after render`,
+      `- **props** là input truyền từ parent xuống child
+- **state** là dữ liệu thay đổi được mà component tự ownership
+- với hooks, concern kiểu lifecycle được diễn đạt qua render + effect thay vì class lifecycle method
+
+Mental model hữu ích là:
+
+- render mô tả UI từ props/state hiện tại
+- effect đồng bộ với thế giới bên ngoài sau render`,
+    ),
+  }),
+  q({
+    id: 'react-usestate-useref',
+    category: 'technical',
+    tags: ['react', 'basics', 'hooks'],
+    question: l('What is the difference between useState and useRef?', 'Khác nhau giữa useState và useRef là gì?'),
+    answer: l(
+      `- **useState** stores data that participates in rendering; updating it triggers a rerender
+- **useRef** stores a mutable value that persists across renders without causing rerenders
+
+Use \`useRef\` for DOM nodes, previous values, or imperative handles. Use \`useState\` when the UI should update because the value changed.`,
+      `- **useState** lưu dữ liệu tham gia vào render; update nó sẽ gây rerender
+- **useRef** lưu giá trị mutable sống qua các lần render mà không gây rerender
+
+Dùng \`useRef\` cho DOM node, previous value hoặc imperative handle. Dùng \`useState\` khi UI phải đổi theo giá trị đó.`,
     ),
   }),
   q({

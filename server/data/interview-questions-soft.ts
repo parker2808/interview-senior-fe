@@ -8,26 +8,42 @@ export const INTERVIEW_SOFT_QUESTIONS: InterviewQuestion[] = [
     tags: ['intro', 'senior'],
     question: l('Introduce yourself.', 'Giới thiệu bản thân.'),
     answer: l(
-      `Keep it **60-90 seconds** and optimize for signal, not biography.
+      `**Short answer:** Keep it to **60-90 seconds** and structure it around current role, strongest stack, recent ownership, and why you fit this job.
 
-1. **Who you are now** - current role, ~5 years of FE, strongest stack: Vue 3 / Nuxt / TypeScript.
-2. **What you have shipped** - domains, product types, team size, user impact.
-3. **Why you are senior** - ownership, architecture decisions, debugging, mentoring, delivery under ambiguity.
-4. **Why you are here** - connect your background to their product or their stack.
+**Why this works:**
 
-For Parker specifically, be honest that React is a growing area, not a production specialty. That is better than pretending. Frame it as: **strong FE fundamentals, proven production depth in Vue/Nuxt, actively transferring those skills into React/Next**.
+1. Start with who you are now: senior FE, ~5 years, strongest in Vue 3 / Nuxt / TypeScript.
+2. Move to what you have shipped: product/domain, team context, and user impact.
+3. Add senior signals: architecture decisions, debugging, mentoring, and delivery under ambiguity.
+4. End with why this role makes sense for you.
 
-End with a hook so the interviewer can choose the next topic: “Happy to go deeper into architecture, performance, or a recent project.”`,
-      `Giữ trong **60-90 giây** và tối ưu cho tín hiệu senior, không kể tiểu sử.
+**Trade-offs / things to avoid:**
 
-1. **Hiện tại là ai** - role hiện tại, ~5 năm FE, stack mạnh nhất: Vue 3 / Nuxt / TypeScript.
-2. **Đã ship gì** - domain, loại product, quy mô team, impact tới user/business.
-3. **Vì sao là senior** - ownership, quyết định kiến trúc, debug, mentoring, delivery khi bài toán còn mơ hồ.
-4. **Vì sao apply** - nối background của mình với product hoặc stack của công ty.
+- Do not tell your life story.
+- Do not bluff React production depth if you do not have it.
+- Do not list tools without showing ownership or outcomes.
 
-Với Parker, nên nói thật React là phần đang tăng tốc chứ chưa phải production specialty. Nói thật như vậy tốt hơn là phóng đại. Cách frame tốt là: **nền tảng FE rất chắc, production depth rõ ở Vue/Nuxt, đang chủ động chuyển các nguyên lý đó sang React/Next**.
+For Parker specifically, the strongest framing is: **deep production experience in Vue/Nuxt, strong frontend fundamentals, and active React/Next ramp-up through concept transfer rather than memorization**.
 
-Kết bằng một hook để interviewer chọn hướng đào sâu: “Em có thể đi sâu hơn vào architecture, performance, hoặc một project gần đây.”`,
+End with a hook such as: “Happy to go deeper into architecture, performance, or a recent project.”`,
+      `**Trả lời ngắn:** Giữ trong **60-90 giây** và đi theo cấu trúc role hiện tại, stack mạnh nhất, ownership gần đây, rồi vì sao bạn fit với role này.
+
+**Vì sao cách này hiệu quả:**
+
+1. Mở đầu bằng hiện tại: senior FE, ~5 năm, mạnh nhất ở Vue 3 / Nuxt / TypeScript.
+2. Chuyển sang cái đã ship: domain/product, bối cảnh team và impact tới user.
+3. Thêm tín hiệu senior: quyết định kiến trúc, debug, mentoring và delivery khi bài toán còn mơ hồ.
+4. Kết bằng lý do vì sao role này hợp với mình.
+
+**Trade-off / điều nên tránh:**
+
+- Đừng kể tiểu sử quá dài.
+- Đừng bluff React production depth nếu chưa có.
+- Đừng chỉ liệt kê tool mà không cho thấy ownership hoặc outcome.
+
+Với Parker, cách frame mạnh nhất là: **production depth rõ ở Vue/Nuxt, nền tảng frontend rất chắc, và đang tăng tốc React/Next bằng cách chuyển nguyên lý giữa các hệ hơn là học thuộc API**.
+
+Nên kết bằng hook kiểu: “Em có thể đi sâu hơn vào architecture, performance hoặc một project gần đây.”`,
     ),
     example: l(
       `“I'm a senior frontend engineer with about five years of experience, mostly in Vue 3, Nuxt, and TypeScript. Recently I owned an internal admin product from API contract discussion to UI architecture, edge-case handling, and rollout. My strengths are building maintainable frontend structures, debugging production issues, and helping teams make clear trade-offs. I'm now intentionally strengthening React/Next fundamentals because I want to operate fluently across modern FE stacks.”`,
@@ -36,6 +52,7 @@ Kết bằng một hook để interviewer chọn hướng đào sâu: “Em có 
     followUps: [
       l('What area are you currently improving the most?', 'Hiện tại bạn đang cải thiện mạnh nhất ở mảng nào?'),
       l('Which recent project best shows your seniority?', 'Project gần đây nào thể hiện rõ nhất seniority của bạn?'),
+      l('Why should we trust you on React if your production depth is in Vue?', 'Vì sao bên em nên tin bạn ở React khi production depth của bạn nằm ở Vue?'),
     ],
   }),
   q({
@@ -44,41 +61,48 @@ Kết bằng một hook để interviewer chọn hướng đào sâu: “Em có 
     tags: ['project', 'star', 'ownership'],
     question: l('Tell me about a recent project.', 'Giới thiệu recent project.'),
     answer: l(
-      `Use **STAR**, but keep it technical and measurable.
+      `**Short answer:** Use **STAR**, but make the “Action” section technical and the “Result” section measurable.
 
-- **Situation** - product goal, user problem, and constraints.
-- **Task** - your ownership boundary. Avoid sounding like you single-handedly built the company.
-- **Action** - architecture choices, state strategy, API collaboration, testing, a11y, performance, rollout.
-- **Result** - user or team impact, and one thing you would improve next time.
+**Why this works:**
 
-Senior interviewers usually keep drilling after the first layer. Prepare answers for:
+- **Situation** explains the user problem and constraints.
+- **Task** defines your ownership boundary.
+- **Action** is where you show senior judgment: architecture, state ownership, API collaboration, testing, a11y, performance, rollout.
+- **Result** proves impact on users, bugs, team speed, or support load.
 
-1. Why you chose that approach over alternatives.
-2. What failed or changed mid-project.
-3. How you aligned with BE, design, or PM.
-4. What you measured to know it worked.
+**Trade-offs / things to avoid:**
 
-The best project stories show **judgment under constraints**, not just “I used cool tools.”`,
-      `Dùng **STAR**, nhưng phải technical và có impact đo được.
+- Do not claim you owned everything if you did not.
+- Do not spend 80% of the answer on project background.
+- Do not stop at “we used X library”; explain why.
 
-- **Situation** - mục tiêu product, user problem và constraint.
-- **Task** - ranh giới ownership của bạn. Tránh kể như thể một mình xây cả công ty.
-- **Action** - lựa chọn architecture, state strategy, phối hợp API, testing, a11y, performance, rollout.
-- **Result** - impact tới user/team, và một điều bạn sẽ làm tốt hơn lần sau.
+Senior interviewers usually drill deeper on trade-offs, failure points, and alignment. The best project answer shows **judgment under constraints**, not just activity.`,
+      `**Trả lời ngắn:** Dùng **STAR**, nhưng phần “Action” phải technical và phần “Result” phải đo được.
 
-Interviewer senior thường đào tiếp sau lớp đầu tiên. Nên chuẩn bị sẵn:
+**Vì sao cách này hiệu quả:**
 
-1. Vì sao chọn approach đó thay vì phương án khác.
-2. Trong dự án có gì fail hoặc đổi hướng giữa chừng.
-3. Bạn align với BE, design hoặc PM như thế nào.
-4. Bạn đo bằng gì để biết là nó hiệu quả.
+- **Situation** giải thích user problem và constraint.
+- **Task** xác định ranh giới ownership của bạn.
+- **Action** là nơi thể hiện judgment của senior: architecture, state ownership, phối hợp API, testing, a11y, performance, rollout.
+- **Result** chứng minh impact lên user, bug, tốc độ của team hoặc support load.
 
-Story tốt nhất là story thể hiện **judgment dưới constraint**, không chỉ là “em dùng tool hay.”`,
+**Trade-off / điều nên tránh:**
+
+- Đừng nhận mình ownership tất cả nếu thực tế không phải vậy.
+- Đừng dành 80% thời gian để kể bối cảnh dự án.
+- Đừng dừng ở mức “team em dùng library X”; phải giải thích vì sao.
+
+Interviewer senior thường đào sâu vào trade-off, điểm fail và cách align với các bên. Một project answer tốt phải thể hiện **judgment dưới constraint**, không chỉ là activity.`,
     ),
     example: l(
       `“We had to rebuild a role-based admin flow with messy permissions and inconsistent legacy UI. I owned the FE architecture and API contract alignment. I split the surface by domain, pushed URL state for filters, introduced reusable permission guards, and added regression tests for the most failure-prone paths. The result was fewer auth-related support issues and faster onboarding for new engineers because the state ownership became much clearer.”`,
       `“Team em phải rebuild một admin flow có role-based permission khá rối và UI legacy không nhất quán. Em ownership phần FE architecture và align API contract. Em chia surface theo domain, đẩy filter lên URL state, thêm permission guard dùng lại được, và viết regression test cho các path dễ lỗi nhất. Kết quả là ít issue support liên quan auth hơn và người mới onboard nhanh hơn vì state ownership rõ hơn nhiều.”`,
     ),
+    followUps: [
+      l('Why did you choose that state strategy instead of a global store?', 'Vì sao bạn chọn state strategy đó thay vì đẩy hết vào global store?'),
+      l('What went wrong during the project and what did you change?', 'Trong dự án có gì đi sai và bạn đã đổi hướng thế nào?'),
+      l('How did you measure whether the change was successful?', 'Bạn đo thành công của thay đổi đó bằng cách nào?'),
+    ],
   }),
   q({
     id: 'ai-daily-work',
@@ -186,27 +210,45 @@ Tránh kiểu điểm yếu giả như “em quá cầu toàn”. Interviewer mu
       'Đánh giá một senior developer cần phải là một người như nào?',
     ),
     answer: l(
-      `A senior is not just a fast coder. The strongest signals are:
+      `**Short answer:** A senior developer is someone who reduces ambiguity, makes sound trade-offs, and raises the quality of both the system and the team.
 
-1. **Ownership** - can take a vague problem to production with clear trade-offs.
-2. **System thinking** - sees FE together with API, UX, accessibility, observability, and business impact.
-3. **Judgment** - knows when to simplify, when to invest, and when to say no.
-4. **Communication** - aligns people, explains risk, writes decisions down, reviews constructively.
-5. **Quality bar** - cares about testing, edge cases, and production safety.
-6. **Multiplication** - makes the team stronger through mentoring and better processes.
+**Why this is the right frame:**
 
-For interviews, answer with both principle and example. Saying “senior means ownership” is generic. Saying “I reduced ambiguity, aligned BE contracts, and helped juniors reason about state boundaries” is concrete.`,
-      `Senior không chỉ là người code nhanh. Tín hiệu mạnh nhất thường là:
+1. **Ownership** - can move a vague problem to production.
+2. **System thinking** - sees FE together with API, UX, a11y, observability, and business goals.
+3. **Judgment** - knows when to simplify, invest, or push back.
+4. **Communication** - explains risk, aligns people, documents decisions.
+5. **Multiplication** - mentors others and leaves the codebase clearer than before.
 
-1. **Ownership** - cầm một bài toán còn mơ hồ và đưa được tới production với trade-off rõ ràng.
-2. **Tư duy hệ thống** - nhìn FE cùng với API, UX, accessibility, observability và business impact.
-3. **Judgment** - biết khi nào nên đơn giản hóa, khi nào nên đầu tư, khi nào nên nói không.
-4. **Communication** - align nhiều người, giải thích risk, viết decision rõ ràng, review có tính xây dựng.
-5. **Quality bar** - quan tâm testing, edge case và độ an toàn khi lên production.
-6. **Nhân bản năng lực** - làm team mạnh lên nhờ mentoring và process tốt hơn.
+**Trade-offs / things to avoid:**
 
-Đi phỏng vấn nên trả lời bằng cả principle lẫn ví dụ. Nói “senior là ownership” thì hơi chung. Nói “em giảm ambiguity, align BE contract và giúp junior reason về state boundary” thì mới đủ cụ thể.`,
+- Do not define seniority only by years.
+- Do not answer only in principles; attach at least one concrete example.
+- Do not confuse “coding fast” with “owning outcomes”.
+
+The best answer sounds like a mix of technical depth, product sense, and team leverage.`,
+      `**Trả lời ngắn:** Senior developer là người giảm được ambiguity, đưa ra trade-off hợp lý, và nâng chất lượng của cả hệ thống lẫn team.
+
+**Vì sao nên frame như vậy:**
+
+1. **Ownership** - đưa được một bài toán mơ hồ tới production.
+2. **Tư duy hệ thống** - nhìn FE cùng với API, UX, a11y, observability và business goal.
+3. **Judgment** - biết lúc nào nên đơn giản hóa, đầu tư thêm hoặc phản biện.
+4. **Communication** - giải thích risk, align nhiều người, ghi lại decision rõ ràng.
+5. **Nhân bản năng lực** - mentor người khác và để lại codebase rõ ràng hơn trước.
+
+**Trade-off / điều nên tránh:**
+
+- Đừng định nghĩa seniority chỉ bằng số năm.
+- Đừng trả lời toàn bằng principle; nên gắn ít nhất một ví dụ thật.
+- Đừng nhầm “code nhanh” với “ownership outcome”.
+
+Câu trả lời tốt nhất nên nghe như sự kết hợp giữa technical depth, product sense và team leverage.`,
     ),
+    followUps: [
+      l('Can you give a recent example that proves that level of ownership?', 'Bạn có ví dụ gần đây nào chứng minh mức ownership đó không?'),
+      l('How do you balance speed with quality as a senior?', 'Bạn cân bằng tốc độ với chất lượng như một senior thế nào?'),
+    ],
   }),
   q({
     id: 'strengths-weaknesses',
@@ -214,43 +256,59 @@ For interviews, answer with both principle and example. Saying “senior means o
     tags: ['self-awareness', 'career'],
     question: l('What are your strengths and weaknesses?', 'Điểm mạnh và điểm yếu của bạn là gì?'),
     answer: l(
-      `Pick strengths that match a senior FE role:
+      `**Short answer:** Pick strengths that match the role, and choose one real weakness that is relevant but actively being improved.
 
-- architectural thinking,
+**Strong strengths for this profile:**
+
+- frontend architecture and state modeling,
 - production debugging,
 - turning ambiguity into execution,
-- mentoring and code review.
+- mentoring and review quality.
 
-For weaknesses, choose something real but manageable. The best answer includes:
+**Good weakness structure:**
 
-1. the gap,
-2. why it matters,
-3. what you are doing about it.
+1. name the gap,
+2. explain why it matters,
+3. show the plan already in motion.
 
-For Parker, a strong weakness answer is React production experience. It is honest, relevant, and already being improved.
+For Parker, “most of my production depth is in Vue/Nuxt, and I am actively strengthening React/Next” is a strong weakness answer because it is honest and recoverable.
 
-Avoid weaknesses that make you sound risky for the job, like “I often miss deadlines.”`,
-      `Hãy chọn điểm mạnh khớp với role senior FE:
+**Trade-offs / things to avoid:**
 
-- tư duy kiến trúc,
+- Do not give a fake weakness.
+- Do not choose a weakness that makes you sound unsafe for the role.
+- Do not say you are improving it without concrete evidence.`,
+      `**Trả lời ngắn:** Hãy chọn điểm mạnh khớp với role, và chọn một điểm yếu có thật nhưng đang được cải thiện chủ động.
+
+**Điểm mạnh hợp với profile này:**
+
+- frontend architecture và state modeling,
 - debug production,
 - biến ambiguity thành execution,
-- mentoring và code review.
+- mentoring và chất lượng review.
 
-Với điểm yếu, chọn thứ có thật nhưng đang kiểm soát được. Câu trả lời tốt nên có:
+**Cấu trúc tốt cho điểm yếu:**
 
-1. khoảng trống là gì,
-2. vì sao nó quan trọng,
-3. bạn đang làm gì để bù vào.
+1. gọi tên khoảng trống,
+2. nói vì sao nó quan trọng,
+3. cho thấy kế hoạch cải thiện đã chạy rồi.
 
-Với Parker, một câu trả lời mạnh là kinh nghiệm React production chưa nhiều. Nó thật, liên quan và đã có hướng cải thiện rõ.
+Với Parker, “production depth của em chủ yếu nằm ở Vue/Nuxt, và em đang chủ động tăng tốc React/Next” là một câu trả lời mạnh vì nó thật và có thể bù được.
 
-Tránh các điểm yếu làm bạn trông rủi ro với role, kiểu “em hay trễ deadline”.`,
+**Trade-off / điều nên tránh:**
+
+- Đừng dùng điểm yếu giả.
+- Đừng chọn điểm yếu làm bạn trông không an toàn cho role.
+- Đừng nói đang cải thiện nếu không có bằng chứng cụ thể.`,
     ),
     example: l(
       `“My strengths are frontend architecture and debugging under ambiguity. I’m good at mapping state ownership, making trade-offs explicit, and helping teams avoid accidental complexity. My current gap is that most of my production depth is in Vue/Nuxt rather than React. I’m addressing that by building with React/Next intentionally and translating patterns instead of memorizing APIs.”`,
       `“Điểm mạnh của em là frontend architecture và debug khi bài toán còn mơ hồ. Em khá mạnh ở việc map state ownership, làm trade-off rõ ràng và giúp team tránh accidental complexity. Khoảng trống hiện tại là production depth của em tập trung nhiều ở Vue/Nuxt hơn React. Em đang xử lý bằng cách học React/Next có chủ đích và luôn cố dịch pattern, chứ không chỉ học thuộc API.”`,
     ),
+    followUps: [
+      l('How are you closing the React gap in practice?', 'Bạn đang lấp khoảng trống React đó trong thực tế bằng cách nào?'),
+      l('Which strength do you think matters most in this role?', 'Theo bạn điểm mạnh nào quan trọng nhất với role này?'),
+    ],
   }),
   q({
     id: 'why-company',
@@ -694,29 +752,61 @@ Nếu task còn mơ hồ, hãy nói rõ điều đó và đề xuất spike ho�
       'Bạn sẽ giải thích hành trình học React của mình khi đi từ Vue như thế nào?',
     ),
     answer: l(
-      `Be honest and strategic.
+      `**Short answer:** Be honest that Vue is your production strength, then explain that you are learning React by transferring **principles**, not memorizing APIs.
 
-Say that Vue is your production strength, but you are learning React by mapping **concepts**, not memorizing API differences:
+**The strongest comparison points are:**
 
 - Vue reactivity vs React re-render model,
 - composables vs custom hooks,
-- watchers/lifecycle vs effects,
-- Pinia mental model vs server-state libraries plus context/reducers,
+- watcher/lifecycle patterns vs effects,
+- Pinia mindset vs React state/server-state tools,
 - Nuxt SSR mental model vs Next App Router and RSC.
 
-This makes you sound like an engineer who transfers principles between ecosystems, not a framework tourist.`,
-      `Hãy trung thực và có chiến lược.
+**Why this answer is strong:**
 
-Bạn có thể nói Vue là production strength của mình, còn React đang được học theo hướng map **khái niệm**, chứ không học thuộc khác biệt API:
+- it avoids bluffing,
+- it shows depth in fundamentals,
+- it proves you can learn ecosystems by reasoning, not cargo-culting.
+
+**Trade-offs / things to avoid:**
+
+- Do not say React and Vue are “basically the same”.
+- Do not apologize too much for the gap.
+- Do not make the answer only about syntax differences.
+
+This framing makes you sound like an engineer with transferable frontend depth.`,
+      `**Trả lời ngắn:** Hãy nói thẳng Vue là production strength của mình, rồi giải thích rằng bạn đang học React bằng cách chuyển **nguyên lý**, không phải học thuộc API.
+
+**Các điểm so sánh mạnh nhất là:**
 
 - Vue reactivity vs React re-render model,
 - composable vs custom hook,
-- watcher/lifecycle vs effect,
-- mental model của Pinia vs server-state library cộng context/reducer,
+- watcher/lifecycle pattern vs effect,
+- tư duy Pinia vs bộ công cụ state/server-state ở React,
 - mental model SSR của Nuxt vs Next App Router và RSC.
 
-Cách nói này khiến bạn trông như một engineer biết chuyển nguyên lý giữa các ecosystem, chứ không phải người nhảy framework theo trend.`,
+**Vì sao câu trả lời này mạnh:**
+
+- không bluff,
+- cho thấy nền tảng rất chắc,
+- chứng minh bạn học ecosystem bằng reasoning chứ không cargo-cult.
+
+**Trade-off / điều nên tránh:**
+
+- Đừng nói React và Vue “gần như giống nhau”.
+- Đừng xin lỗi quá nhiều về khoảng trống này.
+- Đừng biến câu trả lời thành chuyện khác biệt cú pháp.
+
+Cách frame này khiến bạn trông như một engineer có độ sâu frontend chuyển đổi được giữa các hệ.`,
     ),
+    example: l(
+      `A concise version: “My production depth is in Vue/Nuxt, but I’m learning React by mapping concepts. For example, I compare Vue’s fine-grained reactivity with React’s re-render model, composables with custom hooks, and Nuxt SSR mental models with Next App Router. That approach helps me learn React in a way that will hold up in production.”`,
+      `Một phiên bản ngắn gọn: “Production depth của em nằm ở Vue/Nuxt, nhưng em học React bằng cách map nguyên lý. Ví dụ em so Vue reactivity với React re-render model, composable với custom hook, và mental model SSR của Nuxt với Next App Router. Cách học đó giúp em tiếp cận React theo kiểu có thể đứng vững trong production sau này.”`,
+    ),
+    followUps: [
+      l('What has been the hardest React mental shift for you?', 'Mental shift khó nhất của bạn khi học React là gì?'),
+      l('How would you ramp up safely on a React codebase in the first month?', 'Nếu vào một codebase React, bạn sẽ ramp up an toàn trong tháng đầu thế nào?'),
+    ],
   }),
   q({
     id: 'quality-bar-definition',
