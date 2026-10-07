@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { marked } from 'marked'
 import type { DayMeta } from '@/modules/study-plan/constants/days.constant'
+import PlanDayContent from '@/modules/study-plan/components/PlanDayContent/PlanDayContent.vue'
+import { getPlanDayContent } from '@/modules/study-plan/constants/plan-content.constant'
 import { loadMarkdown } from '@/modules/study-plan/utils/load-markdown.util'
 import { classifyMarkdownHref } from '@/modules/study-plan/utils/markdown-links.util'
 import { isBundledPath } from '@/modules/study-plan/utils/load-markdown.util'
@@ -20,23 +22,58 @@ const emit = defineEmits<{
   'open-docs': [payload: { lang: string; slug: string; hash?: string }]
 }>()
 
-type DayTab = 'starter' | 'worksheet' | 'lab'
-const tab = ref<DayTab>('starter')
+type DayTab = 'plan' | 'worksheet' | 'lab'
+const { locale } = useI18n()
+
+const lang = computed<'en' | 'vi'>(() =>
+  locale.value === 'en' ? 'en' : 'vi',
+)
+
+const labels = computed(() =>
+  lang.value === 'en'
+    ? {
+        plan: 'Plan',
+        worksheet: 'Worksheet',
+        lab: 'Lab setup',
+        doneLabel: 'Done',
+        done: 'Mark done',
+        doneReadOnly: 'Done (view only)',
+        pendingReadOnly: 'Not done yet',
+        prev: '← Previous day',
+        next: 'Next day →',
+      }
+    : {
+        plan: 'Plan',
+        worksheet: 'Worksheet',
+        lab: 'Lab setup',
+        doneLabel: 'Đã xong',
+        done: 'Đánh dấu xong',
+        doneReadOnly: 'Đã xong (xem)',
+        pendingReadOnly: 'Chưa xong',
+        prev: '← Day trước',
+        next: 'Day sau →',
+      },
+)
+
+const tab = ref<DayTab>('plan')
+const planContent = computed(() => getPlanDayContent(props.day.day))
 
 watch(
   () => props.day.day,
   () => {
-    tab.value = 'starter'
+    tab.value = 'plan'
   },
 )
 
 const activePath = computed(() => {
   if (tab.value === 'worksheet') return props.day.worksheet
   if (tab.value === 'lab') return props.day.lab
-  return props.day.starter
+  return ''
 })
 
 const html = computed(() => {
+  if (!activePath.value) return ''
+
   const raw = marked.parse(loadMarkdown(activePath.value).text, {
     async: false,
   }) as string
@@ -75,7 +112,9 @@ function onDocClick(e: MouseEvent) {
         <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
           Day {{ String(day.day).padStart(2, '0') }} · {{ day.date }}
         </p>
-        <h2 class="mt-1 text-xl font-bold sm:text-2xl">{{ day.theme }}</h2>
+        <h2 class="mt-1 text-xl font-bold sm:text-2xl">
+          {{ planContent ? planContent.title[lang] : day.theme }}
+        </h2>
       </div>
       <label
         class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-white px-3 text-sm font-medium"
@@ -92,11 +131,11 @@ function onDocClick(e: MouseEvent) {
           {{
             readOnly
               ? done
-                ? 'Đã xong (xem)'
-                : 'Chưa xong'
+                ? labels.doneReadOnly
+                : labels.pendingReadOnly
               : done
-                ? 'Đã xong'
-                : 'Đánh dấu xong'
+                ? labels.doneLabel
+                : labels.done
           }}
         </span>
       </label>
@@ -107,11 +146,11 @@ function onDocClick(e: MouseEvent) {
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-        :class="tab === 'starter' ? 'bg-accent text-white' : 'bg-white border border-line'"
-        :aria-selected="tab === 'starter'"
-        @click="tab = 'starter'"
+        :class="tab === 'plan' ? 'bg-accent text-white' : 'bg-white border border-line'"
+        :aria-selected="tab === 'plan'"
+        @click="tab = 'plan'"
       >
-        Hướng dẫn
+        {{ labels.plan }}
       </button>
       <button
         type="button"
@@ -121,7 +160,7 @@ function onDocClick(e: MouseEvent) {
         :aria-selected="tab === 'worksheet'"
         @click="tab = 'worksheet'"
       >
-        Worksheet
+        {{ labels.worksheet }}
       </button>
       <button
         type="button"
@@ -131,15 +170,22 @@ function onDocClick(e: MouseEvent) {
         :aria-selected="tab === 'lab'"
         @click="tab = 'lab'"
       >
-        Lab setup
+        {{ labels.lab }}
       </button>
     </div>
 
-    <p class="mb-4 font-mono text-xs text-ink-faint">
+    <PlanDayContent v-if="tab === 'plan' && planContent" :content="planContent" />
+
+    <p v-else class="mb-4 font-mono text-xs text-ink-faint">
       <code>{{ activePath }}</code>
     </p>
 
-    <div class="prose-doc" v-html="html" @click="onDocClick" />
+    <div
+      v-if="tab !== 'plan'"
+      class="prose-doc"
+      v-html="html"
+      @click="onDocClick"
+    />
 
     <footer class="mt-8 flex flex-col gap-2 border-t border-line pt-4 sm:flex-row sm:justify-between">
       <button
@@ -148,7 +194,7 @@ function onDocClick(e: MouseEvent) {
         :disabled="day.day <= 1"
         @click="$emit('prev')"
       >
-        ← Day trước
+        {{ labels.prev }}
       </button>
       <button
         type="button"
@@ -156,7 +202,7 @@ function onDocClick(e: MouseEvent) {
         :disabled="day.day >= 30"
         @click="$emit('next')"
       >
-        Day sau →
+        {{ labels.next }}
       </button>
     </footer>
   </article>

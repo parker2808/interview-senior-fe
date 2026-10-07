@@ -9,6 +9,7 @@ const props = defineProps<{
   item: InterviewQuestion
   lang: InterviewLang
   open: boolean
+  highlight?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -26,7 +27,11 @@ const exampleHtml = computed(() =>
 </script>
 
 <template>
-  <article class="min-w-0 overflow-hidden border-b border-line last:border-b-0">
+  <article
+    :id="item.id"
+    class="min-w-0 overflow-hidden border-b border-line last:border-b-0"
+    :class="highlight ? 'bg-accent-soft/40' : ''"
+  >
     <button
       type="button"
       class="flex w-full items-start gap-3 px-1 py-4 text-left"

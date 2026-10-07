@@ -3,6 +3,7 @@ import BackLink from '@/modules/core/components/BackLink/BackLink.vue'
 import DayDetail from '@/modules/study-plan/components/DayDetail/DayDetail.vue'
 import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
 import { getDay } from '@/modules/study-plan/constants/days.constant'
+import { getPlanDayContent } from '@/modules/study-plan/constants/plan-content.constant'
 import { useProgress } from '@/modules/study-plan/composables/use-progress.composable'
 
 const props = defineProps<{
@@ -10,8 +11,12 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
-const { t } = useI18n()
+const { locale, t } = useI18n()
+const lang = computed<'en' | 'vi'>(() =>
+  locale.value === 'en' ? 'en' : 'vi',
+)
 const day = computed(() => getDay(props.dayNumber))
+const planContent = computed(() => getPlanDayContent(props.dayNumber))
 
 const {
   readOnly,
@@ -68,7 +73,11 @@ onMounted(() => {
       <div class="flex h-12 items-center gap-2 px-2 sm:px-4">
         <BackLink to="/plan" :label="t('plan.backDayList')" icon-only />
         <p class="min-w-0 flex-1 truncate text-sm font-semibold text-ink">
-          {{ day ? `Day ${String(day.day).padStart(2, '0')}` : t('plan.title') }}
+          {{
+            day
+              ? `Day ${String(day.day).padStart(2, '0')} · ${planContent?.title[lang] || ''}`
+              : t('plan.title')
+          }}
         </p>
       </div>
     </div>

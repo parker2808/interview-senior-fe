@@ -1714,6 +1714,261 @@ Nếu đi từ Vue/Nuxt sang, có thể so sánh gần đúng là đây là các
     ),
   }),
   q({
+    id: 'next-app-router-layouts-loading-error',
+    category: 'technical',
+    tags: ['react', 'nextjs', 'app-router'],
+    question: l(
+      'How do layouts, routing, loading states, and error states work in the Next.js App Router?',
+      'Layout, routing, loading state và error state hoạt động thế nào trong Next.js App Router?',
+    ),
+    answer: l(
+      `Think in **route segments** rather than one giant page tree.
+
+- ` + '`layout.tsx`' + ` wraps a segment and can nest, similar to nested layouts in Nuxt.
+- ` + '`page.tsx`' + ` is the leaf route content for that segment.
+- ` + '`loading.tsx`' + ` gives a segment-level loading UI while server work is in flight.
+- ` + '`error.tsx`' + ` is a segment-level recovery boundary for rendering failures.
+
+The senior angle is not just memorizing file names. It is understanding that App Router lets you scope chrome, loading, and failure handling **per route segment** instead of treating the whole app as one spinner or one crash surface.
+
+For a Nuxt comparison: nested ` + '`layout.tsx`' + ` maps loosely to Nuxt layouts, while ` + '`loading.tsx`' + ` and ` + '`error.tsx`' + ` feel like first-class segment conventions for UX states that many Vue teams otherwise assemble more manually.`,
+      `Hãy nghĩ theo **route segment** chứ không phải một page tree khổng lồ.
+
+- ` + '`layout.tsx`' + ` bọc một segment và có thể lồng nhau, khá giống nested layout trong Nuxt.
+- ` + '`page.tsx`' + ` là nội dung route lá của segment đó.
+- ` + '`loading.tsx`' + ` cho loading UI theo từng segment khi phần server đang xử lý.
+- ` + '`error.tsx`' + ` là boundary khôi phục lỗi render ở mức segment.
+
+Điểm senior không phải chỉ là nhớ tên file. Mà là hiểu App Router cho phép scope phần chrome, loading và xử lý failure **theo từng route segment**, thay vì biến cả app thành một spinner lớn hoặc một crash surface duy nhất.
+
+So với Nuxt: nested ` + '`layout.tsx`' + ` gần với layout lồng nhau trong Nuxt, còn ` + '`loading.tsx`' + ` và ` + '`error.tsx`' + ` giống những convention hạng nhất cho UX state mà nhiều team Vue nếu không có framework support sẽ phải ráp thủ công hơn.`,
+    ),
+  }),
+  q({
+    id: 'next-server-client-components',
+    category: 'technical',
+    tags: ['react', 'nextjs', 'rsc'],
+    question: l(
+      'How do you decide between Server Components and Client Components in Next.js?',
+      'Bạn quyết định giữa Server Component và Client Component trong Next.js như thế nào?',
+    ),
+    answer: l(
+      `Default to **Server Components** unless you need browser-only behavior.
+
+Use a **Server Component** when:
+
+- the UI can be rendered from server-fetched data,
+- the code should not ship to the browser,
+- the component mainly composes data and markup.
+
+Use a **Client Component** when you need:
+
+- hooks like ` + '`useState`' + ` or ` + '`useEffect`' + `,
+- browser APIs,
+- event handlers and rich interaction.
+
+The senior rule is: keep the ` + '`use client`' + ` boundary as low as possible. Push interactivity down to small leaves so pages and layouts can stay server-first.
+
+If you come from Nuxt, the rough mental bridge is `.client` / `.server` concerns plus SSR-aware data ownership, but App Router makes that boundary much more explicit.`,
+      `Mặc định hãy dùng **Server Component** trừ khi thật sự cần hành vi chỉ có ở browser.
+
+Dùng **Server Component** khi:
+
+- UI render được từ data fetch ở server,
+- code đó không nên ship xuống browser,
+- component chủ yếu làm việc compose data và markup.
+
+Dùng **Client Component** khi cần:
+
+- hooks như ` + '`useState`' + ` hoặc ` + '`useEffect`' + `,
+- browser API,
+- event handler và tương tác phong phú.
+
+Quy tắc kiểu senior là: giữ boundary ` + '`use client`' + ` xuống thấp nhất có thể. Đẩy tương tác xuống các leaf nhỏ để page và layout còn giữ được tính server-first.
+
+Nếu đi từ Nuxt sang, cầu nối mental model gần đúng là concern `.client` / `.server` cộng với ownership dữ liệu kiểu SSR, nhưng App Router làm boundary đó tường minh hơn nhiều.`,
+    ),
+  }),
+  q({
+    id: 'next-data-fetching-cache-revalidation',
+    category: 'technical',
+    tags: ['react', 'nextjs', 'cache'],
+    question: l(
+      'How do data fetching, caching, and revalidation work in the Next.js App Router?',
+      'Data fetching, caching và revalidation hoạt động thế nào trong Next.js App Router?',
+    ),
+    answer: l(
+      `Start by deciding the **freshness requirement** of the page, not by copying a random fetch snippet.
+
+Common options:
+
+- ` + '`fetch(..., { cache: \'no-store\' })`' + ` or dynamic rendering for always-fresh personalized data,
+- ` + '`next: { revalidate: N }`' + ` for content that can be a little stale,
+- tag/path revalidation when mutations should selectively refresh cached results.
+
+The senior nuance is that Next caching is not “free performance.” It changes data freshness, invalidation, and operational complexity. You should be able to say what can be stale, for how long, and what event refreshes it.
+
+For Nuxt engineers, compare it to choosing between server fetch, cached SSR content, and explicit refresh flows such as ` + '`refreshNuxtData`' + ` or route-rule behavior, but with stronger built-in cache semantics around fetch itself.`,
+      `Hãy bắt đầu bằng việc chốt **mức độ tươi mới cần có** của trang, chứ đừng copy bừa một snippet fetch.
+
+Các lựa chọn hay gặp:
+
+- ` + '`fetch(..., { cache: \'no-store\' })`' + ` hoặc dynamic rendering cho dữ liệu cá nhân hóa luôn phải mới,
+- ` + '`next: { revalidate: N }`' + ` cho nội dung có thể stale một chút,
+- revalidate theo tag/path khi mutation cần làm mới có chọn lọc các kết quả đã cache.
+
+Nuance kiểu senior là cache trong Next không phải “free performance”. Nó làm thay đổi freshness, invalidation và độ phức tạp vận hành. Bạn phải nói rõ cái gì có thể stale, stale bao lâu và event nào sẽ refresh nó.
+
+Với người quen Nuxt, có thể so gần đúng với việc chọn giữa server fetch, SSR content có cache, và các flow refresh chủ động như ` + '`refreshNuxtData`' + ` hoặc route rules, nhưng Next đẩy cache semantics xuống tận lớp fetch một cách rõ ràng hơn.`,
+    ),
+  }),
+  q({
+    id: 'next-rendering-modes-streaming',
+    category: 'technical',
+    tags: ['react', 'nextjs', 'ssr'],
+    question: l(
+      'How would you choose between SSR, SSG, ISR, and streaming in Next.js?',
+      'Bạn sẽ chọn giữa SSR, SSG, ISR và streaming trong Next.js như thế nào?',
+    ),
+    answer: l(
+      `Choose based on **SEO, personalization, update frequency, and time-to-useful-content**.
+
+- **SSR** fits dynamic pages where fresh server HTML matters.
+- **SSG** fits static marketing/docs content.
+- **ISR** fits pages that are mostly static but should refresh periodically.
+- **streaming** helps when parts of the page can appear early while slower server work continues.
+
+Senior answers usually mention trade-offs, not just definitions:
+
+- SSR gives freshness but adds request-time cost,
+- SSG is cheap and fast but can go stale,
+- ISR reduces rebuild pressure but adds cache semantics,
+- streaming helps perceived speed but requires good loading-state design.
+
+For a Nuxt comparison, think about the same rendering spectrum, but explain how App Router and Suspense make streamed segment-level UX a first-class part of the design.`,
+      `Hãy chọn dựa trên **SEO, mức độ cá nhân hóa, tần suất cập nhật và time-to-useful-content**.
+
+- **SSR** hợp với trang động nơi HTML mới ở server thật sự quan trọng.
+- **SSG** hợp với marketing/docs ít đổi.
+- **ISR** hợp với trang gần như tĩnh nhưng vẫn cần cập nhật định kỳ.
+- **streaming** hợp khi một phần trang có thể hiện sớm trong lúc phần server chậm hơn vẫn đang chạy.
+
+Câu trả lời kiểu senior thường nói tới trade-off chứ không chỉ là định nghĩa:
+
+- SSR cho freshness nhưng tốn chi phí lúc request,
+- SSG rẻ và nhanh nhưng có thể stale,
+- ISR giảm áp lực rebuild nhưng thêm cache semantics,
+- streaming tăng tốc độ cảm nhận nhưng đòi hỏi thiết kế loading state tốt.
+
+Nếu so với Nuxt, hãy nghĩ tới cùng một phổ lựa chọn render, nhưng nhấn mạnh việc App Router và Suspense biến trải nghiệm streamed theo từng segment thành một phần hạng nhất của thiết kế.`,
+    ),
+  }),
+  q({
+    id: 'next-server-actions',
+    category: 'technical',
+    tags: ['react', 'nextjs', 'server-actions'],
+    question: l(
+      'When are Next.js Server Actions useful, and what should you watch out for?',
+      'Khi nào Server Actions của Next.js hữu ích, và cần để ý điều gì?',
+    ),
+    answer: l(
+      `Server Actions are useful when you want a form or button-driven mutation to call server logic **without hand-writing a separate API endpoint for every small action**.
+
+Good fits:
+
+- form submissions,
+- small admin mutations,
+- cases where validation, auth checks, and revalidation live close to the UI flow.
+
+Things to watch:
+
+- they do not remove the need for authorization or validation,
+- you still need to think about revalidation and stale UI,
+- not every mutation becomes simpler just because it can be an action.
+
+The senior framing is: Server Actions are a delivery tool, not magic. Use them when they reduce ceremony while keeping server ownership, and avoid them when a clear HTTP API contract is still the better boundary.`,
+      `Server Actions hữu ích khi bạn muốn một mutation đi từ form hoặc button gọi logic phía server **mà không phải viết riêng một API endpoint cho mọi action nhỏ**.
+
+Case hợp:
+
+- form submit,
+- mutation nhỏ ở admin,
+- tình huống validation, auth check và revalidation nên nằm gần UI flow.
+
+Điểm cần để ý:
+
+- nó không xoá nhu cầu authorization hay validation,
+- bạn vẫn phải nghĩ tới revalidation và UI stale,
+- không phải mutation nào cũng tự nhiên đơn giản hơn chỉ vì “làm được bằng action”.
+
+Frame kiểu senior là: Server Actions là công cụ tăng tốc delivery, không phải phép màu. Dùng khi nó giảm ceremony mà vẫn giữ ownership ở server, và tránh dùng khi một HTTP API contract rõ ràng vẫn là boundary tốt hơn.`,
+    ),
+  }),
+  q({
+    id: 'next-middleware-use-cases',
+    category: 'technical',
+    tags: ['react', 'nextjs', 'middleware'],
+    question: l(
+      'What is Next.js middleware good for, and what should not go into it?',
+      'Middleware của Next.js hợp cho việc gì, và không nên nhét gì vào đó?',
+    ),
+    answer: l(
+      `Middleware is good for **early request-time decisions** such as lightweight auth gates, redirects, rewrites, locale handling, and simple header/cookie shaping.
+
+It is a bad place for:
+
+- heavy database work,
+- anything that must rely on Node-only APIs,
+- business logic that actually belongs in your backend authorization layer.
+
+The senior point is that middleware runs on a hot path. Keep it thin, predictable, and easy to reason about. Use it to improve routing and request flow, not to turn Edge middleware into a hidden application server.
+
+Nuxt comparison: it is closer to a mix of route middleware and edge/server request shaping than to a client-side router guard.`,
+      `Middleware hợp cho các **quyết định sớm ở thời điểm request** như auth gate nhẹ, redirect, rewrite, xử lý locale, và chỉnh header/cookie đơn giản.
+
+Nó là chỗ không hợp để đặt:
+
+- truy vấn database nặng,
+- logic phụ thuộc Node-only API,
+- business logic vốn phải nằm ở tầng authorization của backend.
+
+Điểm kiểu senior là middleware chạy trên đường đi nóng của request. Hãy giữ nó mỏng, dễ đoán và dễ reasoning. Dùng để cải thiện routing và request flow, chứ đừng biến Edge middleware thành một application server ngầm.
+
+So với Nuxt, nó gần với sự pha trộn giữa route middleware và edge/server request shaping hơn là một client-side router guard đơn thuần.`,
+    ),
+  }),
+  q({
+    id: 'next-metadata-image-font-deployment',
+    category: 'technical',
+    tags: ['react', 'nextjs', 'seo', 'deployment'],
+    question: l(
+      'What production features should you remember in Next.js around metadata, SEO, image/font optimization, and deployment?',
+      'Khi nói về production trong Next.js, bạn nên nhớ gì về metadata, SEO, tối ưu image/font và deployment?',
+    ),
+    answer: l(
+      `A good answer ties these together as **delivery concerns**, not isolated trivia.
+
+- **metadata / SEO**: define titles, descriptions, canonical signals, and social-preview data intentionally.
+- **images**: use Next image optimization when it fits, but know the remote-domain and sizing implications.
+- **fonts**: load them deliberately to reduce layout shift and avoid accidental performance regressions.
+- **deployment**: understand what runtime you are targeting, where env vars live, and how caching/revalidation assumptions behave after deploy.
+
+Senior nuance: “I know the feature exists” is not enough. You should be able to explain what problem it solves, what default it changes, and what can go wrong if the team configures it carelessly.
+
+For a Nuxt comparison, think of the same outcome space: SEO metadata, optimized assets, and runtime/deploy choices - just expressed through Next conventions and Vercel-friendly workflows.`,
+      `Một câu trả lời tốt phải nối các thứ này lại như **concern khi delivery**, chứ không phải trivia rời rạc.
+
+- **metadata / SEO**: chủ động định nghĩa title, description, canonical signal và dữ liệu cho social preview.
+- **images**: dùng tối ưu ảnh của Next khi phù hợp, nhưng phải biết hệ quả về remote domain và kích thước.
+- **fonts**: load có chủ đích để giảm layout shift và tránh regression performance.
+- **deployment**: hiểu mình đang target runtime nào, env vars nằm ở đâu, và giả định cache/revalidation sẽ vận hành ra sao sau deploy.
+
+Nuance kiểu senior là: “em biết có tính năng đó” là chưa đủ. Bạn phải giải thích được nó giải bài toán gì, đổi default nào và nếu cấu hình ẩu thì có thể gây ra rắc rối gì.
+
+Nếu so với Nuxt, hãy nghĩ tới cùng không gian outcome: metadata cho SEO, asset được tối ưu và lựa chọn runtime/deploy, chỉ là thể hiện qua convention của Next và workflow thân thiện với Vercel hơn.`,
+    ),
+  }),
+  q({
     id: 'rendering-pipeline',
     category: 'technical',
     tags: ['browser', 'performance'],
