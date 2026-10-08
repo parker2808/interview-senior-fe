@@ -54,7 +54,6 @@ export const PLAN_RESOURCES: PlanResource[] = [
   { id: 'react', label: 'React/Next track', path: 'react-next-track.md' },
   { id: 'algo', label: 'Algorithms track', path: 'algorithms-track.md' },
   { id: 'context', label: 'Bối cảnh dự án', path: 'project-context.md' },
-  { id: 'capstone', label: 'Capstone brief', path: 'capstone-brief.md' },
   { id: 'feature', label: 'Feature template', path: 'feature-template.md' },
   { id: 'dod', label: 'Definition of Done', path: 'definition-of-done.md' },
   { id: 'selfcheck', label: 'Self-check questions', path: 'self-check-questions.md' },

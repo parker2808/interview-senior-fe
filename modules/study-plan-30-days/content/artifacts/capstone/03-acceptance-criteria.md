@@ -35,4 +35,4 @@ Paste AC v1 từ Day 5; tinh thành “final-ish” cho Capstone. Dùng Given/Wh
 
 > *(điền)*
 
-Quay lại: [Day 5 starter](../../day-05-starter.md) · [Brief](../../capstone-brief.md)
+Quay lại: [Day 5 starter](../../day-05-starter.md) · [Project context](../../project-context.md)

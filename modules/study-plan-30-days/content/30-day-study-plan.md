@@ -98,7 +98,7 @@ Mỗi ngày trong app giờ có cùng một cấu trúc:
 - [Daily index](./daily-index.md)
 - [React / Next track](./react-next-track.md)
 - [Algorithms track](./algorithms-track.md)
-- [Capstone brief](./capstone-brief.md)
+- [Project context](./project-context.md)
 - [Feature template](./feature-template.md)
 - [Definition of Done](./definition-of-done.md)
 - [Self-check questions](./self-check-questions.md)

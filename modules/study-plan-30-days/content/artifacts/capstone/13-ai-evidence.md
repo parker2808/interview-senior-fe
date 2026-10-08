@@ -1,7 +1,7 @@
 # Capstone 13 — AI prompt / evidence
 
 **Nguồn:** copy/điền từ [day-25-ai-review.md](../day-25-ai-review.md) (Day 25).  
-**Brief:** [capstone-brief.md](../../capstone-brief.md)
+**Context:** [project-context.md](../../project-context.md)
 
 ---
 
@@ -29,4 +29,4 @@
 
 ---
 
-Quay lại: [Capstone brief](../../capstone-brief.md) · [Plan](../../30-day-study-plan.md)
+Quay lại: [Project context](../../project-context.md) · [Plan](../../30-day-study-plan.md)

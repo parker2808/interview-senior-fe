@@ -1,7 +1,7 @@
 # Capstone 09 — Accessibility checklist
 
 **Nguồn:** copy/điền từ [day-13-modal-a11y.md](../day-13-modal-a11y.md) (Day 13–14).  
-**Brief:** [capstone-brief.md](../../capstone-brief.md)
+**Context:** [project-context.md](../../project-context.md)
 
 ---
 
@@ -35,4 +35,4 @@
 
 ---
 
-Quay lại: [Capstone brief](../../capstone-brief.md) · [Plan](../../30-day-study-plan.md)
+Quay lại: [Project context](../../project-context.md) · [Plan](../../30-day-study-plan.md)

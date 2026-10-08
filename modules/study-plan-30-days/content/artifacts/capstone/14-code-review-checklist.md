@@ -1,7 +1,7 @@
 # Capstone 14 — Code review checklist
 
 **Nguồn:** copy/điền từ [day-26-code-review.md](../day-26-code-review.md) (Day 26).  
-**Brief:** [capstone-brief.md](../../capstone-brief.md)
+**Context:** [project-context.md](../../project-context.md)
 
 ---
 
@@ -23,4 +23,4 @@
 
 ---
 
-Quay lại: [Capstone brief](../../capstone-brief.md) · [Plan](../../30-day-study-plan.md)
+Quay lại: [Project context](../../project-context.md) · [Plan](../../30-day-study-plan.md)

@@ -1,7 +1,7 @@
 # Capstone 08 — Responsive strategy
 
 **Nguồn:** copy/điền từ [day-12-responsive-tradeoffs.md](../day-12-responsive-tradeoffs.md) (Day 12).  
-**Brief:** [capstone-brief.md](../../capstone-brief.md)
+**Context:** [project-context.md](../../project-context.md)
 
 ---
 
@@ -27,4 +27,4 @@
 
 ---
 
-Quay lại: [Capstone brief](../../capstone-brief.md) · [Plan](../../30-day-study-plan.md)
+Quay lại: [Project context](../../project-context.md) · [Plan](../../30-day-study-plan.md)

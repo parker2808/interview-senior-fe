@@ -24,7 +24,7 @@ Không cần hoàn thiện Capstone hôm nay — chỉ flow + edge + AC draft.
 
 | Nguồn | Path | Ghi chú |
 |---|---|---|
-| Capstone scope | [capstone-brief.md](../capstone-brief.md) | List / Detail / Field Config / roles |
+| Project context | [project-context.md](../project-context.md) | List / Detail / Field Config / roles |
 | Quy trình / bug vs feature | [`documents/vi/practical-questions.md`](../../../../documents/vi/practical-questions.md) | Mục quy trình & đánh giá issue |
 | Map chủ đề repo | [`README.md`](../../../../README.md) | Index drill |
 

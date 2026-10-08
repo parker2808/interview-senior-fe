@@ -22,7 +22,7 @@
 | Lab repo guide | [lab-repo.md](./lab-repo.md) |
 | Algorithms | [algorithms-track.md](./algorithms-track.md) |
 | React/Next | [react-next-track.md](./react-next-track.md) |
-| Capstone | [capstone-brief.md](./capstone-brief.md) |
+| Project context | [project-context.md](./project-context.md) |
 
 ## Calendar
 

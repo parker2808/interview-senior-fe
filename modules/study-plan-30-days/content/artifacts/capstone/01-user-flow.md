@@ -35,4 +35,4 @@ Sau khi điền xong Day 1, **copy** toàn bộ nội dung đã điền vào dư
 
 > *(paste)*
 
-Quay lại: [Day 1 starter](../../day-01-starter.md) · [Brief](../../capstone-brief.md)
+Quay lại: [Day 1 starter](../../day-01-starter.md) · [Project context](../../project-context.md)

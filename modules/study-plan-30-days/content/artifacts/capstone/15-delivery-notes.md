@@ -3,7 +3,7 @@
 
 **Ngày:** Day 29 · 31/10/2026 · **Timebox:** 90–120′  
 **Mục tiêu:** Tick trung thực DoD; đủ index 15 deliverables; README-style delivery notes.  
-**Đọc:** [definition-of-done.md](../../definition-of-done.md) · [capstone-brief.md](../../capstone-brief.md)
+**Đọc:** [definition-of-done.md](../../definition-of-done.md) · [project-context.md](../../project-context.md)
 
 ---
 

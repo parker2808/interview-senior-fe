@@ -179,7 +179,7 @@ export const PLAN_DAY_CONTENT: StudyPlanDayContent[] = [
     studyLinks: [
       doc('architecture', 'Architecture notes', 'Tài liệu architecture'),
       doc('css-layout', 'CSS layout notes', 'Tài liệu CSS layout'),
-      plan('capstone-brief.md', 'Capstone brief', 'Capstone brief'),
+      plan('project-context.md', 'Project context', 'Bối cảnh dự án'),
     ],
     questionLinks: [
       qa('design-system-strategy', 'Design system growth strategy', 'Chiến lược phát triển design system'),

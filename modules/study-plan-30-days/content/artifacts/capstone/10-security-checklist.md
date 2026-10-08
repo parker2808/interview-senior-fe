@@ -1,7 +1,7 @@
 # Capstone 10 — Security checklist
 
 **Nguồn:** copy/điền từ [day-17-security.md](../day-17-security.md) (Day 17).  
-**Brief:** [capstone-brief.md](../../capstone-brief.md)
+**Context:** [project-context.md](../../project-context.md)
 
 ---
 
@@ -28,4 +28,4 @@
 
 ---
 
-Quay lại: [Capstone brief](../../capstone-brief.md) · [Plan](../../30-day-study-plan.md)
+Quay lại: [Project context](../../project-context.md) · [Plan](../../30-day-study-plan.md)

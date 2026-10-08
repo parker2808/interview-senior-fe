@@ -1,7 +1,7 @@
 # Capstone 05 — State ownership
 
 **Nguồn:** copy/điền từ [day-09-state-map.md](../day-09-state-map.md) (Day 9).  
-**Brief:** [capstone-brief.md](../../capstone-brief.md)
+**Context:** [project-context.md](../../project-context.md)
 
 ---
 
@@ -25,4 +25,4 @@
 
 ---
 
-Quay lại: [Capstone brief](../../capstone-brief.md) · [Plan](../../30-day-study-plan.md)
+Quay lại: [Project context](../../project-context.md) · [Plan](../../30-day-study-plan.md)

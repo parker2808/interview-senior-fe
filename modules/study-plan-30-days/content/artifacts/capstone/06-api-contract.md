@@ -1,7 +1,7 @@
 # Capstone 06 — API contract
 
 **Nguồn:** copy/điền từ [day-15-api-contract.md](../day-15-api-contract.md) (Day 15).  
-**Brief:** [capstone-brief.md](../../capstone-brief.md)
+**Context:** [project-context.md](../../project-context.md)
 
 ---
 
@@ -27,4 +27,4 @@
 
 ---
 
-Quay lại: [Capstone brief](../../capstone-brief.md) · [Plan](../../30-day-study-plan.md)
+Quay lại: [Project context](../../project-context.md) · [Plan](../../30-day-study-plan.md)
