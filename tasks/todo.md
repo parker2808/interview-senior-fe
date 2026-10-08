@@ -1,25 +1,17 @@
-# Improve top menu bar UX
+# Simplify day detail tabs and rebuild the 30-day lab track
 
 ## Plan
-- [x] Audit current top-bar/navigation behavior across interview, docs, and plan pages
-- [x] Build a reusable hide-on-scroll top bar with immediate upward re-show, jitter tolerance, reduced-motion support, focus/menu visibility locks, and measured safe-area-aware offsets
-- [x] Redesign navigation UX with a one-action Hub/Home control, sensible parent Back control, and clearer current-location labeling
-- [x] Wire the new bar into the long-form pages (interview, docs, plan home/day/resource)
-- [x] Ensure content is not covered, including docs deep links and anchor offsets
-- [x] Build and manually verify desktop + mobile behavior in a browser
-- [x] Capture before/after screenshots and walkthrough artifacts
-- [ ] Commit, push, and open PR
+- [x] Audit the old Worksheet content and decide what should be kept inside the Plan experience versus removed as redundant
+- [x] Remove the Worksheet tab and keep the day page readable on mobile with a cleaner Plan | Lab split
+- [x] Rebuild all 30 daily Lab docs around one shared practice repo with explicit reuse, folders, tasks, done-when, stretch goals, hints, and algorithm work
+- [x] Verify the updated day page and refreshed Lab content still build and read well on mobile and desktop
 
 ## Notes
-- Parker preferred hide-on-scroll-down / show-on-scroll-up instead of a permanently sticky bar.
-- Docs required special handling because its main content scrolls inside an internal pane instead of the window.
-- Window-scrolled pages needed suppression of the browser's scroll-anchoring bounce when the reserved header spacer collapses.
+- The removed Worksheet tab mostly contained prompts, templates, and checklists rather than unique runnable content, so the useful part is now an optional inline artifact link inside the Plan tab.
+- The new Lab track assumes one companion monorepo set up once, then reused across all 30 days.
+- Mobile readability was the deciding factor for keeping exactly two tabs: Plan for what to review / think through, Lab for the concrete 45-60 minute build.
 
 ## Review
-- Added a reusable `AppTopBar` component plus `useHideOnScrollBar` composable.
-- The bar now provides a direct Hub/Home action and a logical Back action where a parent route exists.
-- Verified in browser:
-  - Desktop `/plan/day/3`: hide/show on scroll, Back to `/plan`, Home to `/`
-  - Desktop `/docs/en/nuxt?from=plan#61-what-is-nuxtjs`: heading lands below the bar, hide/show works inside docs scroll pane, Back to `/plan`, Home to `/`
-  - Mobile `/interview`: unlock with local passcode `123456`, hide/show works, content stays visible below the bar
-- Final verification: `npm run build` passes.
+- The day detail page now uses **Plan | Lab** only; Worksheet is gone, and its supporting prompt doc is demoted to a lightweight in-Plan artifact link instead of a full tab.
+- `lab-repo.md` is now a real Day 0 setup guide for one shared pnpm-workspace monorepo, and all 30 `lab/day-NN-lab.md` files now chain together through that repo instead of repeating setup.
+- Verified with `NUXT_IGNORE_LOCK=1 npm run build` plus browser-based checks on `/plan` and `/plan/day/1`, including dark mode and the new two-tab mobile layout.

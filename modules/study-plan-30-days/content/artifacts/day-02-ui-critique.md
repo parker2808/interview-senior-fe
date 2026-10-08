@@ -24,7 +24,7 @@ Không cần pixel-perfect — cần lập luận Senior FE.
 | Nguồn | Path | Ghi chú |
 |---|---|---|
 | Architecture | [`documents/vi/architecture.md`](../../../../documents/vi/architecture.md) | Presentational vs Container |
-| Capstone scope (optional) | [capstone-brief.md](../capstone-brief.md) | List / Detail / Field Config |
+| Project context (optional) | [project-context.md](../project-context.md) | List / Detail / Field Config |
 
 Plan Day 2: [30-day-study-plan.md — Day 2](../30-day-study-plan.md#day-2--04102026--ui-hierarchy)
 

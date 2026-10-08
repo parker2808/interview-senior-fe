@@ -48,13 +48,12 @@ export const DAYS: DayMeta[] = [
 ]
 
 export const PLAN_RESOURCES: PlanResource[] = [
-  { id: 'plan', label: 'Kế hoạch 30 ngày', path: '30-day-study-plan.md' },
+  { id: 'plan', label: 'Tổng quan 30 ngày', path: '30-day-study-plan.md' },
   { id: 'index', label: 'Daily index', path: 'daily-index.md' },
   { id: 'lab', label: 'Companion lab repo', path: 'lab-repo.md' },
   { id: 'react', label: 'React/Next track', path: 'react-next-track.md' },
   { id: 'algo', label: 'Algorithms track', path: 'algorithms-track.md' },
   { id: 'context', label: 'Bối cảnh dự án', path: 'project-context.md' },
-  { id: 'capstone', label: 'Capstone brief', path: 'capstone-brief.md' },
   { id: 'feature', label: 'Feature template', path: 'feature-template.md' },
   { id: 'dod', label: 'Definition of Done', path: 'definition-of-done.md' },
   { id: 'selfcheck', label: 'Self-check questions', path: 'self-check-questions.md' },

@@ -5,14 +5,19 @@ import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import DayList from '@/modules/study-plan/components/DayList/DayList.vue'
 import ProgressTools from '@/modules/study-plan/components/ProgressTools/ProgressTools.vue'
 import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
+import { PLAN_GAPS } from '@/modules/study-plan/constants/plan-content.constant'
 import {
   DAYS,
   PLAN_RESOURCES,
-  WEEK_LABELS,
 } from '@/modules/study-plan/constants/days.constant'
 import { useProgress } from '@/modules/study-plan/composables/use-progress.composable'
 
 const router = useRouter()
+const { locale } = useI18n()
+
+const lang = computed<'en' | 'vi'>(() =>
+  locale.value === 'en' ? 'en' : 'vi',
+)
 
 const {
   source,
@@ -49,8 +54,6 @@ const filteredDays = computed(() =>
     ? DAYS
     : DAYS.filter((d) => d.week === weekFilter.value),
 )
-
-const weekProgress = computed(() => weekStats(weekFilter.value))
 
 function openDay(day: number) {
   router.push(`/plan/day/${day}`)
@@ -126,7 +129,7 @@ function openResource(path: string) {
             class="text-sm font-semibold text-accent-ink underline"
             @click="openUnlockModal"
           >
-            Mở khóa
+            {{ $t('plan.unlock') }}
           </button>
         </div>
       </div>
@@ -171,13 +174,52 @@ function openResource(path: string) {
       />
     </div>
 
-    <nav class="mt-4 rounded-xl border border-line bg-surface-elevated/70" aria-label="Tài liệu nhanh">
+    <section class="mt-4 rounded-2xl border border-line bg-surface-elevated/70 p-4 sm:p-5">
+      <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
+        {{ $t('plan.overview') }}
+      </p>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-ink-muted">
+        {{ $t('plan.overviewSub') }}
+      </p>
+      <div class="mt-4 rounded-xl border border-line bg-surface p-3 sm:flex sm:items-center sm:justify-between sm:gap-4">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
+            {{ $t('plan.setupTitle') }}
+          </p>
+          <p class="mt-1 text-sm leading-6 text-ink-muted">
+            {{ $t('plan.setupBody') }}
+          </p>
+        </div>
+        <button
+          type="button"
+          class="mt-3 min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink sm:mt-0"
+          @click="openResource('lab-repo.md')"
+        >
+          {{ $t('plan.setupCta') }}
+        </button>
+      </div>
+      <p class="mt-4 text-xs font-semibold uppercase tracking-wider text-ink-faint">
+        {{ $t('plan.gaps') }}
+      </p>
+      <ul class="mt-4 space-y-2 text-sm text-ink">
+        <li
+          v-for="(item, index) in PLAN_GAPS"
+          :key="index"
+          class="flex items-start gap-2"
+        >
+          <span class="mt-1 text-accent-ink">•</span>
+          <span>{{ item[lang] }}</span>
+        </li>
+      </ul>
+    </section>
+
+    <nav class="mt-4 rounded-xl border border-line bg-surface-elevated/70" :aria-label="$t('plan.quickDocs')">
       <button
         type="button"
         class="flex min-h-11 w-full items-center justify-between px-3 text-sm font-semibold sm:hidden"
         @click="navOpen = !navOpen"
       >
-        Tài liệu nhanh
+        {{ $t('plan.quickDocs') }}
         <span>{{ navOpen ? '▴' : '▾' }}</span>
       </button>
       <div
@@ -188,10 +230,10 @@ function openResource(path: string) {
           v-for="r in PLAN_RESOURCES"
           :key="r.id"
           type="button"
-          class="min-h-10 rounded-lg border border-line bg-white px-3 text-sm font-medium hover:border-accent"
+          class="min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
           @click="openResource(r.path)"
         >
-          {{ r.label }}
+          {{ $t(`plan.resources.${r.id}`) }}
         </button>
       </div>
     </nav>
@@ -200,10 +242,9 @@ function openResource(path: string) {
       <DayList
         :days="filteredDays"
         :week-filter="weekFilter"
-        :week-labels="WEEK_LABELS"
-        :week-progress="weekProgress"
         :is-done="isDone"
         :read-only="readOnly"
+        :week-progress="weekStats"
         @update:week-filter="weekFilter = $event"
         @open="openDay"
         @toggle="toggleDone"

@@ -1,74 +1,80 @@
-# Day 21 — Lab setup
+# Day 21 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Chốt mini slice Next.js có thể demo và note Nuxt ↔ Next.
+- **EN:** Finish a demoable Next.js mini slice and the Nuxt ↔ Next note.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng mọi thứ từ Day 15-20.
+- **EN:** Reuse everything from Days 15-20.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/app/(admin)/customers/`
+- `notes/day-21.md`
+- `README.md`
+- `algorithms/day-21/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-21
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Làm route Customers đủ demo: list, filter, loading/error, một action nhỏ.
+   - EN: Make the Customers route demoable: list, filter, loading/error, and one action.
+2. Viết 5-7 bullet so sánh Nuxt 3 vs Next App Router trên slice này.
+   - EN: Write 5-7 bullets comparing Nuxt 3 vs the Next App Router on this slice.
+3. Thêm section ngắn vào README để chạy app Next demo.
+   - EN: Add a short README section for running the Next demo app.
+
+## Done when / Tiêu chí xong
+
+- Có route Next demo được.
+  - EN: There is a demoable Next route.
+- Có note so sánh Nuxt ↔ Next.
+  - EN: There is a Nuxt ↔ Next comparison note.
+- README có hướng dẫn chạy.
+  - EN: The README includes run instructions.
+
+## Stretch goal
+
+- Thêm screenshot vào README.
+  - EN: Add a screenshot to the README.
+
+## Hints
+
+- Đừng mở route mới nếu route Customers chưa tròn.
+  - EN: Do not open a new route if the Customers route is not coherent yet.
+
+## Algorithm task
+
+- **Problem:** Week 3 timed review
+- **Constraints:**
+- Self-score
+- **Hint:** Islands: đừng quên mark visited.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-21/solution.ts
+algorithms/day-21/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-21`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/next/app/day-21/ (hoặc route tương ứng)` |
-| App dev | `apps/next` |
-| Algo | `algo/day-21/` |
+Open the full prompt: [day-21.md](../artifacts/algo/problems/day-21.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:next
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-21.md
-npm run algo:test:day -- 21
+```text
+day-21: finish next customer mini demo
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab Next: fetch mock với `revalidate` / `no-store`; ghi bảng “khi nào cache”.
-
-### Algo — Week 3 timed review
-1. Mở đề: [day-21.md](../artifacts/algo/problems/day-21.md)
-2. Implement `algo/day-21/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 21` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-21: CI + Next data caching"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-21` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

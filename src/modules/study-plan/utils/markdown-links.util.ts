@@ -1,3 +1,5 @@
+import { stripPlanLocalePrefix } from '@/modules/study-plan/utils/plan-locale-path.util'
+
 export const GITHUB_BLOB_MAIN =
   'https://github.com/parker2808/interview-senior-fe/blob/main/'
 
@@ -55,6 +57,7 @@ export function classifyMarkdownHref(
 
   let resolved: string
   const stripped = normalizeDocPath(pathPart)
+  const from = stripPlanLocalePrefix(fromPath)
 
   if (
     stripped.startsWith('documents/') ||
@@ -70,7 +73,7 @@ export function classifyMarkdownHref(
   } else if (/^\d{2}-[a-z0-9-]+\.md$/i.test(stripped)) {
     resolved = `artifacts/capstone/${stripped}`
   } else {
-    resolved = normalizeDocPath(resolveRelative(fromPath, pathPart))
+    resolved = normalizeDocPath(resolveRelative(from, pathPart))
   }
 
   const docsMatch = resolved.match(/^documents\/(vi|en)\/([^/]+)\.md$/)

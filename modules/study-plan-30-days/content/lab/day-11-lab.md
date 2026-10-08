@@ -1,74 +1,81 @@
-# Day 11 — Lab setup
+# Day 11 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Dùng shared primitives thật trong Vue app.
+- **EN:** Use the shared primitives for real in the Vue app.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng packages/ui + mock data Day 10.
+- **EN:** Reuse packages/ui plus the Day 10 mock data.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/vue-nuxt/components/customers/`
+- `packages/ui/src/components/`
+- `notes/day-11.md`
+- `algorithms/day-11/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:vue
+pnpm storybook:ui
+pnpm test:algo -- day-11
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Thay placeholder bằng Button/FormField/EmptyState/ErrorState thật.
+   - EN: Replace placeholders with the real shared Button/FormField/EmptyState/ErrorState components.
+2. Đảm bảo list có empty/error flow bằng shared component.
+   - EN: Make sure the list exposes empty/error flows through shared components.
+3. Ghi note primitive nào còn thiếu prop.
+   - EN: Note which primitive APIs still miss an important prop.
+
+## Done when / Tiêu chí xong
+
+- Ít nhất 4 primitive được consume.
+  - EN: At least 4 primitives are consumed.
+- Có empty/error state thật.
+  - EN: There is a real empty/error state.
+- Có note gap của design system.
+  - EN: There is a design-system gap note.
+
+## Stretch goal
+
+- Refactor 1 primitive API sau khi consume.
+  - EN: Refactor one primitive API after consuming it.
+
+## Hints
+
+- Sửa primitive trước khi hack ở app.
+  - EN: Fix the primitive before hacking around it in the app.
+
+## Algorithm task
+
+- **Problem:** Min Stack
+- **Constraints:**
+- Mọi thao tác O(1)
+- **Hint:** Stack phụ lưu min hiện tại, hoặc lưu cặp (value, minSoFar).
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-11/solution.ts
+algorithms/day-11/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-11`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-11/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-11/` |
+Open the full prompt: [day-11.md](../artifacts/algo/problems/day-11.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-11.md
-npm run algo:test:day -- 11
+```text
+day-11: consume shared ui in vue app
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: <Tabs> compound (Tabs, TabsList, TabsTrigger, TabsContent) bằng Context nội bộ.
-
-### Algo — Min Stack
-1. Mở đề: [day-11.md](../artifacts/algo/problems/day-11.md)
-2. Implement `algo/day-11/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 11` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-11: Design system primitives"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-11` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

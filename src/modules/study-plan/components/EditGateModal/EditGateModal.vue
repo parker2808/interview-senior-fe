@@ -69,7 +69,7 @@ function onSubmit(e: Event) {
             inputmode="numeric"
             autocomplete="one-time-code"
             maxlength="6"
-            class="min-h-12 w-full rounded-lg border border-line px-3 text-lg tracking-widest"
+            class="min-h-12 w-full rounded-lg border border-line bg-surface px-3 text-lg tracking-widest text-ink"
             placeholder="••••••"
             :value="digits"
             :disabled="unlocking"
@@ -83,14 +83,14 @@ function onSubmit(e: Event) {
         <div class="mt-5 flex flex-col gap-2 sm:flex-row-reverse">
           <button
             type="submit"
-            class="min-h-11 flex-1 rounded-lg bg-accent px-4 text-sm font-semibold text-white disabled:opacity-50"
+            class="min-h-11 flex-1 rounded-lg bg-accent px-4 text-sm font-semibold text-[var(--bg-elevated)] disabled:opacity-50"
             :disabled="unlocking || digits.length !== 6"
           >
             {{ unlocking ? 'Đang mở…' : 'Mở khóa' }}
           </button>
           <button
             type="button"
-            class="min-h-11 flex-1 rounded-lg border border-line bg-white px-4 text-sm font-semibold"
+            class="min-h-11 flex-1 rounded-lg border border-line bg-surface-elevated px-4 text-sm font-semibold text-ink"
             :disabled="unlocking"
             @click="emit('skip')"
           >

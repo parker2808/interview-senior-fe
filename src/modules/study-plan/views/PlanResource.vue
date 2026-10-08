@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
+import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
+import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import ResourceDoc from '@/modules/study-plan/components/ResourceDoc/ResourceDoc.vue'
+import { stripPlanLocalePrefix } from '@/modules/study-plan/utils/plan-locale-path.util'
 
 const props = defineProps<{
   path: string
@@ -10,14 +13,15 @@ const router = useRouter()
 const { t } = useI18n()
 
 function openDoc(path: string) {
-  if (path.startsWith('documents/')) {
-    const m = path.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
+  const normalized = stripPlanLocalePrefix(path)
+  if (normalized.startsWith('documents/')) {
+    const m = normalized.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
     if (m) {
       router.push(`/docs/${m[1]}/${m[2]}?from=plan`)
       return
     }
   }
-  router.push(`/plan/doc/${encodeURIComponent(path)}`)
+  router.push(`/plan/doc/${encodeURIComponent(normalized)}`)
 }
 
 function openDocs(payload: { lang: string; slug: string; hash?: string }) {
@@ -33,7 +37,12 @@ function openDocs(payload: { lang: string; slug: string; hash?: string }) {
       :home-label="t('plan.backHub')"
       back-to="/plan"
       :back-label="t('plan.backPlan')"
-    />
+    >
+      <template #actions>
+        <LocaleToggle />
+        <ThemeToggle />
+      </template>
+    </AppTopBar>
     <div class="px-4 pt-4 sm:px-6 sm:pt-6">
       <ResourceDoc
         :path="path"

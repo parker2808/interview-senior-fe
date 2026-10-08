@@ -1,74 +1,79 @@
-# Day 19 — Lab setup
+# Day 19 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Luyện server fetch, cache và rendering trade-off trong Next.
+- **EN:** Practice server fetch, cache, and rendering trade-offs in Next.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng route App Router Day 18.
+- **EN:** Reuse the Day 18 App Router route.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/app/(admin)/customers/`
+- `notes/day-19.md`
+- `algorithms/day-19/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-19
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Tạo 2 path nhỏ: một revalidate, một no-store hoặc client fetch.
+   - EN: Create 2 small paths: one with revalidate, one with no-store or client fetch.
+2. Viết bảng stale vs fresh cho cùng domain.
+   - EN: Write a stale-vs-fresh table for the same domain.
+3. Ghi note SSR/ISR/streaming choice.
+   - EN: Add a note about SSR/ISR/streaming choices.
+
+## Done when / Tiêu chí xong
+
+- Có ít nhất 2 fetch strategy.
+  - EN: There are at least 2 fetch strategies.
+- Bảng stale/fresh xong.
+  - EN: The stale/fresh table is done.
+- Trade-off render giải thích được.
+  - EN: The rendering trade-off is explainable.
+
+## Stretch goal
+
+- Thêm tag/path revalidation note.
+  - EN: Add a tag/path revalidation note.
+
+## Hints
+
+- Mock response cũng đủ để reason.
+  - EN: Mock responses are enough for reasoning.
+
+## Algorithm task
+
+- **Problem:** Climbing Stairs
+- **Constraints:**
+- 1 ≤ n ≤ 45
+- **Hint:** dp[i] = dp[i-1] + dp[i-2] (Fibonacci).
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-19/solution.ts
+algorithms/day-19/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-19`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-19/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-19/` |
+Open the full prompt: [day-19.md](../artifacts/algo/problems/day-19.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-19.md
-npm run algo:test:day -- 19
+```text
+day-19: compare next cache strategies
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: list chậm giả lập; tối ưu bằng memo hóa row; profile bằng React Profiler (DevTools) — ghi trước/sau.
-
-### Algo — Climbing Stairs
-1. Mở đề: [day-19.md](../artifacts/algo/problems/day-19.md)
-2. Implement `algo/day-19/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 19` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-19: Performance + React memo"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-19` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

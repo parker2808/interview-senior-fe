@@ -47,7 +47,7 @@ function onImportClick() {
   <section class="rounded-xl border border-line bg-surface-elevated/80 p-3 sm:p-4">
     <div
       v-if="!isEditMode"
-      class="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-950"
+      class="mb-3 rounded-lg border border-line bg-accent-soft px-3 py-2 text-sm text-ink"
       role="status"
     >
       <strong>Chế độ Xem</strong> — check-off và publish bị khóa.
@@ -61,7 +61,7 @@ function onImportClick() {
     </div>
     <div
       v-else-if="readOnly"
-      class="mb-3 rounded-lg bg-sky-50 px-3 py-2 text-sm"
+      class="mb-3 rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink"
       role="status"
     >
       <strong>Đang xem tiến độ chỉ đọc</strong>
@@ -81,7 +81,7 @@ function onImportClick() {
       </p>
       <button
         type="button"
-        class="min-h-10 rounded-lg border border-line bg-white px-3 text-sm font-semibold md:hidden"
+        class="min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-semibold text-ink md:hidden"
         @click="toolsOpen = !toolsOpen"
       >
         {{ toolsOpen ? 'Ẩn công cụ' : 'Công cụ tiến độ' }}
@@ -116,6 +116,6 @@ function onImportClick() {
 
 <style scoped>
 .btn {
-  @apply min-h-10 rounded-lg border border-line bg-white px-3 text-sm font-semibold text-ink transition hover:border-accent hover:text-accent-ink;
+  @apply min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-semibold text-ink transition hover:border-accent hover:text-accent-ink;
 }
 </style>

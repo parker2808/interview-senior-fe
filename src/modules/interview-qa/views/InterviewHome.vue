@@ -11,6 +11,7 @@ import type {
 } from '@/modules/interview-qa/types/interview.type'
 
 const { locale, t } = useI18n()
+const route = useRoute()
 const lang = computed<InterviewLang>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
@@ -31,6 +32,7 @@ const {
 const categoryFilter = ref<'all' | InterviewCategoryId>('all')
 const query = ref('')
 const openIds = ref<Set<string>>(new Set())
+const focusedId = ref('')
 
 onMounted(() => {
   boot()
@@ -72,6 +74,44 @@ function collapseAll() {
 }
 
 const gateOpen = computed(() => !unlocked.value)
+
+const requestedQuestionId = computed(() => {
+  const q = route.query.q
+
+  if (typeof q === 'string' && q) return q
+  if (Array.isArray(q) && q[0]) return q[0]
+  if (route.hash?.startsWith('#')) return route.hash.slice(1)
+  return ''
+})
+
+async function focusQuestion(id: string) {
+  if (!id || !questions.value.some((item) => item.id === id)) return
+
+  categoryFilter.value = 'all'
+  query.value = ''
+  focusedId.value = id
+
+  const next = new Set(openIds.value)
+  next.add(id)
+  openIds.value = next
+
+  await nextTick()
+
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
+
+watch(
+  [requestedQuestionId, unlocked, questions],
+  ([id, isUnlocked, loadedQuestions]) => {
+    if (!import.meta.client) return
+    if (!isUnlocked || !loadedQuestions.length || !id) return
+    void focusQuestion(id)
+  },
+  { immediate: false },
+)
 </script>
 
 <template>
@@ -182,6 +222,7 @@ const gateOpen = computed(() => !unlocked.value)
           :item="item"
           :lang="lang"
           :open="openIds.has(item.id)"
+          :highlight="focusedId === item.id"
           @toggle="toggle(item.id)"
         />
         <p

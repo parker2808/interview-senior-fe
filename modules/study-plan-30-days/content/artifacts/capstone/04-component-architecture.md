@@ -1,7 +1,7 @@
 # Capstone 04 — Component architecture
 
 **Nguồn:** copy/điền từ [day-08-component-tree.md](../day-08-component-tree.md) (Day 8).  
-**Brief:** [capstone-brief.md](../../capstone-brief.md)
+**Context:** [project-context.md](../../project-context.md)
 
 ---
 
@@ -31,4 +31,4 @@
 
 ---
 
-Quay lại: [Capstone brief](../../capstone-brief.md) · [Plan](../../30-day-study-plan.md)
+Quay lại: [Project context](../../project-context.md) · [Plan](../../30-day-study-plan.md)

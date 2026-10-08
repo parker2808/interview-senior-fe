@@ -1,74 +1,80 @@
-# Day 7 — Lab setup
+# Day 7 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Dựng customer flow shell tĩnh trong Vue app.
+- **EN:** Build a static customer-flow shell inside the Vue app.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng packages/ui và note AC của Day 1-6.
+- **EN:** Reuse packages/ui and the AC notes from Days 1-6.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/vue-nuxt/pages/customers.vue`
+- `apps/vue-nuxt/components/`
+- `notes/day-07.md`
+- `algorithms/day-07/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:vue
+pnpm test:algo -- day-07
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Tạo page shell gồm title, filter bar, table area, detail placeholder.
+   - EN: Create a page shell with a title, filter bar, table area, and detail placeholder.
+2. Dùng shared UI thay vì viết UI mới.
+   - EN: Use the shared UI package instead of fresh custom UI.
+3. Ghi note boundary component nào sẽ tách sau.
+   - EN: Note which boundaries should split into separate components later.
+
+## Done when / Tiêu chí xong
+
+- Vue shell nhìn như flow thật.
+  - EN: The Vue shell feels like a real flow.
+- Có note boundary.
+  - EN: There is a boundary note.
+- Cấu trúc repo vẫn rõ.
+  - EN: The repo structure is still clear.
+
+## Stretch goal
+
+- Tách luôn filter bar thành component riêng.
+  - EN: Split the filter bar into its own component.
+
+## Hints
+
+- Hôm nay chưa phải data day.
+  - EN: This is not the data day yet.
+
+## Algorithm task
+
+- **Problem:** Week 1 timed review
+- **Constraints:**
+- Tự chấm: pass / partial / fail
+- **Hint:** Nhẩm pattern trước khi code.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-07/solution.ts
+algorithms/day-07/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-07`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-07/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-07/` |
+Open the full prompt: [day-07.md](../artifacts/algo/problems/day-07.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-07.md
-npm run algo:test:day -- 7
+```text
+day-07: create vue customer shell
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: Card/Layout components dùng children; so với slots Vue. Không prop-drill title+body nếu dùng composition.
-
-### Algo — Week 1 timed review
-1. Mở đề: [day-07.md](../artifacts/algo/problems/day-07.md)
-2. Implement `algo/day-07/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 7` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-07: Capstone kickoff + composition"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-07` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

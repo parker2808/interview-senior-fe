@@ -7,7 +7,7 @@
 ## Lý thuyết — học gì hôm nay
 
 - documents/vi/javascript.md — scope, closures, hoisting
-- capstone-brief.md
+- project-context.md
 - react-next-track.md (overview)
 - algorithms-track.md (overview)
 

@@ -1,74 +1,80 @@
-# Day 18 — Lab setup
+# Day 18 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Dùng App Router đúng chất cho route Customers.
+- **EN:** Use the App Router properly for the Customers route.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng route Next Day 15-17.
+- **EN:** Reuse the Next route from Days 15-17.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/app/(admin)/customers/`
+- `apps/react-next/app/(admin)/layout.tsx`
+- `notes/day-18.md`
+- `algorithms/day-18/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-18
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Chuyển route vào admin layout/segment rõ ràng.
+   - EN: Move the route into a clear admin layout/segment.
+2. Thêm loading.tsx và error.tsx tối thiểu.
+   - EN: Add minimal loading.tsx and error.tsx files.
+3. Ghi mapping Nuxt layout/loading/error sang Next.
+   - EN: Write the Nuxt-to-Next mapping for layout/loading/error.
+
+## Done when / Tiêu chí xong
+
+- Layout/segment rõ.
+  - EN: The layout/segment is clear.
+- Loading + error render được.
+  - EN: Loading and error states render.
+- Có note Nuxt ↔ Next.
+  - EN: There is a Nuxt ↔ Next note.
+
+## Stretch goal
+
+- Thêm nested layout cho detail route.
+  - EN: Add a nested layout for a detail route.
+
+## Hints
+
+- Một route đủ để chứng minh concept.
+  - EN: One route is enough to prove the concept.
+
+## Algorithm task
+
+- **Problem:** Number of Islands
+- **Constraints:**
+- 1 ≤ m,n ≤ 300
+- **Hint:** Gặp "1" → tăng đếm → flood-fill thành "0".
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-18/solution.ts
+algorithms/day-18/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-18`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-18/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-18/` |
+Open the full prompt: [day-18.md](../artifacts/algo/problems/day-18.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-18.md
-npm run algo:test:day -- 18
+```text
+day-18: add app router segment states
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: search-as-you-type với AbortController; verify request cũ bị abort khi gõ tiếp.
-
-### Algo — Number of Islands
-1. Mở đề: [day-18.md](../artifacts/algo/problems/day-18.md)
-2. Implement `algo/day-18/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 18` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-18: Race conditions + AbortController"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-18` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

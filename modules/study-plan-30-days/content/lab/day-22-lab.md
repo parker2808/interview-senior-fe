@@ -1,74 +1,79 @@
-# Day 22 — Lab setup
+# Day 22 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Dựng một dashboard nhỏ trong Next app.
+- **EN:** Build a small dashboard inside the Next app.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng customer data, shared UI và note cache/observability từ tuần 3.
+- **EN:** Reuse the customer data, shared UI, and the Week 3 cache/observability notes.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/app/(admin)/dashboard/`
+- `notes/day-22.md`
+- `algorithms/day-22/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-22
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Tạo dashboard route với 3 widget mock.
+   - EN: Create a dashboard route with 3 mocked widgets.
+2. Cho mỗi widget loading/error/empty state rõ.
+   - EN: Give each widget clear loading/error/empty states.
+3. Ghi note khi nào cần BFF hoặc chưa cần.
+   - EN: Write when a BFF would become necessary or why it still is not.
+
+## Done when / Tiêu chí xong
+
+- Dashboard route chạy được.
+  - EN: The dashboard route runs.
+- Widget có state rõ.
+  - EN: The widgets have clear states.
+- Có architecture note.
+  - EN: There is an architecture note.
+
+## Stretch goal
+
+- Thêm partial failure cho 1 widget.
+  - EN: Add partial failure for one widget.
+
+## Hints
+
+- Ưu tiên orchestration hơn chart đẹp.
+  - EN: Prioritize orchestration over fancy charts.
+
+## Algorithm task
+
+- **Problem:** House Robber
+- **Constraints:**
+- 1 ≤ nums.length ≤ 100
+- **Hint:** dp[i] = max(dp[i-1], dp[i-2] + nums[i]).
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-22/solution.ts
+algorithms/day-22/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-22`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/next/app/day-22/ (hoặc route tương ứng)` |
-| App dev | `apps/next` |
-| Algo | `algo/day-22/` |
+Open the full prompt: [day-22.md](../artifacts/algo/problems/day-22.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:next
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-22.md
-npm run algo:test:day -- 22
+```text
+day-22: add next dashboard route
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: RTL test form validate (userEvent). Không test implementation detail.
-
-### Algo — House Robber
-1. Mở đề: [day-22.md](../artifacts/algo/problems/day-22.md)
-2. Implement `algo/day-22/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 22` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-22: Test pyramid + RTL"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-22` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

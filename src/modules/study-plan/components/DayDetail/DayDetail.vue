@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { marked } from 'marked'
 import type { DayMeta } from '@/modules/study-plan/constants/days.constant'
+import PlanDayContent from '@/modules/study-plan/components/PlanDayContent/PlanDayContent.vue'
+import { getPlanDayContent } from '@/modules/study-plan/constants/plan-content.constant'
 import { loadMarkdown } from '@/modules/study-plan/utils/load-markdown.util'
 import { classifyMarkdownHref } from '@/modules/study-plan/utils/markdown-links.util'
 import { isBundledPath } from '@/modules/study-plan/utils/load-markdown.util'
 import { autolinkMarkdownPaths } from '@/modules/study-plan/utils/autolink-md.util'
+import { applyPlanHeadingI18n } from '@/modules/study-plan/utils/plan-locale-path.util'
 
 const props = defineProps<{
   day: DayMeta
@@ -20,34 +23,48 @@ const emit = defineEmits<{
   'open-docs': [payload: { lang: string; slug: string; hash?: string }]
 }>()
 
-type DayTab = 'starter' | 'worksheet' | 'lab'
-const tab = ref<DayTab>('starter')
+type DayTab = 'plan' | 'lab'
+const { locale, t } = useI18n()
+
+const lang = computed<'en' | 'vi'>(() =>
+  locale.value === 'en' ? 'en' : 'vi',
+)
+
+const tab = ref<DayTab>('plan')
+const planContent = computed(() => getPlanDayContent(props.day.day))
 
 watch(
   () => props.day.day,
   () => {
-    tab.value = 'starter'
+    tab.value = 'plan'
   },
 )
 
 const activePath = computed(() => {
-  if (tab.value === 'worksheet') return props.day.worksheet
   if (tab.value === 'lab') return props.day.lab
-  return props.day.starter
+  return ''
 })
 
 const html = computed(() => {
-  const raw = marked.parse(loadMarkdown(activePath.value).text, {
+  if (!activePath.value) return ''
+
+  const raw = marked.parse(loadMarkdown(activePath.value, lang.value).text, {
     async: false,
   }) as string
-  return autolinkMarkdownPaths(raw, activePath.value)
+  const resolvedPath = loadMarkdown(activePath.value, lang.value).path
+  return applyPlanHeadingI18n(autolinkMarkdownPaths(raw, resolvedPath), t)
 })
 
 function onDocClick(e: MouseEvent) {
   const a = (e.target as HTMLElement).closest('a')
   if (!a) return
   const href = a.getAttribute('href')
-  const result = classifyMarkdownHref(activePath.value, href || '', isBundledPath)
+  const resolvedPath = loadMarkdown(activePath.value, lang.value).path
+  const result = classifyMarkdownHref(
+    resolvedPath,
+    href || '',
+    (path) => isBundledPath(path, lang.value),
+  )
   if (result.kind === 'ignore' || result.kind === 'hash') return
   e.preventDefault()
   if (result.kind === 'external' || result.kind === 'github') {
@@ -75,15 +92,17 @@ function onDocClick(e: MouseEvent) {
         <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
           Day {{ String(day.day).padStart(2, '0') }} · {{ day.date }}
         </p>
-        <h2 class="mt-1 text-xl font-bold sm:text-2xl">{{ day.theme }}</h2>
+        <h2 class="mt-1 text-xl font-bold sm:text-2xl">
+          {{ planContent ? planContent.title[lang] : day.theme }}
+        </h2>
       </div>
       <label
-        class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-white px-3 text-sm font-medium"
+        class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink"
         :class="readOnly ? 'opacity-70' : ''"
       >
         <input
           type="checkbox"
-          class="h-5 w-5 accent-accent"
+          class="themed-checkbox"
           :checked="done"
           :disabled="readOnly"
           @change="$emit('toggle')"
@@ -92,11 +111,11 @@ function onDocClick(e: MouseEvent) {
           {{
             readOnly
               ? done
-                ? 'Đã xong (xem)'
-                : 'Chưa xong'
+                ? $t('plan.doneReadOnly')
+                : $t('plan.pendingReadOnly')
               : done
-                ? 'Đã xong'
-                : 'Đánh dấu xong'
+                ? $t('plan.done')
+                : $t('plan.markDone')
           }}
         </span>
       </label>
@@ -107,56 +126,49 @@ function onDocClick(e: MouseEvent) {
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-        :class="tab === 'starter' ? 'bg-accent text-white' : 'bg-white border border-line'"
-        :aria-selected="tab === 'starter'"
-        @click="tab = 'starter'"
+        :class="tab === 'plan' ? 'bg-accent text-[var(--bg-elevated)]' : 'border border-line bg-surface-elevated text-ink'"
+        :aria-selected="tab === 'plan'"
+        @click="tab = 'plan'"
       >
-        Hướng dẫn
+        {{ $t('plan.tabPlan') }}
       </button>
       <button
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-        :class="tab === 'worksheet' ? 'bg-accent text-white' : 'bg-white border border-line'"
-        :aria-selected="tab === 'worksheet'"
-        @click="tab = 'worksheet'"
-      >
-        Worksheet
-      </button>
-      <button
-        type="button"
-        role="tab"
-        class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-        :class="tab === 'lab' ? 'bg-accent text-white' : 'bg-white border border-line'"
+        :class="tab === 'lab' ? 'bg-accent text-[var(--bg-elevated)]' : 'border border-line bg-surface-elevated text-ink'"
         :aria-selected="tab === 'lab'"
         @click="tab = 'lab'"
       >
-        Lab setup
+        {{ $t('plan.tabLab') }}
       </button>
     </div>
 
-    <p class="mb-4 font-mono text-xs text-ink-faint">
-      <code>{{ activePath }}</code>
-    </p>
+    <PlanDayContent v-if="tab === 'plan' && planContent" :content="planContent" />
 
-    <div class="prose-doc" v-html="html" @click="onDocClick" />
+    <div
+      v-if="tab === 'lab'"
+      class="prose-doc"
+      v-html="html"
+      @click="onDocClick"
+    />
 
     <footer class="mt-8 flex flex-col gap-2 border-t border-line pt-4 sm:flex-row sm:justify-between">
       <button
         type="button"
-        class="min-h-11 rounded-lg border border-line bg-white px-4 text-sm font-semibold disabled:opacity-40"
+        class="min-h-11 rounded-lg border border-line bg-surface-elevated px-4 text-sm font-semibold text-ink disabled:opacity-40"
         :disabled="day.day <= 1"
         @click="$emit('prev')"
       >
-        ← Day trước
+        {{ $t('plan.prevDay') }}
       </button>
       <button
         type="button"
-        class="min-h-11 rounded-lg border border-line bg-white px-4 text-sm font-semibold disabled:opacity-40"
+        class="min-h-11 rounded-lg border border-line bg-surface-elevated px-4 text-sm font-semibold text-ink disabled:opacity-40"
         :disabled="day.day >= 30"
         @click="$emit('next')"
       >
-        Day sau →
+        {{ $t('plan.nextDay') }}
       </button>
     </footer>
   </article>

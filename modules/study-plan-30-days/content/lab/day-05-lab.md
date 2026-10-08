@@ -1,74 +1,82 @@
-# Day 5 — Lab setup
+# Day 5 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Hoàn thiện EmptyState và ErrorState, rồi gắn vào acceptance criteria.
+- **EN:** Finish EmptyState and ErrorState, then tie them back to acceptance criteria.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng lại table/card shell Day 4.
+- **EN:** Reuse the Day 4 table/card shell.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `packages/ui/src/components/empty-state/`
+- `packages/ui/src/components/error-state/`
+- `notes/day-05.md`
+- `algorithms/day-05/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm storybook:ui
+pnpm test:ui
+pnpm test:algo -- day-05
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Tạo EmptyState và ErrorState dùng lại được.
+   - EN: Create reusable EmptyState and ErrorState components.
+2. Gắn chúng vào demo state của table/card.
+   - EN: Wire them into the table/card demo states.
+3. Viết 5 acceptance criteria cho list + detail.
+   - EN: Write 5 acceptance criteria for list + detail.
+
+## Done when / Tiêu chí xong
+
+- Có 2 state component dùng lại được.
+  - EN: There are 2 reusable state components.
+- Demo có empty/error flow.
+  - EN: The demo includes empty and error flows.
+- Acceptance criteria đủ rõ.
+  - EN: The acceptance criteria are clear.
+
+## Stretch goal
+
+- Thêm retry callback.
+  - EN: Add a retry callback.
+
+## Hints
+
+- Copy sản phẩm quan trọng hơn animation.
+  - EN: Good product copy matters more than animation today.
+
+## Algorithm task
+
+- **Problem:** Top K Frequent Elements
+- **Constraints:**
+- 1 ≤ nums.length ≤ 10^5
+- k nằm trong range số phần tử distinct
+- **Hint:** Đếm frequency → sort entries hoặc bucket sort theo freq.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-05/solution.ts
+algorithms/day-05/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-05`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-05/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-05/` |
+Open the full prompt: [day-05.md](../artifacts/algo/problems/day-05.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-05.md
-npm run algo:test:day -- 5
+```text
+day-05: add empty and error states
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: extract useLocalStorage(key, initial) hoặc useToggle — dùng trong form Day 3.
-
-### Algo — Top K Frequent Elements
-1. Mở đề: [day-05.md](../artifacts/algo/problems/day-05.md)
-2. Implement `algo/day-05/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 5` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-05: Product AC + custom hooks"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-05` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

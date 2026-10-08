@@ -1,74 +1,79 @@
-# Day 30 — Lab setup
+# Day 30 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Khóa repo ở trạng thái có thể demo khi phỏng vấn.
+- **EN:** Lock the repo into a state you can demo in an interview.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng toàn bộ repo làm material cho mock interview.
+- **EN:** Reuse the whole repo as mock-interview material.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `README.md`
+- `notes/interview/`
+- `notes/day-30.md`
+- `algorithms/day-30/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm test:algo -- day-30
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Thêm project summary, structure và run guide cuối cùng vào README.
+   - EN: Add the final project summary, structure, and run guide to the README.
+2. Viết demo script 10-15 phút + retrospective sau mock.
+   - EN: Write the 10-15 minute demo script plus the post-mock retrospective.
+3. Chọn 1-2 screenshot/GIF để repo trông gọn và tin cậy hơn.
+   - EN: Choose 1-2 screenshots or GIFs so the repo looks tighter and more credible.
+
+## Done when / Tiêu chí xong
+
+- README đủ để gửi recruiter/interviewer xem.
+  - EN: The README is good enough to show a recruiter/interviewer.
+- Có demo script ngắn dựa trên repo.
+  - EN: There is a short demo script based on the repo.
+- Repo trông là một chuỗi 30 ngày mạch lạc.
+  - EN: The repo reads like one coherent 30-day progression.
+
+## Stretch goal
+
+- Quay video demo 2-3 phút cho repo.
+  - EN: Record a 2-3 minute demo video for the repo.
+
+## Hints
+
+- Đây là ngày đóng gói câu chuyện, không phải mở scope mới.
+  - EN: This is the packaging day, not the day to open new scope.
+
+## Algorithm task
+
+- **Problem:** Mock interview live coding
+- **Constraints:**
+- Trong buổi mock 60–90′
+- **Hint:** Narrate out loud.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-30/solution.ts
+algorithms/day-30/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-30`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/next/app/day-30/ (hoặc route tương ứng)` |
-| App dev | `apps/next` |
-| Algo | `algo/day-30/` |
+Open the full prompt: [day-30.md](../artifacts/algo/problems/day-30.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:next
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-30.md
-npm run algo:test:day -- 30
+```text
+day-30: finalize demoable interview repo
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Chuẩn bị 5 câu: hooks rules, useEffect deps, RSC vs client, key reconciliation, state library choice.
-
-### Algo — Mock interview live coding
-1. Mở đề: [day-30.md](../artifacts/algo/problems/day-30.md)
-2. Implement `algo/day-30/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 30` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-30: Full mock interview"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-30` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |
