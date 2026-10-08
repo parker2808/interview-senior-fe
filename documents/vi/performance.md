@@ -319,7 +319,7 @@ const HeavyChart = defineAsyncComponent({
 
 - **Quyết định:** ESM + `sideEffects: false` (hoặc glob chính xác) để Rollup/Vite drop export không dùng. Import **leaf module**, không barrel. Prefer **native** (`Array.toSorted`, `structuredClone`) rồi `lodash-es` từng function, không default `lodash`.
 - **Ràng buộc:** Tree shaking chỉ thấy ESM tĩnh. CJS, `import(variable)` động, và file side effect không đánh dấu thì ở lại. SFC Vue có CSS side effect cần `sideEffects` đúng.
-- **Failure mode:** `export * from './components'` trong design system. Barrel `index.ts` import mọi icon. `sideEffects: false` trên package mà CSS được import như side effect — production mất style.
+- **Failure mode:** Barrel design-system re-export mọi component từ một `index`. Barrel `index.ts` import mọi icon. `sideEffects: false` trên package mà CSS được import như side effect — production mất style.
 - **Đo:** Visualizer trước/sau. Fail CI nếu package cấm xuất hiện trong main chunk.
 
 ```ts

@@ -152,7 +152,7 @@ Mixin gãy ở **namespace** (hai mixin ship `data()` cùng key), **origin** (De
 
 - **Quyết định:** Auto-import UI **nội bộ app** (`components/`, composable, Vue API) trong product app. **Import tường minh** mọi thứ là **public API**: package publish, module xuyên domain, plugin có side-effect, và thứ resolver tham lam không được kéo vào.
 - **Ràng buộc:** Nuxt / `unplugin-vue-components` giấu dependency graph. Tuyệt cho tới khi hai feature auto-import lẫn nhau, hoặc barrel file re-export util Node-only vào client component.
-- **Failure mode:** Composable circular chỉ nổ ở production chunk; barrel design-system (`export * from './components'`) **phá tree-shaking**; tên auto-import đụng nhau (`Modal` từ hai folder).
+- **Failure mode:** Composable circular chỉ nổ ở production chunk; barrel design-system re-export mọi component từ một `index` (**phá tree-shaking**); tên auto-import đụng nhau (`Modal` từ hai folder).
 - **Đo:** Bundle analyzer client trên một route, `vite-bundle-visualizer` / rollup-plugin-visualizer; soi chart/map/editor lib lọt vào page chưa bao giờ import chúng.
 
 Nuxt prefix thư mục lồng (`components/form/Input.vue` → `FormInput`) và có thể path-prefix để tránh collision. `app.component()` global là tệ nhất hai thế giới: luôn trong bundle, không colocation. Library bạn publish thì **đừng** dựa auto-import của consumer — export named component, để resolver của họ map nếu họ muốn.

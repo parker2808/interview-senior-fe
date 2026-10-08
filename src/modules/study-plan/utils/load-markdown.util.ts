@@ -1,11 +1,9 @@
 const planModules = import.meta.glob('@plan/**/*.md', {
-  query: '?raw',
   import: 'default',
   eager: true,
 })
 
 const kbModules = import.meta.glob('@kb/**/*.md', {
-  query: '?raw',
   import: 'default',
   eager: true,
 })

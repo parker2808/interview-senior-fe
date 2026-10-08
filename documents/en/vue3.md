@@ -152,7 +152,7 @@ Mixins fail at **namespace** (two mixins ship `data()` keys with the same name),
 
 - **Decision:** Auto-import **app-local** UI (`components/`, composables, Vue APIs) in the product app. **Explicitly import** anything that is a **public API**: published packages, cross-domain modules, side-effectful plugins, and anything that must not be pulled in by a greedy resolver.
 - **Constraint:** Nuxt / `unplugin-vue-components` hide the dependency graph. That is great until two features auto-import each other or a barrel file re-exports a Node-only util into a client component.
-- **Failure mode:** Circular composables that only blow up in production chunks; a design-system barrel (`export * from './components'`) that **defeats tree-shaking**; auto-imported names colliding (`Modal` from two folders).
+- **Failure mode:** Circular composables that only blow up in production chunks; a design-system barrel that re-exports every component from one `index` (defeats **tree-shaking**); auto-imported names colliding (`Modal` from two folders).
 - **Measure:** Client bundle analyzer on a route, `vite-bundle-visualizer` / rollup-plugin-visualizer; watch for surprise inclusion of chart/map/editor libs on pages that never import them.
 
 Nuxt prefixes nested dirs (`components/form/Input.vue` → `FormInput`) and can path-prefix to avoid collisions. Global `app.component()` registration is the worst of both worlds: always in the bundle, no colocation. For libraries you publish, **do not** rely on the consumer’s auto-import — export named components and let their resolver map them if they want.

@@ -594,7 +594,7 @@ Same decision as **Nuxt vs pure Vue SPA**. If you would not have used Nuxt, don�
 
 **Constraint.** Server HTML must **text-match** the first client render of Client Components. Anything you pass to a Client Component is **in the RSC payload** (the user can see it). Independent data must be fetched **in parallel**.
 
-**Failure mode.** `typeof window !== 'undefined' ? localStorage : default` during **render**. `new Date().toLocaleString()` in a shared layout. `import { stripeSecret } from './env'` into a file that later gained `'use client'`. `const u = await getUser(); const o = await getOrders(u.id); const n = await getNotifs(u.id)` when orders and notifs are independent.
+**Failure mode.** Branching on `typeof window` (not `'undefined'`) to read `localStorage` during **render**. `new Date().toLocaleString()` in a shared layout. Importing a server-only `stripeSecret` into a file that later gained `'use client'`. `const u = await getUser(); const o = await getOrders(u.id); const n = await getNotifs(u.id)` when orders and notifs are independent.
 
 **Measure.** Hydration overlay / “did not match” text. View-source / Network RSC payload for secrets (Ctrl-F the key). Server trace: serial awaits vs `Promise.all`.
 

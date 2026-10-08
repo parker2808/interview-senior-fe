@@ -319,7 +319,7 @@ const HeavyChart = defineAsyncComponent({
 
 - **Decision:** ESM + `sideEffects: false` (or a precise glob) lets Rollup/Vite drop unused exports. Import **leaf modules**, not barrels. Prefer **native** (`Array.toSorted`, `structuredClone`) then `lodash-es` per-function, never default `lodash`.
 - **Constraint:** Tree shaking only sees static ESM. CJS, dynamic `import(variable)`, and files with unmarked side effects stay. Vue SFCs with CSS side effects need accurate `sideEffects`.
-- **Failure mode:** `export * from './components'` in a design system. A `index.ts` barrel that imports every icon. `sideEffects: false` on a package whose CSS is imported as a side effect — production loses styles.
+- **Failure mode:** A design-system barrel that re-exports every component from one `index`. An `index.ts` that imports every icon. `sideEffects: false` on a package whose CSS is imported as a side effect — production loses styles.
 - **Measure:** Visualizer before/after. Fail CI if a forbidden package appears in the main chunk.
 
 ```ts

@@ -226,7 +226,7 @@ Default `const`. Use `let` when the binding must move (index, retry count). Neve
 
 **Production gotchas**
 
-- TDZ in modules: `import { store } from './store'` where `store.ts` imports this file and reads an export at top level → `ReferenceError` at load, not a mysterious `undefined` like `var`.
+- TDZ in modules: a `store` module that this file imports, while `store.ts` imports this file back and reads an export at top level → `ReferenceError` at load, not a mysterious `undefined` like `var`.
 - `for (let i = 0; i < n; i++) { await go(i) }` is correct (per-iteration binding). `for (var i …)` plus a closure still captures one `i`.
 - `const state = reactive({…})` then `state = …` is illegal; `state.x =` is fine. Candidates mix these up constantly.
 - Destructuring `const { items } = props` then expecting `items` to stay live — in Vue 3 you lost reactivity unless you use `toRefs` / `storeToRefs`. That’s a `const` binding gotcha, not a Vue trivia question.

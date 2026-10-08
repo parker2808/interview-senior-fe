@@ -594,7 +594,7 @@ Cùng quyết định **Nuxt vs Vue SPA thuần**. Nếu bạn đã không dùng
 
 **Ràng buộc.** HTML server phải **khớp text** với lần client render đầu của Client Component. Thứ bạn truyền vào Client Component nằm **trong RSC payload** (user đọc được). Data độc lập phải fetch **song song**.
 
-**Failure mode.** `typeof window !== 'undefined' ? localStorage : default` lúc **render**. `new Date().toLocaleString()` trong layout share. `import { stripeSecret } from './env'` vào file sau này gắn `'use client'`. `const u = await getUser(); const o = await getOrders(u.id); const n = await getNotifs(u.id)` khi orders và notifs độc lập.
+**Failure mode.** Nhánh `typeof window` (so với `'undefined'`) để đọc `localStorage` lúc **render**. `new Date().toLocaleString()` trong layout share. Import `stripeSecret` server-only vào file sau này gắn `'use client'`. `const u = await getUser(); const o = await getOrders(u.id); const n = await getNotifs(u.id)` khi orders và notifs độc lập.
 
 **Cách đo.** Overlay hydration / text “did not match”. View-source / Network RSC payload cho secret (Ctrl-F key). Trace server: await tuần tự vs `Promise.all`.
 

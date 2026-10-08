@@ -61,7 +61,7 @@ Hình thường thắng: **testing trophy**, không phải pyramid giáo khoa. N
 import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import { flushPromises } from "@vue/test-utils";
-import { useCatalogSearch } from "./useCatalogSearch";
+import { useCatalogSearch } from "@/composables/useCatalogSearch";
 
 const server = setupServer(
   http.get("/api/catalog", ({ request }) => {
@@ -135,7 +135,7 @@ export function invoiceTotalCents(lines: Line[], taxBps: number): number {
 ```ts
 import { render, screen } from "@testing-library/vue";
 import userEvent from "@testing-library/user-event";
-import PayButton from "./PayButton.vue";
+import PayButton from "@/components/PayButton.vue";
 
 it("disables Pay while the payment intent is in flight", async () => {
   const user = userEvent.setup();

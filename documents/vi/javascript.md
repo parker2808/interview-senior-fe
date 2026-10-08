@@ -226,7 +226,7 @@ Default `const`. `let` khi binding phải dịch (index, retry count). Không `v
 
 **Gotcha production**
 
-- TDZ trong module: `import { store } from './store'` mà `store.ts` import file này và đọc export ở top level → `ReferenceError` lúc load, không phải `undefined` bí ẩn như `var`.
+- TDZ trong module: module `store` mà file này import, trong khi `store.ts` import ngược file này và đọc export ở top level → `ReferenceError` lúc load, không phải `undefined` bí ẩn như `var`.
 - `for (let i = 0; i < n; i++) { await go(i) }` đúng (binding từng iteration). `for (var i …)` cộng closure vẫn capture một `i`.
 - `const state = reactive({…})` rồi `state = …` illegal; `state.x =` thì ổn. Candidate trộn hai cái này liên tục.
 - Destructure `const { items } = props` rồi expect `items` sống — Vue 3 mất reactivity trừ khi `toRefs` / `storeToRefs`. Đó là gotcha binding `const`, không phải trivia Vue.
