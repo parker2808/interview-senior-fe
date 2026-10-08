@@ -117,12 +117,12 @@ function onDocClick(e: MouseEvent) {
         </h2>
       </div>
       <label
-        class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-white px-3 text-sm font-medium"
+        class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink"
         :class="readOnly ? 'opacity-70' : ''"
       >
         <input
           type="checkbox"
-          class="h-5 w-5 accent-accent"
+          class="themed-checkbox"
           :checked="done"
           :disabled="readOnly"
           @change="$emit('toggle')"
@@ -146,7 +146,7 @@ function onDocClick(e: MouseEvent) {
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-        :class="tab === 'plan' ? 'bg-accent text-white' : 'bg-white border border-line'"
+        :class="tab === 'plan' ? 'bg-accent text-[var(--bg-elevated)]' : 'border border-line bg-surface-elevated text-ink'"
         :aria-selected="tab === 'plan'"
         @click="tab = 'plan'"
       >
@@ -156,7 +156,7 @@ function onDocClick(e: MouseEvent) {
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-        :class="tab === 'worksheet' ? 'bg-accent text-white' : 'bg-white border border-line'"
+        :class="tab === 'worksheet' ? 'bg-accent text-[var(--bg-elevated)]' : 'border border-line bg-surface-elevated text-ink'"
         :aria-selected="tab === 'worksheet'"
         @click="tab = 'worksheet'"
       >
@@ -166,7 +166,7 @@ function onDocClick(e: MouseEvent) {
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-        :class="tab === 'lab' ? 'bg-accent text-white' : 'bg-white border border-line'"
+        :class="tab === 'lab' ? 'bg-accent text-[var(--bg-elevated)]' : 'border border-line bg-surface-elevated text-ink'"
         :aria-selected="tab === 'lab'"
         @click="tab = 'lab'"
       >
@@ -190,7 +190,7 @@ function onDocClick(e: MouseEvent) {
     <footer class="mt-8 flex flex-col gap-2 border-t border-line pt-4 sm:flex-row sm:justify-between">
       <button
         type="button"
-        class="min-h-11 rounded-lg border border-line bg-white px-4 text-sm font-semibold disabled:opacity-40"
+        class="min-h-11 rounded-lg border border-line bg-surface-elevated px-4 text-sm font-semibold text-ink disabled:opacity-40"
         :disabled="day.day <= 1"
         @click="$emit('prev')"
       >
@@ -198,7 +198,7 @@ function onDocClick(e: MouseEvent) {
       </button>
       <button
         type="button"
-        class="min-h-11 rounded-lg border border-line bg-white px-4 text-sm font-semibold disabled:opacity-40"
+        class="min-h-11 rounded-lg border border-line bg-surface-elevated px-4 text-sm font-semibold text-ink disabled:opacity-40"
         :disabled="day.day >= 30"
         @click="$emit('next')"
       >

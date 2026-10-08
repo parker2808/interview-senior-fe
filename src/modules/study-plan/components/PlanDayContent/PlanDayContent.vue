@@ -66,7 +66,7 @@ function openAlgo() {
     </section>
 
     <div class="grid gap-4 lg:grid-cols-2">
-      <section class="rounded-xl border border-line bg-white/70 p-3">
+      <section class="rounded-xl border border-line bg-surface-elevated p-3">
         <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
           {{ labels.study }}
         </p>
@@ -83,7 +83,7 @@ function openAlgo() {
         </div>
       </section>
 
-      <section class="rounded-xl border border-line bg-white/70 p-3">
+      <section class="rounded-xl border border-line bg-surface-elevated p-3">
         <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
           {{ labels.qa }}
         </p>
@@ -101,7 +101,7 @@ function openAlgo() {
       </section>
     </div>
 
-    <section class="rounded-xl border border-line bg-white/70 p-3">
+    <section class="rounded-xl border border-line bg-surface-elevated p-3">
       <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
         {{ labels.handsOn }}
       </p>
@@ -117,7 +117,7 @@ function openAlgo() {
       </ul>
     </section>
 
-    <section class="rounded-xl border border-line bg-white/70 p-3">
+    <section class="rounded-xl border border-line bg-surface-elevated p-3">
       <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
@@ -137,7 +137,7 @@ function openAlgo() {
       </div>
     </section>
 
-    <section class="rounded-xl border border-line bg-white/70 p-3">
+    <section class="rounded-xl border border-line bg-surface-elevated p-3">
       <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
         {{ labels.checklist }}
       </p>

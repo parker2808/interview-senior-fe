@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BackLink from '@/modules/core/components/BackLink/BackLink.vue'
+import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import DayList from '@/modules/study-plan/components/DayList/DayList.vue'
@@ -117,11 +117,12 @@ function openResource(path: string) {
       @skip="skipUnlock"
     />
 
-    <div
-      class="sticky top-0 z-20 border-b border-line bg-surface-elevated backdrop-blur"
+    <AppTopBar
+      :title="$t('plan.title')"
+      :home-label="$t('plan.backHub')"
+      :lock-visible="navOpen"
     >
-      <div class="flex h-12 items-center gap-1.5 px-2 sm:gap-2 sm:px-4">
-        <BackLink :label="$t('plan.backHub')" icon-only />
+      <template #actions>
         <NuxtLink
           to="/docs?from=plan"
           class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface-elevated text-ink transition hover:border-accent hover:text-accent-ink"
@@ -142,15 +143,10 @@ function openResource(path: string) {
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
           </svg>
         </NuxtLink>
-        <div class="min-w-0 flex-1">
-          <p class="truncate text-sm font-semibold text-ink">
-            {{ $t('plan.title') }}
-          </p>
-        </div>
         <LocaleToggle />
         <ThemeToggle />
-      </div>
-    </div>
+      </template>
+    </AppTopBar>
 
     <div class="animate-fade-up px-4 pt-5 sm:px-6 sm:pt-8">
     <header class="flex flex-col gap-4 border-b border-line pb-5 sm:flex-row sm:items-start sm:justify-between">
@@ -259,7 +255,7 @@ function openResource(path: string) {
           v-for="r in PLAN_RESOURCES"
           :key="r.id"
           type="button"
-          class="min-h-10 rounded-lg border border-line bg-white px-3 text-sm font-medium hover:border-accent"
+          class="min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
           @click="openResource(r.path)"
         >
           {{ labels.resources[r.id] || r.label }}

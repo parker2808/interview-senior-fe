@@ -1,20 +1,17 @@
-# Rebuild 30-day study plan
+# Fix plan dark mode after PR #20 review
 
 ## Plan
-- [x] Review the current study-plan storage/rendering flow and identify readability issues without touching top navigation
-- [x] Map the interview Q&A bank to the new curriculum, including any missing Next.js/App Router topics that need new entries
-- [x] Rewrite the full bilingual 30-day plan with a clear 4-week overview + final days, realistic daily load, direct Q&A practice links, hands-on tasks, and done checklists
-- [x] Improve the plan page layout/readability only where it helps comprehension and local progress tracking
-- [x] Build the site, manually verify the plan page on desktop and mobile, capture screenshots/video, and open/update a draft PR
+- [x] Audit the new study-plan surfaces for hard-coded light-theme colors and identify the dark-mode contrast failures
+- [x] Merge the latest `origin/main` after PR #21 and keep the shared AppTopBar behavior intact
+- [ ] Verify the merged branch in both light and dark mode on desktop and mobile, including runtime theme switching
+- [ ] Capture before/after dark-mode screenshots, update PR #20, and push the final fix
 
 ## Notes
-- Avoid touching the menu bar/navigation because another PR is changing that area concurrently.
-- Parker is a senior Vue/Nuxt/TypeScript engineer with no production React; React content must compare against Vue/Nuxt mental models.
-- Next.js coverage must be explicit: App Router, RSC vs Client Components, data fetching/caching/revalidation, SSR/SSG/ISR/streaming, Server Actions, middleware, metadata/SEO, image/font optimization, deployment basics, plus a small hands-on task.
-- If the Q&A bank lacks matching Next.js questions, add bilingual entries in the existing schema so the plan can link to them.
-- Keep per-day load around 2 hours and make the page easy to skim in Vietnamese first while preserving bilingual support.
+- Parker reported the regression from the Vercel preview on mobile dark mode with Day 01 expanded.
+- The main issue was new plan surfaces using `bg-white`, `bg-white/70`, and `bg-white/90`, which bypassed the existing dark-theme variables.
+- PR #21 was already merged into `main`; the branch now needs to preserve the new shared AppTopBar behavior while keeping the plan-specific content changes.
 
 ## Review
-- Rebuilt the study plan around a structured 4-week + final-days curriculum instead of a dense markdown wall, with each day now showing a goal, linked FE docs, linked Q&A practice, a small hands-on task, the daily algorithm item, and a simple checklist.
-- Added focused Next.js/App Router interview entries so Week 3 can link to concrete Q&A for layouts/routing/loading/error states, Server vs Client Components, cache/revalidation, rendering modes + streaming, Server Actions, middleware, and metadata/SEO/image-font/deployment basics.
-- Verified with `NUXT_IGNORE_LOCK=1 npm run build`, plus manual browser checks on desktop and mobile for `/plan`, `/plan/day/18`, and the interview deep-link route (`/interview?q=design-system-strategy`).
+- Replaced the plan-specific hard-coded light surfaces with theme-token surfaces (`bg-surface`, `bg-surface-elevated`) and switched active tabs/buttons to token-based foregrounds.
+- Added a custom theme-aware checkbox style so checkboxes render consistently in Safari/iPhone dark mode instead of falling back to an unreadable native square.
+- Merged `origin/main`; only `tasks/todo.md` conflicted, while `PlanHome.vue`, `PlanDay.vue`, and `InterviewHome.vue` picked up the new shared top-bar implementation automatically.

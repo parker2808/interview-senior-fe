@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BackLink from '@/modules/core/components/BackLink/BackLink.vue'
+import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import DayDetail from '@/modules/study-plan/components/DayDetail/DayDetail.vue'
 import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
 import { getDay } from '@/modules/study-plan/constants/days.constant'
@@ -62,16 +62,12 @@ onMounted(() => {
       @skip="skipUnlock"
     />
 
-    <div
-      class="sticky top-0 z-20 border-b border-line bg-surface-elevated backdrop-blur"
-    >
-      <div class="flex h-12 items-center gap-2 px-2 sm:px-4">
-        <BackLink to="/plan" :label="t('plan.backDayList')" icon-only />
-        <p class="min-w-0 flex-1 truncate text-sm font-semibold text-ink">
-          {{ day ? `Day ${String(day.day).padStart(2, '0')}` : t('plan.title') }}
-        </p>
-      </div>
-    </div>
+    <AppTopBar
+      :title="day ? `Day ${String(day.day).padStart(2, '0')}` : t('plan.title')"
+      :home-label="t('plan.backHub')"
+      back-to="/plan"
+      :back-label="t('plan.backDayList')"
+    />
 
     <div class="px-4 pt-3 sm:px-6 sm:pt-5">
       <DayDetail

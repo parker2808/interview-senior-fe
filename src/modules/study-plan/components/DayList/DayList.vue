@@ -83,7 +83,7 @@ function toggleOpen(day: number) {
       <label class="flex flex-col gap-1 text-sm font-medium text-ink-muted sm:flex-row sm:items-center sm:gap-2">
         {{ labels.filter }}
         <select
-          class="min-h-11 rounded-lg border border-line bg-white px-3 text-ink"
+          class="min-h-11 rounded-lg border border-line bg-surface-elevated px-3 text-ink"
           :value="props.weekFilter"
           @change="
             $emit('update:weekFilter', Number(($event.target as HTMLSelectElement).value))
@@ -131,7 +131,7 @@ function toggleOpen(day: number) {
               </ul>
             </div>
 
-            <div class="rounded-xl border border-line bg-white px-3 py-2 text-sm">
+            <div class="rounded-xl border border-line bg-surface-elevated px-3 py-2 text-sm">
               <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
                 {{ labels.progress }}
               </p>
@@ -146,14 +146,14 @@ function toggleOpen(day: number) {
           <li
             v-for="d in daysByWeek.get(week.week) ?? []"
             :key="d.day"
-            class="overflow-hidden rounded-2xl border border-line bg-white/90 transition"
+            class="overflow-hidden rounded-2xl border border-line bg-surface-elevated transition"
             :class="props.isDone(d.day) ? 'border-done/40 bg-done-soft/40' : ''"
           >
             <div class="flex items-start gap-3 px-3 py-4 sm:px-4">
               <label class="mt-0.5 flex shrink-0 cursor-pointer items-center justify-center">
                 <input
                   type="checkbox"
-                  class="h-5 w-5 accent-accent"
+                  class="themed-checkbox"
                   :checked="props.isDone(d.day)"
                   :disabled="props.readOnly"
                   :aria-label="`Mark day ${d.day} done`"
