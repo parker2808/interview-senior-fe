@@ -20,10 +20,11 @@ function initFromSession() {
 
 export function useEditMode() {
   initFromSession()
+  const { t } = useI18n()
 
   const isEditMode = computed(() => unlocked.value)
   const modeLabel = computed(() =>
-    unlocked.value ? 'Chế độ: Sửa' : 'Chế độ: Xem',
+    unlocked.value ? t('plan.modeEdit') : t('plan.modeView'),
   )
 
   async function submitPasscode(passcode: string) {

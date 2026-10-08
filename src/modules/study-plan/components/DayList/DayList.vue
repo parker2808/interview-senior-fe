@@ -27,28 +27,6 @@ const lang = computed<'en' | 'vi'>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
 
-const labels = computed(() =>
-  lang.value === 'en'
-    ? {
-        filter: 'Focus week',
-        allWeeks: 'All weeks',
-        progress: 'Progress',
-        openDay: 'Open day',
-        expand: 'Expand',
-        collapse: 'Collapse',
-        gaps: 'Known content gaps',
-      }
-    : {
-        filter: 'Tập trung tuần',
-        allWeeks: 'Tất cả các tuần',
-        progress: 'Tiến độ',
-        openDay: 'Mở trang ngày',
-        expand: 'Mở chi tiết',
-        collapse: 'Thu gọn',
-        gaps: 'Khoảng trống cần biết',
-      },
-)
-
 const visibleWeeks = computed(() =>
   PLAN_WEEKS.filter((week) =>
     props.weekFilter === 0 ? true : week.week === props.weekFilter,
@@ -81,7 +59,7 @@ function toggleOpen(day: number) {
       class="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"
     >
       <label class="flex flex-col gap-1 text-sm font-medium text-ink-muted sm:flex-row sm:items-center sm:gap-2">
-        {{ labels.filter }}
+        {{ $t('plan.filter') }}
         <select
           class="min-h-11 rounded-lg border border-line bg-surface-elevated px-3 text-ink"
           :value="props.weekFilter"
@@ -89,7 +67,7 @@ function toggleOpen(day: number) {
             $emit('update:weekFilter', Number(($event.target as HTMLSelectElement).value))
           "
         >
-          <option :value="0">{{ labels.allWeeks }}</option>
+          <option :value="0">{{ $t('plan.allWeeks') }}</option>
           <option
             v-for="week in PLAN_WEEKS"
             :key="week.week"
@@ -133,7 +111,7 @@ function toggleOpen(day: number) {
 
             <div class="rounded-xl border border-line bg-surface-elevated px-3 py-2 text-sm">
               <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-                {{ labels.progress }}
+                {{ $t('plan.progress') }}
               </p>
               <p class="mt-1 font-semibold text-ink">
                 {{ props.weekProgress(week.week).done }}/{{ props.weekProgress(week.week).total }}
@@ -183,7 +161,7 @@ function toggleOpen(day: number) {
                     </p>
                   </div>
                   <span class="shrink-0 text-xs font-semibold text-ink-faint">
-                    {{ openDays.has(d.day) ? labels.collapse : labels.expand }}
+                    {{ openDays.has(d.day) ? $t('plan.collapse') : $t('plan.expand') }}
                   </span>
                 </div>
               </button>
@@ -193,7 +171,7 @@ function toggleOpen(day: number) {
                 class="hidden min-h-10 shrink-0 rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink sm:inline-flex sm:items-center"
                 @click="$emit('open', d.day)"
               >
-                {{ labels.openDay }}
+                {{ $t('plan.openDay') }}
               </button>
             </div>
 
@@ -207,7 +185,7 @@ function toggleOpen(day: number) {
                 class="mt-4 min-h-10 rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink sm:hidden"
                 @click="$emit('open', d.day)"
               >
-                {{ labels.openDay }}
+                {{ $t('plan.openDay') }}
               </button>
             </div>
           </li>

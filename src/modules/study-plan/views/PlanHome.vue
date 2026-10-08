@@ -55,52 +55,6 @@ const filteredDays = computed(() =>
     : DAYS.filter((d) => d.week === weekFilter.value),
 )
 
-const labels = computed(() =>
-  lang.value === 'en'
-    ? {
-        unlock: 'Unlock',
-        quickDocs: 'Quick resources',
-        overview: 'What the rebuilt plan emphasizes',
-        overviewSub: 'Keep each day around 2 hours: short reading, targeted Q&A, one small hands-on task, and one algorithm problem.',
-        setupTitle: 'Day 0 / Setup once',
-        setupBody: 'Create one practice repo for all 30 days, then keep reusing it instead of spinning up a new sandbox every day.',
-        setupCta: 'Open shared lab setup',
-        gaps: 'Content gaps to keep in mind',
-        resources: {
-          plan: '30-day overview',
-          index: 'Daily index',
-          lab: 'Companion lab repo',
-          react: 'React / Next track',
-          algo: 'Algorithms track',
-          context: 'Project context',
-          feature: 'Feature template',
-          dod: 'Definition of Done',
-          selfcheck: 'Self-check questions',
-        } as Record<string, string>,
-      }
-    : {
-        unlock: 'Mở khóa',
-        quickDocs: 'Tài liệu nhanh',
-        overview: 'Trọng tâm của plan mới',
-        overviewSub: 'Giữ mỗi ngày khoảng 2 giờ: đọc ngắn, luyện Q&A có mục tiêu, một task hands-on nhỏ và một bài thuật toán.',
-        setupTitle: 'Day 0 / Setup một lần',
-        setupBody: 'Tạo một practice repo dùng chung cho cả 30 ngày, rồi tái sử dụng nó xuyên suốt thay vì mở sandbox mới mỗi ngày.',
-        setupCta: 'Mở hướng dẫn setup repo',
-        gaps: 'Khoảng trống nên biết',
-        resources: {
-          plan: 'Tổng quan 30 ngày',
-          index: 'Mục lục theo ngày',
-          lab: 'Companion lab repo',
-          react: 'Lộ trình React / Next',
-          algo: 'Lộ trình thuật toán',
-          context: 'Bối cảnh dự án',
-          feature: 'Feature template',
-          dod: 'Definition of Done',
-          selfcheck: 'Self-check questions',
-        } as Record<string, string>,
-      },
-)
-
 function openDay(day: number) {
   router.push(`/plan/day/${day}`)
 }
@@ -175,7 +129,7 @@ function openResource(path: string) {
             class="text-sm font-semibold text-accent-ink underline"
             @click="openUnlockModal"
           >
-            {{ labels.unlock }}
+            {{ $t('plan.unlock') }}
           </button>
         </div>
       </div>
@@ -222,18 +176,18 @@ function openResource(path: string) {
 
     <section class="mt-4 rounded-2xl border border-line bg-surface-elevated/70 p-4 sm:p-5">
       <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
-        {{ labels.overview }}
+        {{ $t('plan.overview') }}
       </p>
       <p class="mt-2 max-w-3xl text-sm leading-6 text-ink-muted">
-        {{ labels.overviewSub }}
+        {{ $t('plan.overviewSub') }}
       </p>
       <div class="mt-4 rounded-xl border border-line bg-surface p-3 sm:flex sm:items-center sm:justify-between sm:gap-4">
         <div>
           <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
-            {{ labels.setupTitle }}
+            {{ $t('plan.setupTitle') }}
           </p>
           <p class="mt-1 text-sm leading-6 text-ink-muted">
-            {{ labels.setupBody }}
+            {{ $t('plan.setupBody') }}
           </p>
         </div>
         <button
@@ -241,11 +195,11 @@ function openResource(path: string) {
           class="mt-3 min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink sm:mt-0"
           @click="openResource('lab-repo.md')"
         >
-          {{ labels.setupCta }}
+          {{ $t('plan.setupCta') }}
         </button>
       </div>
       <p class="mt-4 text-xs font-semibold uppercase tracking-wider text-ink-faint">
-        {{ labels.gaps }}
+        {{ $t('plan.gaps') }}
       </p>
       <ul class="mt-4 space-y-2 text-sm text-ink">
         <li
@@ -259,13 +213,13 @@ function openResource(path: string) {
       </ul>
     </section>
 
-    <nav class="mt-4 rounded-xl border border-line bg-surface-elevated/70" :aria-label="labels.quickDocs">
+    <nav class="mt-4 rounded-xl border border-line bg-surface-elevated/70" :aria-label="$t('plan.quickDocs')">
       <button
         type="button"
         class="flex min-h-11 w-full items-center justify-between px-3 text-sm font-semibold sm:hidden"
         @click="navOpen = !navOpen"
       >
-        {{ labels.quickDocs }}
+        {{ $t('plan.quickDocs') }}
         <span>{{ navOpen ? '▴' : '▾' }}</span>
       </button>
       <div
@@ -279,7 +233,7 @@ function openResource(path: string) {
           class="min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
           @click="openResource(r.path)"
         >
-          {{ labels.resources[r.id] || r.label }}
+          {{ $t(`plan.resources.${r.id}`) }}
         </button>
       </div>
     </nav>

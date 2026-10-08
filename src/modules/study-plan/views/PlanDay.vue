@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
+import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
+import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import DayDetail from '@/modules/study-plan/components/DayDetail/DayDetail.vue'
 import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
 import { getDay } from '@/modules/study-plan/constants/days.constant'
 import { useProgress } from '@/modules/study-plan/composables/use-progress.composable'
+import { stripPlanLocalePrefix } from '@/modules/study-plan/utils/plan-locale-path.util'
 
 const props = defineProps<{
   dayNumber: number
@@ -25,14 +28,15 @@ const {
 } = useProgress()
 
 function openDoc(path: string) {
-  if (path.startsWith('documents/')) {
-    const m = path.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
+  const normalized = stripPlanLocalePrefix(path)
+  if (normalized.startsWith('documents/')) {
+    const m = normalized.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
     if (m) {
       router.push(`/docs/${m[1]}/${m[2]}?from=plan`)
       return
     }
   }
-  router.push(`/plan/doc/${encodeURIComponent(path)}`)
+  router.push(`/plan/doc/${encodeURIComponent(normalized)}`)
 }
 
 function openDocs(payload: { lang: string; slug: string; hash?: string }) {
@@ -67,7 +71,12 @@ onMounted(() => {
       :home-label="t('plan.backHub')"
       back-to="/plan"
       :back-label="t('plan.backDayList')"
-    />
+    >
+      <template #actions>
+        <LocaleToggle />
+        <ThemeToggle />
+      </template>
+    </AppTopBar>
 
     <div class="px-4 pt-3 sm:px-6 sm:pt-5">
       <DayDetail
@@ -81,7 +90,7 @@ onMounted(() => {
         @open-doc="openDoc"
         @open-docs="openDocs"
       />
-      <p v-else class="text-ink-muted">Không tìm thấy ngày.</p>
+      <p v-else class="text-ink-muted">{{ t('plan.dayNotFound') }}</p>
     </div>
   </div>
 </template>

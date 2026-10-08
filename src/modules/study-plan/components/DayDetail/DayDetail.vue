@@ -7,6 +7,7 @@ import { loadMarkdown } from '@/modules/study-plan/utils/load-markdown.util'
 import { classifyMarkdownHref } from '@/modules/study-plan/utils/markdown-links.util'
 import { isBundledPath } from '@/modules/study-plan/utils/load-markdown.util'
 import { autolinkMarkdownPaths } from '@/modules/study-plan/utils/autolink-md.util'
+import { applyPlanHeadingI18n } from '@/modules/study-plan/utils/plan-locale-path.util'
 
 const props = defineProps<{
   day: DayMeta
@@ -23,38 +24,10 @@ const emit = defineEmits<{
 }>()
 
 type DayTab = 'plan' | 'lab'
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 const lang = computed<'en' | 'vi'>(() =>
   locale.value === 'en' ? 'en' : 'vi',
-)
-
-const labels = computed(() =>
-  lang.value === 'en'
-    ? {
-        plan: 'Plan',
-        lab: 'Lab',
-        artifact: 'Optional prompt / artifact',
-        artifactOpen: 'Open prompt',
-        doneLabel: 'Done',
-        done: 'Mark done',
-        doneReadOnly: 'Done (view only)',
-        pendingReadOnly: 'Not done yet',
-        prev: '← Previous day',
-        next: 'Next day →',
-      }
-    : {
-        plan: 'Plan',
-        lab: 'Lab',
-        artifact: 'Prompt / artifact bổ sung',
-        artifactOpen: 'Mở prompt',
-        doneLabel: 'Đã xong',
-        done: 'Đánh dấu xong',
-        doneReadOnly: 'Đã xong (xem)',
-        pendingReadOnly: 'Chưa xong',
-        prev: '← Day trước',
-        next: 'Day sau →',
-      },
 )
 
 const tab = ref<DayTab>('plan')
@@ -75,17 +48,23 @@ const activePath = computed(() => {
 const html = computed(() => {
   if (!activePath.value) return ''
 
-  const raw = marked.parse(loadMarkdown(activePath.value).text, {
+  const raw = marked.parse(loadMarkdown(activePath.value, lang.value).text, {
     async: false,
   }) as string
-  return autolinkMarkdownPaths(raw, activePath.value)
+  const resolvedPath = loadMarkdown(activePath.value, lang.value).path
+  return applyPlanHeadingI18n(autolinkMarkdownPaths(raw, resolvedPath), t)
 })
 
 function onDocClick(e: MouseEvent) {
   const a = (e.target as HTMLElement).closest('a')
   if (!a) return
   const href = a.getAttribute('href')
-  const result = classifyMarkdownHref(activePath.value, href || '', isBundledPath)
+  const resolvedPath = loadMarkdown(activePath.value, lang.value).path
+  const result = classifyMarkdownHref(
+    resolvedPath,
+    href || '',
+    (path) => isBundledPath(path, lang.value),
+  )
   if (result.kind === 'ignore' || result.kind === 'hash') return
   e.preventDefault()
   if (result.kind === 'external' || result.kind === 'github') {
@@ -132,11 +111,11 @@ function onDocClick(e: MouseEvent) {
           {{
             readOnly
               ? done
-                ? labels.doneReadOnly
-                : labels.pendingReadOnly
+                ? $t('plan.doneReadOnly')
+                : $t('plan.pendingReadOnly')
               : done
-                ? labels.doneLabel
-                : labels.done
+                ? $t('plan.done')
+                : $t('plan.markDone')
           }}
         </span>
       </label>
@@ -151,7 +130,7 @@ function onDocClick(e: MouseEvent) {
         :aria-selected="tab === 'plan'"
         @click="tab = 'plan'"
       >
-        {{ labels.plan }}
+        {{ $t('plan.tabPlan') }}
       </button>
       <button
         type="button"
@@ -161,29 +140,11 @@ function onDocClick(e: MouseEvent) {
         :aria-selected="tab === 'lab'"
         @click="tab = 'lab'"
       >
-        {{ labels.lab }}
+        {{ $t('plan.tabLab') }}
       </button>
     </div>
 
     <PlanDayContent v-if="tab === 'plan' && planContent" :content="planContent" />
-
-    <div
-      v-if="tab === 'plan' && day.worksheet"
-      class="mt-4 rounded-xl border border-dashed border-line bg-surface p-3"
-    >
-      <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-        {{ labels.artifact }}
-      </p>
-      <p class="mt-2 text-sm leading-6 text-ink-muted">
-        <button
-          type="button"
-          class="inline-flex min-h-10 items-center rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
-          @click="$emit('open-doc', day.worksheet)"
-        >
-          {{ labels.artifactOpen }}
-        </button>
-      </p>
-    </div>
 
     <div
       v-if="tab === 'lab'"
@@ -199,7 +160,7 @@ function onDocClick(e: MouseEvent) {
         :disabled="day.day <= 1"
         @click="$emit('prev')"
       >
-        {{ labels.prev }}
+        {{ $t('plan.prevDay') }}
       </button>
       <button
         type="button"
@@ -207,7 +168,7 @@ function onDocClick(e: MouseEvent) {
         :disabled="day.day >= 30"
         @click="$emit('next')"
       >
-        {{ labels.next }}
+        {{ $t('plan.nextDay') }}
       </button>
     </footer>
   </article>

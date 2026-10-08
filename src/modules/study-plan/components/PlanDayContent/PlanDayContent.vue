@@ -14,28 +14,6 @@ const lang = computed<'en' | 'vi'>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
 
-const labels = computed(() =>
-  lang.value === 'en'
-    ? {
-        goal: 'Goal',
-        study: 'Read / review',
-        qa: 'Practice Q&A',
-        handsOn: 'Hands-on',
-        algorithm: 'Algorithm',
-        checklist: 'Done checklist',
-        open: 'Open',
-      }
-    : {
-        goal: 'Mục tiêu',
-        study: 'Đọc / ôn lại',
-        qa: 'Q&A nên luyện',
-        handsOn: 'Thực hành',
-        algorithm: 'Thuật toán',
-        checklist: 'Checklist hoàn thành',
-        open: 'Mở',
-      },
-)
-
 function openStudyLink(link: StudyPlanDayContent['studyLinks'][number]) {
   if (link.kind === 'docs') {
     router.push(`/docs/${lang.value}/${link.slug}?from=plan`)
@@ -58,7 +36,7 @@ function openAlgo() {
   <div class="space-y-5">
     <section>
       <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
-        {{ labels.goal }}
+        {{ $t('plan.goal') }}
       </p>
       <p class="mt-2 text-sm leading-6 text-ink sm:text-base">
         {{ content.goal[lang] }}
@@ -68,7 +46,7 @@ function openAlgo() {
     <div class="grid gap-4 lg:grid-cols-2">
       <section class="rounded-xl border border-line bg-surface-elevated p-3">
         <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-          {{ labels.study }}
+          {{ $t('plan.study') }}
         </p>
         <div class="mt-3 flex flex-wrap gap-2">
           <button
@@ -85,7 +63,7 @@ function openAlgo() {
 
       <section class="rounded-xl border border-line bg-surface-elevated p-3">
         <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-          {{ labels.qa }}
+          {{ $t('plan.qa') }}
         </p>
         <div class="mt-3 flex flex-wrap gap-2">
           <button
@@ -103,7 +81,7 @@ function openAlgo() {
 
     <section class="rounded-xl border border-line bg-surface-elevated p-3">
       <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-        {{ labels.handsOn }}
+        {{ $t('plan.handsOn') }}
       </p>
       <ul class="mt-3 space-y-2 text-sm leading-6 text-ink sm:text-base">
         <li
@@ -121,7 +99,7 @@ function openAlgo() {
       <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-            {{ labels.algorithm }}
+            {{ $t('plan.algorithm') }}
           </p>
           <p class="mt-2 text-sm leading-6 text-ink sm:text-base">
             {{ content.algorithm.label[lang] }}
@@ -132,14 +110,14 @@ function openAlgo() {
           class="min-h-10 rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
           @click="openAlgo"
         >
-          {{ labels.open }}
+          {{ $t('plan.open') }}
         </button>
       </div>
     </section>
 
     <section class="rounded-xl border border-line bg-surface-elevated p-3">
       <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
-        {{ labels.checklist }}
+        {{ $t('plan.checklist') }}
       </p>
       <ul class="mt-3 space-y-2 text-sm leading-6 text-ink sm:text-base">
         <li

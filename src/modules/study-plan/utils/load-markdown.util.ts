@@ -39,21 +39,43 @@ const byPath: Record<string, string> = {
   ),
 }
 
-export function loadMarkdown(relativePath: string) {
+function normalizedLocale(locale?: string) {
+  return locale === 'en' ? 'en' : 'vi'
+}
+
+function localeFallback(locale?: string) {
+  return normalizedLocale(locale) === 'en' ? 'vi' : 'en'
+}
+
+export function resolvePlanMarkdownPath(relativePath: string, locale?: string) {
   const normalized = String(relativePath || '')
     .replace(/^\.?\/+/, '')
     .replace(/^\/+/, '')
-  const content = byPath[normalized]
+
+  if (normalized.startsWith('documents/')) return normalized
+
+  const unprefixed = normalized.replace(/^(vi|en)\//, '')
+  const primary = `${normalizedLocale(locale)}/${unprefixed}`
+  const secondary = `${localeFallback(locale)}/${unprefixed}`
+
+  if (typeof byPath[primary] === 'string') return primary
+  if (typeof byPath[secondary] === 'string') return secondary
+  return unprefixed
+}
+
+export function loadMarkdown(relativePath: string, locale?: string) {
+  const resolved = resolvePlanMarkdownPath(relativePath, locale)
+  const content = byPath[resolved]
   if (typeof content !== 'string') {
     return {
       ok: false as const,
-      path: normalized,
-      text: `_Không tìm thấy file: \`${normalized}\`_`,
+      path: resolved,
+      text: `_Missing file: \`${resolved}\`_`,
     }
   }
-  return { ok: true as const, path: normalized, text: content }
+  return { ok: true as const, path: resolved, text: content }
 }
 
-export function isBundledPath(relativePath: string) {
-  return loadMarkdown(relativePath).ok
+export function isBundledPath(relativePath: string, locale?: string) {
+  return loadMarkdown(relativePath, locale).ok
 }
