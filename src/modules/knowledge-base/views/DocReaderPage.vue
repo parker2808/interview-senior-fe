@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import BackLink from '@/modules/core/components/BackLink/BackLink.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
@@ -24,6 +25,7 @@ const fromPlan = computed(() => {
   return raw === 'plan' || (Array.isArray(raw) && raw[0] === 'plan')
 })
 
+const parentTo = computed(() => (fromPlan.value ? '/plan' : undefined))
 const backTo = computed(() => (fromPlan.value ? '/plan' : '/'))
 const backLabel = computed(() =>
   fromPlan.value ? t('docs.backPlan') : t('docs.backHub'),
@@ -44,8 +46,8 @@ const searchOpen = ref(false)
 const activeHeading = ref('')
 const tocOpen = ref(false)
 const proseRef = ref<HTMLElement | null>(null)
-const headerRef = ref<HTMLElement | null>(null)
 const mainRef = ref<HTMLElement | null>(null)
+const topBarHeight = ref(56)
 const headerOffset = ref(HEADER_OFFSET)
 
 /** Preserve reading position across VI↔EN on the same slug */
@@ -173,6 +175,11 @@ function jumpTo(id: string) {
   scrollToId(id)
 }
 
+function onTopBarHeightChange(height: number) {
+  topBarHeight.value = height
+  headerOffset.value = height + 8
+}
+
 function onDocClick(e: MouseEvent) {
   const a = (e.target as HTMLElement | null)?.closest?.('a')
   if (!a) return
@@ -244,18 +251,6 @@ onMounted(() => {
 
   syncHashScroll()
   window.addEventListener('hashchange', syncHashScroll)
-
-  const el = headerRef.value
-  if (el && typeof ResizeObserver !== 'undefined') {
-    const ro = new ResizeObserver(([entry]) => {
-      const h = Math.ceil(entry.contentRect.height)
-      headerOffset.value = h + 8
-      el.style.setProperty('--docs-header-h', `${h}px`)
-      document.documentElement.style.setProperty('--app-header-h', `${h}px`)
-    })
-    ro.observe(el)
-    onUnmounted(() => ro.disconnect())
-  }
 })
 
 onUnmounted(() => {
@@ -299,12 +294,21 @@ onUnmounted(() => observer?.disconnect())
 </script>
 
 <template>
-  <div class="docs-shell flex h-dvh max-h-dvh flex-col overflow-hidden">
-    <header
-      ref="headerRef"
-      class="docs-header z-30 shrink-0 border-b border-line bg-surface-elevated backdrop-blur"
+  <div
+    class="docs-shell flex h-dvh max-h-dvh flex-col overflow-hidden"
+    :style="{ '--docs-header-h': `${topBarHeight}px` }"
+  >
+    <AppTopBar
+      :title="title"
+      :home-label="$t('docs.backHub')"
+      :back-to="parentTo"
+      :back-label="backLabel"
+      :lock-visible="sidebarOpen || searchOpen || tocOpen"
+      :scroll-target="mainRef"
+      inner-class="px-2 sm:px-4 lg:px-5"
+      @heightchange="onTopBarHeightChange"
     >
-      <div class="flex h-12 items-center gap-1.5 px-2 sm:gap-2 sm:px-4 lg:px-5">
+      <template #leading>
         <button
           type="button"
           class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-white text-ink lg:hidden"
@@ -324,15 +328,9 @@ onUnmounted(() => observer?.disconnect())
             <path d="M4 7h16M4 12h16M4 17h16" />
           </svg>
         </button>
+      </template>
 
-        <BackLink :to="backTo" :label="backLabel" icon-only />
-
-        <div class="min-w-0 flex-1">
-          <p class="truncate text-sm font-semibold text-ink">
-            {{ title }}
-          </p>
-        </div>
-
+      <template #actions>
         <button
           type="button"
           class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-white text-ink"
@@ -356,8 +354,8 @@ onUnmounted(() => observer?.disconnect())
 
         <LocaleToggle />
         <ThemeToggle />
-      </div>
-    </header>
+      </template>
+    </AppTopBar>
 
     <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
       <aside
@@ -487,6 +485,10 @@ onUnmounted(() => observer?.disconnect())
 <style scoped>
 .docs-shell {
   --docs-header-h: 3rem;
+}
+
+.docs-main {
+  scroll-padding-top: calc(var(--docs-header-h) + 0.75rem);
 }
 
 .docs-main :deep(h1),
