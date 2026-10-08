@@ -2,7 +2,7 @@
 
 > 🌍 **Language / Ngôn ngữ:** [🇻🇳 Tiếng Việt](./README.md) | [🇬🇧 English](./README-en.md)
 
-Complete knowledge base for **Senior Frontend Developer** interviews, focusing on **Vue 3**, **TypeScript**, and modern ecosystem.
+Interview prep for **Senior Frontend Developer** — **Vue 3**, **TypeScript**, and the modern ecosystem. Notes are written for **live rounds** (tradeoffs, failure modes, how you would ship), not as a textbook.
 
 ---
 
@@ -43,7 +43,7 @@ Add a UI module: [STRUCTURE.md](./STRUCTURE.md). Content tracks: [`modules/READM
 
 ## 📚 Document Structure
 
-The documentation is organized into 6 main groups with 22 topics, from basic to advanced:
+The documentation is organized into 6 main groups with 22 topics. Read them as interview coaching, not a course: each section is a scenario, a senior answer, tradeoffs, production gotchas, and follow-ups.
 
 ### I. Core Web Technologies
 
@@ -51,7 +51,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
    1.1. [Core Concepts](./documents/en/javascript.md#11-core-concepts): [High-order Array Functions](./documents/en/javascript.md#111-high-order-array-functions), [Promise/Async-Await](./documents/en/javascript.md#112-promise-vs-asyncawait), [Event Loop](./documents/en/javascript.md#113-event-loop-microtask-macrotask), [var vs let vs const](./documents/en/javascript.md#114-var-vs-let-vs-const)
 
-   1.2. [Advanced](./documents/en/javascript.md#12-advanced-concepts): [Closure & Scope](./documents/en/javascript.md#121-closure--scope), [Prototypes](./documents/en/javascript.md#122-prototypes--inheritance), [`this`](./documents/en/javascript.md#123-this-keyword), [ES6+](./documents/en/javascript.md#124-es6-modern-features), [Memory Management](./documents/en/javascript.md#125-memory-management--garbage-collection), [Hoisting](./documents/en/javascript.md#126-hoisting--temporal-dead-zone)
+   1.2. [Advanced](./documents/en/javascript.md#12-advanced-concepts): [Closure & Scope](./documents/en/javascript.md#121-closure--scope), [Prototypes](./documents/en/javascript.md#122-prototypes--inheritance), [`this`](./documents/en/javascript.md#123-this-keyword), [ES6+](./documents/en/javascript.md#124-es6-modern-features), [Memory Management](./documents/en/javascript.md#125-memory-management--garbage-collection), [Hoisting](./documents/en/javascript.md#126-hoisting--temporal-dead-zone), [AbortController & cancellation](./documents/en/javascript.md#127-abortcontroller-concurrency-and-cancellation)
 
 2. **[TypeScript](./documents/en/typescript.md)**
 
@@ -63,13 +63,13 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
    3.1. [Flexbox](./documents/en/css-layout.md#31-flexbox) vs [CSS Grid](./documents/en/css-layout.md#32-css-grid)
 
-   3.2. [Responsive Design Strategy](./documents/en/css-layout.md#34-responsive-design-strategy)
+   3.2. [Responsive Design Strategy](./documents/en/css-layout.md#34-responsive-design-strategy), [stacking / overflow](./documents/en/css-layout.md#35-stacking-context-and-z-index), [modern layout](./documents/en/css-layout.md#37-modern-layout-subgrid-has-cascade-layers)
 
 4. **[Browser & Web APIs](./documents/en/web-apis.md)**
 
    4.1. [IndexedDB](./documents/en/web-apis.md#41-indexeddb), [Web Workers](./documents/en/web-apis.md#42-web-workers), [Service Workers](./documents/en/web-apis.md#43-service-workers--pwa)
 
-   4.2. [Intersection Observer](./documents/en/web-apis.md#44-intersection-observer), [Modern APIs](./documents/en/web-apis.md#45-modern-apis)
+   4.2. [Intersection Observer](./documents/en/web-apis.md#44-intersection-observer), [Modern APIs](./documents/en/web-apis.md#45-modern-apis), [multi-tab auth](./documents/en/web-apis.md#46-broadcastchannel-and-storage-events-multi-tab-auth)
 
 ---
 
@@ -79,13 +79,13 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
    5.1. [Core Concepts](./documents/en/vue3.md#51-core-concepts): [Virtual DOM](./documents/en/vue3.md#511-virtual-dom), [Composition API](./documents/en/vue3.md#512-options-api-vs-composition-api), [Reactivity](./documents/en/vue3.md#5110-reactivity-setup-computed-watch), [Lifecycle](./documents/en/vue3.md#5111-lifecycle-vue-2-vs-vue-3), [Props](./documents/en/vue3.md#515-props-passing-data-from-parent-to-child), [Computed](./documents/en/vue3.md#516-computed-vs-method), [Watch](./documents/en/vue3.md#517-computed-vs-watch)
 
-   5.2. [Advanced Features](./documents/en/vue3.md#52-advanced-features): [Teleport](./documents/en/vue3.md#521-teleport), [Suspense](./documents/en/vue3.md#522-suspense), [Custom Directives](./documents/en/vue3.md#523-custom-directives), [Plugins](./documents/en/vue3.md#524-plugins), [Render Functions](./documents/en/vue3.md#525-render-functions--jsx), [Provide/Inject](./documents/en/vue3.md#526-provide--inject)
+   5.2. [Advanced Features](./documents/en/vue3.md#52-advanced-features): [Teleport](./documents/en/vue3.md#521-teleport), [Suspense](./documents/en/vue3.md#522-suspense), [Custom Directives](./documents/en/vue3.md#523-custom-directives), [Plugins](./documents/en/vue3.md#524-plugins), [Render Functions](./documents/en/vue3.md#525-render-functions--jsx), [Provide/Inject](./documents/en/vue3.md#526-provide--inject), [slots / keep-alive / hydration](./documents/en/vue3.md#528-slots--scoped-slots)
 
 6. **[Nuxt.js](./documents/en/nuxt.md)**
 
    6.1. [Nuxt vs Vue](./documents/en/nuxt.md#62-nuxt-vs-vue)
 
-   6.2. [CSR vs SSR vs SSG vs SPA](./documents/en/nuxt.md#63-csr-vs-ssr-vs-ssg-vs-spa)
+   6.2. [CSR vs SSR vs SSG vs SPA](./documents/en/nuxt.md#63-csr-vs-ssr-vs-ssg-vs-spa), [data fetching](./documents/en/nuxt.md#65-useasyncdata-vs-usefetch-vs-fetch), [hydration](./documents/en/nuxt.md#68-hydration-clientonly-lazy-hydration)
 
 7. **[State Management](./documents/en/state-management.md)**
 
@@ -93,7 +93,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
    7.2. [State Flow](./documents/en/state-management.md#72-state-flow), [commit vs dispatch](./documents/en/state-management.md#74-vuex-commit-vs-dispatch)
 
-   7.3. [Global vs Local State](./documents/en/state-management.md#73-when-to-use-global-vs-local-state)
+   7.3. [Global vs Local State](./documents/en/state-management.md#73-when-to-use-global-vs-local-state), [SSR hydration](./documents/en/state-management.md#76-ssr-hydration-of-stores), [server cache vs store](./documents/en/state-management.md#77-server-cache-vs-client-store)
 
 ---
 
@@ -131,13 +131,13 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
     11.3. [E2E Testing (Playwright)](./documents/en/testing.md#83-e2e-testing-with-playwright)
 
-    11.4. [Test Coverage](./documents/en/testing.md#84-test-coverage), [TDD/BDD](./documents/en/testing.md#85-tddbdd-methodology)
+    11.4. [Test Coverage](./documents/en/testing.md#84-test-coverage), [TDD/BDD](./documents/en/testing.md#85-tddbdd-methodology), [contracts / visual / legacy](./documents/en/testing.md#86-contract-tests-visual-regression-and-legacy-vue)
 
 12. **[Performance & Optimization](./documents/en/performance.md)** ⚡
 
     12.1. [Core Performance](./documents/en/performance.md#91-core-performance): [Storage](./documents/en/performance.md#911-storage-localstorage-vs-sessionstorage-vs-cookie), [Optimization](./documents/en/performance.md#912-performance-optimization), [Code Review](./documents/en/performance.md#913-code-review-checklist)
 
-    12.2. [Advanced](./documents/en/performance.md#92-advanced-optimization): [Code Splitting](./documents/en/performance.md#921-code-splitting-strategies), [Tree Shaking](./documents/en/performance.md#922-tree-shaking), [Debounce/Throttle](./documents/en/performance.md#923-debounce-vs-throttle), [Image/Font](./documents/en/performance.md#924-image--font-optimization)
+    12.2. [Advanced](./documents/en/performance.md#92-advanced-optimization): [Code Splitting](./documents/en/performance.md#921-code-splitting-strategies), [Tree Shaking](./documents/en/performance.md#922-tree-shaking), [Debounce/Throttle](./documents/en/performance.md#923-debounce-vs-throttle), [Image/Font](./documents/en/performance.md#924-image--font-optimization), [Core Web Vitals](./documents/en/performance.md#925-core-web-vitals-in-2026)
 
 13. **[Security](./documents/en/security.md)** 🔒
 
@@ -147,7 +147,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
     13.3. [Authentication Best Practices](./documents/en/security.md#103-authentication-best-practices)
 
-    13.4. [Input Validation](./documents/en/security.md#104-input-validation-and-sanitization), [HTTPS & CORS](./documents/en/security.md#105-https--cors)
+    13.4. [Input Validation](./documents/en/security.md#104-input-validation--sanitization), [HTTPS & CORS](./documents/en/security.md#105-https--cors), [supply chain](./documents/en/security.md#106-supply-chain-security), [secrets](./documents/en/security.md#107-secrets-in-vite-and-nuxt)
 
 14. **[Accessibility (A11y)](./documents/en/accessibility.md)** ♿
 
@@ -157,7 +157,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
     14.3. [Semantic HTML](./documents/en/accessibility.md#113-semantic-html)
 
-    14.4. [WCAG Guidelines](./documents/en/accessibility.md#114-wcag-guidelines)
+    14.4. [WCAG Guidelines](./documents/en/accessibility.md#114-wcag-guidelines), [CI + design-system a11y](./documents/en/accessibility.md#115-testing-a11y-in-ci-and-design-system-prs)
 
 ---
 
@@ -165,15 +165,15 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
 15. **[Build Tools](./documents/en/build-tools.md)**
 
-    15.1. [Vite vs Webpack](./documents/en/build-tools.md#121-vite-vs-webpack)
+    15.1. [Vite vs Webpack](./documents/en/build-tools.md#121-vite-vs-webpack), [CI builds](./documents/en/build-tools.md#122-ci-build-performance), [3MB chunk debug](./documents/en/build-tools.md#123-how-youd-debug-a-3mb-main-chunk)
 
 16. **[Networking](./documents/en/networking.md)**
 
-    16.1. [REST vs WebSocket](./documents/en/networking.md#131-websocket-vs-rest)
+    16.1. [REST vs WebSocket](./documents/en/networking.md#131-websocket-vs-rest), [REST from FE](./documents/en/networking.md#132-rest-design-from-the-frontend), [optimistic UI](./documents/en/networking.md#133-loading-error-empty-and-optimistic-ui)
 
 17. **[DevOps](./documents/en/devops.md)**
 
-    17.1. [GitOps & ArgoCD Pipeline](./documents/en/devops.md#141-gitops--argocd-pipeline)
+    17.1. [GitOps & ArgoCD Pipeline](./documents/en/devops.md#141-gitops--argocd-pipeline), [FE CI/CD](./documents/en/devops.md#142-frontend-cicd-pipeline-youd-design), [feature flags](./documents/en/devops.md#144-feature-flags)
 
 ---
 
@@ -187,7 +187,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
     18.3. [SOLID Principles](./documents/en/architecture.md#153-solid-principles-in-frontend)
 
-    18.4. [Module Federation & Micro-frontends](./documents/en/architecture.md#154-module-federation--micro-frontends)
+    18.4. [Module Federation & Micro-frontends](./documents/en/architecture.md#154-module-federation--micro-frontends), [feature folders](./documents/en/architecture.md#155-folder-and-feature-architecture)
 
 19. **[System Design](./documents/en/system-design.md)**
 
@@ -195,7 +195,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
     19.2. [Caching Strategies](./documents/en/system-design.md#162-caching-strategies)
 
-    19.3. [Component Library Design](./documents/en/system-design.md#163-component-library-design)
+    19.3. [Component Library Design](./documents/en/system-design.md#163-component-library-design), [dashboard design](./documents/en/system-design.md#164-example-design-a-large-dashboard), [marketing+app hybrid](./documents/en/system-design.md#165-example-design-a-high-traffic-marketing--app-hybrid)
 
 20. **[Leadership & Soft Skills](./documents/en/leadership.md)** 👥
 
@@ -205,7 +205,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
     20.3. [Complexity Estimation](./documents/en/leadership.md#173-complexity-estimation)
 
-    20.4. [Conflict Resolution](./documents/en/leadership.md#174-conflict-resolution)
+    20.4. [Conflict Resolution](./documents/en/leadership.md#174-conflict-resolution), [pushing back](./documents/en/leadership.md#175-saying-no--pushing-back-on-pm), [review as leadership](./documents/en/leadership.md#176-code-review-as-leadership)
 
 21. **[Practical Interview Questions](./documents/en/practical-questions.md)** 💼
 
@@ -219,7 +219,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
     21.5. [Resolving Git Conflicts](./documents/en/practical-questions.md#185-resolving-git-conflicts)
 
-    21.6. [Squashing Commits](./documents/en/practical-questions.md#186-squashing-commits)
+    21.6. [Squashing Commits](./documents/en/practical-questions.md#186-squashing-commits), [incidents](./documents/en/practical-questions.md#187-how-you-handle-a-production-incident-as-frontend), [week-1 onboarding](./documents/en/practical-questions.md#188-how-you-onboard-onto-an-unknown-vue-codebase-in-week-1)
 
 22. **[Monitoring & Error Handling](./documents/en/monitoring.md)** 📊
 
@@ -229,7 +229,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 
     22.3. [Performance Monitoring](./documents/en/monitoring.md#193-performance-monitoring)
 
-    22.4. [Logging Strategy](./documents/en/monitoring.md#194-logging-strategy)
+    22.4. [Logging Strategy](./documents/en/monitoring.md#194-logging-strategy), [alerting](./documents/en/monitoring.md#195-alerting), [error-spike playbook](./documents/en/monitoring.md#196-feature-flag--error-spike-playbook)
 
 ---
 
@@ -240,7 +240,7 @@ The documentation is organized into 6 main groups with 22 topics, from basic to 
 - **Total Sections**: 100+ sub-topics
 - **Code Examples**: 200+ real-world examples
 - **Comparison Tables**: 20+ decision matrices
-- **Level**: Senior Frontend Developer
+- **Level**: Senior Frontend Developer (interview judgment, not curriculum)
 
 ---
 
@@ -302,6 +302,6 @@ If you find this documentation helpful:
 
 **Good luck with your Senior Frontend Developer interview! 🚀**
 
-_Last updated: September 2026_
-_Version: 3.2 (State Management React — 6 main groups, 22 topics)_
+_Last updated: October 2026_
+_Version: 3.3 (Senior interview rewrite — same 22 topics, production judgment)_
 
