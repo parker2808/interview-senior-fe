@@ -1,74 +1,82 @@
-# Day 29 — Lab setup
+# Day 29 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Polish repo để trông như project có thể show trong interview.
+- **EN:** Polish the repo so it looks like something you can show in an interview.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng cả 2 app, UI package, algorithms và notes hiện có.
+- **EN:** Reuse both apps, the UI package, algorithms, and the existing notes.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `README.md`
+- `notes/day-29.md`
+- `apps/vue-nuxt/`
+- `apps/react-next/`
+- `algorithms/day-29/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm lint
+pnpm typecheck
+pnpm test:algo -- day-29
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Cập nhật README với repo map, script chính và demo path.
+   - EN: Update the README with the repo map, key scripts, and demo paths.
+2. Thêm mục What I would improve next.
+   - EN: Add a What I would improve next section.
+3. Chạy lint/typecheck và sửa lỗi cuối.
+   - EN: Run lint/typecheck and fix the last small issues.
+
+## Done when / Tiêu chí xong
+
+- README có tính showcase.
+  - EN: The README feels showcase-ready.
+- Lint/typecheck sạch.
+  - EN: Lint/typecheck are clean.
+- Có next-step section trung thực.
+  - EN: There is an honest next-step section.
+
+## Stretch goal
+
+- Thêm changelog ngắn.
+  - EN: Add a short changelog.
+
+## Hints
+
+- README nên tối ưu để người lạ đọc nhanh.
+  - EN: Optimize the README for a stranger reading fast.
+
+## Algorithm task
+
+- **Problem:** 8 patterns flashcards + 1 random
+- **Constraints:**
+- 15′
+- **Hint:** Trigger sentence = “khi đề hỏi … nghĩ …”.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-29/solution.ts
+algorithms/day-29/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-29`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/next/app/day-29/ (hoặc route tương ứng)` |
-| App dev | `apps/next` |
-| Algo | `algo/day-29/` |
+Open the full prompt: [day-29.md](../artifacts/algo/problems/day-29.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:next
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-29.md
-npm run algo:test:day -- 29
+```text
+day-29: polish repo README and scripts
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Polish Next page: empty/error copy, basic a11y, remove console noise.
-
-### Algo — 8 patterns flashcards + 1 random
-1. Mở đề: [day-29.md](../artifacts/algo/problems/day-29.md)
-2. Implement `algo/day-29/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 29` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-29: DoD + delivery notes"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-29` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

@@ -1,74 +1,78 @@
-# Day 25 — Lab setup
+# Day 25 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Biến repo thành material cho behavioral round.
+- **EN:** Turn the repo into material for the behavioral round.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng toàn bộ thứ đã build để viết story thật.
+- **EN:** Reuse everything you have built to write real stories.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `notes/interview/`
+- `README.md`
+- `algorithms/day-25/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm test:algo -- day-25
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Tạo self-intro và impact-story note.
+   - EN: Create self-intro and impact-story notes.
+2. Thêm mục What this repo demonstrates vào README.
+   - EN: Add a What this repo demonstrates section to the README.
+3. Ghi 3 bullet kiến trúc có thể dùng khi present repo.
+   - EN: Write 3 architecture bullets you can reuse while presenting the repo.
+
+## Done when / Tiêu chí xong
+
+- Có 2 note behavioral.
+  - EN: There are 2 behavioral notes.
+- README bắt đầu có tính showcase.
+  - EN: The README now feels showcase-ready.
+- Kiến trúc được tóm tắt bằng lời của bạn.
+  - EN: The architecture is summarized in your own words.
+
+## Stretch goal
+
+- Thu âm 60-90 giây self-intro.
+  - EN: Record a 60-90 second self-intro.
+
+## Hints
+
+- Giữ story đúng với code đang có.
+  - EN: Keep the story faithful to the actual code.
+
+## Algorithm task
+
+- **Problem:** Weak-topic drill #1
+- **Constraints:**
+- 2 bài, ≤40′ tổng
+- **Hint:** Viết template pattern 5 dòng trước.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-25/solution.ts
+algorithms/day-25/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-25`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/next/app/day-25/ (hoặc route tương ứng)` |
-| App dev | `apps/next` |
-| Algo | `algo/day-25/` |
+Open the full prompt: [day-25.md](../artifacts/algo/problems/day-25.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:next
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-25.md
-npm run algo:test:day -- 25
+```text
+day-25: add interview notes to repo
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab Next: form submit qua Server Action (mock), progressive enhancement note.
-
-### Algo — Weak-topic drill #1
-1. Mở đề: [day-25.md](../artifacts/algo/problems/day-25.md)
-2. Implement `algo/day-25/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 25` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-25: AI-assisted + Server Actions"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-25` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

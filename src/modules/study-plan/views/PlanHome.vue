@@ -62,6 +62,9 @@ const labels = computed(() =>
         quickDocs: 'Quick resources',
         overview: 'What the rebuilt plan emphasizes',
         overviewSub: 'Keep each day around 2 hours: short reading, targeted Q&A, one small hands-on task, and one algorithm problem.',
+        setupTitle: 'Day 0 / Setup once',
+        setupBody: 'Create one practice repo for all 30 days, then keep reusing it instead of spinning up a new sandbox every day.',
+        setupCta: 'Open shared lab setup',
         gaps: 'Content gaps to keep in mind',
         resources: {
           plan: '30-day overview',
@@ -81,6 +84,9 @@ const labels = computed(() =>
         quickDocs: 'Tài liệu nhanh',
         overview: 'Trọng tâm của plan mới',
         overviewSub: 'Giữ mỗi ngày khoảng 2 giờ: đọc ngắn, luyện Q&A có mục tiêu, một task hands-on nhỏ và một bài thuật toán.',
+        setupTitle: 'Day 0 / Setup một lần',
+        setupBody: 'Tạo một practice repo dùng chung cho cả 30 ngày, rồi tái sử dụng nó xuyên suốt thay vì mở sandbox mới mỗi ngày.',
+        setupCta: 'Mở hướng dẫn setup repo',
         gaps: 'Khoảng trống nên biết',
         resources: {
           plan: 'Tổng quan 30 ngày',
@@ -223,6 +229,23 @@ function openResource(path: string) {
       <p class="mt-2 max-w-3xl text-sm leading-6 text-ink-muted">
         {{ labels.overviewSub }}
       </p>
+      <div class="mt-4 rounded-xl border border-line bg-surface p-3 sm:flex sm:items-center sm:justify-between sm:gap-4">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
+            {{ labels.setupTitle }}
+          </p>
+          <p class="mt-1 text-sm leading-6 text-ink-muted">
+            {{ labels.setupBody }}
+          </p>
+        </div>
+        <button
+          type="button"
+          class="mt-3 min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink sm:mt-0"
+          @click="openResource('lab-repo.md')"
+        >
+          {{ labels.setupCta }}
+        </button>
+      </div>
       <p class="mt-4 text-xs font-semibold uppercase tracking-wider text-ink-faint">
         {{ labels.gaps }}
       </p>

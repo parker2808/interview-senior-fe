@@ -1,74 +1,79 @@
-# Day 27 — Lab setup
+# Day 27 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Polish vertical slice Vue để demo tự tin.
+- **EN:** Polish the Vue vertical slice so you can demo it confidently.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng toàn bộ flow Vue tuần 2.
+- **EN:** Reuse the full Week 2 Vue flow.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/vue-nuxt/`
+- `notes/day-27.md`
+- `algorithms/day-27/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:vue
+pnpm test:algo -- day-27
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Chọn 1 slice: customers list+detail hoặc field config.
+   - EN: Pick one slice: customers list+detail or field config.
+2. Polish state, copy và demo path cho slice đó.
+   - EN: Polish the states, copy, and demo path for that slice.
+3. Viết 3 trade-off trong note.
+   - EN: Write 3 trade-offs into the note.
+
+## Done when / Tiêu chí xong
+
+- Slice Vue demo được từ đầu tới cuối.
+  - EN: The Vue slice is demoable end to end.
+- Có trade-off note.
+  - EN: There is a trade-off note.
+- Có thể giới thiệu trong 2-3 phút.
+  - EN: You can present it in 2-3 minutes.
+
+## Stretch goal
+
+- Thêm screenshot vào README.
+  - EN: Add a screenshot to the README.
+
+## Hints
+
+- Một slice mạch lạc tốt hơn ba slice dang dở.
+  - EN: One coherent slice beats three half-finished ones.
+
+## Algorithm task
+
+- **Problem:** Big-O flashcards
+- **Constraints:**
+- 10′
+- **Hint:** Viết bảng 6 dòng.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-27/solution.ts
+algorithms/day-27/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-27`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/vue-spike (spike Capstone)` |
-| App dev | `apps/vue-spike` |
-| Algo | `algo/day-27/` |
+Open the full prompt: [day-27.md](../artifacts/algo/problems/day-27.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:vue
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-27.md
-npm run algo:test:day -- 27
+```text
+day-27: polish vue vertical slice
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Parity note: liệt kê API/composable sẽ map sang hooks ngày mai (bảng Vue→React).
-
-### Algo — Big-O flashcards
-1. Mở đề: [day-27.md](../artifacts/algo/problems/day-27.md)
-2. Implement `algo/day-27/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 27` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-27: Capstone Vue spike"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-27` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

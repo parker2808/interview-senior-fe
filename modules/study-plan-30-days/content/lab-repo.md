@@ -1,83 +1,99 @@
-# Companion lab repo — nơi lưu code mỗi ngày
+# Day 0 / Setup một lần cho toàn bộ lab repo
 
-Hub plan (repo này) giữ **lý thuyết + worksheet + đề bài**.  
-Code chạy được (React/Next/Vue spike + algo tests) nên nằm ở **repo lab riêng** để bạn commit/push hàng ngày.
+> VI trước, EN ngay bên dưới. Dùng **một** practice repo cho cả 30 ngày thay vì tạo sandbox mới mỗi ngày.
 
-## Khuyến nghị cấu trúc (ý tưởng tốt hơn “nhét hết vào Nuxt hub”)
+## Mục tiêu / Goal
 
-| Cách | Ưu | Nhược | Kết luận |
-|---|---|---|---|
-| Code trong Nuxt hub | 1 repo | Lẫn với product hub, khó Vite/Next song song | Không nên |
-| Nhiều repo rời (mỗi ngày 1) | Tách biệt | Rối, không tái sử dụng | Không nên |
-| **1 companion monorepo `senior-fe-lab`** | Đúng “push mỗi ngày”, tách apps, có test algo | Phải clone thêm 1 repo | **Chọn cái này** |
+- **VI:** tạo một monorepo đủ nhẹ để bạn build lại design-system pieces, Vue/Nuxt flow, React/Next flow, thuật toán và note phỏng vấn trong cùng một chỗ.
+- **EN:** create one lightweight monorepo so the design-system work, the Vue/Nuxt flow, the React/Next flow, the algorithm work, and the interview notes all live in one place.
 
-## Tạo repo lab (một lần — Day 1 hoặc Day 6)
-
-```bash
-# 1) Tạo repo trống trên GitHub, ví dụ: parker2808/senior-fe-lab
-git clone git@github.com:YOUR_USER/senior-fe-lab.git
-cd senior-fe-lab
-
-# 2) Bootstrap (copy từ template trong plan hub)
-# Từ máy bạn, trong repo interview-senior-fe:
-cp -R modules/study-plan-30-days/lab-template/. ../senior-fe-lab/
-cd ../senior-fe-lab
-npm install
-```
-
-Hoặc tự tạo theo cây thư mục:
+## Cấu trúc khuyến nghị / Recommended structure
 
 ```text
 senior-fe-lab/
 ├── README.md
-├── package.json              # workspaces
+├── package.json
+├── pnpm-workspace.yaml
+├── tsconfig.base.json
 ├── apps/
-│   ├── react/                # Vite React+TS (Day 1–19 labs)
-│   ├── next/                 # Next App Router (Day 20+)
-│   └── vue-spike/            # Day 27 Capstone Vue
-├── algo/
+│   ├── vue-nuxt/
+│   └── react-next/
+├── packages/
+│   └── ui/
+├── algorithms/
 │   ├── day-01/
-│   │   ├── solution.ts
-│   │   └── solution.test.ts
-│   ├── day-02/
-│   │   └── ...
 │   └── ...
-└── notes/                    # optional: mirror worksheet answers
+└── notes/
+    ├── interview/
+    └── day-01.md
 ```
 
-## Flow làm việc mỗi ngày (quan trọng)
+## Tooling / Công cụ nên có
+
+- **VI:** `pnpm` workspace, TypeScript, ESLint, Prettier, Vitest; Storybook (hoặc playground route) cho `packages/ui` nếu hợp tay.
+- **EN:** `pnpm` workspace, TypeScript, ESLint, Prettier, Vitest; Storybook (or a small playground route) for `packages/ui` if it feels worth the setup.
+
+## Lệnh bootstrap tối thiểu / Minimal bootstrap commands
+
+```bash
+mkdir senior-fe-lab && cd senior-fe-lab
+pnpm init
+
+# workspace file
+printf "packages:\n  - apps/*\n  - packages/*\n" > pnpm-workspace.yaml
+
+# shared tooling
+pnpm add -D typescript eslint prettier vitest @types/node
+
+# Vue / Nuxt app
+pnpm dlx nuxi@latest init apps/vue-nuxt
+
+# React / Next app
+pnpm create next-app@latest apps/react-next --ts --eslint --app --src-dir=false --import-alias "@/*"
+
+# shared UI package + support folders
+mkdir -p packages/ui/src algorithms notes/interview
+```
+
+## Root scripts gợi ý / Suggested root scripts
+
+```json
+{
+  "scripts": {
+    "dev:vue": "pnpm --dir apps/vue-nuxt dev",
+    "dev:next": "pnpm --dir apps/react-next dev",
+    "storybook:ui": "pnpm --dir packages/ui storybook",
+    "test:ui": "pnpm --dir packages/ui vitest",
+    "test:algo": "node scripts/run-algo-test.mjs",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  }
+}
+```
+
+> **VI:** nếu Storybook thấy nặng, thay bằng một route playground nhỏ trong mỗi app.
+> **EN:** if Storybook feels too heavy, replace it with one small playground route in each app.
+
+## Commit convention / Cách đặt commit
+
+- **VI:** dùng đúng format `day-XX: ...` để nhìn lịch sử commit là thấy tiến độ.
+- **EN:** use the `day-XX: ...` convention so the git history reads like the 30-day progression.
+
+Ví dụ / Examples:
 
 ```text
-1. Mở Plan hub → Day N
-2. Tab "Hướng dẫn"  → đọc Lý thuyết + Thực hành (checklist)
-3. Tab "Worksheet"  → điền Capstone / artifact (docs)
-4. Tab "Lab setup"  → làm đúng lệnh setup + biết folder hôm nay
-5. Làm bài trong senior-fe-lab:
-     - apps/react hoặc apps/next  → practice FE
-     - algo/day-NN                → đề nằm ở plan hub, code + test ở lab
-6. Commit & push:
-     git add -A && git commit -m "day-NN: <theme>" && git push
-7. Quay lại Plan hub → tick Checkpoint → đánh dấu Day done
+day-01: bootstrap repo and token seed
+day-12: make vue list responsive
+day-21: finish next customer mini demo
+day-30: finalize demoable interview repo
 ```
 
-**Đề thuật toán ở đâu?**  
-Trong plan hub: `artifacts/algo/problems/day-NN.md` (và tab Lab / Algo track).  
-**Bạn không copy đề vào lab** — chỉ viết `solution.ts` + test.
+## Cloud IDE option / Tùy chọn StackBlitz hoặc CodeSandbox
 
-## Convention commit
+- **VI:** nếu không muốn setup local ngay, import **cả repo** vào StackBlitz hoặc CodeSandbox một lần, rồi tiếp tục trên cùng workspace suốt 30 ngày.
+- **EN:** if you do not want local setup immediately, import the **whole repo** into StackBlitz or CodeSandbox once and keep working inside that same workspace for all 30 days.
 
-```text
-day-01: two-sum + hello react
-day-15: api contract + react-query customers
-day-28: capstone react spike parity
-```
+## Rule quan trọng / Important rule
 
-## Link repo của bạn
-
-Điền URL lab vào đây (và vào README lab):
-
-```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
-```
-
-Mỗi file `lab/day-NN-lab.md` sẽ nhắc path trong lab; thay `YOUR_USER` cho khớp.
+- **VI:** từ Day 2 trở đi, **không lặp lại setup**. Mỗi ngày chỉ nói rõ folder nào sửa, build gì, reuse gì từ ngày trước và commit message là gì.
+- **EN:** from Day 2 onward, **do not repeat setup**. Each day should only say which folders to touch, what to build, what it reuses from earlier days, and the suggested commit message.

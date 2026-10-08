@@ -22,7 +22,7 @@ const emit = defineEmits<{
   'open-docs': [payload: { lang: string; slug: string; hash?: string }]
 }>()
 
-type DayTab = 'plan' | 'worksheet' | 'lab'
+type DayTab = 'plan' | 'lab'
 const { locale } = useI18n()
 
 const lang = computed<'en' | 'vi'>(() =>
@@ -33,8 +33,9 @@ const labels = computed(() =>
   lang.value === 'en'
     ? {
         plan: 'Plan',
-        worksheet: 'Worksheet',
-        lab: 'Lab setup',
+        lab: 'Lab',
+        artifact: 'Optional prompt / artifact',
+        artifactOpen: 'Open prompt',
         doneLabel: 'Done',
         done: 'Mark done',
         doneReadOnly: 'Done (view only)',
@@ -44,8 +45,9 @@ const labels = computed(() =>
       }
     : {
         plan: 'Plan',
-        worksheet: 'Worksheet',
-        lab: 'Lab setup',
+        lab: 'Lab',
+        artifact: 'Prompt / artifact bổ sung',
+        artifactOpen: 'Mở prompt',
         doneLabel: 'Đã xong',
         done: 'Đánh dấu xong',
         doneReadOnly: 'Đã xong (xem)',
@@ -66,7 +68,6 @@ watch(
 )
 
 const activePath = computed(() => {
-  if (tab.value === 'worksheet') return props.day.worksheet
   if (tab.value === 'lab') return props.day.lab
   return ''
 })
@@ -156,16 +157,6 @@ function onDocClick(e: MouseEvent) {
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-        :class="tab === 'worksheet' ? 'bg-accent text-[var(--bg-elevated)]' : 'border border-line bg-surface-elevated text-ink'"
-        :aria-selected="tab === 'worksheet'"
-        @click="tab = 'worksheet'"
-      >
-        {{ labels.worksheet }}
-      </button>
-      <button
-        type="button"
-        role="tab"
-        class="min-h-10 rounded-lg px-3 text-sm font-semibold"
         :class="tab === 'lab' ? 'bg-accent text-[var(--bg-elevated)]' : 'border border-line bg-surface-elevated text-ink'"
         :aria-selected="tab === 'lab'"
         @click="tab = 'lab'"
@@ -176,12 +167,26 @@ function onDocClick(e: MouseEvent) {
 
     <PlanDayContent v-if="tab === 'plan' && planContent" :content="planContent" />
 
-    <p v-else class="mb-4 font-mono text-xs text-ink-faint">
-      <code>{{ activePath }}</code>
-    </p>
+    <div
+      v-if="tab === 'plan' && day.worksheet"
+      class="mt-4 rounded-xl border border-dashed border-line bg-surface p-3"
+    >
+      <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
+        {{ labels.artifact }}
+      </p>
+      <p class="mt-2 text-sm leading-6 text-ink-muted">
+        <button
+          type="button"
+          class="inline-flex min-h-10 items-center rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
+          @click="$emit('open-doc', day.worksheet)"
+        >
+          {{ labels.artifactOpen }}
+        </button>
+      </p>
+    </div>
 
     <div
-      v-if="tab !== 'plan'"
+      v-if="tab === 'lab'"
       class="prose-doc"
       v-html="html"
       @click="onDocClick"

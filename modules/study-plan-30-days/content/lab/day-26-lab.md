@@ -1,74 +1,81 @@
-# Day 26 — Lab setup
+# Day 26 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Thêm tests và checklist review cho repo.
+- **EN:** Add tests and a review checklist to the repo.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng flow Vue hoặc Next đại diện nhất.
+- **EN:** Reuse whichever Vue or Next flow is the most representative.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `packages/ui/src/**/__tests__/`
+- `apps/react-next/**/__tests__/`
+- `notes/day-26.md`
+- `algorithms/day-26/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm test:ui
+pnpm test:next  # or vitest/rtl
+pnpm test:algo -- day-26
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Viết 1 test cho shared primitive và 1 test cho page flow.
+   - EN: Write 1 test for a shared primitive and 1 test for a page flow.
+2. Tạo checklist review correctness/a11y/perf/security/tests.
+   - EN: Create a review checklist for correctness/accessibility/performance/security/tests.
+3. Chạy test và ghi kết quả ngắn.
+   - EN: Run the tests and note the short result.
+
+## Done when / Tiêu chí xong
+
+- Ít nhất 2 test xanh.
+  - EN: At least 2 tests are green.
+- Có checklist review.
+  - EN: There is a review checklist.
+- Biết phần nào còn thiếu coverage.
+  - EN: You know what still lacks coverage.
+
+## Stretch goal
+
+- Thêm sample CI workflow.
+  - EN: Add a sample CI workflow.
+
+## Hints
+
+- Test behavior quan trọng, không test implementation detail.
+  - EN: Test important behavior, not implementation detail.
+
+## Algorithm task
+
+- **Problem:** Weak-topic drill #2
+- **Constraints:**
+- 20′ + reflection
+- **Hint:** So trigger với ngày trước.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-26/solution.ts
+algorithms/day-26/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-26`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/next/app/day-26/ (hoặc route tương ứng)` |
-| App dev | `apps/next` |
-| Algo | `algo/day-26/` |
+Open the full prompt: [day-26.md](../artifacts/algo/problems/day-26.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:next
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-26.md
-npm run algo:test:day -- 26
+```text
+day-26: add tests and review checklist
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab Next: Customers List page theo AC Day 5 (mock data) — loading/empty/error/table.
-
-### Algo — Weak-topic drill #2
-1. Mở đề: [day-26.md](../artifacts/algo/problems/day-26.md)
-2. Implement `algo/day-26/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 26` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-26: Code review + Next Capstone page"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-26` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

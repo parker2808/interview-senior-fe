@@ -1,74 +1,79 @@
-# Day 13 — Lab setup
+# Day 13 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Thêm flow edit có keyboard support trong Vue app.
+- **EN:** Add an edit flow with keyboard support in the Vue app.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng FormField/TextField Day 3 và flow hiện có.
+- **EN:** Reuse the Day 3 form primitives and the current flow.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/vue-nuxt/components/customers/`
+- `notes/day-13.md`
+- `algorithms/day-13/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:vue
+pnpm test:algo -- day-13
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Mở editor từ row hoặc detail panel.
+   - EN: Open the editor from the row or detail panel.
+2. Thêm ESC để đóng, return focus và focus visible rõ.
+   - EN: Add ESC to close, return focus, and visible focus treatment.
+3. Ghi 5 a11y checks đã tự test.
+   - EN: Write down 5 accessibility checks you tested manually.
+
+## Done when / Tiêu chí xong
+
+- Flow edit mở/đóng được.
+  - EN: The edit flow opens and closes.
+- ESC và return focus hoạt động.
+  - EN: ESC and return focus work.
+- Có checklist a11y đã tick.
+  - EN: There is a checked accessibility list.
+
+## Stretch goal
+
+- Thêm initial focus thông minh cho field đầu tiên.
+  - EN: Add smarter initial focus on the first field.
+
+## Hints
+
+- Hiểu cơ chế là đủ, chưa cần modal hoàn hảo.
+  - EN: Understanding the mechanics is enough; the modal does not need to be perfect.
+
+## Algorithm task
+
+- **Problem:** Linked List Cycle
+- **Constraints:**
+- Không dùng thêm O(n) Set nếu có thể (Floyd).
+- **Hint:** slow/fast: nếu gặp nhau → cycle.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-13/solution.ts
+algorithms/day-13/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-13`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-13/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-13/` |
+Open the full prompt: [day-13.md](../artifacts/algo/problems/day-13.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-13.md
-npm run algo:test:day -- 13
+```text
+day-13: add accessible vue edit flow
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: Modal bằng createPortal; Esc đóng; focus nút đầu; restore focus khi unmount.
-
-### Algo — Linked List Cycle
-1. Mở đề: [day-13.md](../artifacts/algo/problems/day-13.md)
-2. Implement `algo/day-13/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 13` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-13: A11y modal"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-13` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

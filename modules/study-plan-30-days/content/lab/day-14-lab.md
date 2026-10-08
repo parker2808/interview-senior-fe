@@ -1,74 +1,80 @@
-# Day 14 — Lab setup
+# Day 14 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Làm một pass keyboard và cleanup cho flow Vue.
+- **EN:** Run a keyboard pass and cleanup on the Vue flow.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng toàn bộ flow Vue Day 7-13.
+- **EN:** Reuse the full Vue flow from Days 7-13.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/vue-nuxt/`
+- `notes/day-14.md`
+- `algorithms/day-14/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:vue
+pnpm lint
+pnpm test:algo -- day-14
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Test Tab, Shift+Tab, Enter, ESC trên flow chính.
+   - EN: Test Tab, Shift+Tab, Enter, and ESC on the main flow.
+2. Sửa ít nhất 2 issue thật.
+   - EN: Fix at least 2 real issues.
+3. Ghi bug list + fix list vào note.
+   - EN: Write the bug list plus the fix list into the note.
+
+## Done when / Tiêu chí xong
+
+- Sửa được >=2 issue.
+  - EN: At least 2 issues are fixed.
+- Bug list đã ghi.
+  - EN: The bug list is written.
+- Flow vẫn ổn sau cleanup.
+  - EN: The flow still works after cleanup.
+
+## Stretch goal
+
+- Thêm smoke checklist script.
+  - EN: Add a smoke-checklist script.
+
+## Hints
+
+- Đừng thêm feature mới hôm nay.
+  - EN: Do not add new features today.
+
+## Algorithm task
+
+- **Problem:** Week 2 timed review
+- **Constraints:**
+- Self-score pass/partial/fail
+- **Hint:** Viết skeleton trước.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-14/solution.ts
+algorithms/day-14/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-14`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-14/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-14/` |
+Open the full prompt: [day-14.md](../artifacts/algo/problems/day-14.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-14.md
-npm run algo:test:day -- 14
+```text
+day-14: keyboard pass on vue flow
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: audit Day 13 Modal + form Day 3 bằng keyboard only; sửa 2 issue.
-
-### Algo — Week 2 timed review
-1. Mở đề: [day-14.md](../artifacts/algo/problems/day-14.md)
-2. Implement `algo/day-14/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 14` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-14: Keyboard review + week pack"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-14` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

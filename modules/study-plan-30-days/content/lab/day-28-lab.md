@@ -1,74 +1,79 @@
-# Day 28 — Lab setup
+# Day 28 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Đạt parity tương tự trên React/Next cho cùng slice.
+- **EN:** Reach similar parity on React/Next for the same slice.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng cùng domain và slice Day 27.
+- **EN:** Reuse the same domain and slice from Day 27.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/`
+- `notes/day-28.md`
+- `algorithms/day-28/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-28
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Polish cùng slice trong Next app để so sánh trực tiếp với Vue.
+   - EN: Polish the same slice in the Next app so it compares directly with Vue.
+2. Đảm bảo loading/error/action path đủ demo.
+   - EN: Make sure loading/error/action paths are demoable.
+3. Viết 3 khác biệt DX/architecture giữa Vue và Next.
+   - EN: Write 3 DX/architecture differences between Vue and Next.
+
+## Done when / Tiêu chí xong
+
+- Slice Next demo được.
+  - EN: The Next slice is demoable.
+- Có note so sánh Vue vs Next.
+  - EN: There is a Vue vs Next note.
+- Có thể demo 2 app cạnh nhau.
+  - EN: You can demo both apps side by side.
+
+## Stretch goal
+
+- Thêm smoke test cho slice Next.
+  - EN: Add a smoke test for the Next slice.
+
+## Hints
+
+- Feature parity quan trọng hơn polish pixel.
+  - EN: Feature parity matters more than pixel polish.
+
+## Algorithm task
+
+- **Problem:** Cooldown Easy
+- **Constraints:**
+- Optional nếu spike overtime
+- **Hint:** Có thể skip nếu spike chưa xong.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-28/solution.ts
+algorithms/day-28/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-28`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/next/app/day-28/ (hoặc route tương ứng)` |
-| App dev | `apps/next` |
-| Algo | `algo/day-28/` |
+Open the full prompt: [day-28.md](../artifacts/algo/problems/day-28.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:next
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-28.md
-npm run algo:test:day -- 28
+```text
+day-28: polish next parity slice
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Đây là ngày React chính: hoàn thiện slice + 1 test RTL smoke + note RSC/client boundary.
-
-### Algo — Cooldown Easy
-1. Mở đề: [day-28.md](../artifacts/algo/problems/day-28.md)
-2. Implement `algo/day-28/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 28` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-28: Capstone React/Next spike"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-28` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

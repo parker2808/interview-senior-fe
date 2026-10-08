@@ -1,74 +1,80 @@
-# Day 15 — Lab setup
+# Day 15 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Khởi động route Customers tương đương trong Next app.
+- **EN:** Start the equivalent Customers route in the Next app.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng schema, mock data và packages/ui từ Vue track.
+- **EN:** Reuse the schema, mock data, and packages/ui from the Vue track.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/app/customers/`
+- `apps/react-next/lib/`
+- `notes/day-15.md`
+- `algorithms/day-15/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-15
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Tạo route /customers.
+   - EN: Create the /customers route.
+2. Render list mock bằng shared UI package.
+   - EN: Render the mock list through the shared UI package.
+3. Viết note cách data vào Vue vs Next khác nhau ra sao.
+   - EN: Write how the data flow differs in Vue vs Next.
+
+## Done when / Tiêu chí xong
+
+- Next route render được.
+  - EN: The Next route renders.
+- Mock list reuse model cũ.
+  - EN: The mock list reuses the old model.
+- Có note so sánh Vue vs Next.
+  - EN: There is a Vue vs Next comparison note.
+
+## Stretch goal
+
+- Tạo lib fixtures dùng chung cho cả 2 app.
+  - EN: Create a shared fixtures lib for both apps.
+
+## Hints
+
+- Mục tiêu là domain parity, không phải pixel parity.
+  - EN: The goal is domain parity, not pixel parity.
+
+## Algorithm task
+
+- **Problem:** Binary Tree Level Order Traversal
+- **Constraints:**
+- 0 ≤ nodes ≤ 2000
+- **Hint:** Queue: mỗi vòng lấy size = queue.length = số node level hiện tại.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-15/solution.ts
+algorithms/day-15/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-15`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-15/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-15/` |
+Open the full prompt: [day-15.md](../artifacts/algo/problems/day-15.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-15.md
-npm run algo:test:day -- 15
+```text
+day-15: start next customers route
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: dùng @tanstack/react-query (hoặc SWR) load customers mock; loading/error/success states.
-
-### Algo — Binary Tree Level Order Traversal
-1. Mở đề: [day-15.md](../artifacts/algo/problems/day-15.md)
-2. Implement `algo/day-15/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 15` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-15: API contract + React Query"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-15` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

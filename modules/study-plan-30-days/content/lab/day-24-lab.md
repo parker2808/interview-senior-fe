@@ -1,74 +1,79 @@
-# Day 24 — Lab setup
+# Day 24 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Bổ sung guard/flag và checklist release cho repo.
+- **EN:** Add a guard/flag and a release checklist to the repo.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng dashboard hoặc customers route hiện có.
+- **EN:** Reuse the current dashboard or customers route.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/app/(admin)/`
+- `notes/day-24.md`
+- `algorithms/day-24/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-24
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Chọn auth gate nhẹ hoặc feature flag wrapper.
+   - EN: Pick either a light auth gate or a feature-flag wrapper.
+2. Viết security/release checklist đi kèm.
+   - EN: Write the companion security/release checklist.
+3. Đảm bảo UI giải thích rõ khi feature bị khóa.
+   - EN: Make sure the UI explains clearly when a feature is locked.
+
+## Done when / Tiêu chí xong
+
+- Có 1 guard/flag thật.
+  - EN: There is one real guard/flag.
+- Checklist release/security đã có.
+  - EN: The release/security checklist exists.
+- Blocked state dễ hiểu.
+  - EN: The blocked state is understandable.
+
+## Stretch goal
+
+- Thêm rollback note.
+  - EN: Add a rollback note.
+
+## Hints
+
+- Mục tiêu là decision-making, không phải auth system hoàn chỉnh.
+  - EN: The goal is decision-making, not a full auth system.
+
+## Algorithm task
+
+- **Problem:** Live coding simulation
+- **Constraints:**
+- Đúng 45′, có timer
+- **Hint:** Nói pattern trước khi gõ.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-24/solution.ts
+algorithms/day-24/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-24`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/next/app/day-24/ (hoặc route tương ứng)` |
-| App dev | `apps/next` |
-| Algo | `algo/day-24/` |
+Open the full prompt: [day-24.md](../artifacts/algo/problems/day-24.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:next
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-24.md
-npm run algo:test:day -- 24
+```text
+day-24: add release guard and checklist
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: chạy E2E trên Next/React lab (1 smoke) HOẶC script manual checklist nếu chưa cài PW.
-
-### Algo — Live coding simulation
-1. Mở đề: [day-24.md](../artifacts/algo/problems/day-24.md)
-2. Implement `algo/day-24/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 24` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-24: E2E + coding interview sim"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-24` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

@@ -1,74 +1,81 @@
-# Day 8 — Lab setup
+# Day 8 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Tách shell Vue thành cây component rõ trách nhiệm.
+- **EN:** Split the Vue shell into a component tree with clear ownership.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng lại page shell Day 7.
+- **EN:** Reuse the Day 7 page shell.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/vue-nuxt/components/customers/`
+- `notes/day-08.md`
+- `algorithms/day-08/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:vue
+pnpm test:algo -- day-08
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Tách page thành page, filters, table, detail panel.
+   - EN: Split the page into page, filters, table, and detail-panel pieces.
+2. Ghi props, emits và owner của mỗi component.
+   - EN: Document props, emits, and owners for each component.
+3. Vẽ lại component tree trong note.
+   - EN: Rewrite the component tree in the note.
+
+## Done when / Tiêu chí xong
+
+- Không còn god component lớn.
+  - EN: The giant god component is gone.
+- Owner của state/component rõ.
+  - EN: State and component ownership are clear.
+- Flow vẫn render đúng.
+  - EN: The flow still renders correctly.
+
+## Stretch goal
+
+- Thêm barrel exports cho module customers.
+  - EN: Add barrel exports for the customers module.
+
+## Hints
+
+- Nếu phân vân local hay shared, để local trước.
+  - EN: If unsure whether something is local or shared, keep it local first.
+
+## Algorithm task
+
+- **Problem:** Binary Search
+- **Constraints:**
+- 1 ≤ nums.length ≤ 10^4
+- Mọi phần tử unique
+- Phải O(log n)
+- **Hint:** while lo<=hi; mid; so sánh rồi hẹp nửa trái/phải.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-08/solution.ts
+algorithms/day-08/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-08`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-08/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-08/` |
+Open the full prompt: [day-08.md](../artifacts/algo/problems/day-08.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-08.md
-npm run algo:test:day -- 8
+```text
+day-08: split vue customer modules
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: tách CustomerTable (dumb) + CustomersPage (smart fetch mock). Không fetch trong dumb.
-
-### Algo — Binary Search
-1. Mở đề: [day-08.md](../artifacts/algo/problems/day-08.md)
-2. Implement `algo/day-08/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 8` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-08: Component architecture"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-08` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

@@ -1,74 +1,87 @@
-# Day 1 — Lab setup
+# Day 1 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Day 0 / Setup một lần
+
+- **VI:** nếu repo lab dùng chung chưa tồn tại, hoàn thành Day 0 trong [lab-repo.md](../lab-repo.md) trước khi làm Day 1.
+- **EN:** if the shared lab repo does not exist yet, finish Day 0 in [lab-repo.md](../lab-repo.md) before doing Day 1.
+
+## Hôm nay build gì / What you will build
+
+- **VI:** Khởi tạo repo lab chung, seed token đầu tiên và README khung.
+- **EN:** Bootstrap the shared lab repo, seed the first tokens, and start the README.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Không có; đây là Day 0/Day 1.
+- **EN:** None yet; this is Day 0/Day 1.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `packages/ui/src/tokens/`
+- `notes/day-01.md`
+- `algorithms/day-01/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm install
+pnpm storybook:ui  # or a small UI playground
+pnpm test:algo -- day-01
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Làm phần Day 0 trong lab-repo nếu repo chưa tồn tại.
+   - EN: Finish Day 0 from lab-repo if the repo does not exist yet.
+2. Tạo token cơ bản cho màu, spacing, radius và type.
+   - EN: Create base tokens for color, spacing, radius, and type.
+3. Viết note 3 primitive đầu tiên cần tách từ màn admin thật.
+   - EN: Write down the first 3 primitives you want to extract from a real admin screen.
+
+## Done when / Tiêu chí xong
+
+- Repo cài đặt xong.
+  - EN: The repo installs cleanly.
+- Token file đã commit.
+  - EN: The token file is committed.
+- README có section repo structure.
+  - EN: The README has a repo-structure section.
+
+## Stretch goal
+
+- Thêm dark token alias.
+  - EN: Add dark token aliases.
+
+## Hints
+
+- Giữ ngày đầu thật nhẹ, đừng dựng cả app.
+  - EN: Keep day one intentionally light; do not build both apps yet.
+
+## Algorithm task
+
+- **Problem:** Two Sum
+- **Constraints:**
+- 2 ≤ nums.length ≤ 10^4
+- -10^9 ≤ nums[i], target ≤ 10^9
+- Đúng một lời giải
+- **Hint:** Duyệt một lần: với mỗi x, tìm target-x đã thấy trong Map(value→index).
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-01/solution.ts
+algorithms/day-01/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-01`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-01/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-01/` |
+Open the full prompt: [day-01.md](../artifacts/algo/problems/day-01.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-01.md
-npm run algo:test:day -- 1
+```text
+day-01: bootstrap repo and token seed
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Đọc mental model React vs Vue (component = function). Tạo app Vite React+TS skeleton (hoặc note Day 6 setup nếu chưa kịp). Viết 1 component Hello + props.
-
-### Algo — Two Sum
-1. Mở đề: [day-01.md](../artifacts/algo/problems/day-01.md)
-2. Implement `algo/day-01/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 1` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-01: JS core + User flow"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-01` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

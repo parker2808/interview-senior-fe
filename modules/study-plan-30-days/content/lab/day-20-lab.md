@@ -1,74 +1,81 @@
-# Day 20 — Lab setup
+# Day 20 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Thêm Server Action, metadata và asset/deploy note trong Next.
+- **EN:** Add a Server Action, metadata, and an asset/deploy note in Next.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng customers route Day 15-19.
+- **EN:** Reuse the customers route from Days 15-19.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/app/(admin)/customers/`
+- `apps/react-next/app/(admin)/customers/actions.ts`
+- `notes/day-20.md`
+- `algorithms/day-20/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-20
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Tạo 1 save form nhỏ qua Server Action hoặc mock server mutation.
+   - EN: Create one small save form through a Server Action or mock server mutation.
+2. Đặt metadata/title cho route.
+   - EN: Set route metadata/title.
+3. Ghi note image/font/deploy assumption.
+   - EN: Write an image/font/deploy note.
+
+## Done when / Tiêu chí xong
+
+- Mutation demo chạy được.
+  - EN: The mutation demo works.
+- Metadata có giá trị rõ.
+  - EN: The metadata is meaningful.
+- Có note asset/deploy.
+  - EN: There is an asset/deploy note.
+
+## Stretch goal
+
+- Thêm optimistic UI note.
+  - EN: Add an optimistic UI note.
+
+## Hints
+
+- Một mutation nhỏ nhưng rõ boundary là đủ.
+  - EN: One small mutation with a clear boundary is enough.
+
+## Algorithm task
+
+- **Problem:** Coin Change
+- **Constraints:**
+- 1 ≤ coins.length ≤ 12
+- 0 ≤ amount ≤ 10^4
+- **Hint:** dp[x] = min số xu tạo x; khởi dp[0]=0, còn lại Infinity.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-20/solution.ts
+algorithms/day-20/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-20`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/next/app/day-20/ (hoặc route tương ứng)` |
-| App dev | `apps/next` |
-| Algo | `algo/day-20/` |
+Open the full prompt: [day-20.md](../artifacts/algo/problems/day-20.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:next
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-20.md
-npm run algo:test:day -- 20
+```text
+day-20: add next mutation and metadata
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab Next: app/ layout + page customers (RSC mặc định) + 1 Client Component interactive filter.
-
-### Algo — Coin Change
-1. Mở đề: [day-20.md](../artifacts/algo/problems/day-20.md)
-2. Implement `algo/day-20/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 20` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-20: Observability + Next App Router"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-20` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

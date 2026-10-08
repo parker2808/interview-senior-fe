@@ -1,74 +1,83 @@
-# Day 4 — Lab setup
+# Day 4 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Tạo DataTable shell và card fallback cho mobile.
+- **EN:** Create a DataTable shell and a mobile card fallback.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng lại badge, button và form primitive.
+- **EN:** Reuse the badge, button, and form primitives.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `packages/ui/src/components/data-table/`
+- `packages/ui/src/components/customer-card/`
+- `notes/day-04.md`
+- `algorithms/day-04/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm storybook:ui
+pnpm test:ui
+pnpm test:algo -- day-04
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Dựng DataTable shell với header, row, empty state.
+   - EN: Build a DataTable shell with header, row, and empty state.
+2. Tạo CustomerCard cho mobile với 2-3 field chính.
+   - EN: Create a CustomerCard for mobile with 2-3 key fields.
+3. Viết note khi nào table nên xuống card.
+   - EN: Write down when the table should collapse into cards.
+
+## Done when / Tiêu chí xong
+
+- Có cả table và card fallback.
+  - EN: Both the table and card fallback exist.
+- Empty state render được.
+  - EN: The empty state renders.
+- Trade-off note đã có.
+  - EN: The trade-off note exists.
+
+## Stretch goal
+
+- Thêm sticky header.
+  - EN: Add a sticky header.
+
+## Hints
+
+- Đừng virtualize sớm ở ngày này.
+  - EN: Do not virtualize this early.
+
+## Algorithm task
+
+- **Problem:** Group Anagrams
+- **Constraints:**
+- 1 ≤ strs.length ≤ 10^4
+- 0 ≤ strs[i].length ≤ 100
+- strs[i] chữ thường
+- **Hint:** Key = sort ký tự ("eat"→"aet") hoặc count signature "a1e1t1".
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-04/solution.ts
+algorithms/day-04/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-04`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-04/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-04/` |
+Open the full prompt: [day-04.md](../artifacts/algo/problems/day-04.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-04.md
-npm run algo:test:day -- 4
+```text
+day-04: add table shell and mobile cards
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: render table 50 rows từ mock data typed bằng TS interface; filter client-side; giải thích key ổn định.
-
-### Algo — Group Anagrams
-1. Mở đề: [day-04.md](../artifacts/algo/problems/day-04.md)
-2. Implement `algo/day-04/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 4` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-04: TS + Data-heavy table"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-04` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

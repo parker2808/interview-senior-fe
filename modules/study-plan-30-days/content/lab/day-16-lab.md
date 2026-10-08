@@ -1,74 +1,80 @@
-# Day 16 — Lab setup
+# Day 16 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Thêm filter form và controlled inputs trong Next app.
+- **EN:** Add the filter form and controlled inputs in the Next app.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng route Day 15 và shared form primitives.
+- **EN:** Reuse the Day 15 route and the shared form primitives.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/app/customers/`
+- `apps/react-next/components/`
+- `notes/day-16.md`
+- `algorithms/day-16/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-16
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Thêm search/filter form kiểu controlled input.
+   - EN: Add a search/filter form with controlled inputs.
+2. Viết một hook nhỏ cho filter logic.
+   - EN: Write one small hook for the filter logic.
+3. Ghi nơi React buộc bạn explicit hơn Vue.
+   - EN: Note where React forces you to be more explicit than Vue.
+
+## Done when / Tiêu chí xong
+
+- Filter/search hoạt động.
+  - EN: Filter/search works.
+- Có ít nhất 1 custom hook nhỏ.
+  - EN: There is at least 1 small custom hook.
+- Có note mental shift.
+  - EN: There is a mental-shift note.
+
+## Stretch goal
+
+- Đồng bộ filter với URL.
+  - EN: Sync the filter state with the URL.
+
+## Hints
+
+- Giữ hook nhỏ, đừng abstract quá sớm.
+  - EN: Keep the hook small and avoid early abstraction.
+
+## Algorithm task
+
+- **Problem:** Maximum Depth of Binary Tree
+- **Constraints:**
+- 0 ≤ nodes ≤ 10^4
+- **Hint:** 1 + max(left, right); null → 0.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-16/solution.ts
+algorithms/day-16/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-16`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-16/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-16/` |
+Open the full prompt: [day-16.md](../artifacts/algo/problems/day-16.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-16.md
-npm run algo:test:day -- 16
+```text
+day-16: add next filter form
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: ErrorBoundary class (hoặc library) bọc page; fallback UI + retry. Note: boundary không bắt lỗi async event.
-
-### Algo — Maximum Depth of Binary Tree
-1. Mở đề: [day-16.md](../artifacts/algo/problems/day-16.md)
-2. Implement `algo/day-16/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 16` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-16: Error matrix + Error Boundary"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-16` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |

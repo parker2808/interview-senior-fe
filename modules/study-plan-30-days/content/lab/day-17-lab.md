@@ -1,74 +1,80 @@
-# Day 17 — Lab setup
+# Day 17 — Lab
 
-**Mục đích tab này:** hướng dẫn môi trường / folder / lệnh để **làm và push code** cho đúng yêu cầu ngày hôm nay.
+> **Timebox:** 45-60 phút / minutes
 
-Companion repo: xem [lab-repo.md](../lab-repo.md) (một lần setup cho cả tháng).
+Companion repo: [lab-repo.md](../lab-repo.md)
 
-## 0) Một lần duy nhất (nếu chưa có lab repo)
+## Hôm nay build gì / What you will build
+
+- **VI:** Thêm cleanup và error handling cho flow Next.
+- **EN:** Add cleanup and error handling to the Next flow.
+
+## Reuse từ ngày trước / Reuse from earlier days
+
+- **VI:** Dùng list/filter Day 15-16.
+- **EN:** Reuse the list/filter flow from Days 15-16.
+
+## Folder(s) nên chạm / Folders to touch
+
+- `apps/react-next/app/customers/`
+- `apps/react-next/components/`
+- `notes/day-17.md`
+- `algorithms/day-17/`
+
+## Starter / minimal commands
 
 ```bash
-# clone repo lab trống của bạn, rồi:
-cp -R modules/study-plan-30-days/lab-template/. /path/to/senior-fe-lab/
 cd /path/to/senior-fe-lab
-npm install
+pnpm dev:next
+pnpm test:algo -- day-17
 ```
 
-Ghi URL lab của bạn:
+## Từng bước / Step-by-step
+
+1. Tạo một flow có thể bị stale nếu không cleanup.
+   - EN: Create a flow that can go stale without cleanup.
+2. Thêm AbortController hoặc stale guard.
+   - EN: Add AbortController or a stale guard.
+3. Wrap 1 phần bằng error boundary và ghi limit của nó.
+   - EN: Wrap one area with an error boundary and note its limits.
+
+## Done when / Tiêu chí xong
+
+- Có ví dụ cleanup/stale guard thật.
+  - EN: There is a real cleanup/stale-guard example.
+- Error boundary fallback hiện được.
+  - EN: The error boundary fallback renders.
+- Limitations note xong.
+  - EN: The limitations note is done.
+
+## Stretch goal
+
+- Log mock error event vào note observability.
+  - EN: Log a mock error event into observability notes.
+
+## Hints
+
+- Một ví dụ sắc nét đủ hơn ba ví dụ nửa vời.
+  - EN: One sharp example is better than three vague ones.
+
+## Algorithm task
+
+- **Problem:** Lowest Common Ancestor of a BST
+- **Constraints:**
+- Cả p,q đều tồn tại trong cây
+- **Hint:** Nếu cả hai < root → trái; cả hai > root → phải; else root là LCA.
 
 ```text
-LAB_REPO=https://github.com/YOUR_USER/senior-fe-lab
+algorithms/day-17/solution.ts
+algorithms/day-17/solution.test.ts
 ```
 
-## 1) Folder làm việc hôm nay
+Run: `pnpm test:algo -- day-17`
 
-| Phần | Path trong lab repo |
-|---|---|
-| FE practice | `apps/react/src/days/day-17/` |
-| App dev | `apps/react` |
-| Algo | `algo/day-17/` |
+Open the full prompt: [day-17.md](../artifacts/algo/problems/day-17.md)
 
-## 2) Lệnh dev / test
+## Suggested commit
 
-```bash
-cd /path/to/senior-fe-lab
-
-# FE lab
-npm run dev:react
-
-# Algo — đọc đề ở plan hub trước
-# đề: interview-senior-fe/.../artifacts/algo/problems/day-17.md
-npm run algo:test:day -- 17
+```text
+day-17: add next cleanup and error states
 ```
-
-## 3) Việc cần code hôm nay
-
-### React / Next / Vue
-Lab: cố ý render HTML string an toàn (escape) vs dangerouslySetInnerHTML — ghi khi nào được phép.
-
-### Algo — Lowest Common Ancestor of a BST
-1. Mở đề: [day-17.md](../artifacts/algo/problems/day-17.md)
-2. Implement `algo/day-17/solution.ts`
-3. Bổ sung test nếu cần trong `solution.test.ts`
-4. `npm run algo:test:day -- 17` → xanh
-
-## 4) Commit & push
-
-```bash
-git add -A
-git commit -m "day-17: FE security"
-git push
-```
-
-## 5) Quay lại Plan hub
-
-- Điền **Worksheet** (Capstone docs)
-- Tick **Checkpoint** trên tab Hướng dẫn
-- Đánh dấu Day done
-
-## Troubleshooting
-
-| Triệu chứng | Cách xử lý |
-|---|---|
-| Chưa có Vite/Next app | Day 6 (hoặc hôm nay) scaffold theo [lab-repo.md](../lab-repo.md) |
-| `algo:test:day` fail vì thiếu file | Tạo folder `algo/day-17` + copy stub từ `algo/day-01` |
-| Không biết đề ở đâu | Luôn ở plan hub `artifacts/algo/problems/` — không phải trong lab |
