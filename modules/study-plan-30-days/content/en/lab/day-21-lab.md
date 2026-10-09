@@ -1,58 +1,42 @@
 # Day 21 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+Show me a tiny App Router slice you actually ran. Where is the server fetch, where is the client island, and how does this compare to the same slice in Nuxt 3?
 
-- Finish a demoable Next.js mini slice and the Nuxt ↔ Next note.
+## What you will produce
 
-## What this day reuses
+- Build a tiny `/customers` route in a Next lab: root layout, dashboard layout, server-fetched list page, one small client filter, loading.tsx, error.tsx, and page metadata.
+- After it works, write 5 lines comparing the same slice in Nuxt 3.
 
-- Reuse everything from Days 15-20.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/react-next/app/(admin)/customers/`
-- `notes/day-21.md`
-- `README.md`
-- `algorithms/day-21/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-21
-```
-
-## Step-by-step
-
-1. Make the Customers route demoable: list, filter, loading/error, and one action.
-2. Write 5-7 bullets comparing Nuxt 3 vs the Next App Router on this slice.
-3. Add a short README section for running the Next demo app.
+- **Decision:** Keep the spike tiny. Server list + one client filter is enough to prove the boundary. Compare to Nuxt from what you just did, not from docs.
+- **Constraint:** Tiny lab slice only. No customer-module product, no npm-install tutorial in the write-up. If a lab app already exists, reuse it; do not start from `create-next-app` instructions.
+- **Failure mode:** A full CRUD admin. `'use client'` on the page because the filter needs state. A comparison copied from the Next marketing site.
+- **Measure:** The slice runs, even if tiny. The Nuxt ↔ Next note is written from this spike. Timed algo review is done.
+- **Tradeoff:** Client filter over a server-fetched list is simple and re-filters stale data. Pushing the filter to the server is correct and costs a navigation or action.
+- **Production gotcha:** Passing a server-fetched Date into a client child without serializing. Forgetting metadata. An `error.tsx` that cannot recover. The goal is concept transfer and confidence, not a product.
 
 ## Done when
 
-- There is a demoable Next route.
-- There is a Nuxt ↔ Next comparison note.
-- The README includes run instructions.
+- The Next.js slice actually runs, even if tiny.
+- The Nuxt ↔ Next comparison is written from experience, not copied from docs.
+- Timed algo review is complete.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a screenshot to the README.
+Add a one-line note on what you would do next if this were production (auth, pagination, empty state) — and stop there.
 
-## Hints
-
-- Do not open a new route if the Customers route is not coherent yet.
-
-## Algorithm task
+## Algorithm
 
 - **Problem:** Week 3 timed review
 - **Constraints:**
 - Self-score
-- **Hint:** start from the **Review** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** Islands: do not forget to mark visited.
 
 ```text
 algorithms/day-21/solution.ts
@@ -66,5 +50,5 @@ Open the full prompt: [day-21.md](../artifacts/algo/problems/day-21.md)
 ## Suggested commit
 
 ```text
-day-21: finish next customer mini demo
+day-21: tiny Next customers slice plus five-line Nuxt compare
 ```

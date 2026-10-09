@@ -1,59 +1,42 @@
 # Day 26 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+Walk me through a recent project. What trade-off did you own? Why should we trust you on React if your production depth is in Vue?
 
-- Add tests and a review checklist to the repo.
+## What you will produce
 
-## What this day reuses
+- Write one project story with constraint, trade-off, risk, and result, then trim it to 2 minutes.
+- Write one strong answer for “Why should we trust you on React if your production depth is in Vue?”
 
-- Reuse whichever Vue or Next flow is the most representative.
+## How a senior works this
 
-## Folders to touch
-
-- `packages/ui/src/**/__tests__/`
-- `apps/react-next/**/__tests__/`
-- `notes/day-26.md`
-- `algorithms/day-26/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm test:ui
-pnpm test:next  # or vitest/rtl
-pnpm test:algo -- day-26
-```
-
-## Step-by-step
-
-1. Write 1 test for a shared primitive and 1 test for a page flow.
-2. Create a review checklist for correctness/accessibility/performance/security/tests.
-3. Run the tests and note the short result.
+- **Decision:** One project, timed to 2 minutes, using constraint → trade-off → risk → result. The React-gap answer is transfer + evidence + honesty, not a defense.
+- **Constraint:** Spoken stories only. Day 26 is behavioral, not a Capstone Vue/React spike and not a test-writing day.
+- **Failure mode:** A tour of the architecture with no decision. Blaming the previous team. ‘I can learn anything’ with no proof from Week 3. Sounding defensive about Vue.
+- **Measure:** The project story is timed and concise. The React-gap answer sounds credible, not defensive.
+- **Tradeoff:** In the project story, name the option you rejected and the user or delivery cost. In the React answer, trade swagger for a map: Vue concept → React evidence from this plan.
+- **Production gotcha:** Stories that collapse if they ask ‘what did you personally write?’ Confidential numbers you cannot share — prepare a relative metric.
 
 ## Done when
 
-- At least 2 tests are green.
-- There is a review checklist.
-- You know what still lacks coverage.
+- One project story is timed and concise.
+- The React-gap answer sounds credible, not defensive.
+- Weak-topic algo drill #2 is complete.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a sample CI workflow.
+Record both answers and cut any sentence that starts with ‘basically’ or ‘we just’.
 
-## Hints
-
-- Test important behavior, not implementation detail.
-
-## Algorithm task
+## Algorithm
 
 - **Problem:** Weak-topic drill #2
 - **Constraints:**
-- 20′ + reflection
-- **Hint:** start from the **Remedial** pattern and open the full prompt if you need a stronger nudge.
+- 20 minutes + reflection
+- **Hint:** Compare the trigger sentence with yesterday’s drill.
 
 ```text
 algorithms/day-26/solution.ts
@@ -67,5 +50,5 @@ Open the full prompt: [day-26.md](../artifacts/algo/problems/day-26.md)
 ## Suggested commit
 
 ```text
-day-26: add tests and review checklist
+day-26: two-minute project story and React-gap answer
 ```

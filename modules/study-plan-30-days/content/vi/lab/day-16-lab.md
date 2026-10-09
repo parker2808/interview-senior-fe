@@ -1,58 +1,42 @@
 # Day 16 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+`useState` hay `useRef`? Controlled hay uncontrolled — khi nào chọn cái nào? Khi nào Context thành vấn đề?
 
-- Thêm filter form và controlled inputs trong Next app.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Dựng hoặc review một form nhỏ rồi chỉ ra phần nào nên là state, ref, derived value và lifted state.
+- Viết một rule of thumb cho thời điểm nên dừng Context và chuyển sang tool khác.
 
-- Dùng route Day 15 và shared form primitives.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/react-next/app/customers/`
-- `apps/react-next/components/`
-- `notes/day-16.md`
-- `algorithms/day-16/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-16
-```
-
-## Từng bước
-
-1. Thêm search/filter form kiểu controlled input.
-2. Viết một hook nhỏ cho filter logic.
-3. Ghi nơi React buộc bạn explicit hơn Vue.
+- **Quyết định:** Gắn nhãn từng value: state (kéo render), ref (imperative / không cần render), derived (tính, đừng lưu), lifted (anh em dùng chung).
+- **Constraint:** Snippet form nhỏ hoặc review form đã có. Không viết lại TextField của design system.
+- **Failure mode:** Lưu derived vào state rồi để chúng lệch. Input uncontrolled cộng prop `value`. Context cho mọi keystroke trong cây lớn.
+- **Cách đo:** Giải thích state vs ref bằng case cụ thể, và form thể hiện reasoning controlled input chứ không phải nhớ API.
+- **Trade-off:** Form controlled dễ test và ràng buộc; chúng re-render mỗi phím. Uncontrolled + ref ổn cho ‘submit file rồi thôi’.
+- **Gotcha production:** Lift state quá cao làm re-render cả dashboard. Context không tách (state vs dispatch) thành story perf bạn không định kể.
 
 ## Tiêu chí xong
 
-- Filter/search hoạt động.
-- Có ít nhất 1 custom hook nhỏ.
-- Có note mental shift.
+- Giải thích được state và ref bằng một case cụ thể.
+- Ví dụ form thể hiện được reasoning về controlled input, không chỉ là nhớ API.
+- Bài algo xong và recursion kiểu DFS vẫn còn thoải mái.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Đồng bộ filter với URL.
+Viết rule: rời Context khi update dày, consumer rộng, hoặc value là server cache.
 
-## Gợi ý
+## Thuật toán
 
-- Giữ hook nhỏ, đừng abstract quá sớm.
-
-## Bài thuật toán
-
-- **Bài:** Maximum Depth of Binary Tree
+- **Bài:** Maximum Depth of Binary Tree · DFS
 - **Ràng buộc:**
 - 0 ≤ nodes ≤ 10^4
-- **Hint:** xem pattern **DFS recursion** và mở đề đầy đủ nếu cần.
+- **Hint:** 1 + max(left, right); null → 0.
 
 ```text
 algorithms/day-16/solution.ts
@@ -66,5 +50,5 @@ Mở đề đầy đủ: [day-16.md](../artifacts/algo/problems/day-16.md)
 ## Commit gợi ý
 
 ```text
-day-16: add next filter form
+day-16: label form values as state ref derived or lifted
 ```

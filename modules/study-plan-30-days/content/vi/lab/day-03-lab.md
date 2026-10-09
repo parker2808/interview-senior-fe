@@ -1,60 +1,42 @@
 # Day 3 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Làm form dùng được với keyboard và screen reader thế nào? Validate khi nào — blur, submit, hay live? Semantic HTML hay ARIA: cái nào dùng trước?
 
-- Xây FormField và TextField cho flow validation cơ bản.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Chọn một flow form và ghi lại: field, rule validate, error message, thời điểm kích hoạt và disabled state.
+- Kiểm tra xem người dùng chỉ dùng keyboard hoặc screen reader có hiểu được flow tương tự không.
 
-- Dùng lại token và Button từ Day 1-2.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `packages/ui/src/components/form-field/`
-- `packages/ui/src/components/text-field/`
-- `notes/day-03.md`
-- `algorithms/day-03/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm storybook:ui
-pnpm test:ui
-pnpm test:algo -- day-03
-```
-
-## Từng bước
-
-1. Tạo FormField gồm label, hint, error, required.
-2. Tạo TextField controlled-friendly với invalid/disabled state.
-3. Ghi state machine cho một form nhỏ.
+- **Quyết định:** Mỗi field có label nhìn thấy, một rule lỗi, và thời điểm kích hoạt có chủ đích. Ưu tiên semantic native; ARIA chỉ khi HTML không diễn tả được.
+- **Constraint:** Một form thật (login, filter, hoặc edit). Ghi lại; không dựng form library.
+- **Failure mode:** Placeholder đóng vai label. Validate từng phím đánh IME. Submit disabled mà không nói lý do. Error chỉ báo bằng màu.
+- **Cách đo:** Nói được field → rule → message → timing → disabled dưới 2 phút, kể cả screen reader nghe error ra sao.
+- **Trade-off:** Validate lúc blur (feedback nhanh, ồn hơn) hay lúc submit (êm, muộn hơn). Mixed cũng được nếu biện hộ được theo từng field.
+- **Gotcha production:** `aria-live` mỗi phím là gotcha production. Nút disabled không giải thích form thiếu gì cũng vậy.
 
 ## Tiêu chí xong
 
-- Label/hint/error rõ ràng.
-- Input có invalid/disabled state.
-- State machine note xong.
+- Mỗi field đều có label và rule lỗi rõ ràng.
+- Thời điểm validate là có chủ đích, không phải ngẫu nhiên.
+- Bài algo xong và giải thích được vì sao Set là đủ.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm textarea cùng API.
+Thêm thứ tự focus và focus đáp xuống đâu sau submit lỗi.
 
-## Gợi ý
+## Thuật toán
 
-- Giữ form nhỏ, đừng lao vào form library.
-
-## Bài thuật toán
-
-- **Bài:** Contains Duplicate
+- **Bài:** Contains Duplicate · Set
 - **Ràng buộc:**
 - 1 ≤ nums.length ≤ 10^5
-- -10^9 ≤ nums[i] ≤ 10^9
-- **Hint:** xem pattern **Set** và mở đề đầy đủ nếu cần.
+- **Hint:** Set: nếu add mà đã có → duplicate. Set là đủ ở đây.
 
 ```text
 algorithms/day-03/solution.ts
@@ -68,5 +50,5 @@ Mở đề đầy đủ: [day-03.md](../artifacts/algo/problems/day-03.md)
 ## Commit gợi ý
 
 ```text
-day-03: add shared form primitives
+day-03: document one form field rules timing and a11y feedback
 ```

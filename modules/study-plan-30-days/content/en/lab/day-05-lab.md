@@ -1,60 +1,42 @@
 # Day 5 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+Can you finish this admin flow with only a keyboard? Where does focus go after a modal closes? When is lazy-loading a keyboard trap?
 
-- Finish EmptyState and ErrorState, then tie them back to acceptance criteria.
+## What you will produce
 
-## What this day reuses
+- Run a keyboard-only pass on one real flow: Tab, Shift+Tab, Enter, Escape, and focus return.
+- Write down the top 3 keyboard or focus issues you would fix first.
 
-- Reuse the Day 4 table/card shell.
+## How a senior works this
 
-## Folders to touch
-
-- `packages/ui/src/components/empty-state/`
-- `packages/ui/src/components/error-state/`
-- `notes/day-05.md`
-- `algorithms/day-05/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm storybook:ui
-pnpm test:ui
-pnpm test:algo -- day-05
-```
-
-## Step-by-step
-
-1. Create reusable EmptyState and ErrorState components.
-2. Wire them into the table/card demo states.
-3. Write 5 acceptance criteria for list + detail.
+- **Decision:** Treat keyboard order as a product path. Document Tab order, Escape, and focus return for one real flow, then rank 3 fixes.
+- **Constraint:** One flow you already know. Keyboard pass + note. Do not implement a focus-trap library today.
+- **Failure mode:** Focus lost after dialog close. Tab order that skips the primary action. Custom dropdowns that ignore Arrow keys and Escape.
+- **Measure:** A written keyboard order and at least one focus bug with a concrete fix. You can demo the path out loud.
+- **Tradeoff:** Native dialog/select vs custom widgets. Native wins keyboard for free; custom wins visual control and costs a focus trap.
+- **Production gotcha:** Lazy-loaded chunks that remount and reset focus. Portals that append to `body` and dump the user at the document end.
 
 ## Done when
 
-- There are 2 reusable state components.
-- The demo includes empty and error flows.
-- The acceptance criteria are clear.
+- Keyboard order is documented for one real flow.
+- At least 1 focus bug is identified with a concrete fix.
+- Algo is green and the complexity trade-off is clear.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a retry callback.
+Note the skip-link / landmark story: can a keyboard user jump to the table without tabbing the whole nav?
 
-## Hints
+## Algorithm
 
-- Good product copy matters more than animation today.
-
-## Algorithm task
-
-- **Problem:** Top K Frequent Elements
+- **Problem:** Top K Frequent Elements · Hash map + bucket
 - **Constraints:**
 - 1 ≤ nums.length ≤ 10^5
-- k nằm trong range số phần tử distinct
-- **Hint:** start from the **HashMap + bucket/sort** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** Count frequency, then sort entries or bucket-sort by freq.
 
 ```text
 algorithms/day-05/solution.ts
@@ -68,5 +50,5 @@ Open the full prompt: [day-05.md](../artifacts/algo/problems/day-05.md)
 ## Suggested commit
 
 ```text
-day-05: add empty and error states
+day-05: keyboard-only pass and top three focus fixes
 ```

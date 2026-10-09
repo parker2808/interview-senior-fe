@@ -1,39 +1,59 @@
-# Day 5 — Hướng dẫn (07/10/2026)
+# Day 5 — Interview drill (07/10/2026)
 
-**Chủ đề:** Product AC + custom hooks  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** AC v1 Capstone testable; viết custom hook React đầu tiên.
+**Theme:** Keyboard-first interaction review / Review tương tác theo hướng keyboard-first  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- self-check-questions.md — Product
-- documents/vi/react.md — custom hooks
-- capstone 03-acceptance-criteria.md
+- **EN:** Review interaction quality from the perspective of someone who cannot rely on a mouse.
+- **VI:** Review chất lượng tương tác theo góc nhìn của người không thể dựa vào chuột.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** Can you finish this admin flow with only a keyboard? Where does focus go after a modal closes? When is lazy-loading a keyboard trap?
+- **VI:** Hoàn thành flow admin này chỉ bằng keyboard được không? Focus đi đâu sau khi đóng modal? Khi nào lazy-load thành bẫy keyboard?
 
-### 1) Capstone / FE craft
-Viết AC Given/When/Then cho List filter + Edit save (ít nhất 6 AC). Copy sang capstone/03.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-05-product-review.md`](./artifacts/day-05-product-review.md)
+## Read
 
-### 2) React / Next lab
-Lab: extract useLocalStorage(key, initial) hoặc useToggle — dùng trong form Day 3.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-05-lab.md`](./lab/day-05-lab.md)
+- `accessibility` — Accessibility basics (opens in a new tab in the app / mở tab mới trong app)
+- `web-apis` — Web APIs notes (opens in a new tab in the app / mở tab mới trong app)
+- `architecture` — Architecture notes (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Top K Frequent Elements** (Medium) · pattern **HashMap + bucket/sort**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-05.md`](./artifacts/algo/problems/day-05.md)  
-→ Code + test trong lab repo: `algo/day-05/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `accessibility-forms-keyboard` — Forms and keyboard accessibility
+- `lazy-loading-tradeoffs` — Lazy loading trade-offs
 
-- [ ] AC đo được (pass/fail); hook tái sử dụng được; Top K chạy sample.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Run a keyboard-only pass on one real flow: Tab, Shift+Tab, Enter, Escape, and focus return.
+  - **VI:** Chạy một lượt keyboard-only trên một flow thật: Tab, Shift+Tab, Enter, Escape và focus return.
+- **EN:** Write down the top 3 keyboard or focus issues you would fix first.
+  - **VI:** Ghi lại 3 lỗi keyboard hoặc focus nên sửa trước.
+
+## Algorithm
+
+- **Problem:** Top K Frequent Elements · Hash map + bucket
+- Full prompt: [`artifacts/algo/problems/day-05.md`](./artifacts/algo/problems/day-05.md)
+- Code + test in the lab repo: `algorithms/day-05/`
+
+## Checkpoint
+
+- Đã ghi được thứ tự keyboard cho 1 flow thật.
+  - EN: Keyboard order is documented for one real flow.
+- Đã chỉ ra ít nhất 1 bug focus kèm hướng sửa cụ thể.
+  - EN: At least 1 focus bug is identified with a concrete fix.
+- Bài algo xanh và trade-off độ phức tạp đã rõ.
+  - EN: Algo is green and the complexity trade-off is clear.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-05-lab.md`](./lab/day-05-lab.md)

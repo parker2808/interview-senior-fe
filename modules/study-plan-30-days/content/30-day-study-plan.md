@@ -2,7 +2,9 @@
 
 **Lịch:** Day 1 = **03/10/2026** → Day 30 = **01/11/2026**  
 **Nhịp mỗi ngày:** khoảng **90–120 phút**  
-**Source of truth:** xem **Plan homepage** để mở từng ngày theo tuần, link sang docs và Q&A trực tiếp.
+**Source of truth:** xem **Plan homepage** để mở từng ngày theo tuần. Docs và Q&A mở **tab mới** để không lạc khỏi trang ngày.
+
+> Đây là **interview prep**, không phải giáo trình phải học hết. Ở lại trang ngày; đừng biến knowledge base thành một course.
 
 ---
 

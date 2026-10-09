@@ -1,59 +1,44 @@
 # Day 8 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+In ra gì, vì sao? Đi event loop: call stack, microtask, macrotask. Giải thích bug closure và TDZ không bằng khẩu hiệu.
 
-- Tách shell Vue thành cây component rõ trách nhiệm.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Viết 3 snippet phỏng vấn có setTimeout, Promise và closure capture. Đoán output trước khi chạy.
+- Với mỗi snippet, giải thích output bằng ngôn ngữ dễ hiểu chứ không chỉ jargon.
 
-- Dùng lại page shell Day 7.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/vue-nuxt/components/customers/`
-- `notes/day-08.md`
-- `algorithms/day-08/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm test:algo -- day-08
-```
-
-## Từng bước
-
-1. Tách page thành page, filters, table, detail panel.
-2. Ghi props, emits và owner của mỗi component.
-3. Vẽ lại component tree trong note.
+- **Quyết định:** Ba snippet nhỏ, đoán output trước. Một event-loop, một Promise-then vs setTimeout, một loop-closure (`var` vs `let` hoặc index bị capture).
+- **Constraint:** Snippet trong note hoặc playground có sẵn. Đây không phải ngày feature Vue và không phải tách module khách hàng.
+- **Failure mode:** Thuộc ‘microtask trước macrotask’ rồi vẫn xếp sai `Promise.then` / `queueMicrotask` / `setTimeout(0)`. Nói ‘closure nhớ value’ trong khi nó nhớ binding.
+- **Cách đo:** Đi được một snippet từng tick và dự đoán khớp lúc chạy.
+- **Trade-off:** Interviewer muốn model, không phải trivia Node vs browser. Chỉ nhắc `requestAnimationFrame` nếu đặt được nó so với style/layout.
+- **Gotcha production:** Watcher Vue và `nextTick` là microtask. Câu ‘DOM đã update’ mà bỏ `nextTick` là miss production.
 
 ## Tiêu chí xong
 
-- Không còn god component lớn.
-- Owner của state/component rõ.
-- Flow vẫn render đúng.
+- Giải thích được từng bước của một snippet event loop.
+- Closure và TDZ đã trở nên cụ thể lại, không còn mơ hồ.
+- Bài algo xong với reasoning O(log n).
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm barrel exports cho module customers.
+Thêm snippet thứ tư trộn `async/await` với `setTimeout` và đoán ranh giới await.
 
-## Gợi ý
+## Thuật toán
 
-- Nếu phân vân local hay shared, để local trước.
-
-## Bài thuật toán
-
-- **Bài:** Binary Search
+- **Bài:** Binary Search · Tìm trên dữ liệu đã sort
 - **Ràng buộc:**
 - 1 ≤ nums.length ≤ 10^4
 - Mọi phần tử unique
 - Phải O(log n)
-- **Hint:** xem pattern **Binary search** và mở đề đầy đủ nếu cần.
+- **Hint:** while lo<=hi; mid; so sánh rồi hẹp nửa trái/phải.
 
 ```text
 algorithms/day-08/solution.ts
@@ -67,5 +52,5 @@ Mở đề đầy đủ: [day-08.md](../artifacts/algo/problems/day-08.md)
 ## Commit gợi ý
 
 ```text
-day-08: split vue customer modules
+day-08: three event-loop snippets with predicted output
 ```

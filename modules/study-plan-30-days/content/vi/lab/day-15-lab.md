@@ -1,58 +1,42 @@
 # Day 15 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Bạn là Vue specialist đang học React. Re-render khác reactivity Vue thế nào? Map props, state và lifecycle sang hooks mà không xin lỗi.
 
-- Khởi động route Customers tương đương trong Next app.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Viết một note so sánh Vue → React cho state, derived state, side effects và composition.
+- Giải thích React “thủ công” hơn Vue ở đâu và khi nào sự thủ công đó lại có ích.
 
-- Dùng schema, mock data và packages/ui từ Vue track.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/react-next/app/customers/`
-- `apps/react-next/lib/`
-- `notes/day-15.md`
-- `algorithms/day-15/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-15
-```
-
-## Từng bước
-
-1. Tạo route /customers.
-2. Render list mock bằng shared UI package.
-3. Viết note cách data vào Vue vs Next khác nhau ra sao.
+- **Quyết định:** Chuyển nguyên lý, đừng dịch API từng dòng. State / derived / effects / composition trên một trang. Thành thật về khoảng trống mới là senior.
+- **Constraint:** Note so sánh. Không route customers Next, không bước cài ‘start the React app’.
+- **Failure mode:** ‘React chỉ là Vue đổi tên.’ Giọng xin lỗi. Nhận production depth React mà chưa có.
+- **Cách đo:** Story React nghe trung thực và tự tin. So sánh được một khái niệm thật giữa Vue và React dưới 2 phút.
+- **Trade-off:** Vue track mutation; React re-render một subtree và bạn phải opt out. Kiểm soát thủ công hữu ích cho data flow rõ và đau khi quên update derived state.
+- **Gotcha production:** Nhét `ref` vào `useState` rồi hỏi sao màn không update. Coi `useMemo` như `computed` của Vue.
 
 ## Tiêu chí xong
 
-- Next route render được.
-- Mock list reuse model cũ.
-- Có note so sánh Vue vs Next.
+- Story về React nghe trung thực và tự tin, không mang giọng xin lỗi.
+- So sánh được một khái niệm thật giữa Vue và React.
+- Bài algo xong và cách dùng queue cho BFS đã chắc hơn.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Tạo lib fixtures dùng chung cho cả 2 app.
+Thêm một câu bạn sẽ dùng nếu họ hỏi ‘tuần đầu viết React được chưa?’
 
-## Gợi ý
+## Thuật toán
 
-- Mục tiêu là domain parity, không phải pixel parity.
-
-## Bài thuật toán
-
-- **Bài:** Binary Tree Level Order Traversal
+- **Bài:** Binary Tree Level Order Traversal · BFS
 - **Ràng buộc:**
 - 0 ≤ nodes ≤ 2000
-- **Hint:** xem pattern **BFS queue** và mở đề đầy đủ nếu cần.
+- **Hint:** Queue: mỗi vòng lấy size = queue.length = số node level hiện tại.
 
 ```text
 algorithms/day-15/solution.ts
@@ -66,5 +50,5 @@ Mở đề đầy đủ: [day-15.md](../artifacts/algo/problems/day-15.md)
 ## Commit gợi ý
 
 ```text
-day-15: start next customers route
+day-15: Vue-to-React comparison note for state effects composition
 ```

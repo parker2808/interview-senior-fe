@@ -1,60 +1,42 @@
 # Day 5 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Hoàn thành flow admin này chỉ bằng keyboard được không? Focus đi đâu sau khi đóng modal? Khi nào lazy-load thành bẫy keyboard?
 
-- Hoàn thiện EmptyState và ErrorState, rồi gắn vào acceptance criteria.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Chạy một lượt keyboard-only trên một flow thật: Tab, Shift+Tab, Enter, Escape và focus return.
+- Ghi lại 3 lỗi keyboard hoặc focus nên sửa trước.
 
-- Dùng lại table/card shell Day 4.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `packages/ui/src/components/empty-state/`
-- `packages/ui/src/components/error-state/`
-- `notes/day-05.md`
-- `algorithms/day-05/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm storybook:ui
-pnpm test:ui
-pnpm test:algo -- day-05
-```
-
-## Từng bước
-
-1. Tạo EmptyState và ErrorState dùng lại được.
-2. Gắn chúng vào demo state của table/card.
-3. Viết 5 acceptance criteria cho list + detail.
+- **Quyết định:** Coi thứ tự keyboard là một product path. Ghi Tab order, Escape và focus return cho một flow thật, rồi xếp 3 fix.
+- **Constraint:** Một flow bạn đã biết. Keyboard pass + note. Hôm nay không implement focus-trap library.
+- **Failure mode:** Mất focus sau khi đóng dialog. Tab order bỏ primary action. Dropdown custom bỏ qua Arrow và Escape.
+- **Cách đo:** Thứ tự keyboard đã viết và ít nhất một bug focus kèm hướng sửa. Demo path thành tiếng được.
+- **Trade-off:** Dialog/select native hay widget custom. Native được keyboard miễn phí; custom được visual và phải trả focus trap.
+- **Gotcha production:** Chunk lazy-load remount rồi reset focus. Portal append vào `body` rồi đẩy user xuống cuối document.
 
 ## Tiêu chí xong
 
-- Có 2 state component dùng lại được.
-- Demo có empty/error flow.
-- Acceptance criteria đủ rõ.
+- Đã ghi được thứ tự keyboard cho 1 flow thật.
+- Đã chỉ ra ít nhất 1 bug focus kèm hướng sửa cụ thể.
+- Bài algo xanh và trade-off độ phức tạp đã rõ.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm retry callback.
+Ghi skip-link / landmark: user keyboard nhảy tới table mà không tab hết nav được không?
 
-## Gợi ý
+## Thuật toán
 
-- Copy sản phẩm quan trọng hơn animation.
-
-## Bài thuật toán
-
-- **Bài:** Top K Frequent Elements
+- **Bài:** Top K Frequent Elements · HashMap + bucket
 - **Ràng buộc:**
 - 1 ≤ nums.length ≤ 10^5
-- k nằm trong range số phần tử distinct
-- **Hint:** xem pattern **HashMap + bucket/sort** và mở đề đầy đủ nếu cần.
+- **Hint:** Đếm frequency → sort entries hoặc bucket sort theo freq.
 
 ```text
 algorithms/day-05/solution.ts
@@ -68,5 +50,5 @@ Mở đề đầy đủ: [day-05.md](../artifacts/algo/problems/day-05.md)
 ## Commit gợi ý
 
 ```text
-day-05: add empty and error states
+day-05: keyboard-only pass and top three focus fixes
 ```

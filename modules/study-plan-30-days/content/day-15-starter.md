@@ -1,39 +1,60 @@
-# Day 15 — Hướng dẫn (17/10/2026)
+# Day 15 — Interview drill (17/10/2026)
 
-**Chủ đề:** API contract + React Query  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Contract GET/PATCH Capstone; fetch với cache/stale policy.
+**Theme:** React mental model for a Vue dev / Mental model React cho người đi từ Vue  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/networking.md
-- documents/vi/react.md — data fetching
-- documents/vi/nextjs.md — skim fetch
+- **EN:** Start React the honest way: concept transfer, not pretending the frameworks are the same.
+- **VI:** Bắt đầu React theo cách trung thực: chuyển nguyên lý, không giả vờ hai framework là một.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** You are a Vue specialist learning React. How does re-render differ from Vue reactivity? Map props, state, and lifecycle to hooks without apologizing.
+- **VI:** Bạn là Vue specialist đang học React. Re-render khác reactivity Vue thế nào? Map props, state và lifecycle sang hooks mà không xin lỗi.
 
-### 1) Capstone / FE craft
-Viết contract endpoints List/Detail/Patch + error shape → capstone/06.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-15-api-contract.md`](./artifacts/day-15-api-contract.md)
+## Read
 
-### 2) React / Next lab
-Lab: dùng @tanstack/react-query (hoặc SWR) load customers mock; loading/error/success states.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-15-lab.md`](./lab/day-15-lab.md)
+- `react` — React notes (opens in a new tab in the app / mở tab mới trong app)
+- `state-management-react` — React state-management notes (opens in a new tab in the app / mở tab mới trong app)
+- `react-next-track.md` — React / Next track (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Binary Tree Level Order Traversal** (Medium) · pattern **BFS queue**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-15.md`](./artifacts/algo/problems/day-15.md)  
-→ Code + test trong lab repo: `algo/day-15/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `learning-react-as-vue-dev` — Explaining the React learning journey
+- `react-rerender-model-vs-vue` — React re-render model vs Vue
+- `react-props-state-lifecycle-hooks` — Props, state, and lifecycle with hooks
 
-- [ ] Contract review được; query lab không race khi remount nhanh; BFS đúng.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Write a Vue → React comparison note for state, derived state, side effects, and composition.
+  - **VI:** Viết một note so sánh Vue → React cho state, derived state, side effects và composition.
+- **EN:** Explain where React feels more manual than Vue and where that manual control is useful.
+  - **VI:** Giải thích React “thủ công” hơn Vue ở đâu và khi nào sự thủ công đó lại có ích.
+
+## Algorithm
+
+- **Problem:** Binary Tree Level Order Traversal · BFS
+- Full prompt: [`artifacts/algo/problems/day-15.md`](./artifacts/algo/problems/day-15.md)
+- Code + test in the lab repo: `algorithms/day-15/`
+
+## Checkpoint
+
+- Story về React nghe trung thực và tự tin, không mang giọng xin lỗi.
+  - EN: Your React story sounds honest and confident, not apologetic.
+- So sánh được một khái niệm thật giữa Vue và React.
+  - EN: You can compare one real concept across Vue and React.
+- Bài algo xong và cách dùng queue cho BFS đã chắc hơn.
+  - EN: Algo is done and BFS queue usage is solid.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-15-lab.md`](./lab/day-15-lab.md)

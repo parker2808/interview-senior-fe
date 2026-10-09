@@ -1,38 +1,60 @@
-# Day 22 — Hướng dẫn (24/10/2026)
+# Day 22 — Interview drill (24/10/2026)
 
-**Chủ đề:** Test pyramid + RTL  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Map behaviors→layers; viết test RTL đầu tiên.
+**Theme:** Design an admin dashboard / Thiết kế một admin dashboard  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/testing.md
-- documents/vi/react.md — testing library mindset
+- **EN:** Move up one level: orchestrate APIs, loading behavior, failure isolation, and observability for a real frontend surface.
+- **VI:** Nâng lên một mức: điều phối API, loading behavior, cô lập lỗi và observability cho một bề mặt frontend thật.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** Design a dashboard that calls 15 APIs. What loads first, what fails independently, and do you need a BFF? What would you watch in production?
+- **VI:** Thiết kế dashboard gọi 15 API. Cái gì load trước, cái gì fail độc lập, và có cần BFF không? Bạn sẽ watch gì trên production?
 
-### 1) Capstone / FE craft
-Test plan Capstone: unit/component/E2E cho Save flow → capstone/12.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-22-test-plan.md`](./artifacts/day-22-test-plan.md)
+## Read
 
-### 2) React / Next lab
-Lab: RTL test form validate (userEvent). Không test implementation detail.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-22-lab.md`](./lab/day-22-lab.md)
+- `system-design` — System design notes (opens in a new tab in the app / mở tab mới trong app)
+- `architecture` — Architecture notes (opens in a new tab in the app / mở tab mới trong app)
+- `monitoring` — Monitoring notes (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**House Robber** (Medium) · pattern **DP 1D**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-22.md`](./artifacts/algo/problems/day-22.md)  
-→ Code + test trong lab repo: `algo/day-22/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `dashboard-15-apis` — Dashboard with 15 APIs
+- `bff-when` — When to introduce a BFF
+- `observability-frontend` — Good frontend observability
 
-- [ ] Pyramid map; ≥2 RTL tests green; DP OK.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Take one admin/dashboard idea and outline widgets, API dependencies, failure boundaries, and which data can arrive progressively.
+  - **VI:** Chọn một ý tưởng admin/dashboard và vẽ ra widget, phụ thuộc API, boundary của lỗi và phần data nào có thể hiện dần.
+- **EN:** State whether a BFF is justified or whether better API contracts are enough.
+  - **VI:** Kết luận xem có cần BFF thật hay chỉ cần API contract tốt hơn là đủ.
+
+## Algorithm
+
+- **Problem:** House Robber · DP 1D
+- Full prompt: [`artifacts/algo/problems/day-22.md`](./artifacts/algo/problems/day-22.md)
+- Code + test in the lab repo: `algorithms/day-22/`
+
+## Checkpoint
+
+- Kế hoạch dashboard đã tách rõ kiến trúc với hành vi UX.
+  - EN: The dashboard plan separates architecture from UX behavior.
+- Đã có quan điểm rõ về BFF so với gọi API trực tiếp.
+  - EN: There is a clear opinion on BFF vs direct APIs.
+- Bài algo xong và hiểu được ý tưởng DP cuộn.
+  - EN: Algo is done and the rolling-DP idea is clear.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-22-lab.md`](./lab/day-22-lab.md)

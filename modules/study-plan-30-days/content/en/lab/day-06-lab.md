@@ -1,60 +1,42 @@
 # Day 6 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+How do you type props so the next engineer cannot misuse the component? When do you want a union vs a generic? Show Button, TextField, EmptyState.
 
-- Scaffold the Vue/Nuxt and React/Next apps in the same workspace.
+## What you will produce
 
-## What this day reuses
+- Spec 3 core component APIs (for example Button, TextField, EmptyState) with props, variants, and misuse guardrails.
+- Mark which props must stay simple and which ones should be extensible.
 
-- Reuse the full packages/ui work from Days 1-5.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/vue-nuxt/`
-- `apps/react-next/`
-- `packages/ui/`
-- `notes/day-06.md`
-- `algorithms/day-06/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm dev:next
-pnpm test:algo -- day-06
-```
-
-## Step-by-step
-
-1. Scaffold apps/vue-nuxt and apps/react-next.
-2. Import Button/FormField into both apps to test the workspace link.
-3. Write the root scripts and path mapping into the note.
+- **Decision:** Design the public type first. Variants as unions. Forbid impossible states (`loading` + `href` on a link button) in the type, not in a runtime warning.
+- **Constraint:** Type specs / short TS snippets only. No component library scaffold, no npm install.
+- **Failure mode:** `props: Record<string, any>`. A boolean forest (`primary`, `danger`, `ghost`) that allows `primary && danger`. Generics added for decoration.
+- **Measure:** Three typed APIs plus one intentional union or generic. You can explain one misuse the type prevents.
+- **Tradeoff:** Simple props vs extensible slots/render props. Simple wins consistency; extensible wins one-off product needs and costs support.
+- **Production gotcha:** Vue 3 `defineProps` + generic components still have inference edges. If you promise ‘the type makes it impossible’, know the escape hatch (`as any` in a template).
 
 ## Done when
 
-- Both apps boot.
-- The shared UI package imports in both apps.
-- There are basic root dev/lint/test scripts.
+- Three component APIs are typed and documented.
+- At least one union or generic is used intentionally.
+- Algo is done and the stack pattern feels natural.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add Storybook for packages/ui.
+Write the discriminated union for Button-as-button vs Button-as-link.
 
-## Hints
+## Algorithm
 
-- Focus on workspace plumbing, not new UI.
-
-## Algorithm task
-
-- **Problem:** Valid Parentheses
+- **Problem:** Valid Parentheses · Stack
 - **Constraints:**
 - 1 ≤ s.length ≤ 10^4
-- **Hint:** start from the **Stack** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** Stack: push openers; on close, pop and match the pair.
 
 ```text
 algorithms/day-06/solution.ts
@@ -68,5 +50,5 @@ Open the full prompt: [day-06.md](../artifacts/algo/problems/day-06.md)
 ## Suggested commit
 
 ```text
-day-06: scaffold vue and next apps
+day-06: spec three typed component APIs with misuse guardrails
 ```

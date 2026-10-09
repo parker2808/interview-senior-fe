@@ -1,59 +1,42 @@
 # Day 10 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+How do you type a real admin flow end to end? Where do you narrow? Which utility types are load-bearing? When is `unknown` better than `any`?
 
-- Add TypeScript models and a typed mock API for the Vue flow.
+## What you will produce
 
-## What this day reuses
+- Model one admin flow with DTO, UI model, mutation payload, and error state types.
+- Write down where you want strictness and where flexibility is acceptable.
 
-- Reuse the component tree and state map from Days 8-9.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/vue-nuxt/types/`
-- `apps/vue-nuxt/server-mocks/`
-- `apps/vue-nuxt/composables/`
-- `algorithms/day-10/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm typecheck
-pnpm test:algo -- day-10
-```
-
-## Step-by-step
-
-1. Define Customer, CustomerStatus, FieldConfig, and ApiError.
-2. Create a typed mock composable that returns list + detail data.
-3. Connect the typed data to the page shell.
+- **Decision:** Four types for one flow: DTO (wire), UI model (view), mutation payload (write), error union (recoverable vs fatal). Map DTO→UI in one function.
+- **Constraint:** Type-only note or a `.ts` snippet. Do not rebuild the Vue module that would consume the types.
+- **Failure mode:** One `Customer` type used as response, table row, and PUT body. `any` on errors. Optional fields that are actually required after the mapper.
+- **Measure:** One concrete model plus one guard or utility type used on purpose (`Pick`, `Omit`, `Extract`, type predicate).
+- **Tradeoff:** Strict DTOs catch backend drift and slow iteration. A looser boundary type at the edge plus a strict UI model is often the production compromise.
+- **Production gotcha:** Date strings vs `Date`. Nullable IDs from list endpoints. Error envelopes that change shape between 400 and 500. Zod/io-ts only if you have used them — do not bluff.
 
 ## Done when
 
-- Typecheck is clean.
-- Mock data renders.
-- There is no any on the main path.
+- You have one concrete type model for a real flow.
+- At least one guard or utility type is used on purpose.
+- Algo is complete and the sliding-window pattern is understandable.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a discriminated union for fetch state.
+Write a type guard for the error union and show the narrow in an `if`.
 
-## Hints
-
-- A small mock API is enough.
-
-## Algorithm task
+## Algorithm
 
 - **Problem:** Longest Substring Without Repeating Characters
 - **Constraints:**
 - 0 ≤ s.length ≤ 5·10^4
-- **Hint:** start from the **Sliding window** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** Window [l,r] + Set/Map of last index; on duplicate, shrink l.
 
 ```text
 algorithms/day-10/solution.ts
@@ -67,5 +50,5 @@ Open the full prompt: [day-10.md](../artifacts/algo/problems/day-10.md)
 ## Suggested commit
 
 ```text
-day-10: add typed vue mock data
+day-10: model DTO UI mutation and error types for one flow
 ```

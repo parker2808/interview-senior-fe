@@ -1,70 +1,67 @@
 # Day 6 — Lab
 
-> **Timebox:** 45-60 phút / minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.  
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Companion repo: [lab-repo.md](../lab-repo.md)
+## What they will ask / Họ sẽ hỏi gì
 
-## Hôm nay build gì / What you will build
+- **EN:** How do you type props so the next engineer cannot misuse the component? When do you want a union vs a generic? Show Button, TextField, EmptyState.
+- **VI:** Type props thế nào để engineer sau không dùng sai component? Khi nào dùng union, khi nào generic? Show Button, TextField, EmptyState.
 
-- **VI:** Scaffold Vue/Nuxt và React/Next app trong cùng workspace.
-- **EN:** Scaffold the Vue/Nuxt and React/Next apps in the same workspace.
+## What you will produce / Bạn sẽ produce gì
 
-## Reuse từ ngày trước / Reuse from earlier days
+- **EN:** Spec 3 core component APIs (for example Button, TextField, EmptyState) with props, variants, and misuse guardrails.
+  - **VI:** Spec 3 API component cốt lõi (ví dụ Button, TextField, EmptyState) gồm props, variant và guardrail chống dùng sai.
+- **EN:** Mark which props must stay simple and which ones should be extensible.
+  - **VI:** Đánh dấu prop nào phải giữ thật đơn giản và prop nào nên cho phép mở rộng.
 
-- **VI:** Dùng lại toàn bộ packages/ui của Day 1-5.
-- **EN:** Reuse the full packages/ui work from Days 1-5.
+## How a senior works this / Senior làm thế nào
 
-## Folder(s) nên chạm / Folders to touch
-
-- `apps/vue-nuxt/`
-- `apps/react-next/`
-- `packages/ui/`
-- `notes/day-06.md`
-- `algorithms/day-06/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm dev:next
-pnpm test:algo -- day-06
-```
-
-## Từng bước / Step-by-step
-
-1. Scaffold apps/vue-nuxt và apps/react-next.
-   - EN: Scaffold apps/vue-nuxt and apps/react-next.
-2. Import Button/FormField vào cả hai app để test workspace link.
-   - EN: Import Button/FormField into both apps to test the workspace link.
-3. Ghi root scripts và path mapping vào note.
-   - EN: Write the root scripts and path mapping into the note.
+- **Decision / Quyết định:**
+  - EN: Design the public type first. Variants as unions. Forbid impossible states (`loading` + `href` on a link button) in the type, not in a runtime warning.
+  - VI: Thiết kế public type trước. Variant là union. Cấm state bất khả thi (`loading` + `href` trên link button) ngay trong type, không phải warning runtime.
+- **Constraint / Ràng buộc:**
+  - EN: Type specs / short TS snippets only. No component library scaffold, no npm install.
+  - VI: Chỉ spec type / snippet TS ngắn. Không scaffold component library, không npm install.
+- **Failure mode:**
+  - EN: `props: Record<string, any>`. A boolean forest (`primary`, `danger`, `ghost`) that allows `primary && danger`. Generics added for decoration.
+  - VI: `props: Record<string, any>`. Rừng boolean (`primary`, `danger`, `ghost`) cho phép `primary && danger`. Generic chỉ để trang trí.
+- **Measure / Cách đo:**
+  - EN: Three typed APIs plus one intentional union or generic. You can explain one misuse the type prevents.
+  - VI: Ba API đã type cộng một union hoặc generic có chủ đích. Giải thích được một cách dùng sai mà type chặn.
+- **Tradeoff / Trade-off:**
+  - EN: Simple props vs extensible slots/render props. Simple wins consistency; extensible wins one-off product needs and costs support.
+  - VI: Props đơn giản hay slot/render prop mở rộng. Đơn giản thắng consistency; mở rộng thắng case product lẻ và tốn support.
+- **Production gotcha / Gotcha production:**
+  - EN: Vue 3 `defineProps` + generic components still have inference edges. If you promise ‘the type makes it impossible’, know the escape hatch (`as any` in a template).
+  - VI: Vue 3 `defineProps` + generic component vẫn có mép inference. Nếu hứa ‘type khiến điều đó bất khả thi’, phải biết lỗ thoát (`as any` trong template).
 
 ## Done when / Tiêu chí xong
 
-- Cả 2 app boot được.
-  - EN: Both apps boot.
-- Shared UI import chạy ở cả 2 app.
-  - EN: The shared UI package imports in both apps.
-- Có root script dev/lint/test tối thiểu.
-  - EN: There are basic root dev/lint/test scripts.
+- Ba API component đã được type và ghi chú rõ.
+  - EN: Three component APIs are typed and documented.
+- Có ít nhất một union hoặc generic được dùng có chủ đích.
+  - EN: At least one union or generic is used intentionally.
+- Bài algo xong và pattern stack đã thấy quen tay.
+  - EN: Algo is done and the stack pattern feels natural.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch / Stretch
 
-- Thêm Storybook cho packages/ui.
-  - EN: Add Storybook for packages/ui.
+- **EN:** Write the discriminated union for Button-as-button vs Button-as-link.
+- **VI:** Viết discriminated union cho Button-as-button và Button-as-link.
 
-## Hints
+## Algorithm / Thuật toán
 
-- Focus vào plumbing của workspace, không phải UI mới.
-  - EN: Focus on workspace plumbing, not new UI.
-
-## Algorithm task
-
-- **Problem:** Valid Parentheses
-- **Constraints:**
+- **Problem / Bài:** Valid Parentheses · Stack / Valid Parentheses · Stack
+- **Constraints / Ràng buộc:**
+  - EN:
 - 1 ≤ s.length ≤ 10^4
-- **Hint:** Stack: gặp mở thì push; gặp đóng thì pop và khớp cặp.
+  - VI:
+- 1 ≤ s.length ≤ 10^4
+- **Hint:** Stack: push openers; on close, pop and match the pair.
+  - VI: Stack: gặp mở thì push; gặp đóng thì pop và khớp cặp.
 
 ```text
 algorithms/day-06/solution.ts
@@ -78,5 +75,5 @@ Open the full prompt: [day-06.md](../artifacts/algo/problems/day-06.md)
 ## Suggested commit
 
 ```text
-day-06: scaffold vue and next apps
+day-06: spec three typed component APIs with misuse guardrails
 ```

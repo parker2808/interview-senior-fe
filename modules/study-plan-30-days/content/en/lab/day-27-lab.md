@@ -1,57 +1,42 @@
 # Day 27 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+How do you review code? What is your quality bar? How do you handle ambiguity? Which of those answers are still weak — concept, story, or articulation?
 
-- Polish the Vue vertical slice so you can demo it confidently.
+## What you will produce
 
-## What this day reuses
+- List the 5 questions you still answer weakly and group them by root cause: concept gap, story gap, or articulation gap.
+- Pick the top 2 weak spots and do one repair pass each today.
 
-- Reuse the full Week 2 Vue flow.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/vue-nuxt/`
-- `notes/day-27.md`
-- `algorithms/day-27/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm test:algo -- day-27
-```
-
-## Step-by-step
-
-1. Pick one slice: customers list+detail or field config.
-2. Polish the states, copy, and demo path for that slice.
-3. Write 3 trade-offs into the note.
+- **Decision:** Triage before more study. Concept gap → reread + one example. Story gap → STAR from a shipped system. Articulation gap → record and cut.
+- **Constraint:** A weak-spot list plus two repair passes. Not a Vue spike and not a new Next feature.
+- **Failure mode:** A list of 20 topics. Repairing the topic you like instead of the one that would fail the loop. No spoken pass.
+- **Measure:** A real weak-spot list with priorities, and two spots that got a concrete repair pass.
+- **Tradeoff:** Breadth review feels safe and changes nothing. Two deep repairs raise the floor of the mock tomorrow.
+- **Production gotcha:** Ambiguity answers that skip the clarifying question. Code-review answers that only mention style. Quality bars with no example of something you rejected.
 
 ## Done when
 
-- The Vue slice is demoable end to end.
-- There is a trade-off note.
-- You can present it in 2-3 minutes.
+- A real weak-spot list exists with priorities.
+- Two weak spots got a concrete repair pass.
+- Big-O flashcards are complete.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a screenshot to the README.
+Write the clarifying questions you ask in the first 2 minutes of a vague design prompt.
 
-## Hints
-
-- One coherent slice beats three half-finished ones.
-
-## Algorithm task
+## Algorithm
 
 - **Problem:** Big-O flashcards
 - **Constraints:**
-- 10′
-- **Hint:** start from the **Theory** pattern and open the full prompt if you need a stronger nudge.
+- 10 minutes
+- **Hint:** Write a 6-row table.
 
 ```text
 algorithms/day-27/solution.ts
@@ -65,5 +50,5 @@ Open the full prompt: [day-27.md](../artifacts/algo/problems/day-27.md)
 ## Suggested commit
 
 ```text
-day-27: polish vue vertical slice
+day-27: weak-spot triage and two repair passes
 ```

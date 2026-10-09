@@ -1,57 +1,42 @@
 # Day 28 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+Can you hold a 45–60 minute loop: intro, technical Q&A, and either coding or system design (autocomplete, a recent project, design-system growth) without resetting?
 
-- Reach similar parity on React/Next for the same slice.
+## What you will produce
 
-## What this day reuses
+- Simulate 45-60 minutes: 10 minutes intro/project, 20 minutes technical/Q&A, 15-20 minutes coding or system design.
+- Score yourself immediately after: strongest answer, weakest answer, and one timing issue.
 
-- Reuse the same domain and slice from Day 27.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/react-next/`
-- `notes/day-28.md`
-- `algorithms/day-28/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-28
-```
-
-## Step-by-step
-
-1. Polish the same slice in the Next app so it compares directly with Vue.
-2. Make sure loading/error/action paths are demoable.
-3. Write 3 DX/architecture differences between Vue and Next.
+- **Decision:** One uninterrupted block. Use a timer. Score while the memory is fresh. This is a mock, not a React parity spike.
+- **Constraint:** 45–60 minutes as one sitting. No pausing to look up docs. No Capstone Vue/React build.
+- **Failure mode:** Three short drills with breaks. Scoring the next morning. Designing autocomplete for 40 minutes and skipping the intro.
+- **Measure:** The mock happened as one block. Lessons are written. Strongest, weakest, one timing issue.
+- **Tradeoff:** Coding vs system design in the last segment: pick the weaker one. Comfort-zone mocks hide the gap.
+- **Production gotcha:** Going deep on a favorite Vue story and starving the design segment. Saying ‘as I said yesterday’ — the interviewer was not there.
 
 ## Done when
 
-- The Next slice is demoable.
-- There is a Vue vs Next note.
-- You can demo both apps side by side.
+- The mock happened as one uninterrupted block.
+- You captured lessons while the memory was still fresh.
+- Cooldown algo is complete.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a smoke test for the Next slice.
+If you have a peer, swap 15 minutes of Q&A. If not, play the recording at 1.25× and mark filler words.
 
-## Hints
+## Algorithm
 
-- Feature parity matters more than pixel polish.
-
-## Algorithm task
-
-- **Problem:** Cooldown Easy
+- **Problem:** Cooldown easy problem
 - **Constraints:**
-- Optional nếu spike overtime
-- **Hint:** start from the **Cooldown** pattern and open the full prompt if you need a stronger nudge.
+- Keep it light after the mock
+- **Hint:** A short cooldown, not a skip. Use it to reset narration.
 
 ```text
 algorithms/day-28/solution.ts
@@ -65,5 +50,5 @@ Open the full prompt: [day-28.md](../artifacts/algo/problems/day-28.md)
 ## Suggested commit
 
 ```text
-day-28: polish next parity slice
+day-28: mock round 1 score strongest weakest timing
 ```

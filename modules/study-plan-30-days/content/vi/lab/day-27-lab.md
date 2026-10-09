@@ -1,57 +1,42 @@
 # Day 27 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Bạn review code thế nào? Quality bar của bạn là gì? Xử lý requirement mơ hồ ra sao? Câu nào vẫn yếu — khái niệm, story, hay diễn đạt?
 
-- Polish vertical slice Vue để demo tự tin.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Liệt kê 5 câu bạn vẫn trả lời yếu và gom nhóm theo root cause: thiếu khái niệm, thiếu story hay diễn đạt chưa rõ.
+- Chọn 2 điểm yếu lớn nhất và sửa một lượt tập trung cho từng điểm trong hôm nay.
 
-- Dùng toàn bộ flow Vue tuần 2.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/vue-nuxt/`
-- `notes/day-27.md`
-- `algorithms/day-27/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm test:algo -- day-27
-```
-
-## Từng bước
-
-1. Chọn 1 slice: customers list+detail hoặc field config.
-2. Polish state, copy và demo path cho slice đó.
-3. Viết 3 trade-off trong note.
+- **Quyết định:** Phân loại trước khi học thêm. Thiếu khái niệm → đọc lại + một ví dụ. Thiếu story → STAR từ hệ thống đã ship. Diễn đạt yếu → ghi âm và cắt.
+- **Constraint:** Danh sách điểm yếu cộng hai lượt sửa. Không phải spike Vue và không phải feature Next mới.
+- **Failure mode:** List 20 chủ đề. Sửa topic bạn thích thay vì topic sẽ trượt vòng. Không có lượt nói.
+- **Cách đo:** Danh sách điểm yếu thật kèm ưu tiên, và hai điểm đã được sửa một lượt cụ thể.
+- **Trade-off:** Ôn rộng thì thấy an toàn và không đổi gì. Hai lượt sửa sâu nâng sàn buổi mock ngày mai.
+- **Gotcha production:** Câu ambiguity bỏ qua câu hỏi làm rõ. Câu code-review chỉ nói style. Quality bar không có ví dụ thứ bạn đã từ chối.
 
 ## Tiêu chí xong
 
-- Slice Vue demo được từ đầu tới cuối.
-- Có trade-off note.
-- Có thể giới thiệu trong 2-3 phút.
+- Đã có danh sách điểm yếu thật kèm thứ tự ưu tiên.
+- Hai điểm yếu đã được sửa bằng một lượt ôn tập cụ thể.
+- Đã xong phần flashcard Big-O.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm screenshot vào README.
+Viết các câu hỏi làm rõ bạn hỏi trong 2 phút đầu của đề design mơ hồ.
 
-## Gợi ý
+## Thuật toán
 
-- Một slice mạch lạc tốt hơn ba slice dang dở.
-
-## Bài thuật toán
-
-- **Bài:** Big-O flashcards
+- **Bài:** Flashcard Big-O
 - **Ràng buộc:**
 - 10′
-- **Hint:** xem pattern **Theory** và mở đề đầy đủ nếu cần.
+- **Hint:** Viết bảng 6 dòng.
 
 ```text
 algorithms/day-27/solution.ts
@@ -65,5 +50,5 @@ Mở đề đầy đủ: [day-27.md](../artifacts/algo/problems/day-27.md)
 ## Commit gợi ý
 
 ```text
-day-27: polish vue vertical slice
+day-27: weak-spot triage and two repair passes
 ```

@@ -1,39 +1,59 @@
-# Day 2 — Hướng dẫn (04/10/2026)
+# Day 2 — Interview drill (04/10/2026)
 
-**Chủ đề:** this/event loop + UI critique  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Giải thích this + micro/macrotask; critique UI admin có hierarchy rõ.
+**Theme:** Make UI states readable / Làm cho UI state dễ đọc  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/javascript.md — this, event loop
-- documents/vi/architecture.md — presentational vs container
-- documents/vi/react.md — rendering mental model
+- **EN:** Practice the product and UX judgment needed to keep complex screens understandable.
+- **VI:** Luyện product sense và UX judgment để giữ màn hình phức tạp vẫn dễ hiểu.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** A dashboard calls 15 APIs. What does the user see first, what can arrive late, and what fails independently? How do you keep hierarchy obvious in 10 seconds?
+- **VI:** Dashboard gọi 15 API. User thấy gì trước, phần nào được tới muộn, phần nào fail độc lập? Làm sao hierarchy rõ trong 10 giây?
 
-### 1) Capstone / FE craft
-Critique 1 admin page: primary action, empty/loading/error, 8–10 UX issues + sketch redesign.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-02-ui-critique.md`](./artifacts/day-02-ui-critique.md)
+## Read
 
-### 2) React / Next lab
-Lab: useState counter + conditional render. So sánh với ref Vue. Giải thích re-render khi setState.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-02-lab.md`](./lab/day-02-lab.md)
+- `accessibility` — Accessibility basics (opens in a new tab in the app / mở tab mới trong app)
+- `architecture` — Architecture notes (opens in a new tab in the app / mở tab mới trong app)
+- `practical-questions` — Practical debugging notes (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Valid Anagram** (Easy) · pattern **Frequency map**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-02.md`](./artifacts/algo/problems/day-02.md)  
-→ Code + test trong lab repo: `algo/day-02/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `dashboard-15-apis` — Dashboard with 15 APIs
+- `lazy-loading-tradeoffs` — Lazy loading trade-offs
 
-- [ ] Nói được thứ tự log của 1 snippet Promise/setTimeout; có UI critique; Anagram pass.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Take one screen from Parker’s experience and redraw loading, empty, error, and permission-denied states.
+  - **VI:** Lấy một màn hình từ kinh nghiệm của Parker và vẽ lại loading, empty, error và permission-denied state.
+- **EN:** Rewrite the heading, primary action, and helper copy so the hierarchy is obvious in under 10 seconds.
+  - **VI:** Viết lại heading, primary action và helper copy sao cho nhìn dưới 10 giây là hiểu thứ tự ưu tiên.
+
+## Algorithm
+
+- **Problem:** Valid Anagram · Frequency map
+- Full prompt: [`artifacts/algo/problems/day-02.md`](./artifacts/algo/problems/day-02.md)
+- Code + test in the lab repo: `algorithms/day-02/`
+
+## Checkpoint
+
+- Màn hình đã có đủ state rõ ràng, không chỉ happy path.
+  - EN: The screen has explicit state coverage, not just the happy path.
+- Giải thích được ít nhất 1 UX trade-off bằng product impact chứ không chỉ là gu.
+  - EN: You can explain one UX trade-off with product impact, not taste only.
+- Bài algo chạy đúng với reasoning O(n).
+  - EN: Algo passes with O(n) reasoning.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-02-lab.md`](./lab/day-02-lab.md)

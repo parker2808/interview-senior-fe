@@ -1,57 +1,42 @@
 # Day 24 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+CSRF vs XSS — what changes in the UI? How do you evaluate a third-party script? How do you roll out a frontend feature with flags and a rollback?
 
-- Add a guard/flag and a release checklist to the repo.
+## What you will produce
 
-## What this day reuses
+- Write a short release checklist for one frontend feature: flags, monitoring, rollback, third-party risk, and post-release watch points.
+- Add one paragraph on how cookie auth, XSS, and CSRF change your UI decisions.
 
-- Reuse the current dashboard or customers route.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/react-next/app/(admin)/`
-- `notes/day-24.md`
-- `algorithms/day-24/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-24
-```
-
-## Step-by-step
-
-1. Pick either a light auth gate or a feature-flag wrapper.
-2. Write the companion security/release checklist.
-3. Make sure the UI explains clearly when a feature is locked.
+- **Decision:** Treat release as part of the design. Flags + one metric + a rollback path before the merge. Security notes must change a concrete UI choice (no `v-html`, cookie flags, CSRF token on mutations).
+- **Constraint:** Checklist + one paragraph. Not an E2E suite, not a CI rewrite.
+- **Failure mode:** A generic OWASP list. Feature flags that cannot be turned off without a deploy. ‘XSS is a backend problem.’
+- **Measure:** The checklist is practical enough to use next week. Security notes are tied to concrete frontend choices.
+- **Tradeoff:** Third-party tags buy product analytics and cost XSS surface, perf, and a vendor outage in your critical path. Say no, or isolate.
+- **Production gotcha:** HttpOnly cookies still leave you CSRF-exposed on cookie-auth mutations. `innerHTML` in a Vue `v-html` from a ‘trusted CMS’. Flags that default on in production.
 
 ## Done when
 
-- There is one real guard/flag.
-- The release/security checklist exists.
-- The blocked state is understandable.
+- The release checklist is practical enough to use next week.
+- Security notes are tied to concrete frontend choices.
+- Live-coding algo session is complete.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a rollback note.
+Add the rollback sentence: what you revert (flag, CDN, or commit) and how long until users are safe.
 
-## Hints
-
-- The goal is decision-making, not a full auth system.
-
-## Algorithm task
+## Algorithm
 
 - **Problem:** Live coding simulation
 - **Constraints:**
-- Đúng 45′, có timer
-- **Hint:** start from the **Interview sim** pattern and open the full prompt if you need a stronger nudge.
+- Narrate the pattern before typing
+- **Hint:** Say the pattern out loud before you type.
 
 ```text
 algorithms/day-24/solution.ts
@@ -65,5 +50,5 @@ Open the full prompt: [day-24.md](../artifacts/algo/problems/day-24.md)
 ## Suggested commit
 
 ```text
-day-24: add release guard and checklist
+day-24: frontend release checklist and XSS CSRF UI notes
 ```

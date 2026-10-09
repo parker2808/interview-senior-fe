@@ -1,57 +1,42 @@
 # Day 30 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+Can you run 75–90 minutes end to end: intro, project deep dive, 5–7 technical questions, one design or coding segment, closing, then a retrospective that names next steps?
 
-- Lock the repo into a state you can demo in an interview.
+## What you will produce
 
-## What this day reuses
+- Run a 75-90 minute mock: intro, project deep dive, 5-7 technical questions, one design/coding segment, and closing questions.
+- Finish with a short retrospective: what sounded strongest, what still sounded vague, and what Parker should not bluff.
 
-- Reuse the whole repo as mock-interview material.
+## How a senior works this
 
-## Folders to touch
-
-- `README.md`
-- `notes/interview/`
-- `notes/day-30.md`
-- `algorithms/day-30/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm test:algo -- day-30
-```
-
-## Step-by-step
-
-1. Add the final project summary, structure, and run guide to the README.
-2. Write the 10-15 minute demo script plus the post-mock retrospective.
-3. Choose 1-2 screenshots or GIFs so the repo looks tighter and more credible.
+- **Decision:** Full run, then a retrospective with concrete next steps — not feelings. Name the no-bluff list out loud.
+- **Constraint:** 75–90 minutes + 15 minutes retro. Do not open a new feature. Do not package a demo repo as the day.
+- **Failure mode:** Stopping at 40 minutes because it ‘felt fine’. A retro that says ‘need more confidence’. Bluffing Next cache internals you still cannot draw.
+- **Measure:** The full mock completed end to end. The retro names concrete next steps. The mock algo problem is done.
+- **Tradeoff:** Spending the last 10 minutes on another technical flex vs asking two sharp questions about the team. Seniors use the close.
+- **Production gotcha:** Energy drop in minute 50. Strengths/weaknesses answers that contradict the intro. A hardship story that still blames a person by name.
 
 ## Done when
 
-- The README is good enough to show a recruiter/interviewer.
-- There is a short demo script based on the repo.
-- The repo reads like one coherent 30-day progression.
+- The full mock was completed end to end.
+- The retrospective names concrete next steps, not generic feelings.
+- The final mock algo problem is complete.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Record a 2-3 minute demo video for the repo.
+Write the 7-day list from Day 29 against today’s retro and keep only the overlap.
 
-## Hints
+## Algorithm
 
-- This is the packaging day, not the day to open new scope.
-
-## Algorithm task
-
-- **Problem:** Mock interview live coding
+- **Problem:** Mock live-coding problem
 - **Constraints:**
-- During a 60-90 minute mock
-- **Hint:** start from the **Mock** pattern and open the full prompt if you need a stronger nudge.
+- Inside the 75–90 minute mock
+- **Hint:** Narrate out loud.
 
 ```text
 algorithms/day-30/solution.ts
@@ -65,5 +50,5 @@ Open the full prompt: [day-30.md](../artifacts/algo/problems/day-30.md)
 ## Suggested commit
 
 ```text
-day-30: finalize demoable interview repo
+day-30: full mock retrospective and no-bluff list
 ```

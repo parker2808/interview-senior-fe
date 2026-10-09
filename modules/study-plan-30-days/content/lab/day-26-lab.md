@@ -1,69 +1,67 @@
 # Day 26 — Lab
 
-> **Timebox:** 45-60 phút / minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.  
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Companion repo: [lab-repo.md](../lab-repo.md)
+## What they will ask / Họ sẽ hỏi gì
 
-## Hôm nay build gì / What you will build
+- **EN:** Walk me through a recent project. What trade-off did you own? Why should we trust you on React if your production depth is in Vue?
+- **VI:** Kể một recent project. Trade-off nào bạn own? Vì sao tin bạn ở React khi production depth nằm ở Vue?
 
-- **VI:** Thêm tests và checklist review cho repo.
-- **EN:** Add tests and a review checklist to the repo.
+## What you will produce / Bạn sẽ produce gì
 
-## Reuse từ ngày trước / Reuse from earlier days
+- **EN:** Write one project story with constraint, trade-off, risk, and result, then trim it to 2 minutes.
+  - **VI:** Viết một project story có constraint, trade-off, risk và result, rồi rút còn 2 phút.
+- **EN:** Write one strong answer for “Why should we trust you on React if your production depth is in Vue?”
+  - **VI:** Viết một câu trả lời chắc tay cho câu “Vì sao chúng tôi nên tin bạn ở React khi production depth của bạn nằm ở Vue?”
 
-- **VI:** Dùng flow Vue hoặc Next đại diện nhất.
-- **EN:** Reuse whichever Vue or Next flow is the most representative.
+## How a senior works this / Senior làm thế nào
 
-## Folder(s) nên chạm / Folders to touch
-
-- `packages/ui/src/**/__tests__/`
-- `apps/react-next/**/__tests__/`
-- `notes/day-26.md`
-- `algorithms/day-26/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm test:ui
-pnpm test:next  # or vitest/rtl
-pnpm test:algo -- day-26
-```
-
-## Từng bước / Step-by-step
-
-1. Viết 1 test cho shared primitive và 1 test cho page flow.
-   - EN: Write 1 test for a shared primitive and 1 test for a page flow.
-2. Tạo checklist review correctness/a11y/perf/security/tests.
-   - EN: Create a review checklist for correctness/accessibility/performance/security/tests.
-3. Chạy test và ghi kết quả ngắn.
-   - EN: Run the tests and note the short result.
+- **Decision / Quyết định:**
+  - EN: One project, timed to 2 minutes, using constraint → trade-off → risk → result. The React-gap answer is transfer + evidence + honesty, not a defense.
+  - VI: Một project, bấm 2 phút, theo constraint → trade-off → risk → result. Câu khoảng trống React là chuyển nguyên lý + bằng chứng + thành thật, không phải phòng thủ.
+- **Constraint / Ràng buộc:**
+  - EN: Spoken stories only. Day 26 is behavioral, not a Capstone Vue/React spike and not a test-writing day.
+  - VI: Chỉ story nói. Day 26 là behavioral, không phải spike Capstone Vue/React và không phải ngày viết test.
+- **Failure mode:**
+  - EN: A tour of the architecture with no decision. Blaming the previous team. ‘I can learn anything’ with no proof from Week 3. Sounding defensive about Vue.
+  - VI: Tour kiến trúc không có quyết định. Đổ team trước. ‘Tôi học được gì cũng được’ mà không có bằng chứng từ Tuần 3. Giọng phòng thủ về Vue.
+- **Measure / Cách đo:**
+  - EN: The project story is timed and concise. The React-gap answer sounds credible, not defensive.
+  - VI: Project story gọn và có bấm giờ. Câu khoảng trống React nghe đáng tin, không phòng thủ.
+- **Tradeoff / Trade-off:**
+  - EN: In the project story, name the option you rejected and the user or delivery cost. In the React answer, trade swagger for a map: Vue concept → React evidence from this plan.
+  - VI: Trong project story, gọi tên option bạn từ chối và cái giá user hoặc delivery. Trong câu React, đổi vẻ ta đây lấy một map: khái niệm Vue → bằng chứng React từ plan này.
+- **Production gotcha / Gotcha production:**
+  - EN: Stories that collapse if they ask ‘what did you personally write?’ Confidential numbers you cannot share — prepare a relative metric.
+  - VI: Story sụp nếu họ hỏi ‘bạn viết phần nào?’ Số mật không share được — chuẩn bị metric tương đối.
 
 ## Done when / Tiêu chí xong
 
-- Ít nhất 2 test xanh.
-  - EN: At least 2 tests are green.
-- Có checklist review.
-  - EN: There is a review checklist.
-- Biết phần nào còn thiếu coverage.
-  - EN: You know what still lacks coverage.
+- Đã có một project story gọn và có bấm giờ.
+  - EN: One project story is timed and concise.
+- Câu trả lời về khoảng trống React nghe đáng tin, không phòng thủ.
+  - EN: The React-gap answer sounds credible, not defensive.
+- Đã xong weak-topic algo drill #2.
+  - EN: Weak-topic algo drill #2 is complete.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch / Stretch
 
-- Thêm sample CI workflow.
-  - EN: Add a sample CI workflow.
+- **EN:** Record both answers and cut any sentence that starts with ‘basically’ or ‘we just’.
+- **VI:** Ghi cả hai câu và cắt mọi câu bắt đầu bằng ‘basically’ hoặc ‘we just’.
 
-## Hints
+## Algorithm / Thuật toán
 
-- Test behavior quan trọng, không test implementation detail.
-  - EN: Test important behavior, not implementation detail.
-
-## Algorithm task
-
-- **Problem:** Weak-topic drill #2
-- **Constraints:**
+- **Problem / Bài:** Weak-topic drill #2 / Drill vào điểm yếu #2
+- **Constraints / Ràng buộc:**
+  - EN:
+- 20 minutes + reflection
+  - VI:
 - 20′ + reflection
-- **Hint:** So trigger với ngày trước.
+- **Hint:** Compare the trigger sentence with yesterday’s drill.
+  - VI: So trigger với ngày trước.
 
 ```text
 algorithms/day-26/solution.ts
@@ -77,5 +75,5 @@ Open the full prompt: [day-26.md](../artifacts/algo/problems/day-26.md)
 ## Suggested commit
 
 ```text
-day-26: add tests and review checklist
+day-26: two-minute project story and React-gap answer
 ```

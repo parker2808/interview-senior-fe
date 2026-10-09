@@ -1,67 +1,67 @@
 # Day 24 — Lab
 
-> **Timebox:** 45-60 phút / minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.  
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Companion repo: [lab-repo.md](../lab-repo.md)
+## What they will ask / Họ sẽ hỏi gì
 
-## Hôm nay build gì / What you will build
+- **EN:** CSRF vs XSS — what changes in the UI? How do you evaluate a third-party script? How do you roll out a frontend feature with flags and a rollback?
+- **VI:** CSRF vs XSS — UI đổi gì? Đánh giá third-party script thế nào? Rollout feature frontend với flag và rollback ra sao?
 
-- **VI:** Bổ sung guard/flag và checklist release cho repo.
-- **EN:** Add a guard/flag and a release checklist to the repo.
+## What you will produce / Bạn sẽ produce gì
 
-## Reuse từ ngày trước / Reuse from earlier days
+- **EN:** Write a short release checklist for one frontend feature: flags, monitoring, rollback, third-party risk, and post-release watch points.
+  - **VI:** Viết một release checklist ngắn cho một feature frontend: flag, monitoring, rollback, risk từ third-party và điểm cần quan sát sau release.
+- **EN:** Add one paragraph on how cookie auth, XSS, and CSRF change your UI decisions.
+  - **VI:** Thêm một đoạn ngắn về cách cookie auth, XSS và CSRF ảnh hưởng tới quyết định ở UI.
 
-- **VI:** Dùng dashboard hoặc customers route hiện có.
-- **EN:** Reuse the current dashboard or customers route.
+## How a senior works this / Senior làm thế nào
 
-## Folder(s) nên chạm / Folders to touch
-
-- `apps/react-next/app/(admin)/`
-- `notes/day-24.md`
-- `algorithms/day-24/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-24
-```
-
-## Từng bước / Step-by-step
-
-1. Chọn auth gate nhẹ hoặc feature flag wrapper.
-   - EN: Pick either a light auth gate or a feature-flag wrapper.
-2. Viết security/release checklist đi kèm.
-   - EN: Write the companion security/release checklist.
-3. Đảm bảo UI giải thích rõ khi feature bị khóa.
-   - EN: Make sure the UI explains clearly when a feature is locked.
+- **Decision / Quyết định:**
+  - EN: Treat release as part of the design. Flags + one metric + a rollback path before the merge. Security notes must change a concrete UI choice (no `v-html`, cookie flags, CSRF token on mutations).
+  - VI: Coi release là một phần của design. Flag + một metric + đường rollback trước khi merge. Ghi chú security phải đổi một lựa chọn UI cụ thể (không `v-html`, cookie flag, CSRF token trên mutation).
+- **Constraint / Ràng buộc:**
+  - EN: Checklist + one paragraph. Not an E2E suite, not a CI rewrite.
+  - VI: Checklist + một đoạn. Không phải bộ E2E, không viết lại CI.
+- **Failure mode:**
+  - EN: A generic OWASP list. Feature flags that cannot be turned off without a deploy. ‘XSS is a backend problem.’
+  - VI: List OWASP chung chung. Feature flag không tắt được nếu không deploy. ‘XSS là chuyện backend.’
+- **Measure / Cách đo:**
+  - EN: The checklist is practical enough to use next week. Security notes are tied to concrete frontend choices.
+  - VI: Checklist đủ thực tế để dùng tuần sau. Ghi chú security gắn với lựa chọn frontend cụ thể.
+- **Tradeoff / Trade-off:**
+  - EN: Third-party tags buy product analytics and cost XSS surface, perf, and a vendor outage in your critical path. Say no, or isolate.
+  - VI: Tag third-party mua analytics và trả bề mặt XSS, perf, và outage vendor trên critical path. Nói không, hoặc cô lập.
+- **Production gotcha / Gotcha production:**
+  - EN: HttpOnly cookies still leave you CSRF-exposed on cookie-auth mutations. `innerHTML` in a Vue `v-html` from a ‘trusted CMS’. Flags that default on in production.
+  - VI: Cookie HttpOnly vẫn để bạn hở CSRF trên mutation cookie-auth. `innerHTML` qua `v-html` từ ‘CMS tin cậy’. Flag mặc định bật trên production.
 
 ## Done when / Tiêu chí xong
 
-- Có 1 guard/flag thật.
-  - EN: There is one real guard/flag.
-- Checklist release/security đã có.
-  - EN: The release/security checklist exists.
-- Blocked state dễ hiểu.
-  - EN: The blocked state is understandable.
+- Release checklist đủ thực tế để dùng ngay tuần sau.
+  - EN: The release checklist is practical enough to use next week.
+- Ghi chú security đã gắn với lựa chọn frontend cụ thể.
+  - EN: Security notes are tied to concrete frontend choices.
+- Đã xong buổi mô phỏng live-coding algo.
+  - EN: Live-coding algo session is complete.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch / Stretch
 
-- Thêm rollback note.
-  - EN: Add a rollback note.
+- **EN:** Add the rollback sentence: what you revert (flag, CDN, or commit) and how long until users are safe.
+- **VI:** Thêm câu rollback: bạn revert cái gì (flag, CDN, hay commit) và bao lâu thì user an toàn.
 
-## Hints
+## Algorithm / Thuật toán
 
-- Mục tiêu là decision-making, không phải auth system hoàn chỉnh.
-  - EN: The goal is decision-making, not a full auth system.
-
-## Algorithm task
-
-- **Problem:** Live coding simulation
-- **Constraints:**
-- Đúng 45′, có timer
-- **Hint:** Nói pattern trước khi gõ.
+- **Problem / Bài:** Live coding simulation / Mô phỏng live coding
+- **Constraints / Ràng buộc:**
+  - EN:
+- Narrate the pattern before typing
+  - VI:
+- Nói pattern trước khi gõ
+- **Hint:** Say the pattern out loud before you type.
+  - VI: Nói pattern trước khi gõ.
 
 ```text
 algorithms/day-24/solution.ts
@@ -75,5 +75,5 @@ Open the full prompt: [day-24.md](../artifacts/algo/problems/day-24.md)
 ## Suggested commit
 
 ```text
-day-24: add release guard and checklist
+day-24: frontend release checklist and XSS CSRF UI notes
 ```

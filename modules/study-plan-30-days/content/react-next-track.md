@@ -1,8 +1,10 @@
 # React / Next.js track — dành cho Vue specialist
 
-**Mục tiêu sau 30 ngày:** Đọc và viết được React + Next App Router ở mức senior-interview: hooks, state ownership, data fetching, RSC vs client, và code được 1 slice Capstone bằng React/Next.
+**Mục tiêu sau 30 ngày:** Đọc và viết được React + Next App Router ở mức senior-interview: hooks, state ownership, data fetching, RSC vs client, và giải thích được bằng một slice nhỏ đã chạy — không phải bằng một Capstone từ tuần 1.
 
-Code practice nằm trong **companion lab repo** — xem [lab-repo.md](./lab-repo.md). Mỗi ngày mở tab **Lab setup** để biết folder/lệnh.
+Đây là **interview prep**, không phải giáo trình phải học hết. Docs và Q&A trong app mở **tab mới**; ở lại trang ngày trên Plan tab.
+
+Code practice (khi có) nằm trong companion lab repo — xem [lab-repo.md](./lab-repo.md). Mỗi ngày mở **Lab** để biết note / snippet / spike của ngày đó.
 
 ## Bản đồ tư duy Vue → React
 
@@ -20,30 +22,21 @@ Code practice nằm trong **companion lab repo** — xem [lab-repo.md](./lab-rep
 | Nuxt server routes / `useFetch` | Route Handlers / `fetch` + cache / React Query |
 | VTU | React Testing Library |
 
-## Nhịp mỗi ngày (25–35′)
+## Nhịp mỗi ngày (25–35′ khi tới tuần React)
 
-1. Đọc KB mục tương ứng (`documents/vi/react.md` · `nextjs.md` · `state-management-react.md`)
-2. **Lab nhỏ chạy được** (Vite React+TS hoặc Next app riêng — không nhét vào Nuxt hub)
-3. Viết 3–5 dòng so sánh “mình hay làm thế nào ở Vue”
-4. Checkpoint: giải thích được 1 câu “tại sao React làm vậy”
+1. Đọc KB mục tương ứng (`documents/vi/react.md` · `nextjs.md` · `state-management-react.md`) — mở tab mới
+2. **Drill nhỏ:** note so sánh, snippet, hoặc spike Day 21 — không phải product
+3. Viết 3–5 dòng “mình hay làm thế nào ở Vue”
+4. Checkpoint: giải thích được 1 câu “tại sao React làm vậy” theo decision → constraint → failure → measure
 
-## Setup đề xuất (Day 6)
+## Tuần focus (khớp PLAN_WEEKS)
 
-```bash
-# Lab React thuần
-npm create vite@latest fe-react-lab -- --template react-ts
-
-# Lab Next (từ tuần 3)
-npx create-next-app@latest fe-next-lab
-```
-
-Giữ 1 repo lab xuyên tháng; mỗi ngày 1 folder `day-NN/` hoặc 1 route.
-
-## Tuần focus
-
-| Tuần | Focus React/Next |
+| Tuần | Focus |
 |---|---|
-| 1 | Mental model, hooks cơ bản, lists, forms controlled |
-| 2 | Composition, Context, custom hooks, a11y portal |
-| 3 | Data fetching, error boundary, memo, **Next App Router + caching** |
-| 4 | RTL tests, Server Actions, Capstone spike React/Next |
+| 1 · Design system + UI | Tokens, states, a11y, responsive, component APIs. **Chưa** dựng React/Next product. |
+| 2 · JS/TS + Vue/Nuxt | Event loop, Promise/AbortController, type models, composable review, Nuxt rendering, state map, perf story. **Không** tiếp tục chuỗi build module Vue. |
+| 3 · React + Next | Mental model Vue→React, hooks, effects, App Router, cache/rendering, Server Actions, rồi **một** spike `/customers` nhỏ. |
+| 4 · System design + behavioral | Dashboard design, data-heavy trade-offs, security/release, behavioral stories, mock #1. **Không** phải ngày spike Capstone Vue/React. |
+| 5 · Review + mock | Company fit + full mock + retrospective. |
+
+Giữ 1 repo lab xuyên tháng nếu đã có; mỗi ngày một note `notes/day-NN.md` hoặc một snippet — đừng `npm create` lại từ đầu mỗi sáng.

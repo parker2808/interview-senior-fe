@@ -1,38 +1,60 @@
-# Day 11 — Hướng dẫn (13/10/2026)
+# Day 11 — Interview drill (13/10/2026)
 
-**Chủ đề:** Design system primitives  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Spec Button/FormField/Empty/Error; compound component pattern React.
+**Theme:** Vue reactivity and composables / Vue reactivity và composable  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/css-layout.md — skim tokens
-- documents/vi/react.md — compound components
+- **EN:** Turn everyday Vue knowledge into crisp interview explanations with trade-offs and boundaries.
+- **VI:** Biến kiến thức Vue hằng ngày thành các câu trả lời phỏng vấn gọn, rõ và có trade-off.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** How does Vue 3 reactivity actually work? `ref` vs `reactive`? What makes a composable good — and when is it a hidden God object?
+- **VI:** Reactivity Vue 3 chạy thật sự thế nào? `ref` hay `reactive`? Composable tốt là gì — và khi nào nó thành God object giấu mặt?
 
-### 1) Capstone / FE craft
-Spec 4 primitives: API props, variants, a11y notes, empty/error copy.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-11-design-primitives.md`](./artifacts/day-11-design-primitives.md)
+## Read
 
-### 2) React / Next lab
-Lab: <Tabs> compound (Tabs, TabsList, TabsTrigger, TabsContent) bằng Context nội bộ.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-11-lab.md`](./lab/day-11-lab.md)
+- `vue3` — Vue 3 notes (opens in a new tab in the app / mở tab mới trong app)
+- `state-management` — State management notes (opens in a new tab in the app / mở tab mới trong app)
+- `performance` — Performance notes (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Min Stack** (Medium) · pattern **Stack design**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-11.md`](./artifacts/algo/problems/day-11.md)  
-→ Code + test trong lab repo: `algo/day-11/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `vue-reactivity-internals` — Vue 3 reactivity internals
+- `vue-ref-vs-reactive` — ref vs reactive
+- `vue-composables` — What makes a good composable?
 
-- [ ] Spec đủ để handoff; Tabs lab keyboard-ish; Min Stack đúng.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Explain one real feature you built using ref/reactive/computed/watch, then rewrite the explanation as if an interviewer asked “why this design?”.
+  - **VI:** Giải thích một feature thật bạn đã làm với ref/reactive/computed/watch, rồi viết lại câu trả lời theo kiểu interviewer hỏi “vì sao thiết kế như vậy?”.
+- **EN:** Review one composable you wrote before and identify whether it owns state, side effects, or both.
+  - **VI:** Review một composable bạn từng viết và xác định nó đang sở hữu state, side effect hay cả hai.
+
+## Algorithm
+
+- **Problem:** Min Stack · Stack design
+- Full prompt: [`artifacts/algo/problems/day-11.md`](./artifacts/algo/problems/day-11.md)
+- Code + test in the lab repo: `algorithms/day-11/`
+
+## Checkpoint
+
+- Giải thích được Vue reactivity mà không nói chung chung.
+  - EN: You can explain Vue reactivity without hand-waving.
+- Đã review xong một composable với boundary rõ hơn.
+  - EN: One composable review is done with clearer boundaries.
+- Bài algo xong và pattern dùng stack phụ đã rõ.
+  - EN: Algo is done and the “supporting stack” pattern is clear.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-11-lab.md`](./lab/day-11-lab.md)

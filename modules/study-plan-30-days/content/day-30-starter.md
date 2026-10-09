@@ -1,38 +1,60 @@
-# Day 30 — Hướng dẫn (01/11/2026)
+# Day 30 — Interview drill (01/11/2026)
 
-**Chủ đề:** Full mock interview  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Mock 60–90′: Capstone walkthrough + React Q + live coding.
+**Theme:** Full mock interview + retrospective / Full mock interview + retrospective  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- self-check-questions.md
-- algorithms-track.md
+- **EN:** End the plan with a full run that combines stories, technical depth, and problem solving.
+- **VI:** Kết thúc plan bằng một lượt chạy hoàn chỉnh kết hợp story, độ sâu kỹ thuật và giải bài.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** Can you run 75–90 minutes end to end: intro, project deep dive, 5–7 technical questions, one design or coding segment, closing, then a retrospective that names next steps?
+- **VI:** Chạy được 75–90 phút từ đầu tới cuối: intro, project deep dive, 5–7 câu technical, một đoạn design hoặc coding, closing, rồi retrospective gọi tên bước tiếp theo?
 
-### 1) Capstone / FE craft
-Outline trả lời 10–15′ Capstone (problem→constraints→architecture→trade-offs→tests). Ghi weak list hậu mock.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-30-mock-outline.md`](./artifacts/day-30-mock-outline.md)
+## Read
 
-### 2) React / Next lab
-Chuẩn bị 5 câu: hooks rules, useEffect deps, RSC vs client, key reconciliation, state library choice.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-30-lab.md`](./lab/day-30-lab.md)
+- `self-check-questions.md` — Self-check questions (opens in a new tab in the app / mở tab mới trong app)
+- `algorithms-track.md` — Algorithms track (opens in a new tab in the app / mở tab mới trong app)
+- `react-next-track.md` — React / Next track (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Mock interview live coding** (Mixed) · pattern **Mock**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-30.md`](./artifacts/algo/problems/day-30.md)  
-→ Code + test trong lab repo: `algo/day-30/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `strengths-weaknesses` — Strengths and weaknesses
+- `mistake-hardship` — A mistake or difficulty story
+- `tradeoff-example` — A technical trade-off story
 
-- [ ] Ghi điểm 3 phần (Capstone/React/Algo) + 5 việc ôn tiếp 7 ngày sau.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Run a 75-90 minute mock: intro, project deep dive, 5-7 technical questions, one design/coding segment, and closing questions.
+  - **VI:** Chạy một buổi mock 75-90 phút: intro, project deep dive, 5-7 câu technical, một đoạn design/coding và phần closing question.
+- **EN:** Finish with a short retrospective: what sounded strongest, what still sounded vague, and what Parker should not bluff.
+  - **VI:** Kết thúc bằng retrospective ngắn: phần nào nghe mạnh nhất, phần nào vẫn mơ hồ và phần nào Parker tuyệt đối không nên bluff.
+
+## Algorithm
+
+- **Problem:** Mock live-coding problem
+- Full prompt: [`artifacts/algo/problems/day-30.md`](./artifacts/algo/problems/day-30.md)
+- Code + test in the lab repo: `algorithms/day-30/`
+
+## Checkpoint
+
+- Buổi mock hoàn chỉnh đã chạy xong từ đầu tới cuối.
+  - EN: The full mock was completed end to end.
+- Phần retrospective gọi tên bước tiếp theo thật cụ thể, không chỉ là cảm giác chung chung.
+  - EN: The retrospective names concrete next steps, not generic feelings.
+- Đã xong bài algo cuối kiểu mock.
+  - EN: The final mock algo problem is complete.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-30-lab.md`](./lab/day-30-lab.md)

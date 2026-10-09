@@ -1,39 +1,60 @@
-# Day 20 — Hướng dẫn (22/10/2026)
+# Day 20 — Interview drill (22/10/2026)
 
-**Chủ đề:** Observability + Next App Router  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Logging/CWV plan; tạo Next app router đầu tiên.
+**Theme:** Server Actions, middleware, SEO, and assets / Server Actions, middleware, SEO và tối ưu asset  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/monitoring.md
-- documents/vi/nextjs.md — App Router, layouts
-- documents/vi/build-tools.md — skim bundle
+- **EN:** Round out the practical Next.js topics that often show up in senior frontend interviews.
+- **VI:** Bổ sung những chủ đề Next.js thực dụng thường xuất hiện trong phỏng vấn senior frontend.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** When do Server Actions help and when are they the wrong tool? What can middleware actually do? How do you handle metadata, images, fonts, and a first deploy?
+- **VI:** Khi nào Server Actions giúp và khi nào chúng là sai tool? Middleware làm được gì thật? Metadata, image, font và deploy lần đầu bạn xử lý ra sao?
 
-### 1) Capstone / FE craft
-Plan: gì log ở FE, correlation id, error reporting; lazy route list.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-20-observability.md`](./artifacts/day-20-observability.md)
+## Read
 
-### 2) React / Next lab
-Lab Next: app/ layout + page customers (RSC mặc định) + 1 Client Component interactive filter.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-20-lab.md`](./lab/day-20-lab.md)
+- `nextjs` — Next.js notes (opens in a new tab in the app / mở tab mới trong app)
+- `security` — Security notes (opens in a new tab in the app / mở tab mới trong app)
+- `build-tools` — Build tools notes (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Coin Change** (Medium) · pattern **DP unbounded knapsack**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-20.md`](./artifacts/algo/problems/day-20.md)  
-→ Code + test trong lab repo: `algo/day-20/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `next-server-actions` — Server Actions
+- `next-middleware-use-cases` — Next middleware use cases and limits
+- `next-metadata-image-font-deployment` — Metadata, SEO, image/font optimization, and deployment basics
 
-- [ ] Obs notes; Next /customers render; phân biệt Server vs Client component được.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** List which parts of a small admin flow belong in Server Actions, Route Handlers, or plain client mutations.
+  - **VI:** Liệt kê phần nào của một flow admin nhỏ nên nằm ở Server Actions, Route Handlers hay mutation phía client.
+- **EN:** Write a deployment checklist: env vars, caching assumptions, image/font usage, and what to verify after deploy.
+  - **VI:** Viết một deployment checklist: env vars, giả định về cache, dùng image/font thế nào và cần verify gì sau deploy.
+
+## Algorithm
+
+- **Problem:** Coin Change · DP
+- Full prompt: [`artifacts/algo/problems/day-20.md`](./artifacts/algo/problems/day-20.md)
+- Code + test in the lab repo: `algorithms/day-20/`
+
+## Checkpoint
+
+- Giải thích được khi nào Server Actions làm flow đơn giản hơn và khi nào thì không.
+  - EN: You can explain when Server Actions simplify a flow and when they do not.
+- Middleware, SEO và tối ưu asset đã gắn với use case cụ thể.
+  - EN: Middleware, SEO, and asset optimization are tied to concrete use cases.
+- Bài algo xong và giải thích được cách chọn state cho DP.
+  - EN: Algo is done and the DP state choice is explainable.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-20-lab.md`](./lab/day-20-lab.md)

@@ -1,58 +1,42 @@
 # Day 18 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+App Router và RSC giải bài toán gì? Nested layout và `loading.tsx` / `error.tsx` theo segment hoạt động ra sao? Khi nào bắt buộc Client Component?
 
-- Dùng App Router đúng chất cho route Customers.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Vẽ cây thư mục cho một app Next nhỏ với root layout, dashboard layout, một page, loading.tsx và error.tsx.
+- Với mỗi file, ghi lại khái niệm Nuxt 3 gần nhất mà nó map tới.
 
-- Dùng route Next Day 15-17.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/react-next/app/(admin)/customers/`
-- `apps/react-next/app/(admin)/layout.tsx`
-- `notes/day-18.md`
-- `algorithms/day-18/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-18
-```
-
-## Từng bước
-
-1. Chuyển route vào admin layout/segment rõ ràng.
-2. Thêm loading.tsx và error.tsx tối thiểu.
-3. Ghi mapping Nuxt layout/loading/error sang Next.
+- **Quyết định:** Vẽ cây, rồi map từng file sang Nuxt (`app.vue`, layouts, `pages/`, `<NuxtPage>`, error.vue, loading theo route). Mặc định Server; `'use client'` ở leaf cần state hoặc browser API.
+- **Constraint:** Sketch thư mục trong note. Hôm nay không `create-next-app`. Slice chạy được là Day 21.
+- **Failure mode:** ‘Interactive = client’ là cả rule. Dán `'use client'` lên root layout. Nhầm `error.tsx` với handler 500 của API.
+- **Cách đo:** Giải thích nested layout và loading theo segment không cần docs, và Server vs Client sắc hơn mức ‘interactive thì client’.
+- **Trade-off:** Nested layout giữ state shell khi navigate (tốt cho dashboard, lạ nếu bạn chờ remount hết). `error.tsx` theo segment cô lập lỗi — đến khi quên fallback ở root.
+- **Gotcha production:** Client ở trên Server Component là bất hợp pháp. `loading.tsx` bọc segment trong Suspense — navigate nhanh có thể flash shell rỗng nếu fallback quá lớn.
 
 ## Tiêu chí xong
 
-- Layout/segment rõ.
-- Loading + error render được.
-- Có note Nuxt ↔ Next.
+- Giải thích được nested layout và loading theo segment mà không cần mở docs.
+- Ranh giới Server vs Client rõ hơn mức “interactive thì client”.
+- Bài algo xong và thao tác duyệt grid vẫn ổn.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm nested layout cho detail route.
+Thêm `not-found.tsx` và `template.tsx` vào map và nói bạn có dùng `template` không.
 
-## Gợi ý
+## Thuật toán
 
-- Một route đủ để chứng minh concept.
-
-## Bài thuật toán
-
-- **Bài:** Number of Islands
+- **Bài:** Number of Islands · Grid BFS/DFS
 - **Ràng buộc:**
 - 1 ≤ m,n ≤ 300
-- **Hint:** xem pattern **Grid BFS/DFS** và mở đề đầy đủ nếu cần.
+- **Hint:** Gặp ‘1’ → tăng đếm → flood-fill thành ‘0’.
 
 ```text
 algorithms/day-18/solution.ts
@@ -66,5 +50,5 @@ Mở đề đầy đủ: [day-18.md](../artifacts/algo/problems/day-18.md)
 ## Commit gợi ý
 
 ```text
-day-18: add app router segment states
+day-18: sketch App Router tree and Nuxt file map
 ```

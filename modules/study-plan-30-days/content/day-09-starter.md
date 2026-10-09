@@ -1,38 +1,60 @@
-# Day 9 — Hướng dẫn (11/10/2026)
+# Day 9 — Interview drill (11/10/2026)
 
-**Chủ đề:** State ownership  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Map source of truth Capstone; Context vs Zustand quyết định có lý do.
+**Theme:** Promises, fetch, and browser events / Promise, fetch và event trong browser  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/state-management.md
-- documents/vi/state-management-react.md
+- **EN:** Sharpen async reasoning so network and UI behavior sound production-ready in interviews.
+- **VI:** Mài sắc cách nghĩ về async để khi nói về network và UI behavior nghe giống kinh nghiệm production.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** When does one failed request block the whole UI? `Promise.all` vs `allSettled` vs `race`? How do you cancel a stale search? Event delegation vs 200 row listeners?
+- **VI:** Khi nào một request lỗi chặn cả UI? `Promise.all` vs `allSettled` vs `race`? Huỷ search stale thế nào? Event delegation hay 200 listener từng hàng?
 
-### 1) Capstone / FE craft
-Bảng state: data · owner · who writes · who reads · sync server? → capstone/05.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-09-state-map.md`](./artifacts/day-09-state-map.md)
+## Read
 
-### 2) React / Next lab
-Lab: lift filter state lên page; thử Context cho theme/auth mock; viết note khi nào cần Zustand.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-09-lab.md`](./lab/day-09-lab.md)
+- `javascript` — JavaScript notes (opens in a new tab in the app / mở tab mới trong app)
+- `networking` — Networking notes (opens in a new tab in the app / mở tab mới trong app)
+- `web-apis` — Web APIs notes (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Two Sum II (sorted)** (Medium) · pattern **Two pointers**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-09.md`](./artifacts/algo/problems/day-09.md)  
-→ Code + test trong lab repo: `algo/day-09/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `js-promise-combinators` — Promise combinators
+- `promise-basics` — Promise basics
+- `dom-event-propagation-delegation` — Event propagation and delegation
 
-- [ ] State map không còn “mọi thứ trong page”; Context demo chạy; two pointers đúng.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Compare Promise.all vs allSettled vs race on one realistic frontend case such as dashboard widgets or parallel lookups.
+  - **VI:** So sánh Promise.all, allSettled và race trên một case frontend thực tế như dashboard widget hoặc lookup song song.
+- **EN:** Sketch how you would cancel or ignore stale responses in a search flow.
+  - **VI:** Phác thảo cách huỷ hoặc bỏ qua response stale trong một flow search.
+
+## Algorithm
+
+- **Problem:** Two Sum II · Two pointers
+- Full prompt: [`artifacts/algo/problems/day-09.md`](./artifacts/algo/problems/day-09.md)
+- Code + test in the lab repo: `algorithms/day-09/`
+
+## Checkpoint
+
+- Biết khi nào lỗi của một request nên chặn toàn bộ UI và khi nào thì không.
+  - EN: You know when failure of one request should block the whole UI and when it should not.
+- Giải thích được event propagation và delegation bằng một ví dụ DOM.
+  - EN: Event propagation and delegation are explainable with one DOM example.
+- Bài algo xong và pattern two pointers đã rõ.
+  - EN: Algo is done and the two-pointer pattern is clear.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-09-lab.md`](./lab/day-09-lab.md)

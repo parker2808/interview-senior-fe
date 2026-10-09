@@ -1,60 +1,42 @@
 # Day 29 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Vì sao công ty này? Muốn phát triển hướng nào? Đo thành công của một senior thế nào? Họ đang test fit, không phải slogan.
 
-- Polish repo để trông như project có thể show trong interview.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Viết một câu “vì sao công ty này” đã được tailor cho một công ty bạn thực sự muốn vào, theo product fit + skill fit + growth fit.
+- Lập danh sách 7 ngày sau plan: nếu buổi phỏng vấn chưa phải là ngày mai thì còn gì cần drill tiếp.
 
-- Dùng cả 2 app, UI package, algorithms và notes hiện có.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `README.md`
-- `notes/day-29.md`
-- `apps/vue-nuxt/`
-- `apps/react-next/`
-- `algorithms/day-29/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm lint
-pnpm typecheck
-pnpm test:algo -- day-29
-```
-
-## Từng bước
-
-1. Cập nhật README với repo map, script chính và demo path.
-2. Thêm mục What I would improve next.
-3. Chạy lint/typecheck và sửa lỗi cuối.
+- **Quyết định:** Tailor cho một công ty thật. Product fit + skill fit + growth fit. List 7 ngày là điểm yếu từ Day 28, không phải giáo trình mới.
+- **Constraint:** Câu viết + list 7 ngày. Đừng mở build mới.
+- **Failure mode:** ‘Em thích culture’ mà không có product. List 7 ngày là cả knowledge base. Growth plan nghe như bạn sẽ đi sau sáu tháng.
+- **Cách đo:** Đã có một câu company-fit được tailor. Đã có danh sách follow-up 7 ngày.
+- **Trade-off:** Research công ty cụ thể vs growth senior chung. Cụ thể thắng onsite; chung là phương án dự nếu họ hỏi team khác.
+- **Gotcha production:** Khen một product họ đã tắt. Nhận sẽ lead React trong khi team là Vue. Success metric chỉ là velocity cá nhân.
 
 ## Tiêu chí xong
 
-- README có tính showcase.
-- Lint/typecheck sạch.
-- Có next-step section trung thực.
+- Đã có một câu trả lời company-fit được tailor rõ ràng.
+- Đã có danh sách follow-up 7 ngày.
+- Đã xong set algo review cuối.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm changelog ngắn.
+Viết câu bạn sẽ hỏi họ ở cuối để chứng tỏ bạn đã đọc product.
 
-## Gợi ý
+## Thuật toán
 
-- README nên tối ưu để người lạ đọc nhanh.
-
-## Bài thuật toán
-
-- **Bài:** 8 patterns flashcards + 1 random
+- **Bài:** Review pattern + 1 bài ngẫu nhiên
 - **Ràng buộc:**
 - 15′
-- **Hint:** xem pattern **Review** và mở đề đầy đủ nếu cần.
+- **Hint:** Trigger sentence = “khi đề hỏi … nghĩ …”.
 
 ```text
 algorithms/day-29/solution.ts
@@ -68,5 +50,5 @@ Mở đề đầy đủ: [day-29.md](../artifacts/algo/problems/day-29.md)
 ## Commit gợi ý
 
 ```text
-day-29: polish repo README and scripts
+day-29: tailored company-fit answer and 7-day follow-up list
 ```
