@@ -1,58 +1,42 @@
 # Day 18 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+What problem do App Router and RSC actually solve? How do nested layouts and `loading.tsx` / `error.tsx` work per segment? When is a Client Component required?
 
-- Use the App Router properly for the Customers route.
+## What you will produce
 
-## What this day reuses
+- Sketch a tiny Next app tree with root layout, dashboard layout, one page, loading.tsx, and error.tsx.
+- For each file, write the Nuxt 3 idea it most closely matches.
 
-- Reuse the Next route from Days 15-17.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/react-next/app/(admin)/customers/`
-- `apps/react-next/app/(admin)/layout.tsx`
-- `notes/day-18.md`
-- `algorithms/day-18/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-18
-```
-
-## Step-by-step
-
-1. Move the route into a clear admin layout/segment.
-2. Add minimal loading.tsx and error.tsx files.
-3. Write the Nuxt-to-Next mapping for layout/loading/error.
+- **Decision:** Sketch the tree, then map each file to Nuxt (`app.vue`, layouts, `pages/`, `<NuxtPage>`, error.vue, route-level loading). Server by default; `'use client'` at the leaf that needs state or browser APIs.
+- **Constraint:** A folder sketch in a note. Do not `create-next-app` today. The small running slice is Day 21.
+- **Failure mode:** ‘Interactive = client’ as the whole rule. Putting `'use client'` on the root layout. Confusing `error.tsx` with an API 500 handler.
+- **Measure:** You can explain nested layouts and segment-level loading without docs, and Server vs Client is sharper than ‘interactive = client’.
+- **Tradeoff:** Nested layouts preserve shell state across navigations (good for dashboards, surprising if you expected a full remount). Segment `error.tsx` isolates failure — until you forget a root fallback.
+- **Production gotcha:** Client leaves above a Server Component are illegal. `loading.tsx` wraps the segment in Suspense — instant navigation can flash an empty shell if the fallback is huge.
 
 ## Done when
 
-- The layout/segment is clear.
-- Loading and error states render.
-- There is a Nuxt ↔ Next note.
+- You can explain nested layouts and segment-level loading without looking up the docs.
+- The Server vs Client boundary is clearer than “interactive = client”.
+- Algo is done and grid traversal still feels okay.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a nested layout for a detail route.
+Add `not-found.tsx` and `template.tsx` to the map and say whether you would use `template`.
 
-## Hints
+## Algorithm
 
-- One route is enough to prove the concept.
-
-## Algorithm task
-
-- **Problem:** Number of Islands
+- **Problem:** Number of Islands · Grid BFS/DFS
 - **Constraints:**
 - 1 ≤ m,n ≤ 300
-- **Hint:** start from the **Grid BFS/DFS** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** See a ‘1’ → increment → flood-fill it to ‘0’.
 
 ```text
 algorithms/day-18/solution.ts
@@ -66,5 +50,5 @@ Open the full prompt: [day-18.md](../artifacts/algo/problems/day-18.md)
 ## Suggested commit
 
 ```text
-day-18: add app router segment states
+day-18: sketch App Router tree and Nuxt file map
 ```

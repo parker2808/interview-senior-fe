@@ -1,57 +1,42 @@
 # Day 24 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+CSRF vs XSS — UI đổi gì? Đánh giá third-party script thế nào? Rollout feature frontend với flag và rollback ra sao?
 
-- Bổ sung guard/flag và checklist release cho repo.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Viết một release checklist ngắn cho một feature frontend: flag, monitoring, rollback, risk từ third-party và điểm cần quan sát sau release.
+- Thêm một đoạn ngắn về cách cookie auth, XSS và CSRF ảnh hưởng tới quyết định ở UI.
 
-- Dùng dashboard hoặc customers route hiện có.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/react-next/app/(admin)/`
-- `notes/day-24.md`
-- `algorithms/day-24/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-24
-```
-
-## Từng bước
-
-1. Chọn auth gate nhẹ hoặc feature flag wrapper.
-2. Viết security/release checklist đi kèm.
-3. Đảm bảo UI giải thích rõ khi feature bị khóa.
+- **Quyết định:** Coi release là một phần của design. Flag + một metric + đường rollback trước khi merge. Ghi chú security phải đổi một lựa chọn UI cụ thể (không `v-html`, cookie flag, CSRF token trên mutation).
+- **Constraint:** Checklist + một đoạn. Không phải bộ E2E, không viết lại CI.
+- **Failure mode:** List OWASP chung chung. Feature flag không tắt được nếu không deploy. ‘XSS là chuyện backend.’
+- **Cách đo:** Checklist đủ thực tế để dùng tuần sau. Ghi chú security gắn với lựa chọn frontend cụ thể.
+- **Trade-off:** Tag third-party mua analytics và trả bề mặt XSS, perf, và outage vendor trên critical path. Nói không, hoặc cô lập.
+- **Gotcha production:** Cookie HttpOnly vẫn để bạn hở CSRF trên mutation cookie-auth. `innerHTML` qua `v-html` từ ‘CMS tin cậy’. Flag mặc định bật trên production.
 
 ## Tiêu chí xong
 
-- Có 1 guard/flag thật.
-- Checklist release/security đã có.
-- Blocked state dễ hiểu.
+- Release checklist đủ thực tế để dùng ngay tuần sau.
+- Ghi chú security đã gắn với lựa chọn frontend cụ thể.
+- Đã xong buổi mô phỏng live-coding algo.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm rollback note.
+Thêm câu rollback: bạn revert cái gì (flag, CDN, hay commit) và bao lâu thì user an toàn.
 
-## Gợi ý
+## Thuật toán
 
-- Mục tiêu là decision-making, không phải auth system hoàn chỉnh.
-
-## Bài thuật toán
-
-- **Bài:** Live coding simulation
+- **Bài:** Mô phỏng live coding
 - **Ràng buộc:**
-- Đúng 45′, có timer
-- **Hint:** xem pattern **Interview sim** và mở đề đầy đủ nếu cần.
+- Nói pattern trước khi gõ
+- **Hint:** Nói pattern trước khi gõ.
 
 ```text
 algorithms/day-24/solution.ts
@@ -65,5 +50,5 @@ Mở đề đầy đủ: [day-24.md](../artifacts/algo/problems/day-24.md)
 ## Commit gợi ý
 
 ```text
-day-24: add release guard and checklist
+day-24: frontend release checklist and XSS CSRF UI notes
 ```

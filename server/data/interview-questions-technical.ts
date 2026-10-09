@@ -386,35 +386,33 @@ useEffect(() => {
     tags: ['auth', 'jwt', 'security'],
     question: l('Describe the login flow from FE -> BE using JWT.', 'Mô tả luồng đăng nhập từ FE -> BE dùng JWT.'),
     answer: l(
-      `Typical secure flow:
+      `**What they actually ask:** Where does the access token live, how does refresh rotate, and what happens when ten requests 401 at once?
 
-1. user submits credentials over HTTPS,
-2. BE validates and issues short-lived access plus refresh capability,
-3. tokens are usually stored as HttpOnly Secure cookies, or access lives in memory while refresh stays in cookie,
-4. FE requests user profile / session state after login,
-5. on 401, FE may try refresh once, then retry,
-6. logout clears server-side session/refresh state and client UI state.
+**How a senior answers:** HTTPS POST credentials → BE sets **httpOnly + Secure + SameSite refresh**, returns a **short-lived access** (memory or short cookie). FE loads \`/me\`. Axios/ofetch **401 interceptor, single-flight refresh**, retry once. Logout hits BE (revoke family) + \`BroadcastChannel\` other tabs. Constraint: Vue route guards are **UX**; authz is the API.
 
-Senior nuance:
+**Failure mode:** \`localStorage.token\`. Parallel 401s all rotate refresh → all but one fail → logout storm. Refresh interceptor recursing on \`/refresh\` 401. Pinia \`persist: true\` on the user store.
 
-- FE route guards are UX only,
-- BE must enforce authorization,
-- token storage and refresh rotation matter as much as the JWT format itself.`,
-      `Flow an toàn thường là:
+**Measure:** Session-fixation / refresh-reuse test on the server. Time-to-revoke after logout. XSS tabletop: “what can they steal?” Duplicate login after hard refresh (silent refresh).
 
-1. user gửi credentials qua HTTPS,
-2. BE validate và phát access ngắn hạn cùng refresh capability,
-3. token thường được lưu bằng HttpOnly Secure cookie, hoặc access ở memory còn refresh ở cookie,
-4. FE gọi lấy user profile / session state sau khi login,
-5. khi 401, FE có thể thử refresh một lần rồi retry,
-6. logout xóa session/refresh state ở server và dọn UI state phía client.
+**Tradeoffs:** Memory access + cookie refresh: XSS-harder, needs boot refresh. Session cookie only: simplest, CSRF on mutations. SPA talking to a BFF (Nuxt/Nitro) beats raw JWT in the browser.
 
-Nuance mức senior:
+**Production gotchas:** Clock skew — refresh a minute early. 401 on \`/refresh\` must not recurse. OAuth/OIDC: Authorization Code + PKCE, not implicit. FE never trusts JWT \`exp\` for authz.`,
+      `**Họ thực sự hỏi:** Access token sống ở đâu, refresh xoay thế nào, và mười request 401 cùng lúc thì sao?
 
-- route guard ở FE chỉ là UX,
-- quyền phải được BE enforce,
-- cách lưu token và refresh rotation quan trọng không kém chính format JWT.`,
+**Cách senior trả lời:** HTTPS POST credential → BE set **refresh httpOnly + Secure + SameSite**, trả **access ngắn** (memory hoặc cookie ngắn). FE load \`/me\`. Interceptor 401 Axios/ofetch, **refresh single-flight**, retry một lần. Logout gọi BE (revoke family) + \`BroadcastChannel\` tab khác. Constraint: Vue route guard là **UX**; authz là API.
+
+**Failure mode:** \`localStorage.token\`. Nhiều 401 cùng xoay refresh → chỉ một thành công → bão logout. Interceptor đệ quy khi \`/refresh\` 401. Pinia \`persist: true\` trên user store.
+
+**Measure:** Test session-fixation / reuse refresh phía server. Thời gian revoke sau logout. Bàn XSS: “cướp được gì?” Login trùng sau hard refresh (silent refresh).
+
+**Tradeoffs:** Access memory + refresh cookie: khó XSS hơn, cần refresh lúc boot. Chỉ session cookie: đơn giản, CSRF trên mutation. SPA nói chuyện BFF (Nuxt/Nitro) hơn JWT trần trên browser.
+
+**Production gotchas:** Lệch đồng hồ — refresh sớm một phút. 401 \`/refresh\` không được đệ quy. OAuth/OIDC: Authorization Code + PKCE, không implicit. FE không tin \`exp\` JWT để authz.`,
     ),
+    followUps: [
+      l('Walk through a single-flight refresh when five GETs 401 together.', 'Kể single-flight refresh khi năm GET cùng 401.'),
+      l('How do you logout every tab without leaving a usable refresh cookie?', 'Bạn logout mọi tab mà không để lại refresh cookie dùng được thế nào?'),
+    ],
   }),
   q({
     id: 'error-boundary-limits',
@@ -422,27 +420,33 @@ Nuance mức senior:
     tags: ['react', 'error-handling'],
     question: l('What do React Error Boundaries catch and not catch?', 'Error Boundary của React bắt được / không bắt được gì?'),
     answer: l(
-      `Error boundaries catch render-time errors in descendant trees: rendering, lifecycle, constructors.
+      `**What they actually ask:** Why did the checkout still white-screen when the error was in a click handler, and where do you put the boundary?
 
-They do **not** catch:
+**How a senior answers:** React error boundaries catch **render/lifecycle/constructor** errors in descendants. Decision: isolate **widgets** (chart, third-party, one dashboard card), not one giant app boundary. Constraint: they miss event handlers, async/promises, SSR, and errors thrown inside the boundary itself. Vue analog: \`onErrorCaptured\` + \`errorHandler\` — same “render vs event” split.
 
-- event handler errors,
-- async callback errors by default,
-- server-side rendering failures directly,
-- errors thrown inside the boundary itself.
+**Failure mode:** One top-level boundary blanks the product. Swallowing the error without reporting. Expecting a boundary to catch \`await api()\` in \`onMounted\` / \`useEffect\`.
 
-In practice, they are useful for isolating widgets so one crash does not blank the whole page. Pair them with logging and user-friendly recovery UI.`,
-      `Error Boundary bắt lỗi render trong cây con: lúc render, lifecycle và constructor.
+**Measure:** Sentry/OTel: recovered vs fatal. A test that a chart throw leaves the page chrome intact. Synthetic click-handler throw still needs your own \`try/catch\`.
 
-Nó **không** bắt:
+**Tradeoffs:** Fine-grained boundaries add recovery UI and hide shared-cause outages. Too coarse and one widget kills the shell.
 
-- lỗi trong event handler,
-- lỗi async callback theo mặc định,
-- lỗi SSR trực tiếp,
-- lỗi ném ra trong chính boundary đó.
+**Production gotchas:** Next \`error.tsx\` is per **segment**, not a substitute for client async. Vue \`<Suspense>\` error vs async setup. Logging must happen in the boundary, not only \`console.error\`.`,
+      `**Họ thực sự hỏi:** Vì sao checkout vẫn trắng màn khi lỗi nằm ở click handler, và boundary đặt ở đâu?
 
-Trong thực tế, nó rất hữu ích để cô lập widget để một lỗi không làm trắng cả trang. Nên đi kèm logging và UI recovery phù hợp.`,
+**Cách senior trả lời:** Error boundary React bắt lỗi **render/lifecycle/constructor** ở descendant. Decision: cô lập **widget** (chart, third-party, một card dashboard), không một boundary khổng lồ cho cả app. Constraint: bỏ lỡ event handler, async/promise, SSR, và lỗi ném trong chính boundary. Tương đương Vue: \`onErrorCaptured\` + \`errorHandler\` — cùng tách “render vs event.”
+
+**Failure mode:** Một boundary top-level làm trắng product. Nuốt lỗi không report. Trông boundary bắt \`await api()\` trong \`onMounted\` / \`useEffect\`.
+
+**Measure:** Sentry/OTel: recovered vs fatal. Test chart throw mà chrome page còn. Throw synthetic ở click vẫn cần \`try/catch\` của bạn.
+
+**Tradeoffs:** Boundary mịn thêm UI recovery và giấu outage cùng gốc. Quá thô thì một widget giết shell.
+
+**Production gotchas:** Next \`error.tsx\` theo **segment**, không thay async phía client. Vue \`<Suspense>\` lỗi vs async setup. Log phải nằm trong boundary, không chỉ \`console.error\`.`,
     ),
+    followUps: [
+      l('How do you catch an async error that an error boundary will miss?', 'Bạn bắt lỗi async mà error boundary bỏ sót thế nào?'),
+      l('Where would you place boundaries on a Vue/Nuxt dashboard vs one App.vue handler?', 'Bạn đặt boundary trên dashboard Vue/Nuxt thế nào so với một handler App.vue?'),
+    ],
   }),
   q({
     id: 'js-event-loop',
@@ -450,56 +454,28 @@ Trong thực tế, nó rất hữu ích để cô lập widget để một lỗi
     tags: ['javascript', 'event-loop', 'async'],
     question: l('Explain the JavaScript event loop.', 'Giải thích JavaScript event loop.'),
     answer: l(
-      `**Short answer:** JavaScript achieves concurrency in the browser through the **event loop**: synchronous code runs on the call stack, async work is queued, and callbacks are scheduled back onto the main thread later.
+      `**What they actually ask:** Why did this Vue update not paint, and is \`nextTick\` a microtask or a “wait a bit”?
 
-**Why:**
+**How a senior answers:** Stack runs to empty. Then **all** microtasks (Promise jobs, \`queueMicrotask\`, MutationObserver, Vue’s scheduler flush) run before paint or the next macrotask (\`setTimeout\`, I/O, input). Decision: \`nextTick\` waits for Vue’s flush — the API for “read layout after my refs commit.” \`setTimeout(0)\` yields to paint/input; it is not a DOM-measure tool.
 
-The main pieces are:
+**Failure mode:** Microtask starvation — a chain of \`await\` on already-resolved promises never returns to the renderer. Treating \`Promise.resolve().then\` as a substitute for \`nextTick\` (order vs Vue’s job is not guaranteed the way you think).
 
-- the **call stack** for running code,
-- browser/runtime APIs for timers, network, and DOM events,
-- the **task queue**,
-- the **microtask queue** for promises and mutation observers.
+**Measure:** Performance panel: long tasks >50ms, INP, total blocking time — not the puzzle output of A/D/C/B.
 
-The rough order is:
+**Tradeoffs:** Flushing Vue as a microtask keeps DOM consistent before paint; a tight microtask loop janks harder than a macrotask split.
 
-1. run synchronous code to completion,
-2. drain microtasks,
-3. allow rendering,
-4. pull the next task and repeat.
+**Production gotchas:** \`await nextTick()\` then measure then write layout → forced reflow. Worker/off-main-thread is the escape hatch when the loop is the bottleneck.`,
+      `**Họ thực sự hỏi:** Vì sao update Vue chưa paint, và \`nextTick\` là microtask hay “đợi một lúc”?
 
-**Trade-offs / common mistakes:**
+**Cách senior trả lời:** Stack chạy đến hết. Rồi **mọi** microtask (Promise, \`queueMicrotask\`, MutationObserver, flush scheduler Vue) chạy trước paint hoặc macrotask sau (\`setTimeout\`, I/O, input). Decision: \`nextTick\` chờ flush Vue — API cho “đọc layout sau khi ref commit.” \`setTimeout(0)\` nhường paint/input; không phải tool đo DOM.
 
-- assuming \`setTimeout(..., 0)\` runs immediately,
-- forgetting that promises run before the next task,
-- creating long synchronous work that blocks input and paint.
+**Failure mode:** Đói microtask — chuỗi \`await\` trên promise đã resolve không trả lại renderer. Coi \`Promise.resolve().then\` là thay \`nextTick\` (thứ tự vs job Vue không như bạn nghĩ).
 
-Many UI bugs come from misunderstanding callback timing relative to rendering and state updates.`,
-      `**Trả lời ngắn:** JavaScript đạt được concurrency trong browser nhờ **event loop**: code đồng bộ chạy trên call stack, công việc async được đưa vào queue, rồi callback được đưa trở lại main thread ở thời điểm phù hợp.
+**Measure:** Panel Performance: long task >50ms, INP, total blocking time — không phải output đố A/D/C/B.
 
-**Vì sao:**
+**Tradeoffs:** Flush Vue bằng microtask giữ DOM khớp trước paint; vòng microtask chặt giật hơn việc tách macrotask.
 
-Các mảnh chính là:
-
-- **call stack** cho code đang chạy,
-- browser/runtime API cho timer, network và DOM event,
-- **task queue**,
-- **microtask queue** cho promise và mutation observer.
-
-Thứ tự gần đúng là:
-
-1. chạy hết code đồng bộ,
-2. drain microtask,
-3. cho phép render,
-4. lấy task tiếp theo và lặp lại.
-
-**Trade-off / lỗi hay gặp:**
-
-- tưởng \`setTimeout(..., 0)\` chạy ngay,
-- quên rằng promise chạy trước task tiếp theo,
-- tạo synchronous work quá dài làm block input và paint.
-
-Nhiều bug UI sinh ra từ việc hiểu sai timing của callback so với render và state update.`,
+**Production gotchas:** \`await nextTick()\` rồi đo rồi ghi layout → forced reflow. Worker/off-main-thread là lối thoát khi loop là nút thắt.`,
     ),
     example: l(
       `\`\`\`js
@@ -528,25 +504,33 @@ console.log('D')
     tags: ['javascript', 'closures'],
     question: l('What is a closure and why does it matter?', 'Closure là gì và vì sao nó quan trọng?'),
     answer: l(
-      `A closure is a function retaining access to variables from the lexical scope where it was created, even after that outer function has finished.
+      `**What they actually ask:** A search box still fetches the previous query. A debounce sends stale args. A module Map holds the last user’s 20MB export.
 
-Why it matters:
+**How a senior answers:** A closure keeps **bindings**, not a snapshot — unless you copied a \`const\` at schedule time. Decision: in Vue, read latest refs **inside** the async callback (\`page.value\`). In React, \`useRef\` for latest or include the dep and abort. Constraint: whatever the closure retains is ineligible for GC until the function is released.
 
-- it enables encapsulation and factory patterns,
-- powers hooks, callbacks, and many library internals,
-- causes bugs like stale closures when you capture old state unintentionally.
+**Failure mode:** Debounce closing over first-call args. \`window\` listener in \`onMounted\` capturing \`props.user\` once. Module singleton retaining per-user blobs across logout.
 
-Closures are not “bad for memory” by definition. They become problematic when long-lived callbacks retain large objects or outdated references longer than necessary.`,
-      `Closure là khi một function vẫn giữ quyền truy cập vào biến ở lexical scope nơi nó được tạo ra, kể cả khi function ngoài đã chạy xong.
+**Measure:** Memory retainers. A test that a second query resolves first and the first result is dropped.
 
-Vì sao nó quan trọng:
+**Tradeoffs:** “Always latest ref” is simpler than aborting but still wastes network. Prefer abort **and** ignore stale.
 
-- giúp tạo encapsulation và factory pattern,
-- là nền cho hooks, callback và nhiều internals của library,
-- cũng là nguyên nhân của bug stale closure khi vô tình chụp lại state cũ.
+**Production gotchas:** Pinia \`$subscribe\` / \`watch\` without \`onCleanup\`. VueUse event composables that you never stop. React \`useCallback([],)\` is the same bug with different syntax.`,
+      `**Họ thực sự hỏi:** Ô search vẫn fetch query cũ. Debounce gửi args stale. Map ở module giữ export 20MB của user trước.
 
-Closure không mặc định “xấu cho memory”. Nó chỉ thành vấn đề khi callback sống lâu giữ lại object lớn hoặc reference cũ lâu hơn cần thiết.`,
+**Cách senior trả lời:** Closure giữ **binding**, không phải snapshot — trừ khi bạn copy \`const\` lúc schedule. Decision: trong Vue, đọc ref **trong** callback async (\`page.value\`). Trong React, \`useRef\` cho giá trị mới hoặc đưa vào dep và abort. Constraint: thứ closure giữ thì GC không thu đến khi function được thả.
+
+**Failure mode:** Debounce close over args lần gọi đầu. Listener \`window\` trong \`onMounted\` chụp \`props.user\` một lần. Singleton module giữ blob theo user qua logout.
+
+**Measure:** Memory retainer. Test query thứ hai xong trước và kết quả thứ nhất bị bỏ.
+
+**Tradeoffs:** “Luôn đọc ref mới” đơn giản hơn abort nhưng vẫn tốn network. Nên abort **và** bỏ stale.
+
+**Production gotchas:** Pinia \`$subscribe\` / \`watch\` không \`onCleanup\`. Composable VueUse event không stop. React \`useCallback([],)\` cùng bug khác cú pháp.`,
     ),
+    followUps: [
+      l('How do you abort the previous search and ignore its result?', 'Bạn abort search trước và bỏ kết quả của nó thế nào?'),
+      l('When is a module-level closure a security bug after logout?', 'Khi nào closure ở module là bug bảo mật sau logout?'),
+    ],
   }),
   q({
     id: 'js-this-call-bind',
@@ -554,31 +538,33 @@ Closure không mặc định “xấu cho memory”. Nó chỉ thành vấn đ�
     tags: ['javascript', 'this'],
     question: l('How does `this` work in JavaScript? What about call/apply/bind?', '`this` trong JavaScript hoạt động thế nào? call/apply/bind để làm gì?'),
     answer: l(
-      `\`this\` is determined by **how a function is called**, not where it is written, except for arrow functions which capture lexical \`this\`.
+      `**What they actually ask:** Why did \`this.$emit\` die after you extracted a helper, and can you remove the listener you bound?
 
-Common cases:
+**How a senior answers:** \`function\` binds \`this\` at the **call site**; arrows close over lexical \`this\`. Decision: Vue **Options** methods are bound to the instance — write \`onClick() { this.save() }\`. An arrow in \`methods\` captures module \`this\` (\`undefined\` in ESM). Composition API almost never uses \`this\`. \`call\`/\`apply\` invoke now; \`bind\` returns a bound function. Constraint: \`addEventListener('click', obj.method)\` detaches the receiver.
 
-- method call: \`obj.fn()\` -> \`this === obj\`
-- plain function call in strict mode -> \`undefined\`
-- constructor with \`new\` -> new instance
-- arrow function -> inherits surrounding \`this\`
+**Failure mode:** Binding a **new** wrapper every render so \`removeEventListener\` never matches. Class fields \`onClick = () => this.save()\` duplicate per instance (fine) vs forgetting \`bind\` on a prototype method (broken).
 
-\`call\` and \`apply\` invoke a function immediately with an explicit \`this\`; \`bind\` returns a new function with \`this\` pre-bound.
+**Measure:** A test that the listener can be removed. Options-API \`this.$emit\` still fires after extracting a helper.
 
-In modern FE interviews, the key is usually not trivia. It is understanding when callbacks lose context and why arrow functions behave differently.`,
-      `\`this\` được quyết định bởi **cách function được gọi**, không phải nơi nó được viết, ngoại trừ arrow function sẽ lấy lexical \`this\`.
+**Tradeoffs:** Arrows in callbacks are the default. Explicit \`bind\` is clearer for removable listeners (\`{ signal }\` is even better).
 
-Các case hay gặp:
+**Production gotchas:** \`this\` in a Vue template is the instance; in \`<script setup>\` there is no \`this\`. React class components vs hooks. Third-party widgets calling your method as a bare function.`,
+      `**Họ thực sự hỏi:** Vì sao \`this.$emit\` chết sau khi tách helper, và bạn gỡ được listener đã bind không?
 
-- gọi như method: \`obj.fn()\` -> \`this === obj\`
-- gọi function thường ở strict mode -> \`undefined\`
-- gọi với \`new\` -> instance mới
-- arrow function -> kế thừa \`this\` từ scope xung quanh
+**Cách senior trả lời:** \`function\` bind \`this\` ở **call site**; arrow đóng lexical \`this\`. Decision: method Vue **Options** đã bind instance — viết \`onClick() { this.save() }\`. Arrow trong \`methods\` bắt \`this\` module (\`undefined\` trong ESM). Composition API gần như không dùng \`this\`. \`call\`/\`apply\` gọi ngay; \`bind\` trả hàm đã gắn. Constraint: \`addEventListener('click', obj.method)\` làm mất receiver.
 
-\`call\` và \`apply\` gọi function ngay với \`this\` chỉ định; \`bind\` trả về một function mới đã được gắn sẵn \`this\`.
+**Failure mode:** Bind wrapper **mới** mỗi render nên \`removeEventListener\` không khớp. Class field \`onClick = () => this.save()\` nhân đôi mỗi instance (ổn) vs quên \`bind\` method prototype (gãy).
 
-Trong FE interview hiện đại, điều quan trọng thường không phải trivia mà là hiểu lúc nào callback làm mất context và vì sao arrow function cư xử khác.`,
+**Measure:** Test gỡ được listener. Options-API \`this.$emit\` vẫn chạy sau khi tách helper.
+
+**Tradeoffs:** Arrow trong callback là default. \`bind\` tường minh rõ hơn cho listener gỡ được (\`{ signal }\` còn hơn).
+
+**Production gotchas:** \`this\` trong template Vue là instance; \`<script setup>\` không có \`this\`. React class vs hooks. Widget gọi method của bạn như hàm trần.`,
     ),
+    followUps: [
+      l('Why is an arrow function in Options API methods usually a bug?', 'Vì sao arrow trong methods Options API thường là bug?'),
+      l('How do you register and remove the same bound listener?', 'Bạn đăng ký và gỡ cùng một listener đã bind thế nào?'),
+    ],
   }),
   q({
     id: 'js-prototype-chain',
@@ -586,25 +572,33 @@ Trong FE interview hiện đại, điều quan trọng thường không phải t
     tags: ['javascript', 'prototypes'],
     question: l('Explain the prototype chain.', 'Giải thích prototype chain.'),
     answer: l(
-      `JavaScript objects can delegate property lookup to another object via their prototype.
+      `**What they actually ask:** Why is \`el instanceof HTMLElement\` false from an iframe, and what does \`markRaw\` fix for a Map/chart instance in Vue?
 
-When you access \`obj.x\`:
+**How a senior answers:** Lookup walks own props then \`[[Prototype]]\` to \`null\`. Decision: \`class\` for identity + shared methods (\`Error\` subclasses, \`instanceof\` in \`catch\`). Do **not** build app UI on prototype inheritance — Vue components/composables are functions + data. Constraint: prototype methods are shared; class **fields** are per instance.
 
-1. engine checks own properties on \`obj\`,
-2. if missing, it walks up the prototype chain,
-3. it stops at \`null\`.
+**Failure mode:** \`data instanceof Array\` across realms (iframe, jsdom vs window). Vue \`reactive()\` on a class wrapping Mapbox — \`this\` and \`instanceof\` go weird; \`markRaw\` the instance.
 
-Classes in JavaScript are mostly syntax sugar over prototypes. Understanding this helps when reasoning about inheritance, methods, memory sharing, and why some methods live on \`Array.prototype\` instead of every array instance.`,
-      `Object trong JavaScript có thể ủy quyền việc tìm property cho object khác thông qua prototype.
+**Measure:** Fix with \`Array.isArray\`, \`node.nodeType\`, or \`Object.prototype.toString\`. A test in a second window if you embed iframes.
 
-Khi truy cập \`obj.x\`:
+**Tradeoffs:** Prototypes save memory for many instances. Composition (objects + functions) is what Vue/React codebases actually maintain.
 
-1. engine kiểm tra own properties trên \`obj\`,
-2. nếu không có thì đi lên prototype chain,
-3. dừng ở \`null\`.
+**Production gotchas:** Extending built-ins (Array) is still sharp. \`Object.create(null)\` has no \`toString\` — bad as a dictionary if you use \`in\`/\`hasOwn\` carelessly. Pinia stores are not classes.`,
+      `**Họ thực sự hỏi:** Vì sao \`el instanceof HTMLElement\` false từ iframe, và \`markRaw\` sửa gì cho instance Map/chart trong Vue?
 
-Class trong JavaScript phần lớn là syntax sugar trên prototype. Hiểu chuyện này giúp reasoning về inheritance, chia sẻ method trong bộ nhớ, và vì sao một số method nằm trên \`Array.prototype\` thay vì nằm trên từng array instance.`,
+**Cách senior trả lời:** Tra cứu đi own props rồi \`[[Prototype]]\` tới \`null\`. Decision: \`class\` khi cần identity + method share (\`Error\` subclass, \`instanceof\` trong \`catch\`). **Không** dựng UI app trên prototype inheritance — component/composable Vue là function + data. Constraint: method prototype được share; **field** class là per instance.
+
+**Failure mode:** \`data instanceof Array\` qua realm (iframe, jsdom vs window). Vue \`reactive()\` lên class bọc Mapbox — \`this\` và \`instanceof\` loạn; \`markRaw\` instance đó.
+
+**Measure:** Sửa bằng \`Array.isArray\`, \`node.nodeType\`, hoặc \`Object.prototype.toString\`. Test ở window thứ hai nếu có iframe.
+
+**Tradeoffs:** Prototype tiết kiệm nhớ khi nhiều instance. Composition (object + function) mới là thứ Vue/React maintain.
+
+**Production gotchas:** Extend built-in (Array) vẫn sắc. \`Object.create(null)\` không có \`toString\` — dictionary xấu nếu dùng \`in\`/\`hasOwn\` ẩu. Store Pinia không phải class.`,
     ),
+    followUps: [
+      l('What does markRaw fix for a Google Map or Monaco instance in Vue?', 'markRaw sửa gì cho instance Google Map hoặc Monaco trong Vue?'),
+      l('Why can instanceof fail for a node from another iframe?', 'Vì sao instanceof fail với node từ iframe khác?'),
+    ],
   }),
   q({
     id: 'js-hoisting-tdz',
@@ -612,25 +606,33 @@ Class trong JavaScript phần lớn là syntax sugar trên prototype. Hiểu chu
     tags: ['javascript', 'hoisting'],
     question: l('What are hoisting and the temporal dead zone?', 'Hoisting và temporal dead zone là gì?'),
     answer: l(
-      `Hoisting means declarations are processed before execution, but different declarations behave differently.
+      `**What they actually ask:** A circular \`store\` ↔ composable import dies in the app and works in a unit test. Can you name TDZ instead of “hoisting is moving declarations up”?
 
-- function declarations are fully initialized early,
-- \`var\` is hoisted and initialized to \`undefined\`,
-- \`let\` / \`const\` are hoisted but uninitialized until their declaration executes.
+**How a senior answers:** Treat hoisting as a **load-order** problem. Function declarations are initialized. \`var\` is \`undefined\`. \`let\`/\`const\` exist in TDZ until the line runs — access throws. Decision: break cycles with a function (\`getStore()\`), a third module, or \`import()\` after init. Do not “use \`var\` to avoid TDZ.”
 
-The period between entering scope and initialization of \`let\` / \`const\` is the **temporal dead zone**. Accessing them there throws a runtime error.
+**Failure mode:** \`a.ts\` imports \`b.ts\` imports \`a.ts\`; the second file reads a \`const\` export still in TDZ. Works in Vitest (different graph), dies in the Vite app chunk.
 
-Interviewers often ask this to test mental model, not memorization.`,
-      `Hoisting nghĩa là declaration được xử lý trước khi code chạy, nhưng từng loại declaration có hành vi khác nhau.
+**Measure:** The exact \`ReferenceError\` at startup, then the import graph (Madge / Vite circular warning).
 
-- function declaration được khởi tạo đầy đủ từ sớm,
-- \`var\` được hoist và gán \`undefined\`,
-- \`let\` / \`const\` cũng được hoist nhưng chưa được khởi tạo cho tới khi chạy tới dòng khai báo.
+**Tradeoffs:** Lazy getters hide cycles and hide design smell. A third module is louder and usually right.
 
-Khoảng thời gian từ lúc vào scope tới lúc \`let\` / \`const\` được khởi tạo gọi là **temporal dead zone**. Truy cập vào đó sẽ ném runtime error.
+**Production gotchas:** Vue auto-import + Pinia can recreate the cycle. \`typeof\` on a TDZ binding still throws for \`let\`/\`const\`. SSR boot order ≠ client boot order.`,
+      `**Họ thực sự hỏi:** Import vòng \`store\` ↔ composable chết ở app, sống trong unit test. Bạn gọi tên TDZ thay vì “hoisting là kéo declaration lên”?
 
-Người phỏng vấn hay hỏi câu này để kiểm tra mental model, không phải để bạn đọc thuộc lòng.`,
+**Cách senior trả lời:** Coi hoisting là bài **thứ tự load**. Function declaration được khởi tạo. \`var\` là \`undefined\`. \`let\`/\`const\` nằm TDZ đến khi tới dòng — truy cập thì throw. Decision: cắt vòng bằng function (\`getStore()\`), module thứ ba, hoặc \`import()\` sau init. Không “dùng \`var\` để tránh TDZ.”
+
+**Failure mode:** \`a.ts\` import \`b.ts\` import \`a.ts\`; file sau đọc export \`const\` còn TDZ. Vitest (graph khác) ổn, chunk Vite thì chết.
+
+**Measure:** Đúng \`ReferenceError\` lúc start, rồi graph import (Madge / cảnh báo circular Vite).
+
+**Tradeoffs:** Getter lazy giấu vòng và giấu mùi thiết kế. Module thứ ba ồn hơn và thường đúng.
+
+**Production gotchas:** Auto-import Vue + Pinia tạo lại vòng. \`typeof\` trên binding TDZ vẫn throw với \`let\`/\`const\`. Thứ tự boot SSR ≠ client.`,
     ),
+    followUps: [
+      l('How do you break a Pinia ↔ composable import cycle?', 'Bạn cắt vòng import Pinia ↔ composable thế nào?'),
+      l('Does typeof x throw when x is in the TDZ?', 'typeof x có throw khi x đang trong TDZ không?'),
+    ],
   }),
   q({
     id: 'js-copy-immutability',
@@ -638,25 +640,33 @@ Người phỏng vấn hay hỏi câu này để kiểm tra mental model, không
     tags: ['javascript', 'immutability'],
     question: l('What is the difference between shallow copy, deep copy, and immutability?', 'Khác nhau giữa shallow copy, deep copy và immutability là gì?'),
     answer: l(
-      `A **shallow copy** copies the top-level container but keeps nested references. A **deep copy** recursively copies nested data. **Immutability** is the discipline of treating existing data as read-only and producing new values for changes.
+      `**What they actually ask:** Did this Pinia/Vue update mutate a shared nested object, and did you \`structuredClone\` a 50k-row page for no reason?
 
-Important nuance:
+**How a senior answers:** Shallow copy = new container, same nested refs (\`{ ...obj }\`, \`arr.slice()\`). Deep copy = recursive new graph. Immutability is a **discipline** (new values, structural sharing), not a clone API. Decision: copy the **layer you write**; use \`structuredClone\` when you must detach (postMessage, persist, leave Vue proxies). Constraint: \`JSON.parse(JSON.stringify)\` drops \`undefined\`, Dates, Maps, functions, and explodes on cycles.
 
-- you do not always need a full deep clone,
-- deep cloning large state trees can be expensive and unnecessary,
-- structural sharing is often a better strategy.
+**Failure mode:** Mutating \`props.user.role\` or a Pinia nested field so three screens “mystery sync.” Deep-cloning every keystroke. \`structuredClone(vueProxy)\` throwing.
 
-In frontend apps, the goal is usually predictable updates, not cloning for its own sake.`,
-      `**Shallow copy** sao chép container ở level đầu nhưng vẫn giữ nested reference bên trong. **Deep copy** sao chép đệ quy toàn bộ dữ liệu lồng nhau. **Immutability** là nguyên tắc coi dữ liệu hiện có là read-only và tạo ra giá trị mới khi thay đổi.
+**Measure:** A test that editing a draft does not change the list row. Profiler on clone cost. Heap after persist/hydrate.
 
-Nuance quan trọng:
+**Tradeoffs:** Structural sharing (Immer, reducers, Vue reactive writes) is cheaper than full clones. Deep clone is honest isolation and O(n).
 
-- không phải lúc nào cũng cần deep clone toàn phần,
-- deep clone state tree lớn có thể tốn kém và không cần thiết,
-- structural sharing thường là chiến lược tốt hơn.
+**Production gotchas:** Vue proxies vs raw (\`toRaw\` before clone). \`const\` is not immutable. React state must replace identity; Vue can mutate in place — do not mix the two mental models in one PR.`,
+      `**Họ thực sự hỏi:** Update Pinia/Vue này có mutate object lồng đang share không, và bạn có \`structuredClone\` cả trang 50k hàng vô cớ không?
 
-Trong app frontend, mục tiêu thường là update có thể dự đoán được, chứ không phải clone vì clone.`,
+**Cách senior trả lời:** Shallow = container mới, ref lồng cũ (\`{ ...obj }\`, \`arr.slice()\`). Deep = graph mới đệ quy. Immutability là **kỷ luật** (giá trị mới, structural sharing), không phải API clone. Decision: copy **tầng bạn ghi**; \`structuredClone\` khi phải tách (postMessage, persist, rời Vue proxy). Constraint: \`JSON.parse(JSON.stringify)\` mất \`undefined\`, Date, Map, function, và nổ với cycle.
+
+**Failure mode:** Mutate \`props.user.role\` hoặc field lồng Pinia khiến ba màn “tự đồng bộ.” Deep-clone mỗi phím. \`structuredClone(vueProxy)\` throw.
+
+**Measure:** Test sửa draft không đổi hàng list. Profiler chi phí clone. Heap sau persist/hydrate.
+
+**Tradeoffs:** Structural sharing (Immer, reducer, ghi reactive Vue) rẻ hơn clone full. Deep clone cô lập thật và O(n).
+
+**Production gotchas:** Vue proxy vs raw (\`toRaw\` trước khi clone). \`const\` không phải immutable. State React phải đổi identity; Vue có thể mutate tại chỗ — đừng trộn hai mental model trong một PR.`,
     ),
+    followUps: [
+      l('When is structuredClone the wrong tool next to a Vue proxy?', 'Khi nào structuredClone là tool sai cạnh Vue proxy?'),
+      l('How do you update one nested field without cloning the whole tree?', 'Bạn update một field lồng mà không clone cả cây thế nào?'),
+    ],
   }),
   q({
     id: 'js-async-await-under-hood',
@@ -664,33 +674,33 @@ Trong app frontend, mục tiêu thường là update có thể dự đoán đư�
     tags: ['javascript', 'async', 'promises'],
     question: l('How do async/await work under the hood?', 'async/await hoạt động như thế nào bên dưới?'),
     answer: l(
-      `\`async/await\` is syntax on top of promises.
+      `**What they actually ask:** Which combinator, which abort signal, and did you waterfall three independent \`await\`s?
 
-- an \`async\` function always returns a promise,
-- \`await\` pauses execution of that async function until the awaited promise settles,
-- continuation is scheduled as a microtask.
+**How a senior answers:** \`async/await\` is control-flow over promises. Decision: independent calls → \`Promise.all\` (fail-fast if the page cannot render without all). Partials → \`allSettled\` or split critical vs optional. Waterfall only on true data dependence. Constraint: \`await\` yields to the **microtask** queue — it does not block the event loop, but a chain of already-resolved awaits can starve paint.
 
-This makes async code look sequential, but it is still non-blocking for the surrounding event loop.
+**Failure mode:** Empty \`catch { console.error }\` returning \`undefined\` (empty UI). Naive retry that duplicates POST. \`await\` in \`for\` when \`Promise.all\` was the intent.
 
-Senior nuance:
+**Measure:** Network initiator chain (waterfall). TTFB vs compute. A test that rejects one branch and asserts the user-visible error.
 
-- awaiting in loops can serialize work accidentally,
-- unhandled rejections still need care,
-- cancellation is not built into promises, so you often need AbortController or custom coordination.`,
-      `\`async/await\` là syntax đặt trên promise.
+**Tradeoffs:** Sequential \`await\` is readable and slow. \`all\` is fast and blanks the screen on one 500.
 
-- một \`async\` function luôn trả về promise,
-- \`await\` tạm dừng phần còn lại của async function đó cho tới khi promise settle,
-- phần tiếp theo được lên lịch như một microtask.
+**Production gotchas:** Nuxt \`$fetch\` throws; \`fetch\` does not. Cancel with \`AbortSignal\` in \`watch\` \`onCleanup\` / \`onUnmounted\`. Don’t toast \`AbortError\` on every keystroke.`,
+      `**Họ thực sự hỏi:** Combinator nào, abort signal nào, và bạn có waterfall ba \`await\` độc lập không?
 
-Nó làm code async trông tuần tự hơn, nhưng không block event loop xung quanh.
+**Cách senior trả lời:** \`async/await\` là control-flow trên promise. Decision: gọi độc lập → \`Promise.all\` (fail-fast nếu page không render thiếu một phần). Partial → \`allSettled\` hoặc tách critical vs optional. Waterfall chỉ khi data thật sự phụ thuộc. Constraint: \`await\` nhường **microtask** — không block event loop, nhưng chuỗi await đã resolve có thể đói paint.
 
-Nuance mức senior:
+**Failure mode:** \`catch { console.error }\` trả \`undefined\` (UI rỗng). Retry ngây thơ nhân đôi POST. \`await\` trong \`for\` khi đáng lẽ \`Promise.all\`.
 
-- \`await\` trong loop có thể vô tình serialize công việc,
-- unhandled rejection vẫn phải xử lý cẩn thận,
-- promise không có cancel built-in, nên thường cần AbortController hoặc coordination khác.`,
+**Measure:** Initiator chain trên Network (waterfall). TTFB vs compute. Test reject một nhánh và assert lỗi user thấy.
+
+**Tradeoffs:** \`await\` tuần tự dễ đọc và chậm. \`all\` nhanh và trắng màn khi một nhánh 500.
+
+**Production gotchas:** Nuxt \`$fetch\` throw; \`fetch\` thì không. Cancel bằng \`AbortSignal\` trong \`watch\` \`onCleanup\` / \`onUnmounted\`. Đừng toast \`AbortError\` mỗi lần gõ.`,
     ),
+    followUps: [
+      l('How do you share one AbortSignal across fetch, watch, and a Vue listener?', 'Bạn share một AbortSignal cho fetch, watch và listener Vue thế nào?'),
+      l('When is awaiting in a loop correct rather than a bug?', 'Khi nào await trong loop là đúng chứ không phải bug?'),
+    ],
   }),
   q({
     id: 'js-promise-combinators',
@@ -899,17 +909,33 @@ Custom type guard trả về dạng \`value is User\`. Nó hữu ích ở bounda
     tags: ['typescript', 'types'],
     question: l('What is the difference between any, unknown, and never?', 'Khác nhau giữa any, unknown và never là gì?'),
     answer: l(
-      `- **any** turns off type safety for that value.
-- **unknown** says “I truly do not know yet,” so callers must narrow before using it.
-- **never** represents an impossible value or code path that should not happen.
+      `**What they actually ask:** What do you type at the **fetch/JSON boundary**, and will an exhaustive switch fail CI when a union grows?
 
-In mature codebases, prefer \`unknown\` at boundaries over \`any\`, and use \`never\` to make exhaustive checks explicit.`,
-      `- **any** tắt type safety cho giá trị đó.
-- **unknown** nghĩa là “tôi thực sự chưa biết”, nên caller phải narrow trước khi dùng.
-- **never** biểu diễn giá trị hoặc code path không thể xảy ra.
+**How a senior answers:** \`any\` turns the checker off — it is a defect unless you are migrating. \`unknown\` is “not proven yet”; you must narrow (Zod, \`typeof\`, predicates). \`never\` is “this cannot happen” — leftover of an exhaustive switch, or a function that always throws. Decision: \`unknown\` + runtime parse at the edge; domain types inside.
 
-Trong codebase trưởng thành, nên ưu tiên \`unknown\` ở boundary thay vì \`any\`, và dùng \`never\` để làm exhaustive check rõ ràng.`,
+**Failure mode:** \`JSON.parse\` as \`User\`. \`catch (e: any)\`. A type guard that always returns true. \`as never\` to silence a switch.
+
+**Measure:** \`no-explicit-any\` with a shrinking allowlist. A test that an extra union member makes \`const _x: never = x\` fail. Contract tests on illegal payloads.
+
+**Tradeoffs:** \`unknown\` is noisier and honest. \`any\` is faster in a spike and infects callers. \`never\` in return position documents “does not return”; overusing it hides real unions.
+
+**Production gotchas:** Vue \`defineProps\` without types becomes loose. Axios \`data: any\`. \`unknown\` in Pinia persist still needs a parse on rehydrate — TS will not run at runtime.`,
+      `**Họ thực sự hỏi:** Bạn type **biên fetch/JSON** thế nào, và switch exhaustive có fail CI khi union lớn thêm không?
+
+**Cách senior trả lời:** \`any\` tắt checker — là defect trừ khi đang migrate. \`unknown\` là “chưa chứng minh”; phải narrow (Zod, \`typeof\`, predicate). \`never\` là “không thể xảy ra” — phần còn lại của switch exhaustive, hoặc hàm luôn throw. Decision: \`unknown\` + parse runtime ở biên; domain type bên trong.
+
+**Failure mode:** \`JSON.parse\` thành \`User\`. \`catch (e: any)\`. Type guard luôn return true. \`as never\` để bịt switch.
+
+**Measure:** \`no-explicit-any\` với allowlist nhỏ dần. Test thêm member union làm \`const _x: never = x\` fail. Contract test payload bất hợp pháp.
+
+**Tradeoffs:** \`unknown\` ồn hơn và thật. \`any\` nhanh lúc spike và lây caller. \`never\` ở return nói “không return”; lạm dụng sẽ giấu union thật.
+
+**Production gotchas:** Vue \`defineProps\` không type sẽ lỏng. Axios \`data: any\`. \`unknown\` trong Pinia persist vẫn cần parse lúc rehydrate — TS không chạy runtime.`,
     ),
+    followUps: [
+      l('How do you parse unknown API JSON without asserting User?', 'Bạn parse JSON unknown thành User mà không assert thế nào?'),
+      l('When is never the wrong type for an empty array or a default branch?', 'Khi nào never là type sai cho mảng rỗng hoặc nhánh default?'),
+    ],
   }),
   q({
     id: 'ts-designing-api-props',
@@ -1131,27 +1157,33 @@ watch(query, () => {
     tags: ['vue', 'composition-api'],
     question: l('Why is the Composition API useful?', 'Composition API hữu ích ở điểm nào?'),
     answer: l(
-      `The main win is organizing code by **logic concern** instead of option buckets like data/methods/computed scattered across a large file.
+      `**What they actually ask:** Not “Options is dead.” They want **extraction, TS, and SSR-safe reuse** — and whether you still know when Options is fine.
 
-Benefits:
+**How a senior answers:** Organize by **concern** (search, permissions, chart) instead of \`data\`/\`methods\`/\`computed\` buckets. Decision: Composition + composables when the file is an orchestration layer; Options is still OK for small presentational SFCs. Constraint: composables must be called **sync and unconditionally** in \`setup\` so the effect scope is correct.
 
-- better reuse through composables,
-- easier extraction of complex logic,
-- clearer ownership of related state/effects,
-- better TypeScript ergonomics compared with large Options API components.
+**Failure mode:** Mixins + composables in one component (\`this.foo\` collisions, doubled lifecycle). Rewrite everything to \`<script setup>\` without tests and silently change \`beforeDestroy\` vs \`onBeforeUnmount\` + keep-alive. \`if (flag) useFoo()\`.
 
-Composition API is especially valuable when components become more like orchestration layers than simple templates.`,
-      `Lợi ích chính là tổ chức code theo **mối quan tâm logic** thay vì bị tách thành data/methods/computed rải rác như trong file lớn của Options API.
+**Measure:** Time to extract a concern into a tested composable. TS inference at the callsite. Duplicate watchers after a keep-alive tab switch.
 
-Lợi ích:
+**Tradeoffs:** Composition is more explicit and easier to type; Options is faster to scan for juniors on tiny forms. A 20-line Options SFC does not need a rewrite.
 
-- tái sử dụng tốt hơn qua composable,
-- dễ tách logic phức tạp,
-- ownership rõ hơn giữa state/effect liên quan,
-- TypeScript ergonomics tốt hơn với component lớn.
+**Production gotchas:** Auto-import name clashes. Circular composable ↔ Pinia only explodes in the production chunk. \`this\` in Options methods vs arrows (module \`this\` is \`undefined\` in ESM).`,
+      `**Họ thực sự hỏi:** Không phải “Options đã chết.” Họ muốn **tách logic, TS, reuse an toàn SSR** — và bạn còn biết khi nào Options đủ.
 
-Composition API đặc biệt hữu ích khi component dần giống orchestration layer hơn là một template đơn giản.`,
+**Cách senior trả lời:** Tổ chức theo **concern** (search, permission, chart) thay vì thùng \`data\`/\`methods\`/\`computed\`. Decision: Composition + composable khi file là orchestration; Options vẫn ổn cho SFC presentational nhỏ. Constraint: composable phải gọi **sync và không điều kiện** trong \`setup\` để effect scope đúng.
+
+**Failure mode:** Mixin + composable cùng component (\`this.foo\` đụng, lifecycle nhân đôi). Rewrite hết sang \`<script setup>\` không test, đổi thầm \`beforeDestroy\` vs \`onBeforeUnmount\` + keep-alive. \`if (flag) useFoo()\`.
+
+**Measure:** Thời gian tách một concern thành composable có test. Inference TS ở callsite. Watcher nhân đôi sau khi đổi tab keep-alive.
+
+**Tradeoffs:** Composition explicit và dễ type hơn; Options dễ scan với junior trên form nhỏ. SFC Options 20 dòng không cần rewrite.
+
+**Production gotchas:** Auto-import trùng tên. Composable ↔ Pinia circular chỉ nổ ở production chunk. \`this\` trong Options method vs arrow (\`this\` module là \`undefined\` trong ESM).`,
     ),
+    followUps: [
+      l('What would make you keep Options API for a new component?', 'Điều gì khiến bạn giữ Options API cho component mới?'),
+      l('How do you test a composable that uses lifecycle without mounting the app?', 'Bạn test composable dùng lifecycle mà không mount cả app thế nào?'),
+    ],
   }),
   q({
     id: 'vue-composables',
@@ -1371,25 +1403,33 @@ Câu trả lời tốt là gắn rendering mode với constraint của product, 
     tags: ['nuxt', 'nitro', 'server'],
     question: l('What is Nitro in Nuxt 3?', 'Nitro trong Nuxt 3 là gì?'),
     answer: l(
-      `Nitro is Nuxt's server engine. It powers server routes, server rendering, deployment adapters, storage integrations, and hybrid execution across different platforms.
+      `**What they actually ask:** Is Nitro “just SSR,” or do you treat it as a **BFF + deploy adapter** with secrets and cache rules?
 
-Why it matters:
+**How a senior answers:** Nitro is the server engine: \`server/api\`, SSR, storage, and **preset adapters** (Node, Vercel, Cloudflare, etc.). Decision: put **BFF aggregation, cookie auth, and secrets** here so the browser talks to one origin. Constraint: handlers must be **stateless per request** — no module-level user state.
 
-- FE engineers can colocate backend-for-frontend logic,
-- deployment targets can change with less app rewrite,
-- route rules and caching become first-class concerns.
+**Failure mode:** Importing a Pinia store or \`window\` in a Nitro route. Caching a personalized \`/api/me\` at the edge. Shipping \`NUXT_PUBLIC_\` secrets that belong only on the server.
 
-For interviews, a useful senior angle is that Nitro lets a frontend team own more of the delivery surface, but it also means they need stronger discipline around server boundaries and caching.`,
-      `Nitro là server engine của Nuxt. Nó chạy server route, server rendering, deployment adapter, storage integration và hybrid execution trên nhiều platform.
+**Measure:** One origin in the browser Network panel. Cold-start / TTFB per preset. A test that request A cannot read request B’s cookie/store.
 
-Vì sao nó quan trọng:
+**Tradeoffs:** Colocated BFF is fast to ship and easy to leak domain logic. A separate API stays cleaner when many clients exist. Adapter portability is real until you use Node-only APIs on an edge preset.
 
-- FE engineer có thể colocate backend-for-frontend logic,
-- target deploy có thể đổi với ít rewrite hơn,
-- route rule và caching trở thành concern hạng nhất.
+**Production gotchas:** Route rules vs handler cache disagree. \`event.context\` vs a global. Server routes are not a replacement for authorization in the real backend.`,
+      `**Họ thực sự hỏi:** Nitro chỉ là “SSR,” hay bạn coi nó là **BFF + adapter deploy** với secret và rule cache?
 
-Trong phỏng vấn, góc nhìn senior hữu ích là Nitro giúp frontend team ownership nhiều bề mặt hơn, nhưng cũng đòi hỏi kỷ luật tốt hơn ở server boundary và caching.`,
+**Cách senior trả lời:** Nitro là server engine: \`server/api\`, SSR, storage, và **preset adapter** (Node, Vercel, Cloudflare, v.v.). Decision: để **gom BFF, cookie auth, secret** ở đây để browser nói một origin. Constraint: handler phải **stateless theo request** — không user state ở module.
+
+**Failure mode:** Import Pinia hoặc \`window\` trong Nitro route. Cache \`/api/me\` cá nhân ở edge. Ship secret qua \`NUXT_PUBLIC_\` đáng lẽ chỉ ở server.
+
+**Measure:** Một origin trên Network. Cold-start / TTFB theo preset. Test request A không đọc được cookie/store của request B.
+
+**Tradeoffs:** BFF colocated ship nhanh, dễ lộ domain logic. API tách sạch hơn khi có nhiều client. Portable adapter là thật đến khi bạn dùng API chỉ có Node trên preset edge.
+
+**Production gotchas:** Route rule vs cache của handler lệch. \`event.context\` vs global. Server route không thay authorization ở backend thật.`,
     ),
+    followUps: [
+      l('What must never live in a NUXT_PUBLIC_ env var?', 'Thứ gì không bao giờ được nằm trong env NUXT_PUBLIC_?'),
+      l('How do you keep a Nitro handler from leaking state across requests?', 'Bạn giữ handler Nitro khỏi leak state giữa các request thế nào?'),
+    ],
   }),
   q({
     id: 'nuxt-data-fetching',
@@ -1663,17 +1703,33 @@ Câu trả lời kiểu senior nên thực dụng, không giáo điều.`,
     tags: ['react', 'context', 'state-management'],
     question: l('What is React Context good for, and where does it break down?', 'React Context hợp với gì, và giới hạn ở đâu?'),
     answer: l(
-      `Context is good for dependency injection-like data that many descendants need: theme, locale, auth session metadata, feature flags.
+      `**What they actually ask:** Did you put the whole cart / search query / every keystroke into Context and rerender the app?
 
-It breaks down when used as a high-frequency global state store because context updates can cause broad re-render propagation and make data flow harder to track.
+**How a senior answers:** Context is **dependency injection**: theme, locale, auth *identity*, feature flags, a form controller. Decision: low-frequency, wide-tree values. Constraint: any \`value={{...}}\` new object rerenders **all** consumers. High-frequency or server state → Zustand/Pinia-like store or TanStack Query, not Context.
 
-For heavier state needs, pair context with reducers carefully or reach for dedicated state/server-state solutions.`,
-      `Context hợp cho kiểu dependency injection data mà nhiều descendant cần: theme, locale, auth session metadata, feature flag.
+**Failure mode:** One \`AppStateProvider\` that updates on hover. Split components still subscribe to a fat context. Memoizing children but not splitting the context.
 
-Nó yếu đi khi bị dùng như global state store tần suất cao vì update từ context có thể kéo theo re-render rộng và làm data flow khó theo dõi hơn.
+**Measure:** React profiler: who rerenders on a keystroke. Number of context providers on the critical path. A test that a presentational leaf does not render when auth display-name changes.
 
-Khi state nặng hơn, hãy dùng context với reducer thật cẩn thận hoặc chuyển sang state/server-state solution chuyên biệt.`,
+**Tradeoffs:** Context needs no extra lib and is awkward to optimize. External stores have selector granularity and another mental model. Vue provide/inject has the same “don’t make it a global store” rule.
+
+**Production gotchas:** SSR: module-level default context leaks across requests if you put user data there. Next: keep context below the client boundary. Persist + Context = accidental \`localStorage\` tokens.`,
+      `**Họ thực sự hỏi:** Bạn nhét cả cart / query search / mọi phím vào Context rồi rerender app?
+
+**Cách senior trả lời:** Context là **dependency injection**: theme, locale, *identity* auth, feature flag, form controller. Decision: giá trị tần suất thấp, cây rộng. Constraint: \`value={{...}}\` object mới rerender **mọi** consumer. State tần suất cao hoặc server state → store kiểu Zustand/Pinia hoặc TanStack Query, không phải Context.
+
+**Failure mode:** Một \`AppStateProvider\` update lúc hover. Component đã tách vẫn subscribe context béo. Memo child nhưng không tách context.
+
+**Measure:** Profiler React: ai rerender khi gõ. Số provider trên critical path. Test leaf presentational không render khi đổi display-name auth.
+
+**Tradeoffs:** Context không thêm lib và khó tối ưu. Store ngoài có selector mịn và thêm mental model. Vue provide/inject cùng rule “đừng biến thành global store.”
+
+**Production gotchas:** SSR: default context ở module leak user giữa request. Next: giữ context dưới client boundary. Persist + Context = token \`localStorage\` tình cờ.`,
     ),
+    followUps: [
+      l('How do you split context so a theme toggle does not rerender a table?', 'Bạn tách context thế nào để toggle theme không rerender table?'),
+      l('When is Pinia/Zustand a better fit than Context for the same data?', 'Khi nào Pinia/Zustand hợp hơn Context cho cùng loại data?'),
+    ],
   }),
   q({
     id: 'next-app-router-rsc',
@@ -2322,35 +2378,33 @@ Testing kiểu senior là tối ưu confidence theo chi phí, không phải tố
     tags: ['javascript', 'basics'],
     question: l('What is the difference between var, let, and const?', 'Khác nhau giữa var, let và const là gì?'),
     answer: l(
-      `**Short answer:** Prefer **const** by default, use **let** when reassignment is required, and avoid **var** in modern code.
+      `**What they actually ask:** Can you pick a default, and do you know \`const\` is a **binding** rule — not deep freeze — plus TDZ in modules?
 
-**Why:**
+**How a senior answers:** Default \`const\`. Use \`let\` only when the binding must move (index, retry). Never \`var\` in new code. Constraint: \`const user = { role: 'admin' }; user.role = 'guest'\` is legal.
 
-- \`var\` is function-scoped and hoisted to \`undefined\`,
-- \`let\` and \`const\` are block-scoped,
-- \`const\` prevents reassignment of the binding, though nested object contents can still mutate.
+**Failure mode:** Treating \`const\` as \`Object.freeze\`, or \`var\` in a loop with \`await\` so every iteration fires the last id.
 
-**Trade-offs / gotchas:**
+**Measure:** \`no-var\` / \`prefer-const\` in lint, plus a review of objects that actually need \`readonly\` / \`structuredClone\` / Vue \`readonly()\`.
 
-- \`const\` does **not** make an object deeply immutable,
-- \`var\` can create confusing bugs because of hoisting and lack of block scope.
+**Tradeoffs:** \`Object.freeze\` is shallow and can break Vue 3 proxies. Rebinding \`let result\` in a 40-line function is often worse than early returns with \`const\`.
 
-Modern style: use \`const\` unless the binding truly changes.`,
-      `**Trả lời ngắn:** Hãy ưu tiên **const** mặc định, dùng **let** khi thật sự cần gán lại, và tránh **var** trong code hiện đại.
+**Production gotchas:** Circular-import TDZ (\`store\` ↔ composable) throws at load, not a mysterious \`undefined\`. \`const { items } = props\` drops Vue reactivity unless \`toRefs\` / \`storeToRefs\`.`,
+      `**Họ thực sự hỏi:** Bạn chọn default thế nào, và bạn có biết \`const\` là rule về **binding** — không phải freeze sâu — cộng TDZ trong module?
 
-**Vì sao:**
+**Cách senior trả lời:** Default \`const\`. Dùng \`let\` khi binding phải đổi (index, retry). Không \`var\` trong code mới. Constraint: \`const user = { role: 'admin' }; user.role = 'guest'\` vẫn hợp lệ.
 
-- \`var\` có function scope và được hoist lên \`undefined\`,
-- \`let\` và \`const\` có block scope,
-- \`const\` chỉ chặn việc gán lại binding, còn object lồng bên trong vẫn có thể mutate.
+**Failure mode:** Coi \`const\` như \`Object.freeze\`, hoặc \`var\` trong loop có \`await\` khiến mọi iteration bắn cùng id cuối.
 
-**Trade-off / gotcha:**
+**Measure:** Lint \`no-var\` / \`prefer-const\`, rồi review object nào thật sự cần \`readonly\` / \`structuredClone\` / Vue \`readonly()\`.
 
-- \`const\` **không** làm object deep immutable,
-- \`var\` dễ tạo bug khó nhìn vì hoisting và thiếu block scope.
+**Tradeoffs:** \`Object.freeze\` nông và có thể gãy Vue 3 proxy. \`let result\` trong hàm 40 dòng thường tệ hơn early return với \`const\`.
 
-Style hiện đại là: dùng \`const\` trừ khi binding đó thật sự phải thay đổi.`,
+**Production gotchas:** TDZ circular import (\`store\` ↔ composable) nổ lúc load, không phải \`undefined\` bí ẩn. \`const { items } = props\` mất reactivity trừ khi \`toRefs\` / \`storeToRefs\`.`,
     ),
+    followUps: [
+      l('Does const prevent array.push? Why would a reviewer still flag it?', 'const có chặn array.push không? Vì sao reviewer vẫn flag?'),
+      l('Show a circular-import TDZ crash and how you would break the cycle.', 'Chỉ một crash TDZ do circular import và cách bạn cắt vòng.'),
+    ],
   }),
   q({
     id: 'js-loose-vs-strict-equality',
@@ -2358,25 +2412,33 @@ Style hiện đại là: dùng \`const\` trừ khi binding đó thật sự ph�
     tags: ['javascript', 'basics'],
     question: l('What is the difference between == and ===?', 'Khác nhau giữa == và === là gì?'),
     answer: l(
-      `**Short answer:** \`===\` compares without type coercion; \`==\` allows coercion and can produce surprising results.
+      `**What they actually ask:** Will you ship \`==\` in a Vue/TS codebase, and can you name the two loose cases that are still intentional?
 
-Examples:
+**How a senior answers:** Default \`===\` / \`!==\`. Constraint: \`==\` is a coercion table, not “almost equal.” The only loose checks I still use on purpose are \`== null\` (covers \`null\` and \`undefined\`) and rare API-boundary shims.
 
-- \`1 === '1'\` is false
-- \`1 == '1'\` is true
-- \`null == undefined\` is true
+**Failure mode:** \`if (count == false)\` treating \`0\` as missing; \`status == 200\` hiding a string \`"200"\` from a proxy; ESLint off for a whole file.
 
-Because coercion rules are non-trivial, most production code should prefer \`===\` and \`!==\` unless you intentionally want loose equality semantics.`,
-      `**Trả lời ngắn:** \`===\` so sánh không ép kiểu; \`==\` cho phép coercion nên dễ tạo kết quả bất ngờ.
+**Measure:** \`eqeqeq\` lint with an allowlist for \`== null\`. A table of flags/prices that includes \`0\`, \`''\`, \`false\`.
 
-Ví dụ:
+**Tradeoffs:** \`== null\` is shorter than \`value === null || value === undefined\`. Everywhere else, the saved keystroke is not worth the bug.
 
-- \`1 === '1'\` là false
-- \`1 == '1'\` là true
-- \`null == undefined\` là true
+**Production gotchas:** Vue template \`v-if="value == 0"\` vs \`??\` / \`||\` mixups. TS \`===\` does not save you if you typed the API as \`number\` but the JSON is a string.`,
+      `**Họ thực sự hỏi:** Bạn có ship \`==\` trong codebase Vue/TS không, và bạn nêu được hai case loose còn cố ý không?
 
-Vì rule coercion khá rối, phần lớn production code nên ưu tiên \`===\` và \`!==\` trừ khi bạn cố ý muốn loose equality.`,
+**Cách senior trả lời:** Default \`===\` / \`!==\`. Constraint: \`==\` là bảng coercion, không phải “gần bằng.” Chỉ còn dùng cố ý \`== null\` (gộp \`null\`/\`undefined\`) và vài shim ở API boundary.
+
+**Failure mode:** \`if (count == false)\` biến \`0\` thành missing; \`status == 200\` giấu string \`"200"\` từ proxy; tắt ESLint cả file.
+
+**Measure:** Lint \`eqeqeq\` với allowlist \`== null\`. Bảng flag/giá có \`0\`, \`''\`, \`false\`.
+
+**Tradeoffs:** \`== null\` ngắn hơn \`value === null || value === undefined\`. Chỗ khác, tiết kiệm phím không đáng với bug.
+
+**Production gotchas:** Template Vue \`v-if="value == 0"\` lẫn với \`??\` / \`||\`. TS \`===\` không cứu nếu bạn type API là \`number\` nhưng JSON là string.`,
     ),
+    followUps: [
+      l('When is == null a better check than === undefined?', 'Khi nào == null tốt hơn === undefined?'),
+      l('How do you keep API string/number IDs from leaking into === checks?', 'Bạn giữ ID string/number từ API khỏi lọt vào === như thế nào?'),
+    ],
   }),
   q({
     id: 'js-data-types-typeof',
@@ -2384,27 +2446,33 @@ Vì rule coercion khá rối, phần lớn production code nên ưu tiên \`===\
     tags: ['javascript', 'basics'],
     question: l('What basic JavaScript data type and typeof quirks should you know?', 'Những data type và typeof quirk cơ bản nào của JavaScript cần nhớ?'),
     answer: l(
-      `Know the primitives: string, number, bigint, boolean, undefined, symbol, null, plus objects/functions.
+      `**What they actually ask:** Can you type an API boundary without \`typeof\` lying to you — especially \`null\`, arrays, and iframe values?
 
-Common quirks:
+**How a senior answers:** Primitives: string, number, bigint, boolean, undefined, symbol, null. Everything else is object-ish. Decision: never use \`typeof\` alone at a trust boundary. Constraint: \`typeof null === 'object'\` is a leftover; \`typeof [] === 'object'\`; functions are \`'function'\`; \`NaN\` is a number.
 
-- \`typeof null === 'object'\` (legacy bug),
-- arrays are objects, so use \`Array.isArray\`,
-- functions return \`'function'\`,
-- \`NaN\` has type number.
+**Failure mode:** \`if (typeof data === 'object')\` treating \`null\` as a payload, then crashing in a Vue template. \`data instanceof Array\` false across an iframe/jsdom realm.
 
-Interviewers ask this to check whether you know the language's sharp edges, not just the happy path.`,
-      `Hãy nhớ các primitive: string, number, bigint, boolean, undefined, symbol, null, cùng với object/function.
+**Measure:** A Zod/\`unknown\` parse at the fetch boundary. Tests with \`null\`, \`[]\`, \`NaN\`, and a second-window array if you embed iframes.
 
-Quirk hay gặp:
+**Tradeoffs:** \`Array.isArray\` / \`Number.isNaN\` / \`Object.prototype.toString\` beat clever \`typeof\` tables. Hand-rolled type maps drift.
 
-- \`typeof null === 'object'\` (bug lịch sử),
-- array cũng là object nên dùng \`Array.isArray\`,
-- function trả về \`'function'\`,
-- \`NaN\` có type là number.
+**Production gotchas:** Vue proxies still pass \`typeof === 'object'\`. Pinia persist of \`undefined\` vs omitted keys. TS \`typeof\` operator is compile-time — it does not fix runtime JSON.`,
+      `**Họ thực sự hỏi:** Bạn type được API boundary mà không để \`typeof\` nói dối — nhất là \`null\`, array, và giá trị từ iframe?
 
-Người phỏng vấn hỏi câu này để xem bạn có biết góc sắc của ngôn ngữ chứ không chỉ biết happy path.`,
+**Cách senior trả lời:** Primitive: string, number, bigint, boolean, undefined, symbol, null. Còn lại là object-ish. Decision: đừng dùng \`typeof\` một mình ở trust boundary. Constraint: \`typeof null === 'object'\` là di sản; \`typeof [] === 'object'\`; function là \`'function'\`; \`NaN\` là number.
+
+**Failure mode:** \`if (typeof data === 'object')\` coi \`null\` là payload rồi gãy template Vue. \`data instanceof Array\` false qua iframe/jsdom.
+
+**Measure:** Parse Zod/\`unknown\` ở fetch boundary. Test với \`null\`, \`[]\`, \`NaN\`, và array từ window thứ hai nếu có iframe.
+
+**Tradeoffs:** \`Array.isArray\` / \`Number.isNaN\` / \`Object.prototype.toString\` hơn bảng \`typeof\` khôn. Map type viết tay sẽ lệch.
+
+**Production gotchas:** Vue proxy vẫn \`typeof === 'object'\`. Pinia persist \`undefined\` vs key bị bỏ. Toán tử \`typeof\` của TS là compile-time — không sửa JSON runtime.`,
     ),
+    followUps: [
+      l('How do you distinguish null, a missing field, and an empty object from an API?', 'Bạn phân biệt null, field thiếu, và object rỗng từ API thế nào?'),
+      l('Why can instanceof Array fail for a value that looks like an array?', 'Vì sao instanceof Array có thể fail với giá trị trông như array?'),
+    ],
   }),
   q({
     id: 'js-scope',
@@ -2412,27 +2480,33 @@ Người phỏng vấn hỏi câu này để xem bạn có biết góc sắc c�
     tags: ['javascript', 'basics'],
     question: l('What is scope in JavaScript?', 'Scope trong JavaScript là gì?'),
     answer: l(
-      `Scope determines where a variable can be accessed.
+      `**What they actually ask:** Can you predict what a callback, a Vue composable, or an ES module actually closes over — and when that becomes a leak?
 
-Useful categories:
+**How a senior answers:** Scope is **lexical**: a function sees the bindings where it was written, not where it is called. Decision: keep module/global scope for true singletons; keep UI state in component/effect scope. Constraint: a closure keeps the **binding**, not a snapshot, until that function is released.
 
-- global scope,
-- function scope,
-- block scope,
-- lexical scope.
+**Failure mode:** A module-level cache holding the last user’s 20MB export after logout. \`var\` leaking out of a \`for\`/\`if\`. A composable called inside \`if (flag)\` so the effect scope is wrong.
 
-Closures rely on lexical scope, and many bugs around \`var\` vs \`let\` come from misunderstanding scope boundaries.`,
-      `Scope quyết định nơi nào một biến có thể được truy cập.
+**Measure:** Memory retainers on a known object; a test that the second query drops the first result; eslint \`no-var\` plus “no module mutable user data.”
 
-Các loại hữu ích cần nhớ:
+**Tradeoffs:** Module singletons are fast until they retain per-user data. Passing explicit args is noisier than closing over a ref — and usually safer.
 
-- global scope,
-- function scope,
-- block scope,
-- lexical scope.
+**Production gotchas:** Vue \`<script setup>\` top-level \`let\` is **not** reactive. Pinia store imported by a composable that imports the store → TDZ. SSR: module scope is shared across requests.`,
+      `**Họ thực sự hỏi:** Bạn đoán được callback, composable Vue, hay ES module đang close over cái gì — và khi nào thành leak?
 
-Closure dựa trực tiếp vào lexical scope, và rất nhiều bug quanh \`var\` vs \`let\` đến từ việc hiểu sai boundary của scope.`,
+**Cách senior trả lời:** Scope là **lexical**: function thấy binding nơi nó được viết, không phải nơi được gọi. Decision: module/global chỉ cho singleton thật; UI state nằm ở component/effect scope. Constraint: closure giữ **binding**, không phải snapshot, cho tới khi function được thả.
+
+**Failure mode:** Cache module-level giữ export 20MB của user cũ sau logout. \`var\` chảy ra khỏi \`for\`/\`if\`. Composable gọi trong \`if (flag)\` nên effect scope sai.
+
+**Measure:** Memory retainer trên object biết trước; test query thứ hai drop kết quả thứ nhất; eslint \`no-var\` + “không mutable user data ở module.”
+
+**Tradeoffs:** Singleton module nhanh đến khi nó giữ data theo user. Truyền arg rõ ràng ồn hơn close over ref — và thường an toàn hơn.
+
+**Production gotchas:** \`let\` top-level trong Vue \`<script setup>\` **không** reactive. Pinia store import composable import ngược store → TDZ. SSR: module scope dùng chung giữa request.`,
     ),
+    followUps: [
+      l('What is the difference between lexical scope and the this binding?', 'Lexical scope khác this binding ở điểm nào?'),
+      l('When is a module-level cache a leak instead of a performance win?', 'Khi nào cache module-level là leak thay vì thắng performance?'),
+    ],
   }),
   q({
     id: 'dom-event-propagation-delegation',
@@ -2440,33 +2514,33 @@ Closure dựa trực tiếp vào lexical scope, và rất nhiều bug quanh \`va
     tags: ['dom', 'events', 'basics'],
     question: l('Explain event bubbling, capturing, delegation, preventDefault, and stopPropagation.', 'Giải thích event bubbling, capturing, delegation, preventDefault và stopPropagation.'),
     answer: l(
-      `Events travel through the DOM in phases:
+      `**What they actually ask:** Can you wire a 10k-row table and a modal without leaking listeners or killing analytics click-outside?
 
-1. **capturing**: top -> target
-2. **target**
-3. **bubbling**: target -> top
+**How a senior answers:** Capture → target → bubble. Decision: **delegate** on a stable parent for dynamic lists (\`e.target.closest('[data-id]')\`). \`preventDefault\` stops the **browser** action (submit, link). \`stopPropagation\` stops **other listeners**. Constraint: Vue \`@click\` is bubble; \`@click.capture\` / \`.stop\` / \`.prevent\` are explicit.
 
-Useful ideas:
+**Failure mode:** \`stopPropagation\` on a row click so the document click-outside never sees it — modal/dropdown stuck open. Delegation on a node that Vue replaces (\`v-if\`) so the listener dies. Forgetting \`{ signal }\` / \`onUnmounted\` remove.
 
-- **event delegation**: attach one listener on a parent and handle child interactions via event target matching
-- **preventDefault**: stop the browser's default behavior
-- **stopPropagation**: stop the event from continuing through the tree
+**Measure:** One listener on the table, not N per row. A keyboard + click-outside test. Heap: no detached nodes retained by handlers.
 
-Delegation is great for dynamic lists, but stopping propagation carelessly can create hard-to-debug behavior.`,
-      `Event đi qua DOM theo các phase:
+**Tradeoffs:** Delegation is cheaper and survives row recycle. Per-item listeners are simpler until virtualization. \`.stop\` is a last resort, not a default.
 
-1. **capturing**: từ trên xuống target
-2. **target**
-3. **bubbling**: từ target đi ngược lên trên
+**Production gotchas:** Teleport/portal: the listener’s tree is not the visual tree. Shadow DOM / third-party widgets swallow events. React 17+ roots changed delegation; Vue did not.`,
+      `**Họ thực sự hỏi:** Bạn gắn table 10k hàng và modal mà không leak listener hay giết click-outside của analytics?
 
-Những ý quan trọng:
+**Cách senior trả lời:** Capture → target → bubble. Decision: **delegate** trên parent ổn định cho list động (\`e.target.closest('[data-id]')\`). \`preventDefault\` chặn hành vi **browser** (submit, link). \`stopPropagation\` chặn **listener khác**. Constraint: Vue \`@click\` là bubble; \`@click.capture\` / \`.stop\` / \`.prevent\` phải ghi rõ.
 
-- **event delegation**: gắn một listener ở parent rồi xử lý tương tác của child bằng cách kiểm tra event target
-- **preventDefault**: chặn hành vi mặc định của browser
-- **stopPropagation**: chặn event lan tiếp trong cây
+**Failure mode:** \`.stop\` trên click hàng khiến document không thấy click-outside — modal/dropdown kẹt. Delegate trên node bị \`v-if\` thay thế nên listener chết. Quên \`{ signal }\` / \`onUnmounted\` gỡ.
 
-Delegation rất hợp cho list động, nhưng stopPropagation dùng bừa bãi sẽ tạo behavior khó debug.`,
+**Measure:** Một listener trên table, không phải N mỗi hàng. Test keyboard + click-outside. Heap: không còn node detached bị handler giữ.
+
+**Tradeoffs:** Delegation rẻ và sống qua recycle hàng. Listener từng item đơn giản đến khi virtualize. \`.stop\` là cuối cùng, không phải default.
+
+**Production gotchas:** Teleport/portal: cây listener ≠ cây nhìn thấy. Shadow DOM / widget nuốt event. React 17+ đổi delegation; Vue thì không.`,
     ),
+    followUps: [
+      l('When is stopPropagation the wrong fix for a click-outside bug?', 'Khi nào stopPropagation là fix sai cho bug click-outside?'),
+      l('How do you delegate clicks in a virtualized Vue list?', 'Bạn delegate click trong list Vue virtualize thế nào?'),
+    ],
   }),
   q({
     id: 'promise-basics',
@@ -2474,25 +2548,33 @@ Delegation rất hợp cho list động, nhưng stopPropagation dùng bừa bãi
     tags: ['javascript', 'promises', 'basics'],
     question: l('What is a Promise and what problem does it solve?', 'Promise là gì và nó giải quyết bài toán nào?'),
     answer: l(
-      `A Promise represents the future result of an async operation.
+      `**What they actually ask:** Can you compose async work **and** talk failure, abort, and “empty catch that looks like no data”?
 
-It helps by:
+**How a senior answers:** A Promise is a single-settlement value: pending → fulfilled or rejected. Decision: use it as the **contract** (\`async\` functions always return one). Constraint: it does **not** cancel; you pass \`AbortSignal\`. Combinators express failure policy: \`all\` fail-fast, \`allSettled\` for partials.
 
-- making async results composable,
-- avoiding deeply nested callback code,
-- providing explicit success/failure paths through \`.then\`, \`.catch\`, and \`.finally\`.
+**Failure mode:** \`catch { console.error }\` returning \`undefined\` so Vue paints “no rows.” An empty \`catch\` that retries a non-idempotent POST. Unhandled rejection in a fire-and-forget toast.
 
-The main states are pending, fulfilled, and rejected.`,
-      `Promise đại diện cho kết quả trong tương lai của một thao tác bất đồng bộ.
+**Measure:** Network: aborted vs failed. An integration test that rejects one branch and asserts the **user-visible** error. Count of empty catches in review.
 
-Nó hữu ích vì:
+**Tradeoffs:** Promises compose; they do not model streams or retries. \`async/await\` reads sequentially — easy to accidentally waterfall.
 
-- làm kết quả async có thể compose được,
-- tránh callback lồng quá sâu,
-- cho đường đi thành công/thất bại rõ ràng qua \`.then\`, \`.catch\` và \`.finally\`.
+**Production gotchas:** Nuxt/\`$fetch\` throws on HTTP error by default; \`fetch\` does not. Vue \`onMounted\` promises need abort on unmount. A rejected promise in \`Promise.all\` for a dashboard blanks the whole screen.`,
+      `**Họ thực sự hỏi:** Bạn compose được việc async **và** nói được failure, abort, và “empty catch trông như không có data”?
 
-Ba trạng thái chính là pending, fulfilled và rejected.`,
+**Cách senior trả lời:** Promise là giá trị settle một lần: pending → fulfilled hoặc rejected. Decision: dùng nó làm **contract** (\`async\` luôn trả về một promise). Constraint: **không** cancel; phải truyền \`AbortSignal\`. Combinator diễn tả policy lỗi: \`all\` fail-fast, \`allSettled\` cho partial.
+
+**Failure mode:** \`catch { console.error }\` trả \`undefined\` nên Vue vẽ “không có hàng.” \`catch\` rỗng retry POST không idempotent. Unhandled rejection trong toast fire-and-forget.
+
+**Measure:** Network: aborted vs failed. Test integration reject một nhánh và assert lỗi **user thấy**. Đếm empty catch khi review.
+
+**Tradeoffs:** Promise compose được; không model stream hay retry. \`async/await\` đọc tuần tự — dễ waterfall nhầm.
+
+**Production gotchas:** Nuxt/\`$fetch\` mặc định throw khi HTTP lỗi; \`fetch\` thì không. Promise trong Vue \`onMounted\` cần abort lúc unmount. Một reject trong \`Promise.all\` của dashboard làm trắng cả màn.`,
     ),
+    followUps: [
+      l('Why is cancellation not a Promise feature, and what do you use instead?', 'Vì sao cancel không phải feature của Promise, và bạn dùng gì?'),
+      l('When is Promise.all the wrong combinator for a page?', 'Khi nào Promise.all là combinator sai cho một page?'),
+    ],
   }),
   q({
     id: 'array-methods-map-filter-reduce',
@@ -2500,19 +2582,33 @@ Ba trạng thái chính là pending, fulfilled và rejected.`,
     tags: ['javascript', 'arrays', 'basics'],
     question: l('When do you use map, filter, reduce, and forEach?', 'Khi nào dùng map, filter, reduce và forEach?'),
     answer: l(
-      `- **map** transforms each item and returns a new array
-- **filter** keeps a subset based on a condition
-- **reduce** accumulates into one result or structure
-- **forEach** performs side effects and returns nothing useful
+      `**What they actually ask:** Will you \`filter+map\` 50k rows in a Vue computed on every keystroke, or do you pick the method that matches intent **and** cost?
 
-Good interviews answers emphasize choosing the method that expresses intent most clearly, not using reduce for everything.`,
-      `- **map** biến đổi từng phần tử và trả về mảng mới
-- **filter** giữ lại tập con theo điều kiện
-- **reduce** gộp thành một kết quả hoặc cấu trúc
-- **forEach** làm side effect và không trả về kết quả hữu ích
+**How a senior answers:** \`map\` → new array, same length. \`filter\` → subset. \`reduce\` → one value/index when a single pass is the point. \`forEach\` → side effects only. Decision: express intent first; if the list is large, **index once** (Map/Set) instead of O(n) per row.
 
-Câu trả lời tốt nên nhấn mạnh việc chọn method diễn đạt ý đồ rõ nhất, chứ không phải lạm dụng reduce cho mọi thứ.`,
+**Failure mode:** \`items.filter(...).map(...)\` in a template on every render. \`reduce\` golf that no one can review. \`forEach\` + \`push\` reinventing \`map\` and mutating shared Pinia state.
+
+**Measure:** Profiler: computed eval vs keystroke. For 10k+ rows, time to first paint and whether you virtualize (\`content-visibility\`, TanStack Virtual, \`vue-virtual-scroller\`).
+
+**Tradeoffs:** Chained methods are readable and allocate intermediates. A single \`for\`/\`reduce\` is faster and uglier. Prefer readable until a profile says otherwise.
+
+**Production gotchas:** \`computed(() => props.items.sort())\` mutates the prop. \`map\` that returns a new object every time busts child memo/\`watch\`. Empty \`filter\` vs error payload — do not treat them the same.`,
+      `**Họ thực sự hỏi:** Bạn có \`filter+map\` 50k hàng trong computed Vue mỗi lần gõ không, hay chọn method khớp ý **và** chi phí?
+
+**Cách senior trả lời:** \`map\` → mảng mới, cùng độ dài. \`filter\` → tập con. \`reduce\` → một giá trị/index khi một pass là điểm. \`forEach\` → chỉ side effect. Decision: diễn đạt ý trước; list lớn thì **index một lần** (Map/Set) thay vì O(n) mỗi hàng.
+
+**Failure mode:** \`items.filter(...).map(...)\` trong template mỗi render. \`reduce\` golf không ai review được. \`forEach\` + \`push\` giả \`map\` và mutate Pinia shared.
+
+**Measure:** Profiler: computed eval vs phím gõ. Với 10k+ hàng, time to first paint và có virtualize không.
+
+**Tradeoffs:** Chain dễ đọc, allocate trung gian. Một \`for\`/\`reduce\` nhanh và xấu. Ưu tiên dễ đọc đến khi profile nói ngược.
+
+**Production gotchas:** \`computed(() => props.items.sort())\` mutate prop. \`map\` trả object mới mỗi lần phá memo/\`watch\` của child. \`filter\` rỗng vs payload lỗi — đừng coi như nhau.`,
     ),
+    followUps: [
+      l('When do you virtualize instead of making array methods faster?', 'Khi nào bạn virtualize thay vì tối ưu array method?'),
+      l('Why is reduce often the wrong default in a PR review?', 'Vì sao reduce thường là default sai khi review PR?'),
+    ],
   }),
   q({
     id: 'css-box-model',
@@ -2520,27 +2616,33 @@ Câu trả lời tốt nên nhấn mạnh việc chọn method diễn đạt ý 
     tags: ['css', 'basics'],
     question: l('What is the CSS box model?', 'CSS box model là gì?'),
     answer: l(
-      `The box model consists of:
+      `**What they actually ask:** Why is this 320px card overflowing a 320px grid cell, and did you pick \`border-box\` on purpose?
 
-- content,
-- padding,
-- border,
-- margin.
+**How a senior answers:** Content + padding + border + margin. Decision: \`box-sizing: border-box\` globally so \`width\` includes padding/border. Constraint: **margin collapses** vertically in normal flow; it does not on flex/grid items the same way. Overflow is a box-model + \`min-width: auto\` problem more often than a “CSS is broken” problem.
 
-By default, \`width\` and \`height\` describe the content box. With \`box-sizing: border-box\`, the declared width/height includes padding and border.
+**Failure mode:** Mixing content-box third-party CSS with a border-box app. \`width: 100%\` + padding without border-box. Ignoring \`min-width: auto\` on flex children (the classic overflow).
 
-This matters because many layout bugs are really box-model misunderstandings.`,
-      `Box model gồm:
+**Measure:** DevTools box model overlay. A visual test for the card at 320 / 768 / 1280. Layout shift when borders/focus rings appear.
 
-- content,
-- padding,
-- border,
-- margin.
+**Tradeoffs:** Global border-box is the senior default. Content-box is only useful when you truly want “content is exactly N px.”
 
-Mặc định, \`width\` và \`height\` mô tả content box. Với \`box-sizing: border-box\`, width/height khai báo sẽ bao gồm cả padding và border.
+**Production gotchas:** \`box-shadow\` and outlines do not add width — until a design system uses fat borders on focus. Percentage padding is relative to **width**, not height. Vue scoped CSS does not change the box model.`,
+      `**Họ thực sự hỏi:** Vì sao card 320px tràn ô grid 320px, và bạn có chọn \`border-box\` có chủ đích không?
 
-Điều này quan trọng vì nhiều bug layout thực ra bắt nguồn từ việc hiểu sai box model.`,
+**Cách senior trả lời:** Content + padding + border + margin. Decision: \`box-sizing: border-box\` global để \`width\` gồm padding/border. Constraint: **margin collapse** theo chiều dọc ở normal flow; flex/grid khác. Overflow thường là box-model + \`min-width: auto\`, không phải “CSS hỏng.”
+
+**Failure mode:** Trộn CSS content-box của third-party với app border-box. \`width: 100%\` + padding không border-box. Bỏ quên \`min-width: auto\` trên flex child (overflow kinh điển).
+
+**Measure:** Overlay box model trong DevTools. Visual test card ở 320 / 768 / 1280. Layout shift khi hiện border/focus ring.
+
+**Tradeoffs:** Border-box global là default senior. Content-box chỉ khi bạn thật sự muốn “content đúng N px.”
+
+**Production gotchas:** \`box-shadow\` và outline không cộng width — đến khi design system dùng border focus dày. Padding % theo **width**, không phải height. Vue scoped CSS không đổi box model.`,
     ),
+    followUps: [
+      l('Why does a flex child overflow its parent even at width 100%?', 'Vì sao flex child vẫn overflow parent dù width 100%?'),
+      l('What does margin collapse do inside a grid vs normal flow?', 'Margin collapse khác gì trong grid so với normal flow?'),
+    ],
   }),
   q({
     id: 'css-position',
@@ -2548,21 +2650,33 @@ Mặc định, \`width\` và \`height\` mô tả content box. Với \`box-sizing
     tags: ['css', 'basics', 'layout'],
     question: l('What do static, relative, absolute, fixed, and sticky mean in CSS positioning?', 'static, relative, absolute, fixed và sticky trong CSS positioning nghĩa là gì?'),
     answer: l(
-      `- **static**: normal document flow
-- **relative**: still in flow, but can shift relative to its normal position
-- **absolute**: removed from normal flow and positioned relative to the nearest positioned ancestor
-- **fixed**: positioned relative to the viewport
-- **sticky**: behaves like relative until a scroll threshold, then sticks within its container context
+      `**What they actually ask:** Why is this dropdown clipped, why did \`position: fixed\` attach to a transformed parent, and why is sticky not sticking?
 
-Most positioning bugs come from misunderstanding the containing block or stacking context.`,
-      `- **static**: luồng tài liệu bình thường
-- **relative**: vẫn ở trong flow nhưng có thể dịch tương đối so với vị trí gốc
-- **absolute**: ra khỏi flow và định vị theo positioned ancestor gần nhất
-- **fixed**: định vị theo viewport
-- **sticky**: ban đầu như relative, tới ngưỡng scroll thì “dính” trong context của container
+**How a senior answers:** \`static\` = flow. \`relative\` = in flow, offset, and a containing block. \`absolute\` = out of flow, nearest positioned ancestor. \`fixed\` = viewport **unless** a transform/filter/perspective ancestor creates a containing block. \`sticky\` = relative until a threshold, then sticks **inside its scrollport**.
 
-Phần lớn bug positioning đến từ việc hiểu sai containing block hoặc stacking context.`,
+**Failure mode:** \`overflow: hidden\` on a parent killing sticky and clipping popovers. \`fixed\` inside a Vue modal with \`transform\` — it scrolls away. z-index wars without a stacking-context map.
+
+**Measure:** A scroll repro for sticky headers. Keyboard focus still visible for absolute menus. Visual regression when opening a Teleport overlay.
+
+**Tradeoffs:** Absolute in-place is simple until clipping. Teleport-to-body + fixed is the production popover pattern. Sticky is cheaper than JS scroll spies until nested scrollers appear.
+
+**Production gotchas:** Vue Teleport exists because containing blocks lie. \`will-change\` / \`transform\` on a layout wrapper silently retargets \`fixed\`. Sticky needs a defined height on the scroll ancestor.`,
+      `**Họ thực sự hỏi:** Vì sao dropdown bị cắt, vì sao \`position: fixed\` dính parent có transform, và vì sao sticky không dính?
+
+**Cách senior trả lời:** \`static\` = flow. \`relative\` = còn trong flow, offset, và là containing block. \`absolute\` = ra khỏi flow, ancestor positioned gần nhất. \`fixed\` = viewport **trừ khi** ancestor có transform/filter/perspective tạo containing block. \`sticky\` = relative tới ngưỡng, rồi dính **trong scrollport của nó**.
+
+**Failure mode:** \`overflow: hidden\` trên parent giết sticky và cắt popover. \`fixed\` trong modal Vue có \`transform\` — bị cuốn theo scroll. Đánh nhau z-index không có map stacking context.
+
+**Measure:** Repro scroll cho sticky header. Focus bàn phím vẫn thấy trên menu absolute. Visual regression khi mở overlay Teleport.
+
+**Tradeoffs:** Absolute tại chỗ đơn giản đến khi bị clip. Teleport ra body + fixed là pattern popover production. Sticky rẻ hơn JS scroll spy đến khi có scroller lồng.
+
+**Production gotchas:** Vue Teleport tồn tại vì containing block hay nói dối. \`will-change\` / \`transform\` trên wrapper layout âm thầm đổi \`fixed\`. Sticky cần chiều cao rõ trên scroll ancestor.`,
     ),
+    followUps: [
+      l('Why can position fixed be relative to a transformed parent?', 'Vì sao position fixed có thể tính theo parent có transform?'),
+      l('When do you Teleport a popover instead of position absolute?', 'Khi nào bạn Teleport popover thay vì position absolute?'),
+    ],
   }),
   q({
     id: 'css-flexbox-vs-grid',
@@ -2570,23 +2684,33 @@ Phần lớn bug positioning đến từ việc hiểu sai containing block ho�
     tags: ['css', 'layout', 'basics'],
     question: l('When should you use Flexbox vs Grid?', 'Khi nào dùng Flexbox và khi nào dùng Grid?'),
     answer: l(
-      `Use **Flexbox** mainly for **one-dimensional** layout and **Grid** mainly for **two-dimensional** layout.
+      `**What they actually ask:** Can you pick a layout primitive for a dashboard without nesting 4 flex wrappers, and do you know when \`minmax\` beats magic numbers?
 
-Rule of thumb:
+**How a senior answers:** Flex = **one axis** (nav, button row, “this cluster”). Grid = **two axes** (page skeleton, card gallery, form aligned on columns). Decision: Grid for the page, flex inside components. Constraint: flex children default \`min-width: auto\` and overflow; grid \`minmax(0, 1fr)\` is the usual fix.
 
-- flex for nav bars, button groups, simple rows/columns
-- grid for page sections, card grids, dashboards, and explicit row/column placement
+**Failure mode:** Fake grid with nested flex + negative margins. \`repeat(auto-fit, minmax(200px, 1fr))\` without a min that fits the content (unreadable cards). Using JS to measure columns that Grid already solves.
 
-They are complementary, not rivals. A common pattern is Grid for the page skeleton and Flexbox inside smaller components.`,
-      `Dùng **Flexbox** chủ yếu cho layout **một chiều** và **Grid** chủ yếu cho layout **hai chiều**.
+**Measure:** Resize from 320→1440 without a horizontal scroll. Fewer wrapper divs than the last iteration. Keyboard tab order still matches visual order.
 
-Rule of thumb:
+**Tradeoffs:** Flex wrapping is great until you need row **and** column alignment. Grid is verbose for a simple cluster. Subgrid is the right hammer when nested alignment matters and support is OK.
 
-- flex cho nav bar, button group, hàng/cột đơn giản
-- grid cho page section, card grid, dashboard và chỗ cần placement theo hàng/cột rõ ràng
+**Production gotchas:** Vue lists: \`display: contents\` on a wrapper can help grid placement and break a11y/event targeting. Gap vs margin-collapse surprises when mixing systems. Container queries often beat extra breakpoints.`,
+      `**Họ thực sự hỏi:** Bạn chọn primitive layout cho dashboard mà không lồng 4 flex wrapper, và biết khi nào \`minmax\` hơn magic number?
 
-Chúng bổ trợ nhau chứ không đối đầu nhau. Pattern rất phổ biến là dùng Grid cho page skeleton và Flexbox bên trong component nhỏ hơn.`,
+**Cách senior trả lời:** Flex = **một trục** (nav, hàng nút, “cụm này”). Grid = **hai trục** (khung page, gallery card, form thẳng cột). Decision: Grid cho page, flex trong component. Constraint: flex child mặc định \`min-width: auto\` và overflow; grid \`minmax(0, 1fr)\` thường là fix.
+
+**Failure mode:** Fake grid bằng flex lồng + margin âm. \`repeat(auto-fit, minmax(200px, 1fr))\` mà min không vừa content (card không đọc được). Dùng JS đo cột mà Grid đã làm được.
+
+**Measure:** Resize 320→1440 không scroll ngang. Ít wrapper hơn iteration trước. Tab order khớp thứ tự nhìn.
+
+**Tradeoffs:** Flex wrap tốt đến khi cần thẳng **cả hàng lẫn cột**. Grid dài dòng cho một cụm đơn. Subgrid đúng khi alignment lồng quan trọng và support đủ.
+
+**Production gotchas:** List Vue: \`display: contents\` trên wrapper giúp grid nhưng gãy a11y/event. Gap vs margin-collapse khi trộn hệ. Container query thường hơn thêm breakpoint.`,
     ),
+    followUps: [
+      l('Why do people write minmax(0, 1fr) instead of 1fr?', 'Vì sao người ta viết minmax(0, 1fr) thay vì 1fr?'),
+      l('When would you still measure layout in JS?', 'Khi nào bạn vẫn đo layout bằng JS?'),
+    ],
   }),
   q({
     id: 'semantic-html-vs-aria-bem',
@@ -2594,31 +2718,33 @@ Chúng bổ trợ nhau chứ không đối đầu nhau. Pattern rất phổ bi�
     tags: ['html', 'css', 'a11y', 'basics'],
     question: l('How do semantic HTML, ARIA, and BEM fit together?', 'Semantic HTML, ARIA và BEM liên quan với nhau như thế nào?'),
     answer: l(
-      `Use **semantic HTML first** because native elements already provide behavior and accessibility meaning.
+      `**What they actually ask:** Will you ship a \`div\` button with three ARIA attributes, and is BEM still the naming story in a Vue SFC shop?
 
-- use ARIA to fill gaps, not to replace correct HTML,
-- use BEM or another naming system to make CSS structure predictable.
+**How a senior answers:** Semantics first — \`<button>\`, \`<a href>\`, \`<label>\`, headings, lists. ARIA **fills gaps** (dialog, tabs, live regions), it does not replace a native control. BEM (or CSS modules / scoped + utility) is a **naming/collision** tool, not accessibility. Constraint: first rule of ARIA is don’t use ARIA if a native element exists.
 
-Example:
+**Failure mode:** \`role="button"\` on a div without Enter/Space, focus, or disabled. \`aria-label\` that overrides visible text and lies. BEM as a religion while the markup is a soup of divs.
 
-- prefer \`<button>\` over a clickable \`<div>\`,
-- add ARIA only when native semantics are insufficient,
-- use naming conventions so styling stays maintainable.
+**Measure:** Keyboard-only pass. Accessibility tree in DevTools matches the visual hierarchy. Lint: \`vuejs-accessibility\` / axe on the critical flow.
 
-Semantics solve meaning; ARIA augments accessibility; BEM solves CSS organization.`,
-      `Hãy ưu tiên **semantic HTML trước** vì native element đã có sẵn behavior và meaning cho accessibility.
+**Tradeoffs:** BEM scales in multi-team CSS; Vue scoped + design tokens often replace it inside one app. ARIA widgets cost more than native and drift.
 
-- dùng ARIA để lấp khoảng trống, không phải để thay thế HTML đúng,
-- dùng BEM hoặc naming system khác để CSS có cấu trúc dễ đoán.
+**Production gotchas:** Vue \`<component :is>\` swapping \`a\`/\`button\` without href vs type. Scoped CSS + BEM double-prefix. \`aria-hidden\` on a focusable control inside a modal.`,
+      `**Họ thực sự hỏi:** Bạn có ship nút \`div\` kèm ba ARIA, và BEM còn là câu chuyện đặt tên trong shop Vue SFC không?
 
-Ví dụ:
+**Cách senior trả lời:** Semantic trước — \`<button>\`, \`<a href>\`, \`<label>\`, heading, list. ARIA **lấp chỗ trống** (dialog, tabs, live region), không thay native control. BEM (hoặc CSS modules / scoped + utility) là tool **đặt tên/tránh đụng**, không phải a11y. Constraint: rule đầu của ARIA là đừng dùng ARIA nếu đã có element native.
 
-- ưu tiên \`<button>\` hơn một \`<div>\` có click,
-- chỉ thêm ARIA khi native semantic chưa đủ,
-- dùng convention đặt tên để styling maintainable hơn.
+**Failure mode:** \`role="button"\` trên div thiếu Enter/Space, focus, disabled. \`aria-label\` đè text thật và nói dối. BEM thành tôn giáo trong khi markup toàn div.
 
-Semantics giải quyết meaning; ARIA tăng cường accessibility; BEM giải quyết tổ chức CSS.`,
+**Measure:** Đi hết flow bằng bàn phím. Accessibility tree khớp hierarchy nhìn thấy. Lint \`vuejs-accessibility\` / axe trên flow critical.
+
+**Tradeoffs:** BEM scale khi nhiều team CSS; Vue scoped + design token thường thay trong một app. Widget ARIA đắt hơn native và dễ lệch.
+
+**Production gotchas:** Vue \`<component :is>\` đổi \`a\`/\`button\` thiếu href vs type. Scoped CSS + BEM double-prefix. \`aria-hidden\` trên control còn focus trong modal.`,
     ),
+    followUps: [
+      l('When is a custom ARIA tablist justified over native elements?', 'Khi nào ARIA tablist custom đáng hơn element native?'),
+      l('How do you name styles in Vue 3 if the team is not on BEM?', 'Bạn đặt tên style trong Vue 3 thế nào nếu team không dùng BEM?'),
+    ],
   }),
   q({
     id: 'http-basics-status-codes',
@@ -2626,41 +2752,33 @@ Semantics giải quyết meaning; ARIA tăng cường accessibility; BEM giải 
     tags: ['http', 'basics'],
     question: l('What HTTP basics and status codes should frontend engineers know?', 'Frontend engineer nên nắm những HTTP basics và status code nào?'),
     answer: l(
-      `Useful basics:
+      `**What they actually ask:** What does the **UI** do on 401 vs 403 vs 422 vs 429 — and will a retry create a second order?
 
-- HTTP methods and their intent: GET, POST, PUT/PATCH, DELETE
-- headers, body, caching, cookies, and auth
-- idempotency vs non-idempotency
+**How a senior answers:** Methods carry intent: GET safe/idempotent, PUT/DELETE idempotent, POST usually not, PATCH maybe. Decision: map status to **product states**, not toast-everything. 401 → refresh/login. 403 → “no permission.” 404 → gone vs never existed. 409/412 → conflict UX. 422 → field errors. 429 → backoff. 5xx → retry only if idempotent.
 
-Status codes worth knowing well:
+**Failure mode:** Treating every non-2xx as “network error.” Retrying POST on 500. Hiding 403 as 404 without a product decision. Assuming \`fetch\` throws on 404 (it does not; \`$fetch\` often does).
 
-- 200/201/204 success variants
-- 301/302/307/308 redirects at a high level
-- 400/401/403/404 client-side outcomes
-- 409 conflict
-- 422 validation errors
-- 429 rate limiting
-- 500/502/503 server-side failures
+**Measure:** Error-code analytics (not only HTTP 500). Duplicate-create rate. Contract tests on the error envelope \`{ code, message, fields }\`.
 
-Frontend engineers do not need to memorize the whole spec, but they should know how these affect UI behavior.`,
-      `Những basics hữu ích:
+**Tradeoffs:** A rich error envelope costs BE work and saves FE guesswork. Collapsing codes to one banner is faster to ship and impossible to i18n well.
 
-- HTTP method và intent của nó: GET, POST, PUT/PATCH, DELETE
-- header, body, caching, cookie và auth
-- idempotency vs non-idempotency
+**Production gotchas:** 204 with a body. 301/308 vs 302/307 and lost POST. CDN 404 HTML parsed as JSON. Axios vs \`$fetch\` vs \`fetch\` disagree on what “error” means.`,
+      `**Họ thực sự hỏi:** UI làm gì với 401 vs 403 vs 422 vs 429 — và retry có tạo đơn thứ hai không?
 
-Status code rất nên nắm:
+**Cách senior trả lời:** Method mang intent: GET an toàn/idempotent, PUT/DELETE idempotent, POST thường không, PATCH tùy. Decision: map status sang **product state**, không toast hết. 401 → refresh/login. 403 → không quyền. 404 → mất vs chưa từng có. 409/412 → UX conflict. 422 → lỗi field. 429 → backoff. 5xx → chỉ retry nếu idempotent.
 
-- 200/201/204 cho các kiểu thành công
-- 301/302/307/308 ở mức high-level cho redirect
-- 400/401/403/404 cho outcome phía client
-- 409 conflict
-- 422 validation error
-- 429 rate limit
-- 500/502/503 cho lỗi phía server
+**Failure mode:** Mọi non-2xx thành “lỗi mạng.” Retry POST khi 500. Giấu 403 thành 404 không có quyết định product. Tưởng \`fetch\` throw khi 404 (không; \`$fetch\` thường có).
 
-Frontend engineer không cần thuộc cả spec, nhưng cần biết các mã này ảnh hưởng tới hành vi UI thế nào.`,
+**Measure:** Analytics theo error code (không chỉ HTTP 500). Tỷ lệ tạo trùng. Contract test envelope \`{ code, message, fields }\`.
+
+**Tradeoffs:** Envelope lỗi giàu tốn BE và cứu FE khỏi đoán. Gộp mọi mã thành một banner ship nhanh, i18n kém.
+
+**Production gotchas:** 204 vẫn có body. 301/308 vs 302/307 làm mất POST. CDN 404 HTML bị parse như JSON. Axios vs \`$fetch\` vs \`fetch\` không cùng định nghĩa “error.”`,
     ),
+    followUps: [
+      l('How do you distinguish 401 from 403 in a Vue route guard vs an API client?', 'Bạn phân biệt 401 với 403 ở Vue route guard và API client thế nào?'),
+      l('Which status codes are safe to retry automatically?', 'Status code nào retry tự động là an toàn?'),
+    ],
   }),
   q({
     id: 'cors-basics',
@@ -2668,25 +2786,33 @@ Frontend engineer không cần thuộc cả spec, nhưng cần biết các mã n
     tags: ['http', 'security', 'basics'],
     question: l('What is CORS at a practical level?', 'CORS là gì ở mức thực tế?'),
     answer: l(
-      `CORS is the browser's cross-origin access policy for frontend requests.
+      `**What they actually ask:** Why does this request “work in Postman” and fail in Chrome — and did you just set \`Access-Control-Allow-Origin: *\` with cookies?
 
-Practical meaning:
+**How a senior answers:** CORS is a **browser** rule: JS on origin A may read a response from origin B only if B opts in. Decision: prefer a **same-origin BFF** (Nuxt/Nitro) so the browser never sees cross-origin cookies. Constraint: simple GET/POST without custom headers skip preflight; \`Authorization\`, \`Content-Type: application/json\`, or \`credentials: 'include'\` trigger OPTIONS.
 
-- the server decides which origins/methods/headers are allowed,
-- the browser enforces that policy,
-- some requests trigger a preflight OPTIONS check.
+**Failure mode:** \`*\` + \`Allow-Credentials: true\` (illegal / ignored). Reflecting any \`Origin\`. Treating CORS as authz. Caching a preflight too short so every click pays OPTIONS.
 
-Important nuance: CORS is a browser-enforced policy, not a general backend security boundary by itself.`,
-      `CORS là policy truy cập cross-origin mà browser áp lên request từ frontend.
+**Measure:** Network panel: is there a preflight, and does it fail? Can a foreign page read the JSON? Cookie still first-party after the BFF move?
 
-Về thực tế:
+**Tradeoffs:** BFF kills CORS complexity and adds a hop. Wide ACAO is easy for a public API and fatal with cookies.
 
-- server quyết định origin/method/header nào được phép,
-- browser là bên enforce policy đó,
-- một số request sẽ kích hoạt preflight OPTIONS.
+**Production gotchas:** \`localhost\` vs \`127.0.0.1\` are different origins. Vite proxy hides CORS in dev and surprises in preview. Expo/WebView is not Chrome’s CORS. Server-to-server is unaffected.`,
+      `**Họ thực sự hỏi:** Vì sao request “chạy ở Postman” mà gãy trên Chrome — và bạn vừa set \`Access-Control-Allow-Origin: *\` kèm cookie?
 
-Nuance quan trọng: CORS là policy do browser enforce, không phải tự nó là security boundary tổng quát của backend.`,
+**Cách senior trả lời:** CORS là rule của **browser**: JS origin A chỉ đọc response origin B khi B opt-in. Decision: ưu tiên **BFF same-origin** (Nuxt/Nitro) để browser khỏi cookie cross-origin. Constraint: GET/POST simple không custom header bỏ preflight; \`Authorization\`, \`Content-Type: application/json\`, hoặc \`credentials: 'include'\` bật OPTIONS.
+
+**Failure mode:** \`*\` + \`Allow-Credentials: true\` (sai / bị bỏ). Reflect mọi \`Origin\`. Coi CORS là authz. Cache preflight quá ngắn nên mỗi click trả OPTIONS.
+
+**Measure:** Network: có preflight không, fail ở đâu? Trang lạ đọc được JSON không? Cookie còn first-party sau khi đưa BFF?
+
+**Tradeoffs:** BFF hết rắc rối CORS, thêm một hop. ACAO rộng dễ cho public API, chết với cookie.
+
+**Production gotchas:** \`localhost\` vs \`127.0.0.1\` khác origin. Vite proxy giấu CORS lúc dev, bất ngờ lúc preview. Expo/WebView không phải CORS của Chrome. Server-to-server không dính.`,
     ),
+    followUps: [
+      l('Which headers force a CORS preflight, and why does that matter for CSRF?', 'Header nào buộc preflight CORS, và vì sao chuyện đó liên quan CSRF?'),
+      l('When would you keep a cross-origin API instead of a BFF?', 'Khi nào bạn giữ API cross-origin thay vì BFF?'),
+    ],
   }),
   q({
     id: 'vue-lifecycle-nexttick-template-refs',
@@ -2694,19 +2820,33 @@ Nuance quan trọng: CORS là policy do browser enforce, không phải tự nó 
     tags: ['vue', 'basics'],
     question: l('When do you use onMounted, onUnmounted, nextTick, and template refs in Vue 3?', 'Khi nào dùng onMounted, onUnmounted, nextTick và template ref trong Vue 3?'),
     answer: l(
-      `- **onMounted** when you need DOM-dependent work after mount
-- **onUnmounted** for cleanup
-- **nextTick** when you need to wait for the DOM to reflect a reactive update
-- **template refs** when you need imperative access to a DOM node or child instance
+      `**What they actually ask:** \`onMounted\` does **not** run on the server. Can you focus a \`v-if\` input, measure a list, and dispose a chart without a \`nextTick\` chain?
 
-The main caution is not to overuse imperative DOM access when declarative rendering is enough.`,
-      `- **onMounted** khi cần làm việc phụ thuộc DOM sau khi mount
-- **onUnmounted** để cleanup
-- **nextTick** khi cần chờ DOM phản ánh xong một reactive update
-- **template ref** khi cần truy cập imperative tới DOM node hoặc child instance
+**How a senior answers:** State and pure subscriptions in \`setup\`. DOM / \`window\` / third-party widgets in \`onMounted\`. Stop them in \`onBeforeUnmount\` or \`onScopeDispose\` (composables). \`nextTick\` waits for the **already scheduled** Vue flush — focus, measure, hand a node to Mapbox. Template refs are the imperative handle; they are \`null\` until mounted.
 
-Điểm cần cẩn thận là đừng lạm dụng imperative DOM access nếu render declarative đã đủ.`,
+**Failure mode:** \`addEventListener\` in \`setup\` (SSR crash or double register). \`await nextTick(); await nextTick()\` to hide a child that never mounted. Reading \`el.value.getBoundingClientRect()\` in setup.
+
+**Measure:** “Does this run in \`nuxi build\` SSR?” Playwright first HTML vs hydrated UI. Chart \`dispose\` on unmount (heap).
+
+**Tradeoffs:** \`onServerPrefetch\` / \`useAsyncData\` for HTML completeness; mounted fetch is client-only and flashes. Refs beat \`document.querySelector\` inside the component.
+
+**Production gotchas:** \`onMounted\` on a \`v-if\` child runs when **that** child is created. Teleport does not change ownership. Async setup needs \`<Suspense>\` or the component never appears.`,
+      `**Họ thực sự hỏi:** \`onMounted\` **không** chạy trên server. Bạn focus được input \`v-if\`, đo list, dispose chart mà không chuỗi \`nextTick\`?
+
+**Cách senior trả lời:** State và subscription thuần trong \`setup\`. DOM / \`window\` / widget trong \`onMounted\`. Gỡ ở \`onBeforeUnmount\` hoặc \`onScopeDispose\` (composable). \`nextTick\` chờ flush Vue **đã schedule** — focus, đo, đưa node cho Mapbox. Template ref là handle imperative; \`null\` đến khi mounted.
+
+**Failure mode:** \`addEventListener\` trong \`setup\` (SSR crash hoặc đăng ký đôi). \`await nextTick()\` hai lần để giấu child chưa mount. Đọc \`el.value.getBoundingClientRect()\` trong setup.
+
+**Measure:** “Chạy trong \`nuxi build\` SSR không?” Playwright HTML đầu vs UI hydrate. Chart \`dispose\` lúc unmount (heap).
+
+**Tradeoffs:** \`onServerPrefetch\` / \`useAsyncData\` cho HTML đủ; fetch ở mounted là client-only và flash. Ref hơn \`document.querySelector\` trong component.
+
+**Production gotchas:** \`onMounted\` của child \`v-if\` chạy khi **child đó** được tạo. Teleport không đổi owner. Async setup cần \`<Suspense>\` nếu không component không hiện.`,
     ),
+    followUps: [
+      l('What is the first-paint difference between useAsyncData and an onMounted fetch in Nuxt?', 'First paint khác gì giữa useAsyncData và fetch trong onMounted ở Nuxt?'),
+      l('When is onScopeDispose the right cleanup instead of onUnmounted?', 'Khi nào onScopeDispose đúng hơn onUnmounted để cleanup?'),
+    ],
   }),
   q({
     id: 'vue-vif-vshow',
@@ -2714,23 +2854,33 @@ The main caution is not to overuse imperative DOM access when declarative render
     tags: ['vue', 'basics'],
     question: l('When should you use v-if vs v-show?', 'Khi nào dùng v-if và khi nào dùng v-show?'),
     answer: l(
-      `Use **v-if** when the condition changes less often and you want to mount/unmount the subtree. Use **v-show** when the element stays mounted but needs to toggle visibility frequently.
+      `**What they actually ask:** Do you want the subtree **gone** (no listeners, no SSR HTML, hooks re-run) or just \`display: none\`?
 
-Rule of thumb:
+**How a senior answers:** \`v-if\` mount/unmount — use for tabs, auth gates, expensive widgets, anything with \`onMounted\` side effects. \`v-show\` keeps the instance — use for frequent toggles (tooltips, local filters) where setup cost dominates. Constraint: \`v-show\` still runs setup and still exists for a11y/SSR.
 
-- \`v-if\` has higher toggle cost, lower initial cost
-- \`v-show\` has lower toggle cost, higher initial cost
+**Failure mode:** \`v-show\` on a Mapbox/chart that keeps ticking in the background. \`v-if\` on a form that wipes in-progress input every toggle. \`v-if\` + \`v-for\` on the same node (Vue 3 allows it; order is \`v-if\` first — usually split).
 
-This matters for both performance and lifecycle behavior.`,
-      `Dùng **v-if** khi điều kiện đổi không quá thường xuyên và bạn muốn mount/unmount subtree. Dùng **v-show** khi element vẫn nên giữ mounted nhưng cần bật/tắt hiển thị thường xuyên.
+**Measure:** Toggle cost in profiler. Does the hidden panel still fire network/WebSocket? Screen reader: is hidden content still reachable?
 
-Rule of thumb:
+**Tradeoffs:** \`v-if\` is cheaper initially and safer for secrets (do not leave PII in hidden DOM). \`v-show\` is cheaper to flip and keeps state.
 
-- \`v-if\` tốn hơn khi toggle, rẻ hơn lúc ban đầu
-- \`v-show\` rẻ hơn khi toggle, nhưng tốn hơn lúc render ban đầu
+**Production gotchas:** \`v-if="isMobile"\` defaulting false on SSR then true on client → hydration mismatch. \`keep-alive\` around \`v-if\` changes the story (\`onActivated\`). Tests: \`exists()\` vs \`isVisible()\`.`,
+      `**Họ thực sự hỏi:** Bạn muốn subtree **biến mất** (hết listener, hết HTML SSR, hook chạy lại) hay chỉ \`display: none\`?
 
-Điều này quan trọng cả về performance lẫn lifecycle behavior.`,
+**Cách senior trả lời:** \`v-if\` mount/unmount — tab, auth gate, widget đắt, thứ có side effect \`onMounted\`. \`v-show\` giữ instance — toggle thường (tooltip, filter local) khi setup đắt hơn. Constraint: \`v-show\` vẫn chạy setup và vẫn tồn tại với a11y/SSR.
+
+**Failure mode:** \`v-show\` trên Mapbox/chart vẫn tick nền. \`v-if\` trên form xóa input đang gõ mỗi lần bật. \`v-if\` + \`v-for\` cùng node (Vue 3 cho phép; \`v-if\` trước — thường tách).
+
+**Measure:** Chi phí toggle trên profiler. Panel ẩn còn bắn network/WebSocket? Screen reader còn đọc được nội dung ẩn?
+
+**Tradeoffs:** \`v-if\` rẻ lúc đầu và an toàn hơn với secret (đừng để PII trong DOM ẩn). \`v-show\` rẻ khi lật và giữ state.
+
+**Production gotchas:** \`v-if="isMobile"\` mặc định false lúc SSR rồi true lúc client → hydration mismatch. \`keep-alive\` quanh \`v-if\` đổi câu chuyện (\`onActivated\`). Test: \`exists()\` vs \`isVisible()\`.`,
     ),
+    followUps: [
+      l('How does v-if vs v-show change what you assert in Vue Test Utils?', 'v-if vs v-show đổi điều bạn assert trong Vue Test Utils thế nào?'),
+      l('When does keep-alive change the v-if decision?', 'Khi nào keep-alive làm đổi quyết định v-if?'),
+    ],
   }),
   q({
     id: 'vue-computed-vs-methods-watch',
@@ -2738,29 +2888,33 @@ Rule of thumb:
     tags: ['vue', 'basics', 'reactivity'],
     question: l('How do computed, methods, and watch differ in Vue?', 'computed, methods và watch khác nhau thế nào trong Vue?'),
     answer: l(
-      `- **computed** for derived values that benefit from caching
-- **methods** for actions or calculations you do not need to cache
-- **watch** for side effects when something changes
+      `**What they actually ask:** Purity and caching — not “computed is for display.” Will you filter 20k rows in a template method, or fetch inside a computed?
 
-Easy rule:
+**How a senior answers:** Derived, sync, **pure** → \`computed\`. Handlers and parameterized work → methods. Anything **outside the graph** (fetch, analytics, URL, third-party widget) → \`watch\` / \`watchEffect\`. Prefer explicit \`watch\` sources. Constraint: computed cache keys on reactive identity; a new array every time never hits. No async computed.
 
-- if you are deriving UI state, think computed first
-- if you are reacting to a change by doing outside work, think watch
-- if you just need callable logic, think method
+**Failure mode:** \`{{ format(user) }}\` on 500 rows. Computed that writes \`localStorage\`. Fetch in \`watchEffect\` without abort. \`watch(..., { deep: true })\` on a whole form.
 
-Many codebases get messy when watch is used for derivation that should be computed.`,
-      `- **computed** cho giá trị suy ra và có lợi từ cache
-- **methods** cho action hoặc tính toán không cần cache
-- **watch** cho side effect khi một giá trị thay đổi
+**Measure:** Computed eval count vs render count. Duplicate GETs in the waterfall. Watcher count in DevTools.
 
-Rule dễ nhớ:
+**Tradeoffs:** Computed cannot take arguments — pre-index a Map. \`watchEffect\` is short and over-collects. Methods are honest about running every call.
 
-- nếu đang suy ra UI state thì nghĩ tới computed trước
-- nếu đang phản ứng với thay đổi để làm việc bên ngoài thì nghĩ tới watch
-- nếu chỉ cần logic callable thì nghĩ tới method
+**Production gotchas:** \`computed(() => props.items.sort())\` mutates the prop. A computed returning a fresh object always fires child watchers. \`console.log\` inside computed lies about prod frequency.`,
+      `**Họ thực sự hỏi:** Tính thuần và cache — không phải “computed để display.” Bạn filter 20k hàng trong method template, hay fetch trong computed?
 
-Nhiều codebase trở nên rối khi watch bị dùng cho việc suy ra dữ liệu đáng lẽ nên là computed.`,
+**Cách senior trả lời:** Derived, sync, **thuần** → \`computed\`. Handler và việc có tham số → method. Thứ **ngoài graph** (fetch, analytics, URL, widget) → \`watch\` / \`watchEffect\`. Ưu tiên source \`watch\` rõ. Constraint: cache computed theo identity reactive; array mới mỗi lần không bao giờ hit. Không có async computed.
+
+**Failure mode:** \`{{ format(user) }}\` trên 500 hàng. Computed ghi \`localStorage\`. Fetch trong \`watchEffect\` không abort. \`watch(..., { deep: true })\` cả form.
+
+**Measure:** Số lần computed chạy vs render. GET trùng trên waterfall. Số watcher trong DevTools.
+
+**Tradeoffs:** Computed không nhận argument — index sẵn Map. \`watchEffect\` ngắn và dễ over-collect. Method thành thật là chạy mỗi lần gọi.
+
+**Production gotchas:** \`computed(() => props.items.sort())\` mutate prop. Computed trả object mới luôn kích watcher con. \`console.log\` trong computed nói dối tần suất prod.`,
     ),
+    followUps: [
+      l('Why is computed the wrong place to fetch?', 'Vì sao computed là chỗ sai để fetch?'),
+      l('When is watchEffect too implicit in a large component?', 'Khi nào watchEffect quá implicit trong component lớn?'),
+    ],
   }),
   q({
     id: 'vue-props-emits-vmodel',
@@ -2768,21 +2922,33 @@ Nhiều codebase trở nên rối khi watch bị dùng cho việc suy ra dữ li
     tags: ['vue', 'basics', 'components'],
     question: l('How do props, emits, and v-model work together in Vue 3?', 'props, emits và v-model phối hợp với nhau như thế nào trong Vue 3?'),
     answer: l(
-      `The core idea is **one-way data flow**:
+      `**What they actually ask:** One-way data flow is the junior bar. They want **do not mutate props**, multiple \`v-model\`, \`defineModel\`, and who owns the form.
 
-- parent passes data down via **props**
-- child notifies changes up via **emits**
-- \`v-model\` is convenient syntax for a prop + update event pair
+**How a senior answers:** Props down, emits up. \`v-model\` / \`v-model:foo\` is parent-owned state (\`:modelValue\` + \`update:modelValue\`). In the child, emit or \`defineModel()\` — never assign the prop. Constraint: objects are by **reference**; nested mutation often skips the warning and still fights the parent refetch.
 
-The source of truth should stay clear. Child components should not silently own data that the parent believes it owns.`,
-      `Ý cốt lõi là **one-way data flow**:
+**Failure mode:** \`v-model="props.user"\` or \`props.filters.page++\`. Parent \`:filters="{ ...filters, page }"\` new identity every render → child deep watch thrashes. Two-way \`watch\` loops on currency fields.
 
-- parent truyền data xuống qua **props**
-- child báo thay đổi đi lên qua **emits**
-- \`v-model\` là syntax tiện lợi cho một cặp prop + update event
+**Measure:** “Mutation of prop” as CI fail. Lost-keystroke tickets. Count of \`watch(() => props.x, { deep: true })\`.
 
-Source of truth phải luôn rõ. Child không nên âm thầm ownership data mà parent tưởng là mình đang ownership.`,
+**Tradeoffs:** Parent-owned \`v-model\` is simple; every keystroke re-renders the parent unless you debounce. Local draft + emit on blur is heavier and avoids broadcast. Form libraries still must not mutate props.
+
+**Production gotchas:** Destructure \`const { user } = defineProps()\` can drop reactivity in plain TS. Binding \`v-model\` straight to Pinia broadcasts every keystroke. \`.number\` on empty input → \`0\`.`,
+      `**Họ thực sự hỏi:** One-way là sàn junior. Họ muốn **đừng mutate prop**, nhiều \`v-model\`, \`defineModel\`, và ai sở hữu form.
+
+**Cách senior trả lời:** Props xuống, emit lên. \`v-model\` / \`v-model:foo\` là state parent sở hữu (\`:modelValue\` + \`update:modelValue\`). Trong child, emit hoặc \`defineModel()\` — không gán prop. Constraint: object truyền **theo reference**; mutate lồng thường không warning và vẫn đánh nhau với refetch của parent.
+
+**Failure mode:** \`v-model="props.user"\` hoặc \`props.filters.page++\`. Parent \`:filters="{ ...filters, page }"\` identity mới mỗi render → deep watch của child đập. Vòng \`watch\` two-way trên field tiền.
+
+**Measure:** Warning “mutation of prop” fail CI. Ticket mất phím gõ. Đếm \`watch(() => props.x, { deep: true })\`.
+
+**Tradeoffs:** \`v-model\` parent đơn giản; mỗi phím render parent trừ khi debounce. Draft local + emit lúc blur nặng hơn, tránh broadcast. Form library vẫn không được mutate prop.
+
+**Production gotchas:** Destructure \`const { user } = defineProps()\` có thể mất reactivity trong TS thuần. \`v-model\` thẳng vào Pinia broadcast mỗi phím. \`.number\` trên input rỗng → \`0\`.`,
     ),
+    followUps: [
+      l('When do you use defineModel vs explicit props and emits in a published component?', 'Khi nào dùng defineModel vs props/emits tường minh ở component publish?'),
+      l('How do you keep a child form from losing keystrokes when the parent refetches?', 'Bạn giữ form con khỏi mất phím khi parent refetch thế nào?'),
+    ],
   }),
   q({
     id: 'vue-key-in-v-for',
@@ -2790,25 +2956,33 @@ Source of truth phải luôn rõ. Child không nên âm thầm ownership data m�
     tags: ['vue', 'basics', 'lists'],
     question: l('Why does key matter in v-for?', 'Vì sao key quan trọng trong v-for?'),
     answer: l(
-      `Keys help Vue preserve or reset DOM/component identity correctly across list updates.
+      `**What they actually ask:** Why did the checkbox stay checked after sort, and when is an index key actually OK?
 
-Good keys:
+**How a senior answers:** \`key\` is **identity** for reuse vs remount. Decision: stable unique id from the domain. Constraint: keys are among **siblings** — two \`v-for\`s in the same parent still share that space. Index keys are OK for **append-only, static, no local state** lists.
 
-- are stable,
-- unique among siblings,
-- come from real item identity when possible.
+**Failure mode:** Index keys on a todo list: reorder preserves the wrong input. Using \`Math.random()\` or \`Date.now()\` remounts every render (lost focus, replayed \`onMounted\`, extra fetches). Same id reused after delete/create.
 
-Index keys can cause wrong state preservation when items are inserted, removed, or reordered.`,
-      `Key giúp Vue preserve hoặc reset đúng identity của DOM/component khi list thay đổi.
+**Measure:** Reorder + typed input still bound to the right row. Vue warning about duplicate keys treated as fail. Profiler: unnecessary child remounts.
 
-Key tốt:
+**Tradeoffs:** Remount-on-key-change is a feature (reset a wizard: \`:key="stepId"\`). Over-keying a huge static table adds vnode cost for no state win.
 
-- ổn định,
-- unique trong nhóm sibling,
-- đến từ identity thật của item nếu có thể.
+**Production gotchas:** \`<template v-for>\` needs the key on the \`<template>\`. Virtualizers invent their own identity. SSR + client key mismatch hydrates wrong. Don’t key on an object (stringifies to \`[object Object]\`).`,
+      `**Họ thực sự hỏi:** Vì sao checkbox vẫn tick sau khi sort, và khi nào index key thực sự ổn?
 
-Dùng index làm key dễ gây preserve nhầm state khi item bị chèn, xóa hoặc reorder.`,
+**Cách senior trả lời:** \`key\` là **identity** để reuse vs remount. Decision: id ổn định, unique từ domain. Constraint: key trong nhóm **sibling** — hai \`v-for\` cùng parent vẫn chung không gian. Index key ổn cho list **chỉ append, tĩnh, không local state**.
+
+**Failure mode:** Index key trên todo: reorder giữ nhầm input. \`Math.random()\` / \`Date.now()\` remount mỗi render (mất focus, \`onMounted\` chạy lại, fetch thêm). Cùng id sau delete/create.
+
+**Measure:** Reorder + input đã gõ vẫn đúng hàng. Warning duplicate key coi là fail. Profiler: child remount không cần.
+
+**Tradeoffs:** Đổi key để remount là feature (reset wizard: \`:key="stepId"\`). Key quá tay trên bảng tĩnh khổng lồ chỉ thêm cost vnode.
+
+**Production gotchas:** \`<template v-for>\` để key trên \`<template>\`. Virtualizer có identity riêng. SSR + key client lệch hydrate sai. Đừng key bằng object (thành \`[object Object]\`).`,
     ),
+    followUps: [
+      l('When is changing a key on purpose the right way to reset state?', 'Khi nào cố ý đổi key là cách đúng để reset state?'),
+      l('Why can two v-for lists in one parent collide on keys?', 'Vì sao hai list v-for trong một parent có thể đụng key?'),
+    ],
   }),
   q({
     id: 'react-props-state-lifecycle-hooks',
@@ -2816,23 +2990,33 @@ Dùng index làm key dễ gây preserve nhầm state khi item bị chèn, xóa h
     tags: ['react', 'basics'],
     question: l('What are props, state, and “lifecycle with hooks” in React?', 'props, state và “lifecycle với hooks” trong React là gì?'),
     answer: l(
-      `- **props** are inputs from parent to child
-- **state** is local mutable data owned by the component
-- with hooks, lifecycle concerns are expressed through render + effects rather than class lifecycle methods
+      `**What they actually ask:** Coming from Vue, do you still think in “created/mounted,” or do you split **render vs synchronize**?
 
-A useful mental model is:
+**How a senior answers:** Props are the parent’s contract (read-only). State is values that, when set, **schedule a re-run of the function**. Lifecycle is not \`componentDidMount\` trivia — it is: render is a pure description; \`useEffect\` / \`useLayoutEffect\` sync the outside world after commit. Constraint: hook order is the identity of state.
 
-- render describes UI from current props/state
-- effects synchronize with the outside world after render`,
-      `- **props** là input truyền từ parent xuống child
-- **state** là dữ liệu thay đổi được mà component tự ownership
-- với hooks, concern kiểu lifecycle được diễn đạt qua render + effect thay vì class lifecycle method
+**Failure mode:** Fetch in render. Derived values stored in state that drift from props. Effects that should be Vue-style \`computed\`. Missing cleanup → two subscriptions after Strict Mode double-mount.
 
-Mental model hữu ích là:
+**Measure:** React DevTools “why did this render.” Network: abort on unmount / dep change. A test that props update replaces stale local state when that is the product rule.
 
-- render mô tả UI từ props/state hiện tại
-- effect đồng bộ với thế giới bên ngoài sau render`,
+**Tradeoffs:** Local state is fast and hidden. Lifting state makes data flow obvious and rerenders a wider tree. Server Components / Nuxt \`useAsyncData\` move “first fetch” out of effects.
+
+**Production gotchas:** Vue watchers feel precise; React effects run after paint and see stale closures unless deps/refs are honest. \`key\` on a child remounts its state — same as Vue.`,
+      `**Họ thực sự hỏi:** Từ Vue sang, bạn còn nghĩ “created/mounted,” hay tách **render vs đồng bộ**?
+
+**Cách senior trả lời:** Props là contract của parent (read-only). State là giá trị khi set sẽ **schedule chạy lại function**. Lifecycle không phải trivia \`componentDidMount\` — mà là: render mô tả thuần; \`useEffect\` / \`useLayoutEffect\` đồng bộ thế giới ngoài sau commit. Constraint: thứ tự hook là identity của state.
+
+**Failure mode:** Fetch trong render. Derived nhét vào state rồi lệch props. Effect đáng lẽ là \`computed\` kiểu Vue. Thiếu cleanup → hai subscription sau Strict Mode mount đôi.
+
+**Measure:** React DevTools “why did this render.” Network: abort lúc unmount / đổi dep. Test props update thay local state cũ khi đó là rule product.
+
+**Tradeoffs:** State local nhanh và kín. Lift state làm data flow rõ, rerender cây rộng hơn. Server Components / Nuxt \`useAsyncData\` đưa “fetch đầu” ra khỏi effect.
+
+**Production gotchas:** Watcher Vue thấy chính xác; effect React chạy sau paint và dính stale closure nếu dep/ref không thật. \`key\` trên child remount state — giống Vue.`,
     ),
+    followUps: [
+      l('What Vue habit hurts most when you start writing useEffect?', 'Thói quen Vue nào hại nhất khi bắt đầu viết useEffect?'),
+      l('When should derived data stay out of useState?', 'Khi nào derived data không nên nằm trong useState?'),
+    ],
   }),
   q({
     id: 'react-usestate-useref',
@@ -2840,15 +3024,33 @@ Mental model hữu ích là:
     tags: ['react', 'basics', 'hooks'],
     question: l('What is the difference between useState and useRef?', 'Khác nhau giữa useState và useRef là gì?'),
     answer: l(
-      `- **useState** stores data that participates in rendering; updating it triggers a rerender
-- **useRef** stores a mutable value that persists across renders without causing rerenders
+      `**What they actually ask:** Will you put a WebSocket, a previous id, or a debounce timer in state and rerender the tree 60 times a second?
 
-Use \`useRef\` for DOM nodes, previous values, or imperative handles. Use \`useState\` when the UI should update because the value changed.`,
-      `- **useState** lưu dữ liệu tham gia vào render; update nó sẽ gây rerender
-- **useRef** lưu giá trị mutable sống qua các lần render mà không gây rerender
+**How a senior answers:** \`useState\` is UI state — set it and React re-renders. \`useRef\` is a mutable box that **survives renders and does not notify**. Decision: DOM nodes, latest callback, abort controller, “previous props,” timers → ref. Anything the user must see → state. Constraint: writing \`ref.current\` in render is a side effect; keep it in events/effects.
 
-Dùng \`useRef\` cho DOM node, previous value hoặc imperative handle. Dùng \`useState\` khi UI phải đổi theo giá trị đó.`,
+**Failure mode:** \`setState\` on every mousemove. Reading \`ref.current\` in render to “avoid rerenders” and showing a stale screen. Using state for an interval id.
+
+**Measure:** Render count while dragging/typing. A test that a second request ignores the first via a generation ref + abort.
+
+**Tradeoffs:** Refs are the React version of “latest Vue ref.value inside the async callback.” They skip render — so they can desync the UI if you hide display data in them.
+
+**Production gotchas:** Vue \`ref\` is reactive; React \`useRef\` is not. \`useState\` updater must be stable/pure. Putting the access token in state + persist = \`localStorage\`.`,
+      `**Họ thực sự hỏi:** Bạn có nhét WebSocket, id cũ, hay timer debounce vào state rồi rerender cây 60 lần/giây không?
+
+**Cách senior trả lời:** \`useState\` là UI state — set là React render lại. \`useRef\` là hộp mutable **sống qua render và không báo**. Decision: DOM node, callback mới nhất, abort controller, “props trước,” timer → ref. Thứ user phải thấy → state. Constraint: ghi \`ref.current\` trong render là side effect; để trong event/effect.
+
+**Failure mode:** \`setState\` mỗi mousemove. Đọc \`ref.current\` lúc render để “tránh rerender” rồi hiện màn hình stale. Dùng state cho interval id.
+
+**Measure:** Số render khi kéo/gõ. Test request thứ hai bỏ request thứ nhất nhờ generation ref + abort.
+
+**Tradeoffs:** Ref là bản React của “đọc \`ref.value\` Vue mới nhất trong callback async.” Chúng bỏ render — nên giấu data hiển thị trong đó sẽ lệch UI.
+
+**Production gotchas:** Vue \`ref\` reactive; React \`useRef\` thì không. Updater \`useState\` phải thuần/ổn. Nhét access token vào state + persist = \`localStorage\`.`,
     ),
+    followUps: [
+      l('How do you keep an async callback from seeing a stale setState value?', 'Bạn giữ callback async khỏi thấy setState stale thế nào?'),
+      l('When is useRef the wrong tool because the UI must update?', 'Khi nào useRef là tool sai vì UI phải cập nhật?'),
+    ],
   }),
   q({
     id: 'live-coding-debounce',
@@ -2856,24 +3058,28 @@ Dùng \`useRef\` cho DOM node, previous value hoặc imperative handle. Dùng \`
     tags: ['coding', 'javascript', 'debounce'],
     question: l('Implement debounce and explain trade-offs.', 'Hãy implement debounce và giải thích trade-off.'),
     answer: l(
-      `Debounce delays execution until calls stop for a given wait period. It is useful for search input or resize handlers where only the final burst matters.
+      `**What they actually ask:** Typeahead that still shows yesterday’s query — did you debounce the **function** and abort the **request**?
 
-Trade-offs:
+**How a senior answers:** Debounce waits for quiet, then runs (usually trailing). Decision: search, resize, save-draft. Constraint: debounce is a timer; it does not cancel in-flight fetch. Pair with \`AbortController\` + ignore stale. Leading vs trailing is a product choice (instant first hint vs only last value).
 
-- improves efficiency,
-- adds intentional delay,
-- you may want leading/trailing behavior or cancellation depending on UX.
+**Failure mode:** Closing over the first \`args\`. No cancel → race. Forgetting \`flush\`/\`cancel\` on unmount so a setState runs on a dead component. Debouncing the Vue watcher source instead of the effect.
 
-In interviews, also mention that stale async work still needs cancellation if the debounced function performs requests.`,
-      `Debounce trì hoãn việc chạy hàm cho tới khi chuỗi gọi dừng lại trong một khoảng thời gian. Nó hợp với search input hoặc resize handler khi chỉ kết quả cuối cùng của một đợt thao tác mới quan trọng.
+**Measure:** Network: one request after typing stops; previous is red/cancelled. Test: second query wins.
 
-Trade-off:
+**Tradeoffs:** Delay vs server load. Lodash debounce is fine if you own cancel/flush. Too-long wait feels broken; too-short still storms.
 
-- tăng hiệu quả,
-- thêm độ trễ có chủ đích,
-- có thể cần leading/trailing behavior hoặc cancel tùy UX.
+**Production gotchas:** VueUse \`useDebounceFn\` still needs abort. SSR: don’t start timers in \`setup\`. IME composition events can fire extra calls.`,
+      `**Họ thực sự hỏi:** Typeahead vẫn hiện query hôm qua — bạn debounce **hàm** và abort **request** chưa?
 
-Khi phỏng vấn, cũng nên nói thêm: nếu hàm debounce đi gọi request thì phần async cũ vẫn có thể cần cancel riêng.`,
+**Cách senior trả lời:** Debounce chờ yên rồi chạy (thường trailing). Decision: search, resize, save-draft. Constraint: debounce là timer; không cancel fetch đang bay. Đi kèm \`AbortController\` + bỏ stale. Leading vs trailing là chọn product (gợi ý ngay vs chỉ giá trị cuối).
+
+**Failure mode:** Close over \`args\` lần đầu. Không cancel → race. Quên \`flush\`/\`cancel\` lúc unmount nên setState trên component chết. Debounce source watcher Vue thay vì effect.
+
+**Measure:** Network: một request sau khi ngừng gõ; cái trước đỏ/cancelled. Test: query thứ hai thắng.
+
+**Tradeoffs:** Trễ vs tải server. Lodash debounce ổn nếu bạn nắm cancel/flush. Wait quá dài như gãy; quá ngắn vẫn bão.
+
+**Production gotchas:** VueUse \`useDebounceFn\` vẫn cần abort. SSR: đừng start timer trong \`setup\`. Sự kiện IME composition có thể bắn thêm.`,
     ),
     example: l(
       `\`\`\`ts
@@ -2901,6 +3107,10 @@ function debounce<T extends (...args: any[]) => void>(fn: T, wait = 300) {
 }
 \`\`\``,
     ),
+    followUps: [
+      l('How do you cancel both the timer and the in-flight request on unmount?', 'Bạn cancel cả timer lẫn request đang bay lúc unmount thế nào?'),
+      l('Leading vs trailing: which one for search, which one for a save button?', 'Leading vs trailing: cái nào cho search, cái nào cho nút save?'),
+    ],
   }),
   q({
     id: 'live-coding-throttle',
@@ -2908,22 +3118,28 @@ function debounce<T extends (...args: any[]) => void>(fn: T, wait = 300) {
     tags: ['coding', 'javascript', 'throttle'],
     question: l('Implement throttle and explain when it is better than debounce.', 'Hãy implement throttle và giải thích khi nào nó tốt hơn debounce.'),
     answer: l(
-      `Throttle limits a function to run at most once per interval. It is useful when you want regular updates during continuous activity, such as scroll or drag.
+      `**What they actually ask:** Scroll/drag still janks — do you throttle the **handler** or virtualize the **list**, and will the last event run?
 
-Compared with debounce:
+**How a senior answers:** Throttle = at most once per interval while events keep coming. Decision: scroll position, drag, resize-driven layout, analytics beacons. Constraint: leading-only drops the **final** value (scroll never lands on the true bottom). Trailing-only feels laggy at the start.
 
-- debounce waits for quiet,
-- throttle preserves periodic responsiveness.
+**Failure mode:** Throttling a Vue \`watch\` that already batches. Using throttle where debounce (search) was right. Timer leak on unmount. Passing a new throttled function every render so it never actually throttles.
 
-The exact leading/trailing semantics matter in real UX.`,
-      `Throttle giới hạn một hàm chỉ chạy tối đa một lần trong mỗi khoảng thời gian. Nó hợp khi bạn vẫn muốn cập nhật đều trong lúc người dùng đang thao tác liên tục, ví dụ scroll hoặc drag.
+**Measure:** Handler calls / second vs frame time. INP. A test that the last scroll event still updates.
 
-So với debounce:
+**Tradeoffs:** Throttle keeps live feedback; debounce waits for quiet. \`requestAnimationFrame\` is often the better “once per frame” throttle for visual work.
 
-- debounce chờ yên rồi mới chạy,
-- throttle giữ được phản hồi định kỳ.
+**Production gotchas:** Passive scroll listeners + don’t read layout in the handler (forced reflow). Vue \`useScroll\` already rAF-throttles — don’t wrap twice.`,
+      `**Họ thực sự hỏi:** Scroll/drag vẫn giật — bạn throttle **handler** hay virtualize **list**, và event cuối còn chạy không?
 
-Leading/trailing semantics cụ thể khá quan trọng trong UX thực tế.`,
+**Cách senior trả lời:** Throttle = tối đa một lần mỗi khoảng trong lúc event còn tới. Decision: vị trí scroll, drag, layout theo resize, beacon analytics. Constraint: chỉ leading mất **giá trị cuối** (scroll không bao giờ tới đáy thật). Chỉ trailing chậm lúc đầu.
+
+**Failure mode:** Throttle \`watch\` Vue vốn đã batch. Dùng throttle chỗ đáng debounce (search). Leak timer lúc unmount. Tạo hàm throttle mới mỗi render nên không bao giờ throttle thật.
+
+**Measure:** Số lần gọi handler / giây vs thời gian frame. INP. Test event scroll cuối vẫn update.
+
+**Tradeoffs:** Throttle giữ phản hồi sống; debounce chờ yên. \`requestAnimationFrame\` thường là throttle “một lần/frame” tốt hơn cho việc vẽ.
+
+**Production gotchas:** Listener scroll passive + đừng đọc layout trong handler (forced reflow). Vue \`useScroll\` đã rAF-throttle — đừng bọc hai lần.`,
     ),
     example: l(
       `\`\`\`ts
@@ -2953,6 +3169,10 @@ function throttle<T extends (...args: any[]) => void>(fn: T, wait = 300) {
 }
 \`\`\``,
     ),
+    followUps: [
+      l('How would you add a trailing call so the last scroll position is not dropped?', 'Bạn thêm trailing call thế nào để vị trí scroll cuối không bị mất?'),
+      l('When is requestAnimationFrame a better throttle than setTimeout?', 'Khi nào requestAnimationFrame là throttle tốt hơn setTimeout?'),
+    ],
   }),
   q({
     id: 'live-coding-promise-all',
@@ -2960,22 +3180,28 @@ function throttle<T extends (...args: any[]) => void>(fn: T, wait = 300) {
     tags: ['coding', 'javascript', 'promises'],
     question: l('How would you polyfill Promise.all?', 'Bạn sẽ polyfill Promise.all như thế nào?'),
     answer: l(
-      `Core behavior:
+      `**What they actually ask:** Behavior first — order, fail-fast, empty input, then whether \`all\` will blank a dashboard.
 
-- preserve result order,
-- resolve when all inputs resolve,
-- reject immediately on the first rejection,
-- accept non-promise values by wrapping with \`Promise.resolve\`.
+**How a senior answers:** Collect results **by index**, not push order. \`Promise.resolve\` every item. Reject on first rejection. \`[]\` resolves to \`[]\`. Decision: use \`all\` when missing one result makes the screen useless; otherwise \`allSettled\` or split optional calls.
 
-In an interview, explain behavior first, then code.`,
-      `Hành vi cốt lõi:
+**Failure mode:** Pushing in completion order (wrong permutation). Forgetting empty-array. Using \`all\` for 15 widgets so one 500 whitescreens. No abort of siblings after the first reject (they still hit the network).
 
-- giữ đúng thứ tự kết quả,
-- resolve khi tất cả input đều resolve,
-- reject ngay khi có lỗi đầu tiên,
-- chấp nhận cả giá trị không phải promise bằng cách bọc \`Promise.resolve\`.
+**Measure:** A test: mix values + promises, assert order. A test: first reject, later resolve must not win. Dashboard: partial UI vs fail-fast.
 
-Khi phỏng vấn, nên giải thích hành vi trước rồi mới code.`,
+**Tradeoffs:** Fail-fast is honest for required data. \`allSettled\` is noisier and product-correct for optional cards.
+
+**Production gotchas:** Vue dashboard in \`onMounted\` with \`Promise.all\` + no error boundary. Cancellation is extra — \`all\` does not abort the rest.`,
+      `**Họ thực sự hỏi:** Hành vi trước — thứ tự, fail-fast, input rỗng, rồi \`all\` có làm trắng dashboard không.
+
+**Cách senior trả lời:** Gom kết quả **theo index**, không phải thứ tự xong. \`Promise.resolve\` mọi item. Reject ngay reject đầu. \`[]\` resolve \`[]\`. Decision: \`all\` khi thiếu một kết quả thì màn hình vô dụng; không thì \`allSettled\` hoặc tách gọi optional.
+
+**Failure mode:** Push theo thứ tự hoàn thành (hoán vị sai). Quên mảng rỗng. \`all\` cho 15 widget nên một 500 trắng màn. Không abort anh em sau reject đầu (vẫn tốn network).
+
+**Measure:** Test: trộn value + promise, assert thứ tự. Test: reject trước, resolve sau không được thắng. Dashboard: UI partial vs fail-fast.
+
+**Tradeoffs:** Fail-fast thật với data bắt buộc. \`allSettled\` ồn hơn và đúng product với card optional.
+
+**Production gotchas:** Dashboard Vue trong \`onMounted\` dùng \`Promise.all\` + không error boundary. Cancel là thêm — \`all\` không abort phần còn lại.`,
     ),
     example: l(
       `\`\`\`ts
@@ -3025,6 +3251,10 @@ function promiseAll<T>(items: Array<T | Promise<T>>): Promise<T[]> {
 }
 \`\`\``,
     ),
+    followUps: [
+      l('How would you abort the remaining fetches after the first reject?', 'Bạn abort các fetch còn lại sau reject đầu thế nào?'),
+      l('When do you choose allSettled over this fail-fast behavior in a Vue dashboard?', 'Khi nào chọn allSettled hơn fail-fast này trên dashboard Vue?'),
+    ],
   }),
   q({
     id: 'live-coding-deep-clone',
@@ -3032,24 +3262,28 @@ function promiseAll<T>(items: Array<T | Promise<T>>): Promise<T[]> {
     tags: ['coding', 'javascript', 'deep-clone'],
     question: l('How would you approach deep clone in JavaScript?', 'Bạn tiếp cận bài deep clone trong JavaScript thế nào?'),
     answer: l(
-      `First, clarify scope. “Deep clone” can mean many things: plain objects and arrays only, or Dates, Maps, Sets, cycles, class instances, functions?
+      `**What they actually ask:** Define correctness before code — cycles, Date/Map, Vue proxies, functions — then pick \`structuredClone\` unless you cannot.
 
-Senior answer:
+**How a senior answers:** Narrow the supported shapes. Prefer \`structuredClone\` (keeps Date, Map, Set, ArrayBuffer). \`JSON.parse(JSON.stringify)\` is a **lossy serializer**. Custom recursion only for a documented subset. Constraint: \`structuredClone\` throws on functions, DOM nodes, and some Vue proxies — \`toRaw\` first.
 
-1. narrow the supported shapes,
-2. mention that \`structuredClone\` is preferred when available,
-3. explain trade-offs and edge cases before writing custom recursion.
+**Failure mode:** Silent drop of \`undefined\`/Dates via JSON. Infinite loop on cycles. Cloning a 50k-row page on every keystroke. Treating \`const\` as a clone.
 
-Interviewers often care more about how you define correctness than whether you memorize every edge case.`,
-      `Trước tiên cần chốt scope. “Deep clone” có thể nghĩa là chỉ object/array thuần, hoặc còn cả Date, Map, Set, cycle, class instance, function?
+**Measure:** A table of fixtures (Date, Map, cycle, proxy). Clone cost in profiler. After clone, mutate the copy and assert the source is untouched.
 
-Câu trả lời kiểu senior:
+**Tradeoffs:** Structural sharing (write one path) is cheaper than deep clone. Clone is honest isolation for persist/postMessage.
 
-1. thu hẹp rõ những shape sẽ hỗ trợ,
-2. nhắc rằng \`structuredClone\` là lựa chọn ưu tiên khi có thể dùng,
-3. giải thích trade-off và edge case trước khi viết recursion thủ công.
+**Production gotchas:** Pinia persist + proxies. Web Workers need structured clone anyway. Class instances lose methods unless you rehydrate.`,
+      `**Họ thực sự hỏi:** Định nghĩa correctness trước code — cycle, Date/Map, Vue proxy, function — rồi chọn \`structuredClone\` trừ khi không được.
 
-Nhiều interviewer quan tâm cách bạn định nghĩa correctness hơn là việc bạn thuộc hết mọi edge case.`,
+**Cách senior trả lời:** Thu hẹp shape hỗ trợ. Ưu tiên \`structuredClone\` (giữ Date, Map, Set, ArrayBuffer). \`JSON.parse(JSON.stringify)\` là **serializer mất mát**. Recursion thủ công chỉ cho subset đã ghi. Constraint: \`structuredClone\` throw với function, DOM node, và một số Vue proxy — \`toRaw\` trước.
+
+**Failure mode:** JSON âm thầm mất \`undefined\`/Date. Vòng vô hạn với cycle. Clone trang 50k hàng mỗi phím. Coi \`const\` là clone.
+
+**Measure:** Bảng fixture (Date, Map, cycle, proxy). Chi phí clone trên profiler. Sau clone, mutate bản sao và assert nguồn không đổi.
+
+**Tradeoffs:** Structural sharing (ghi một path) rẻ hơn deep clone. Clone cô lập thật cho persist/postMessage.
+
+**Production gotchas:** Pinia persist + proxy. Web Worker vốn cần structured clone. Class instance mất method trừ khi rehydrate.`,
     ),
     example: l(
       `\`\`\`ts
@@ -3095,6 +3329,10 @@ function deepClone<T>(value: T): T {
 
 Khi lên production phải nói rõ case nào chưa hỗ trợ, ví dụ cycle hoặc special object type, nếu chưa implement.`,
     ),
+    followUps: [
+      l('What happens if you structuredClone a Vue reactive proxy?', 'structuredClone một Vue reactive proxy thì chuyện gì xảy ra?'),
+      l('How would you handle cycles without blowing the stack?', 'Bạn xử lý cycle mà không nổ stack thế nào?'),
+    ],
   }),
   q({
     id: 'live-coding-event-emitter',
@@ -3102,28 +3340,28 @@ Khi lên production phải nói rõ case nào chưa hỗ trợ, ví dụ cycle h
     tags: ['coding', 'javascript', 'event-emitter'],
     question: l('Implement a simple EventEmitter.', 'Hãy implement một EventEmitter đơn giản.'),
     answer: l(
-      `The key operations are:
+      `**What they actually ask:** Can you unsubscribe, survive a listener that unsubscribes mid-emit, and not leak a Vue component?
 
-- subscribe,
-- unsubscribe,
-- emit.
+**How a senior answers:** \`on\` / \`off\` / \`emit\`. Decision: return an unsubscribe function; snapshot listeners (\`[...set]\`) before emit so mutation is safe. Constraint: this is a **retainer** — every \`on\` needs a lifetime (\`onScopeDispose\`, \`onUnmounted\`).
 
-Good interview additions:
+**Failure mode:** Iterating the live Set while a listener unsubscribes (skipped neighbor). Global bus holding the last page’s closures. \`once\` that does not remove on throw.
 
-- return an unsubscribe function,
-- avoid breaking iteration if listeners mutate subscriptions,
-- mention \`once\` as a possible extension.`,
-      `Ba thao tác chính là:
+**Measure:** A test: listener B unsubscribes during emit; C still runs. Heap after route change: no detached emitters. Pair subscribe/unsubscribe in a Vue composable test.
 
-- subscribe,
-- unsubscribe,
-- emit.
+**Tradeoffs:** A tiny emitter is clear. A global event bus recreates the mixin spaghetti Composition API was meant to kill — prefer Pinia or props/emits.
 
-Điểm cộng trong phỏng vấn:
+**Production gotchas:** Vue 3 removed \`$on\`/\`$off\` on the app for this reason. Memory: payload objects closed over by long-lived listeners. Don’t emit during SSR unless you meant to.`,
+      `**Họ thực sự hỏi:** Bạn unsubscribe được, sống sót listener gỡ giữa emit, và không leak component Vue?
 
-- trả về hàm unsubscribe,
-- tránh làm hỏng vòng lặp nếu listener tự thay đổi subscription,
-- nhắc tới \`once\` như một extension hợp lý.`,
+**Cách senior trả lời:** \`on\` / \`off\` / \`emit\`. Decision: trả hàm unsubscribe; snapshot listener (\`[...set]\`) trước emit để mutation an toàn. Constraint: đây là **retainer** — mỗi \`on\` cần vòng đời (\`onScopeDispose\`, \`onUnmounted\`).
+
+**Failure mode:** Duyệt Set sống trong lúc listener unsubscribe (bỏ sót hàng xóm). Bus global giữ closure của page cũ. \`once\` không gỡ khi throw.
+
+**Measure:** Test: listener B gỡ lúc emit; C vẫn chạy. Heap sau đổi route: không emitter treo. Test composable Vue pair subscribe/unsubscribe.
+
+**Tradeoffs:** Emitter nhỏ thì rõ. Event bus global dựng lại spaghetti mixin mà Composition API muốn giết — nên Pinia hoặc props/emits.
+
+**Production gotchas:** Vue 3 bỏ \`$on\`/\`$off\` trên app vì lý do này. Memory: payload bị listener sống lâu close over. Đừng emit lúc SSR trừ khi cố ý.`,
     ),
     example: l(
       `\`\`\`ts
@@ -3171,5 +3409,232 @@ class EventEmitter<T = unknown> {
 }
 \`\`\``,
     ),
+    followUps: [
+      l('Why snapshot the listener set before emit?', 'Vì sao snapshot set listener trước khi emit?'),
+      l('When is a global EventEmitter a worse idea than Pinia or props/emits?', 'Khi nào EventEmitter global tệ hơn Pinia hoặc props/emits?'),
+    ],
+  }),
+  q({
+    id: 'auth-401-refresh-queue',
+    category: 'technical',
+    tags: ['auth', 'jwt', 'http'],
+    question: l(
+      'How do you handle a burst of 401s: interceptor, single-flight refresh, queue, and logout storm?',
+      'Bạn xử lý bão 401 thế nào: interceptor, refresh single-flight, queue, và logout storm?',
+    ),
+    answer: l(
+      `**What they actually ask:** Ten parallel GETs 401 after access expiry — do you stampede \`/refresh\` and kick the user out?
+
+**How a senior answers:** One interceptor. If status is 401 and the request is not \`/refresh\` and not already retried: wait on a **single in-flight refresh promise**, then replay with the new access. Queue is that shared promise (callers await it). On refresh 401: logout once, \`BroadcastChannel\` other tabs, do **not** recurse.
+
+**Failure mode:** Each 401 rotates the refresh; rotation invalidates all but one → logout storm. Pinia persist of the access token. Retrying a non-idempotent POST blindly.
+
+**Measure:** One \`/refresh\` in the Network panel for a burst. Refresh-reuse detection on the server. Time-to-revoke after logout.
+
+**Tradeoffs:** Memory access + httpOnly refresh needs this machinery. A session cookie + BFF often deletes the problem. Queueing POSTs needs idempotency keys.
+
+**Production gotchas:** 401 on \`/refresh\` must bypass the interceptor. Clock skew — refresh a minute early. Vue route guard racing the same refresh. Axios \`error.config\` mutation vs ofetch retry.`,
+      `**Họ thực sự hỏi:** Mười GET song song 401 sau khi access hết hạn — bạn stampede \`/refresh\` rồi đá user ra?
+
+**Cách senior trả lời:** Một interceptor. Nếu 401, không phải \`/refresh\`, chưa retry: chờ **một promise refresh đang bay**, rồi phát lại với access mới. Queue chính là promise đó (caller await). Khi refresh 401: logout một lần, \`BroadcastChannel\` tab khác, **không** đệ quy.
+
+**Failure mode:** Mỗi 401 xoay refresh; rotation hủy hết trừ một → bão logout. Pinia persist access token. Retry POST không idempotent.
+
+**Measure:** Một \`/refresh\` trên Network cho cả burst. Server phát hiện reuse refresh. Thời gian revoke sau logout.
+
+**Tradeoffs:** Access memory + refresh httpOnly cần máy này. Session cookie + BFF thường xóa bài toán. Queue POST cần idempotency key.
+
+**Production gotchas:** 401 trên \`/refresh\` phải bypass interceptor. Lệch đồng hồ — refresh sớm một phút. Vue route guard đua cùng refresh. Axios mutate \`error.config\` vs ofetch retry.`,
+    ),
+    example: l(
+      `\`\`\`ts
+let refreshInFlight: Promise<string> | null = null
+
+async function refreshAccess() {
+  if (!refreshInFlight) {
+    refreshInFlight = api.post('/auth/refresh')
+      .then((r) => { tokenMemory.set(r.accessToken); return r.accessToken })
+      .finally(() => { refreshInFlight = null })
+  }
+  return refreshInFlight
+}
+\`\`\``,
+      `\`\`\`ts
+let refreshInFlight: Promise<string> | null = null
+
+async function refreshAccess() {
+  if (!refreshInFlight) {
+    refreshInFlight = api.post('/auth/refresh')
+      .then((r) => { tokenMemory.set(r.accessToken); return r.accessToken })
+      .finally(() => { refreshInFlight = null })
+  }
+  return refreshInFlight
+}
+\`\`\``,
+    ),
+    followUps: [
+      l('How do you avoid retrying a POST that already created an order?', 'Bạn tránh retry POST đã tạo đơn thế nào?'),
+      l('How do all tabs learn about logout without a second refresh storm?', 'Mọi tab biết logout thế nào mà không bão refresh lần hai?'),
+    ],
+  }),
+  q({
+    id: 'tanstack-query-vs-global-store',
+    category: 'technical',
+    tags: ['state', 'tanstack-query', 'pinia'],
+    question: l(
+      'When is server state TanStack Query / useAsyncData, and when is it Pinia or Zustand?',
+      'Khi nào server state thuộc TanStack Query / useAsyncData, khi nào thuộc Pinia hoặc Zustand?',
+    ),
+    answer: l(
+      `**What they actually ask:** Did you copy the product list into Pinia and forget to invalidate after an admin edit?
+
+**How a senior answers:** **Server cache** (TanStack Query, Nuxt \`useAsyncData\`/\`useFetch\`) owns data a server would recognize — keyed, stale, invalidated after POST. **Client store** owns client-only meaning: session UX, drafts, selection not yet in the URL, overlay flags. Decision: after a mutation, **invalidate the cache**; do not dual-write the entity graph.
+
+**Failure mode:** \`useProductListStore\` that is a hand-rolled query. Query **and** Pinia both listing the cart. Optimistic Pinia + failed POST + cache unused = a third state.
+
+**Measure:** Time until every surface shows the new value (one invalidate). Count of stores named \`useXListStore\`. Payload size if you also serialize the same blob for SSR.
+
+**Tradeoffs:** Query-only: freshness + loading UI + key discipline. Store-only: simple and stale. Both with a rule scales; both without a rule diverges.
+
+**Production gotchas:** SSR payload already is a server cache — don’t hydrate it into Pinia too. Colliding \`useFetch\` keys. Persist plugin on a list store. Vue: \`refreshNuxtData('product:id')\` after PATCH.`,
+      `**Họ thực sự hỏi:** Bạn copy list sản phẩm vào Pinia rồi quên invalidate sau khi admin sửa?
+
+**Cách senior trả lời:** **Server cache** (TanStack Query, Nuxt \`useAsyncData\`/\`useFetch\`) sở hữu data server nhận ra — có key, stale, invalidate sau POST. **Client store** sở hữu nghĩa chỉ có ở client: UX session, draft, selection chưa lên URL, cờ overlay. Decision: sau mutation, **invalidate cache**; đừng dual-write graph entity.
+
+**Failure mode:** \`useProductListStore\` là query viết tay. Query **và** Pinia cùng list cart. Optimistic Pinia + POST fail + cache không dùng = state thứ ba.
+
+**Measure:** Thời gian mọi surface hiện giá trị mới (một lần invalidate). Đếm store tên \`useXListStore\`. Payload nếu bạn còn serialize cùng blob cho SSR.
+
+**Tradeoffs:** Chỉ query: tươi + UI loading + kỷ luật key. Chỉ store: đơn giản và stale. Cả hai có rule thì scale; không rule thì lệch.
+
+**Production gotchas:** Payload SSR đã là server cache — đừng hydrate thêm vào Pinia. Key \`useFetch\` đụng nhau. Persist plugin trên list store. Vue: \`refreshNuxtData('product:id')\` sau PATCH.`,
+    ),
+    followUps: [
+      l('Which cart fields still belong in Pinia on an SSR commerce site?', 'Field cart nào vẫn thuộc Pinia trên site thương mại SSR?'),
+      l('Who wins on first paint in Nuxt: payload or the TanStack client cache?', 'First paint ở Nuxt: payload thắng hay TanStack client cache?'),
+    ],
+  }),
+  q({
+    id: 'vite-vs-webpack-tradeoffs',
+    category: 'technical',
+    tags: ['build', 'vite', 'webpack'],
+    question: l(
+      'Vite vs Webpack: CI shipped a 3MB chunk — when do you stay on Vite?',
+      'Vite vs Webpack: CI ra chunk 3MB — khi nào bạn ở lại Vite?',
+    ),
+    answer: l(
+      `**What they actually ask:** Is Vite “faster” in prod, and did route splitting never happen?
+
+**How a senior answers:** Greenfield Vue 3 / Nuxt → **Vite**. Stay on Vite unless you need **first-class Module Federation today** or a Webpack-only loader maze. Constraint: dev is an ESM server + esbuild dep prebundle; **prod is still Rollup** (Rolldown later). A 3MB entry is a **graph** problem (no split, fat barrel, two Vues), not a reason to flee Vite.
+
+**Failure mode:** Treating Vite as universally faster in prod. MF via a Vite plugin, then two Vue copies. Leaking secrets through \`VITE_*\`. Blaming Vite for a Pinia store that fans out HMR.
+
+**Measure:** Analyzer (parsed vs gzip/brotli of **entry + async chunks**). Cold start, leaf-SFC HMR, CI \`vite build\` minutes, LCP on a mid-tier phone, duplicate Vue.
+
+**Tradeoffs:** Webpack/Rspack own MF and exotic loaders. Vite wins DX and ESM libraries. Rspack if you must keep a Webpack graph and want Rust speed.
+
+**Production gotchas:** Nuxt “slow HMR” is often Nitro restart. Hidden source maps uploaded to Sentry, not the CDN. Workspace packages prebundled wrong. Don’t switch bundlers to hide a missing \`import()\` on a route.`,
+      `**Họ thực sự hỏi:** Vite có “nhanh hơn” lúc prod không, và route splitting đã làm chưa?
+
+**Cách senior trả lời:** Vue 3 / Nuxt greenfield → **Vite**. Ở lại Vite trừ khi cần **Module Federation hạng nhất hôm nay** hoặc mê cung loader chỉ Webpack. Constraint: dev là ESM server + esbuild prebundle; **prod vẫn là Rollup**. Entry 3MB là bài **graph** (không split, barrel béo, hai Vue), không phải lý do bỏ Vite.
+
+**Failure mode:** Coi Vite luôn nhanh hơn lúc prod. MF qua plugin Vite rồi hai bản Vue. Lộ secret qua \`VITE_*\`. Đổ lỗi Vite cho store Pinia làm HMR tỏa.
+
+**Measure:** Analyzer (parsed vs gzip/brotli của **entry + async chunk**). Cold start, HMR SFC lá, phút CI \`vite build\`, LCP máy tầm trung, Vue nhân đôi.
+
+**Tradeoffs:** Webpack/Rspack nắm MF và loader lạ. Vite thắng DX và lib ESM. Rspack nếu phải giữ graph Webpack và muốn tốc độ Rust.
+
+**Production gotchas:** “HMR chậm” Nuxt thường là restart Nitro. Source map hidden upload Sentry, không lên CDN. Workspace package prebundle sai. Đừng đổi bundler để giấu thiếu \`import()\` trên route.`,
+    ),
+    followUps: [
+      l('How do you read a 3MB report: entry vs async vs duplicated vue?', 'Bạn đọc báo cáo 3MB thế nào: entry vs async vs vue nhân đôi?'),
+      l('When is Module Federation a reason to leave Vite?', 'Khi nào Module Federation là lý do rời Vite?'),
+    ],
+  }),
+  q({
+    id: 'vue-markraw-shallow-performance',
+    category: 'technical',
+    tags: ['vue', 'performance', 'reactivity'],
+    question: l(
+      'When do you use markRaw, shallowRef, and shallowReactive on large lists?',
+      'Khi nào dùng markRaw, shallowRef và shallowReactive trên list lớn?',
+    ),
+    answer: l(
+      `**What they actually ask:** A 50k-row table or a Mapbox instance — did you deep-proxy the world?
+
+**How a senior answers:** \`ref\` for values you replace. \`reactive\` for a small bag you mutate. \`shallowRef\` for **large immutable pages** you swap in one assignment (\`rows.value = next\`). \`markRaw\` for **third-party identity** (Map, Chart, Monaco, class instances). Constraint: Vue cannot see mutations **inside** shallow/raw targets — use \`triggerRef\` if you must patch in place.
+
+**Failure mode:** Deep \`reactive()\` on 50k rows. Wrapping a WebSocket/map and breaking \`instanceof\`. \`rows.value[i] = row\` on a shallowRef and wondering why the UI is stale.
+
+**Measure:** Time-to-interact on the grid before/after \`shallowRef\`. Heap: leaked reactive objects / watchers after unmount.
+
+**Tradeoffs:** Deep reactivity is convenient and expensive. Shallow is cheap and easy to misuse. Virtualize the list either way if you paint 50k DOM nodes.
+
+**Production gotchas:** \`reactive\` unwraps nested refs. Module-scope \`reactive({})\` in Nuxt leaks across requests. \`toRaw\` before \`structuredClone\` or third-party Maps. Don’t \`markRaw\` data you still need Vue to track.`,
+      `**Họ thực sự hỏi:** Table 50k hàng hoặc instance Mapbox — bạn deep-proxy cả thế giới?
+
+**Cách senior trả lời:** \`ref\` cho giá trị bạn thay cả cục. \`reactive\` cho túi nhỏ mutate tại chỗ. \`shallowRef\` cho **trang immutable lớn** swap một assignment (\`rows.value = next\`). \`markRaw\` cho **identity third-party** (Map, Chart, Monaco, class). Constraint: Vue không thấy mutation **trong** shallow/raw — \`triggerRef\` nếu phải patch tại chỗ.
+
+**Failure mode:** \`reactive()\` sâu 50k hàng. Bọc WebSocket/map rồi gãy \`instanceof\`. \`rows.value[i] = row\` trên shallowRef rồi lạ UI stale.
+
+**Measure:** Time-to-interact của grid trước/sau \`shallowRef\`. Heap: object reactive / watcher leak sau unmount.
+
+**Tradeoffs:** Deep reactivity tiện và đắt. Shallow rẻ và dễ dùng sai. Virtualize list dù sao nếu bạn vẽ 50k DOM node.
+
+**Production gotchas:** \`reactive\` unwrap ref lồng. \`reactive({})\` ở module Nuxt leak giữa request. \`toRaw\` trước \`structuredClone\` hoặc Map third-party. Đừng \`markRaw\` data Vue vẫn phải track.`,
+    ),
+    example: l(
+      `\`\`\`ts
+const rows = shallowRef<Row[]>([])
+function setPage(next: Row[]) { rows.value = next }
+const map = markRaw(new MapboxMap(el))
+\`\`\``,
+      `\`\`\`ts
+const rows = shallowRef<Row[]>([])
+function setPage(next: Row[]) { rows.value = next }
+const map = markRaw(new MapboxMap(el))
+\`\`\``,
+    ),
+    followUps: [
+      l('When must you call triggerRef after mutating a shallowRef array in place?', 'Khi nào phải gọi triggerRef sau khi mutate tại chỗ mảng shallowRef?'),
+      l('Why does reactive() on a chart instance break the library?', 'Vì sao reactive() trên instance chart làm gãy thư viện?'),
+    ],
+  }),
+  q({
+    id: 'fe-ci-preview-deploys',
+    category: 'technical',
+    tags: ['ci', 'devops', 'preview'],
+    question: l(
+      'How do you think about preview deploys, env, and rollback on a frontend team?',
+      'Bạn nghĩ về preview deploy, env và rollback trên team frontend thế nào?',
+    ),
+    answer: l(
+      `**What they actually ask:** Can PM open \`pr-123.preview\` without seeing prod PII, and can you undo a bad SHA in minutes?
+
+**How a senior answers:** Every PR gets a **unique URL** of **that SHA**. Env: staging/test APIs, fake data, **separate** OAuth clients and cookies. Kill preview on merge/close. Rollback = redeploy last good artifact (same digest, different runtime env) — do not “hotfix on the preview.” Constraint: preview origins explode CORS/cookies; BFF same-origin or a wildcard CORS **only** on staging.
+
+**Failure mode:** Preview on prod DB. \`VITE_*\` / \`NUXT_PUBLIC_*\` copied from prod. Cookie \`Domain=.example.com\` leaking preview ↔ prod. Long-lived preview that became unofficial staging.
+
+**Measure:** Time-to-preview in the first CI pass. Incidents from preview→prod mixups. Rollback time. \`X-Robots-Tag: noindex\` on previews.
+
+**Tradeoffs:** Full namespace per PR is realistic and expensive. Vercel/Pages is cheap and may not match GitOps. Prefer **runtime** env so one digest promotes.
+
+**Production gotchas:** Secrets in \`VITE_*\` (always client). CSP \`connect-src\` missing staging. Mixed content. e2e should target the preview \`baseURL\`. SSR + WS previews need a real Node host, not only static.`,
+      `**Họ thực sự hỏi:** PM mở \`pr-123.preview\` mà không thấy PII prod, và bạn undo SHA xấu trong vài phút được không?
+
+**Cách senior trả lời:** Mỗi PR một **URL riêng** của **đúng SHA**. Env: API staging/test, data giả, OAuth client và cookie **tách**. Giết preview lúc merge/đóng. Rollback = deploy lại artifact tốt cuối (cùng digest, env runtime khác) — đừng “hotfix trên preview.” Constraint: origin preview nổ CORS/cookie; BFF same-origin hoặc CORS wildcard **chỉ** trên staging.
+
+**Failure mode:** Preview trỏ DB prod. \`VITE_*\` / \`NUXT_PUBLIC_*\` copy từ prod. Cookie \`Domain=.example.com\` rò preview ↔ prod. Preview sống lâu thành staging chui.
+
+**Measure:** Time-to-preview ở CI pass đầu. Incident do lẫn preview→prod. Thời gian rollback. \`X-Robots-Tag: noindex\` trên preview.
+
+**Tradeoffs:** Namespace k8s mỗi PR thật và đắt. Vercel/Pages rẻ, có thể lệch GitOps. Ưu tiên env **runtime** để một digest promote được.
+
+**Production gotchas:** Secret trong \`VITE_*\` (luôn là client). CSP \`connect-src\` thiếu staging. Mixed content. e2e nên nhắm \`baseURL\` preview. Preview SSR + WS cần host Node thật, không chỉ static.`,
+    ),
+    followUps: [
+      l('What must never be a NUXT_PUBLIC_ or VITE_ value on a preview?', 'Thứ gì không bao giờ được là NUXT_PUBLIC_ hoặc VITE_ trên preview?'),
+      l('How do you roll back without rebuilding, and what does that require of env?', 'Bạn rollback không rebuild thế nào, và env phải đáp ứng gì?'),
+    ],
   }),
 ]

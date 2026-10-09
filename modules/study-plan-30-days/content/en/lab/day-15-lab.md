@@ -1,58 +1,42 @@
 # Day 15 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+You are a Vue specialist learning React. How does re-render differ from Vue reactivity? Map props, state, and lifecycle to hooks without apologizing.
 
-- Start the equivalent Customers route in the Next app.
+## What you will produce
 
-## What this day reuses
+- Write a Vue → React comparison note for state, derived state, side effects, and composition.
+- Explain where React feels more manual than Vue and where that manual control is useful.
 
-- Reuse the schema, mock data, and packages/ui from the Vue track.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/react-next/app/customers/`
-- `apps/react-next/lib/`
-- `notes/day-15.md`
-- `algorithms/day-15/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-15
-```
-
-## Step-by-step
-
-1. Create the /customers route.
-2. Render the mock list through the shared UI package.
-3. Write how the data flow differs in Vue vs Next.
+- **Decision:** Transfer concepts, do not translate APIs line by line. State / derived / effects / composition on one page. Honesty about the gap is the senior move.
+- **Constraint:** Comparison note. No Next customers route, no ‘start the React app’ install steps.
+- **Failure mode:** ‘React is just Vue with different names.’ Sounding apologetic. Claiming production React depth you do not have.
+- **Measure:** The React story sounds honest and confident. You can compare one real concept across Vue and React in under 2 minutes.
+- **Tradeoff:** Vue tracks mutations; React re-renders a subtree and you opt out. Manual control is useful for explicit data flow and painful for derived state you forget to update.
+- **Production gotcha:** Putting a `ref` in `useState` and wondering why the screen does not update. Treating `useMemo` as Vue `computed`.
 
 ## Done when
 
-- The Next route renders.
-- The mock list reuses the old model.
-- There is a Vue vs Next comparison note.
+- Your React story sounds honest and confident, not apologetic.
+- You can compare one real concept across Vue and React.
+- Algo is done and BFS queue usage is solid.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Create a shared fixtures lib for both apps.
+Add the one sentence you will use if they ask ‘are you ready to write React in week one?’
 
-## Hints
+## Algorithm
 
-- The goal is domain parity, not pixel parity.
-
-## Algorithm task
-
-- **Problem:** Binary Tree Level Order Traversal
+- **Problem:** Binary Tree Level Order Traversal · BFS
 - **Constraints:**
 - 0 ≤ nodes ≤ 2000
-- **Hint:** start from the **BFS queue** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** Queue: each loop take size = queue.length = nodes on this level.
 
 ```text
 algorithms/day-15/solution.ts
@@ -66,5 +50,5 @@ Open the full prompt: [day-15.md](../artifacts/algo/problems/day-15.md)
 ## Suggested commit
 
 ```text
-day-15: start next customers route
+day-15: Vue-to-React comparison note for state effects composition
 ```

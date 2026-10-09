@@ -1,60 +1,42 @@
 # Day 29 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+Why this company? What do you want to grow into next? How do you measure success as a senior? They are testing fit, not a slogan.
 
-- Polish the repo so it looks like something you can show in an interview.
+## What you will produce
 
-## What this day reuses
+- Write one tailored “why this company” answer for a company you actually want, using product fit + skill fit + growth fit.
+- Make a 7-day post-plan list: what to keep drilling if the interview is not tomorrow yet.
 
-- Reuse both apps, the UI package, algorithms, and the existing notes.
+## How a senior works this
 
-## Folders to touch
-
-- `README.md`
-- `notes/day-29.md`
-- `apps/vue-nuxt/`
-- `apps/react-next/`
-- `algorithms/day-29/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm lint
-pnpm typecheck
-pnpm test:algo -- day-29
-```
-
-## Step-by-step
-
-1. Update the README with the repo map, key scripts, and demo paths.
-2. Add a What I would improve next section.
-3. Run lint/typecheck and fix the last small issues.
+- **Decision:** Tailor to one real company. Product fit + skill fit + growth fit. The 7-day list is the weak spots from Day 28, not a new curriculum.
+- **Constraint:** Written answers + a 7-day list. Do not start a new build.
+- **Failure mode:** ‘I like the culture’ with no product. A 7-day list that is the whole knowledge base. Growth plans that sound like you will leave in six months.
+- **Measure:** One targeted company-fit answer is written. A 7-day follow-up list exists.
+- **Tradeoff:** Specific company research vs generic senior growth. Specific wins onsite; generic is a backup if they ask about another team.
+- **Production gotcha:** Praising a product they sunset. Claiming you will lead React when the team is Vue. Success metrics that are only personal velocity.
 
 ## Done when
 
-- The README feels showcase-ready.
-- Lint/typecheck are clean.
-- There is an honest next-step section.
+- One targeted company-fit answer is written.
+- A 7-day follow-up list exists.
+- The final review algo set is complete.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a short changelog.
+Write the question you will ask them at the end that proves you read the product.
 
-## Hints
+## Algorithm
 
-- Optimize the README for a stranger reading fast.
-
-## Algorithm task
-
-- **Problem:** 8 patterns flashcards + 1 random
+- **Problem:** Pattern review + one random problem
 - **Constraints:**
-- 15′
-- **Hint:** start from the **Review** pattern and open the full prompt if you need a stronger nudge.
+- 15 minutes
+- **Hint:** Trigger sentence = ‘when the prompt asks … think …’.
 
 ```text
 algorithms/day-29/solution.ts
@@ -68,5 +50,5 @@ Open the full prompt: [day-29.md](../artifacts/algo/problems/day-29.md)
 ## Suggested commit
 
 ```text
-day-29: polish repo README and scripts
+day-29: tailored company-fit answer and 7-day follow-up list
 ```

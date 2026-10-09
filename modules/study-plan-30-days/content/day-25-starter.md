@@ -1,38 +1,60 @@
-# Day 25 — Hướng dẫn (27/10/2026)
+# Day 25 — Interview drill (27/10/2026)
 
-**Chủ đề:** AI-assisted + Server Actions  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Dùng AI có audit trail; thử Server Action Next.
+**Theme:** Behavioral stories: intro, impact, seniority / Behavioral: giới thiệu, impact, seniority  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/practical-questions.md
-- documents/vi/nextjs.md — server actions
+- **EN:** Start the behavioral block with the highest-value stories: who you are, what impact you had, and why that shows seniority.
+- **VI:** Bắt đầu phần behavioral bằng những story có giá trị cao nhất: bạn là ai, impact gì và vì sao điều đó cho thấy seniority.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** Introduce yourself. What was your biggest impact? What makes someone senior — and how do you demonstrate it without a title speech?
+- **VI:** Giới thiệu bản thân. Impact lớn nhất là gì? Thế nào là senior — và bạn chứng minh thế nào mà không diễn thuyết về title?
 
-### 1) Capstone / FE craft
-Prompt AI implement 1 util; audit bugs/security; ghi evidence → capstone/13.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-25-ai-review.md`](./artifacts/day-25-ai-review.md)
+## Read
 
-### 2) React / Next lab
-Lab Next: form submit qua Server Action (mock), progressive enhancement note.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-25-lab.md`](./lab/day-25-lab.md)
+- `leadership` — Leadership notes (opens in a new tab in the app / mở tab mới trong app)
+- `practical-questions` — Practical interview notes (opens in a new tab in the app / mở tab mới trong app)
+- `self-check-questions.md` — Self-check questions (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Weak-topic drill #1** (Mixed) · pattern **Remedial**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-25.md`](./artifacts/algo/problems/day-25.md)  
-→ Code + test trong lab repo: `algo/day-25/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `self-intro` — Introduce yourself
+- `biggest-impact` — Biggest impact so far
+- `what-is-senior` — What makes a senior developer?
 
-- [ ] AI evidence trước/sau; Server Action chạy; weak drill note.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Write and record a 60-90 second self-intro that frames Vue depth, frontend fundamentals, and active React/Next growth honestly.
+  - **VI:** Viết và ghi âm một self-intro 60-90 giây frame được độ sâu Vue, nền tảng frontend và việc đang tăng tốc React/Next một cách trung thực.
+- **EN:** Pick one impact story and rewrite it in STAR with measurable results.
+  - **VI:** Chọn một impact story và viết lại theo STAR với kết quả đo được.
+
+## Algorithm
+
+- **Problem:** Weak-topic drill #1
+- Full prompt: [`artifacts/algo/problems/day-25.md`](./artifacts/algo/problems/day-25.md)
+- Code + test in the lab repo: `algorithms/day-25/`
+
+## Checkpoint
+
+- Đã có self-intro nói thành tiếng, không chỉ là bullet note.
+  - EN: A spoken self-intro now exists, not just bullet notes.
+- Đã có một impact story theo STAR và có số đo.
+  - EN: One impact story is in STAR form and measurable.
+- Đã xong weak-topic algo drill #1.
+  - EN: Weak-topic algo drill #1 is complete.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-25-lab.md`](./lab/day-25-lab.md)

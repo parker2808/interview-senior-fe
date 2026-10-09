@@ -8,27 +8,33 @@ export const INTERVIEW_SITUATIONAL_QUESTIONS: InterviewQuestion[] = [
     tags: ['jwt', 'security'],
     question: l('What are the advantages and disadvantages of JWT?', 'Ưu và nhược điểm của JWT?'),
     answer: l(
-      `JWT is useful because it is portable, self-contained, and easy to verify statelessly. That works well for distributed systems and APIs.
+      `**What they actually ask:** Is JWT the session, or just a signed envelope — and can you revoke it at 2 a.m.?
 
-But the downsides matter:
+**How a senior answers:** Use JWT when **independent services** must verify a short-lived access token without a central lookup on every hop. Constraint: a self-contained token is **hard to revoke**; you need short TTL, refresh rotation, and often a session version / denylist for logout-all.
 
-- revocation is harder than with server sessions,
-- payloads can become bloated if abused,
-- storing readable bearer tokens on the client increases XSS risk,
-- some teams misuse JWT and ignore broader session design concerns.
+**Failure mode:** Fat claims (PII, permissions that go stale). Bearer in \`localStorage\`. “Stateless” as an excuse to skip a refresh-token store. Trusting \`exp\` on the client for authz.
 
-Senior answer: JWT is just one piece of auth design. TTL, rotation, storage, revocation, and authorization rules matter as much as token format.`,
-      `JWT hữu ích vì nó portable, self-contained và dễ verify theo kiểu stateless. Điều đó khá hợp với hệ phân tán và API.
+**Measure:** Time-to-revoke. Refresh-reuse detection. Token byte size on the wire. XSS tabletop: readable vs httpOnly.
 
-Nhưng nhược điểm cũng rất thật:
+**Tradeoffs:** Stateless verify scales horizontally; opaque server sessions revoke instantly and stay small. BFF session cookies often beat raw JWT in the SPA.
 
-- revoke khó hơn session phía server,
-- payload dễ phình nếu lạm dụng,
-- lưu bearer token ở nơi JS đọc được làm tăng risk XSS,
-- nhiều team dùng JWT rồi quên mất bài toán session tổng thể.
+**Production gotchas:** Algorithm confusion / \`none\`. Clock skew. Putting roles in the JWT and never re-checking after a role change. Vue route guards reading claims is UX only.`,
+      `**Họ thực sự hỏi:** JWT có phải là session, hay chỉ là phong bì đã ký — và 2 giờ sáng bạn revoke được không?
 
-Câu trả lời senior là: JWT chỉ là một mảnh của auth design. TTL, rotation, storage, revocation và authorization rule quan trọng không kém chính format token.`,
+**Cách senior trả lời:** Dùng JWT khi **nhiều service** phải verify access ngắn mà không lookup trung tâm mỗi hop. Constraint: token self-contained **khó revoke**; cần TTL ngắn, xoay refresh, và thường version session / denylist cho logout-all.
+
+**Failure mode:** Claim béo (PII, quyền cũ). Bearer trong \`localStorage\`. “Stateless” để khỏi lưu refresh. Tin \`exp\` trên client để authz.
+
+**Measure:** Thời gian revoke. Phát hiện reuse refresh. Byte token trên wire. Bàn XSS: JS đọc được vs httpOnly.
+
+**Tradeoffs:** Verify stateless scale ngang; session opaque phía server revoke tức thì và nhỏ. Cookie session qua BFF thường hơn JWT trần trên SPA.
+
+**Production gotchas:** Nhầm algorithm / \`none\`. Lệch đồng hồ. Nhét role vào JWT rồi không check lại sau khi đổi quyền. Vue route guard đọc claim chỉ là UX.`,
     ),
+    followUps: [
+      l('What do you still store on the server if access tokens are JWTs?', 'Nếu access là JWT, bạn vẫn lưu gì trên server?'),
+      l('When would you pick an opaque session cookie over JWT?', 'Khi nào bạn chọn session cookie opaque hơn JWT?'),
+    ],
   }),
   q({
     id: 'jwt-backend-store',
@@ -84,21 +90,33 @@ Không phải LocalStorage xấu với mọi thứ. Vấn đề là auth token s
     tags: ['browser', 'storage'],
     question: l('Differences between Cookies, LocalStorage, and SessionStorage?', 'Khác biệt giữa Cookies, LocalStorage và SessionStorage?'),
     answer: l(
-      `At a high level:
+      `**What they actually ask:** Where does the **refresh token** go, and did Pinia persist just invent \`localStorage\` auth?
 
-- **Cookies** can be sent automatically with requests and can be HttpOnly, so they are useful for auth/session mechanics.
-- **LocalStorage** is persistent and JS-readable, good for non-secret preferences.
-- **SessionStorage** is also JS-readable but scoped to a browser tab/session.
+**How a senior answers:** Cookies: auto-sent, can be \`HttpOnly; Secure; SameSite\` — session/refresh. \`localStorage\`: origin-wide, JS-readable, survives tabs — **non-secrets** (theme, dismissed banners). \`sessionStorage\`: per-tab, JS-readable — drafts, wizard step. Decision: sensitivity × lifetime × “must the server see it?” Constraint: XSS reads any JS storage; CSRF cares about cookies.
 
-The correct choice depends on the data's sensitivity, lifetime, and whether the server must receive it automatically.`,
-      `Nhìn ở mức cao:
+**Failure mode:** JWT in \`localStorage\`. Cookie without SameSite on a mutation API. Storing PII or cart-with-auth in \`localStorage\` “because it’s easy.”
 
-- **Cookies** có thể tự gửi kèm request và có thể là HttpOnly, nên hợp cho cơ chế auth/session.
-- **LocalStorage** lưu bền hơn và JS đọc được, hợp cho preference không nhạy cảm.
-- **SessionStorage** cũng bị JS đọc được nhưng gắn với một tab/session trình duyệt.
+**Measure:** XSS tabletop. A cross-site form POST fixture if cookies auth mutations. Logout clears the right store and other tabs.
 
-Chọn gì phụ thuộc vào độ nhạy cảm của dữ liệu, vòng đời của nó, và việc server có cần tự nhận nó theo request hay không.`,
+**Tradeoffs:** Cookies need a CSRF story. Memory + httpOnly refresh needs a boot refresh. \`sessionStorage\` dies with the tab (good for isolation, bad for “continue later”).
+
+**Production gotchas:** Pinia/Zustand \`persist\`. Safari ITP. 4KB cookie budget. \`localhost\` vs preview origin. Vue SSR: don’t read \`localStorage\` in \`setup\`.`,
+      `**Họ thực sự hỏi:** **Refresh token** để đâu, và Pinia persist có vừa biến thành auth \`localStorage\` không?
+
+**Cách senior trả lời:** Cookie: tự gửi, có thể \`HttpOnly; Secure; SameSite\` — session/refresh. \`localStorage\`: theo origin, JS đọc được, sống qua tab — **không secret** (theme, banner đã tắt). \`sessionStorage\`: theo tab, JS đọc được — draft, bước wizard. Decision: độ nhạy × vòng đời × “server có phải tự thấy?” Constraint: XSS đọc mọi JS storage; CSRF quan tâm cookie.
+
+**Failure mode:** JWT trong \`localStorage\`. Cookie không SameSite trên API mutation. Nhét PII hoặc cart kèm auth vào \`localStorage\` “vì tiện.”
+
+**Measure:** Bàn XSS. Fixture form POST cross-site nếu cookie auth mutation. Logout xóa đúng store và các tab khác.
+
+**Tradeoffs:** Cookie cần chuyện CSRF. Memory + refresh httpOnly cần refresh lúc boot. \`sessionStorage\` chết theo tab (tốt để cô lập, tệ nếu “làm tiếp sau”).
+
+**Production gotchas:** Pinia/Zustand \`persist\`. Safari ITP. Ngân sách cookie 4KB. \`localhost\` vs origin preview. Vue SSR: đừng đọc \`localStorage\` trong \`setup\`.`,
     ),
+    followUps: [
+      l('What belongs in a cookie that must never go in localStorage?', 'Thứ gì thuộc cookie và không bao giờ được vào localStorage?'),
+      l('How do you sync logout across tabs with each storage type?', 'Bạn đồng bộ logout giữa các tab với từng loại storage thế nào?'),
+    ],
   }),
   q({
     id: 'perf-issue-story',
@@ -390,31 +408,33 @@ The key is orchestrating data so the dashboard feels progressively useful, not a
     tags: ['security', 'csrf', 'xss'],
     question: l('How do CSRF and XSS differ, and how do they relate to cookie auth?', 'CSRF và XSS khác nhau thế nào, liên quan cookie auth ra sao?'),
     answer: l(
-      `XSS is about malicious script running on your origin. CSRF is about a different origin causing the browser to send an authenticated request to yours.
+      `**What they actually ask:** If the SPA uses Bearer in memory, do you still need CSRF? And does “Vue escapes by default” let you store JWTs in \`localStorage\`?
 
-Relation to cookie auth:
+**How a senior answers:** XSS = attacker JS on **your** origin (token theft, fake UI). CSRF = other origin triggers a **credentialed** request (cookies auto-attach). Decision: cookie sessions → SameSite=Lax + custom header / double-submit; Bearer-from-memory → classic CSRF usually gone. XSS is still game over for any JS-readable secret. Vue text interpolation escapes; \`v-html\` / markdown / \`href\` do not.
 
-- cookie auth is more exposed to CSRF if not defended,
-- JS-readable tokens are more exposed to XSS.
+**Failure mode:** “We are an SPA so CSRF vanished” while refresh cookies POST \`/transfer\`. \`Access-Control-Allow-Origin: *\` + credentials. Mutations on GET.
 
-In reality you care about both:
+**Measure:** Can a malicious page change state with the user’s cookie and no extra header? Authed XSS on a CMS field. CSP reports trending down.
 
-- HttpOnly cookies help with XSS exposure,
-- SameSite and CSRF tokens help with CSRF,
-- sanitization and CSP help reduce XSS risk.`,
-      `XSS là bài toán script độc hại chạy được trên origin của bạn. CSRF là bài toán một origin khác ép browser gửi request đã được xác thực tới origin của bạn.
+**Tradeoffs:** Cookie UX vs CSRF program. Memory bearer vs CSRF-free but XSS-sensitive if it ever hits Web Storage.
 
-Liên quan tới cookie auth:
+**Production gotchas:** \`www\` vs \`api\` are same-site. CSRF tokens do not survive XSS. \`v-html\` of CMS + token in Pinia persist is the combo incident.`,
+      `**Họ thực sự hỏi:** SPA dùng Bearer trong memory thì còn CSRF không? Và “Vue escape mặc định” có cho phép nhét JWT vào \`localStorage\`?
 
-- cookie auth dễ dính CSRF hơn nếu không có phòng vệ,
-- token mà JS đọc được lại dễ bị XSS hơn.
+**Cách senior trả lời:** XSS = JS attacker trên origin **của bạn** (cướp token, UI giả). CSRF = origin khác kích request **có credential** (cookie tự gắn). Decision: session cookie → SameSite=Lax + header custom / double-submit; Bearer-từ-memory → CSRF cổ điển thường hết. XSS vẫn game over với mọi secret JS đọc được. Vue interpolate escape; \`v-html\` / markdown / \`href\` thì không.
 
-Thực tế là phải quan tâm cả hai:
+**Failure mode:** “SPA nên CSRF biến mất” trong khi cookie refresh POST \`/transfer\`. \`Access-Control-Allow-Origin: *\` + credentials. Mutation trên GET.
 
-- HttpOnly cookie giúp giảm exposure với XSS,
-- SameSite và CSRF token giúp chống CSRF,
-- sanitize và CSP giúp giảm risk XSS.`,
+**Measure:** Trang độc có đổi state bằng cookie user mà không thêm header? XSS user đã login trên field CMS. Báo cáo CSP giảm.
+
+**Tradeoffs:** UX cookie vs chương trình CSRF. Bearer memory hết CSRF nhưng nhạy XSS nếu rơi vào Web Storage.
+
+**Production gotchas:** \`www\` vs \`api\` là same-site. CSRF token không sống sót XSS. \`v-html\` CMS + token trong Pinia persist là combo incident.`,
     ),
+    followUps: [
+      l('Why does HttpOnly not solve CSRF by itself?', 'Vì sao HttpOnly một mình không giải quyết CSRF?'),
+      l('When does a Bearer SPA still have a CSRF surface?', 'Khi nào SPA Bearer vẫn còn bề mặt CSRF?'),
+    ],
   }),
   q({
     id: 'design-news-feed',
@@ -576,37 +596,33 @@ Câu trả lời senior là: micro-frontend là quyết định về tổ chức
     tags: ['architecture', 'monorepo'],
     question: l('When does a monorepo help frontend teams?', 'Khi nào monorepo giúp ích cho frontend team?'),
     answer: l(
-      `A monorepo helps when teams need to share packages, types, tooling, design-system code, or coordinated changes across apps.
+      `**What they actually ask:** Will a design-system change land in three apps this week, and will CI still finish before standup?
 
-Benefits:
+**How a senior answers:** Choose a monorepo when you **coordinate types, UI kit, and tooling** across apps more often than you release them independently. Constraint: you still need **ownership, affected-package CI, and a publish story** (changesets). A folder of apps without task graph is not a strategy.
 
-- shared standards and tooling,
-- easier cross-package refactors,
-- clearer source of truth.
+**Failure mode:** One pipeline that installs/builds everything. Circular packages. “Just import from \`../../other-app\`.” No CODEOWNERS so every package is everyone’s leftover.
 
-Costs:
+**Measure:** CI minutes vs affected graph. Time to land a type change in app + BFF. Cache hit rate (Nx/Turborepo). Broken publish of the design system.
 
-- build graph complexity,
-- CI performance concerns,
-- ownership and versioning discipline still required.
+**Tradeoffs:** Polyrepo isolates blast radius and duplicates tooling. Monorepo makes atomic refactors cheap and review/CI policy harder. Vue + React in one repo is fine if packages do not share a runtime.
 
-A monorepo is a force multiplier if engineering practices are good; otherwise it centralizes chaos.`,
-      `Monorepo giúp khi các team cần chia sẻ package, type, tooling, design-system code hoặc phải làm coordinated change qua nhiều app.
+**Production gotchas:** Vite prebundling across workspace packages. TS project references stale. Nuxt/Nitro bundling a server-only package into the client. Version drift of “internal” packages that were never versioned.`,
+      `**Họ thực sự hỏi:** Thay đổi design system có vào ba app tuần này không, và CI còn xong trước standup?
 
-Lợi ích:
+**Cách senior trả lời:** Chọn monorepo khi bạn **phối hợp type, UI kit, tooling** giữa các app thường hơn là release độc lập. Constraint: vẫn cần **ownership, CI theo package bị ảnh hưởng, và chuyện publish** (changeset). Một folder app không có task graph chưa phải strategy.
 
-- standard và tooling dùng chung,
-- refactor cross-package dễ hơn,
-- source of truth rõ hơn.
+**Failure mode:** Một pipeline install/build tất cả. Package vòng. “Import \`../../other-app\`.” Không CODEOWNERS nên mọi package là đồ thừa của mọi người.
 
-Chi phí:
+**Measure:** Phút CI vs graph affected. Thời gian đưa type change vào app + BFF. Cache hit (Nx/Turborepo). Publish design system gãy.
 
-- build graph phức tạp hơn,
-- CI dễ nặng,
-- vẫn cần kỷ luật ownership và versioning.
+**Tradeoffs:** Polyrepo cô lập blast radius, nhân đôi tooling. Monorepo refactor atomic rẻ, policy review/CI khó hơn. Vue + React chung repo ổn nếu package không share runtime.
 
-Monorepo là force multiplier nếu practice kỹ thuật tốt; nếu không thì nó chỉ gom chaos về một chỗ.`,
+**Production gotchas:** Vite prebundle qua workspace package. TS project references stale. Nuxt/Nitro nhét package chỉ server vào client. Version lệch của package “internal” chưa từng được version.`,
     ),
+    followUps: [
+      l('How do you keep CI from building every package on a docs typo?', 'Bạn giữ CI khỏi build mọi package vì một typo docs thế nào?'),
+      l('When would you split an app back out of the monorepo?', 'Khi nào bạn tách một app ra khỏi monorepo?'),
+    ],
   }),
   q({
     id: 'role-permission-ui',
@@ -799,5 +815,110 @@ Pattern tốt:
 
 Judgment kiểu senior là biết lúc nào nên cải thiện nền tảng dần dần thay vì cố “sửa cho đúng toàn bộ” trong một phát.`,
     ),
+  }),
+  q({
+    id: 'adr-when-you-write-one',
+    category: 'situational',
+    tags: ['architecture', 'adr', 'leadership'],
+    question: l('When does a senior write an ADR?', 'Khi nào một senior viết ADR?'),
+    answer: l(
+      `**What they actually ask:** Pinia vs Vuex — would you write an ADR, or only talk in Slack?
+
+**How a senior answers:** Write one when the choice is **expensive to reverse** or will look random in six months: rendering model, state library, BFF vs FE aggregation, MF vs monorepo, cookie vs token, “why not GraphQL.” One to two pages: context, decision, alternatives, consequences. Status: proposed → accepted → superseded. Constraint: nobody reads novels; link it from the README and the PR.
+
+**Failure mode:** An ADR for every rename. Beautiful docs nobody links. Using an ADR to **win after shipping**. Never superseding, so the repo lies.
+
+**Measure:** Can a new hire find *why* Pinia / *why* \`routeRules\` / *why* no MF? Time spent re-litigating settled choices should drop.
+
+**Tradeoffs:** Too many ADRs are noise; none is tribal knowledge in one head. Markdown in repo beats Confluence (it sits next to the code). A weekend prototype can stay a Slack thread until it graduates.
+
+**Production gotchas:** Org announces MF while the ADR says no — update status. Decision without **owner** and review date. Disagree-and-commit: spike, named owner, then implement the chosen path.`,
+      `**Họ thực sự hỏi:** Pinia vs Vuex — bạn viết ADR, hay chỉ nói trên Slack?
+
+**Cách senior trả lời:** Viết khi lựa chọn **đắt để đảo** hoặc sáu tháng sau trông như ngẫu nhiên: model render, thư viện state, BFF vs gom ở FE, MF vs monorepo, cookie vs token, “vì sao không GraphQL.” Một đến hai trang: context, quyết định, phương án, hệ quả. Status: proposed → accepted → superseded. Constraint: không ai đọc tiểu thuyết; link từ README và PR.
+
+**Failure mode:** ADR cho mỗi lần đổi tên. Doc đẹp không ai link. Dùng ADR để **thắng sau khi ship**. Không bao giờ superseded, repo nói dối.
+
+**Measure:** Newbie tìm được *vì sao* Pinia / \`routeRules\` / không MF? Thời gian tranh cãi lại quyết định đã chốt phải giảm.
+
+**Tradeoffs:** Quá nhiều ADR là nhiễu; không có là kiến thức trong đầu một người. Markdown trong repo hơn Confluence (nằm cạnh code). Prototype cuối tuần có thể ở Slack đến khi tốt nghiệp.
+
+**Production gotchas:** Org tuyên bố MF trong khi ADR nói không — cập nhật status. Quyết định không **owner** và ngày review. Disagree-and-commit: spike, owner có tên, rồi làm đúng hướng đã chọn.`,
+    ),
+    followUps: [
+      l('Show me an ADR you regret, and what you would write now.', 'Cho xem một ADR bạn hối, và giờ bạn sẽ viết gì.'),
+      l('How do ADRs interact with RFCs and Jira on your team?', 'ADR tương tác với RFC và Jira trên team bạn thế nào?'),
+    ],
+  }),
+  q({
+    id: 'oauth-pkce-spa',
+    category: 'situational',
+    tags: ['auth', 'oauth', 'oidc', 'spa'],
+    question: l(
+      'How should a Vue/Nuxt SPA do OAuth/OIDC, and why PKCE?',
+      'SPA Vue/Nuxt nên làm OAuth/OIDC thế nào, và vì sao PKCE?',
+    ),
+    answer: l(
+      `**What they actually ask:** Implicit flow is dead — can you keep tokens off \`localStorage\` and still talk to an IdP?
+
+**How a senior answers:** **Authorization Code + PKCE** for public clients (no client secret in the SPA). Decision: prefer a **BFF** (Nuxt/Nitro or Auth.js) that runs the code exchange and sets **httpOnly** session/refresh cookies; the browser never holds the IdP secret. Constraint: PKCE stops a stolen \`?code=\` from being exchanged without the code_verifier; it does **not** replace XSS hardening.
+
+**Failure mode:** Implicit flow / tokens in the URL hash. Client secret in \`VITE_*\`. Access token in Pinia persist. Hidden-iframe silent refresh (third-party cookies are dead).
+
+**Measure:** Auth code never logged. Refresh reuse detection. XSS tabletop: what is readable? Redirect URI allowlist includes only preview/prod hosts.
+
+**Tradeoffs:** Pure SPA + PKCE + memory access is possible and CSRF-light; BFF is more moving parts and the senior default for cookie UX. Mobile/native uses the same PKCE idea with a different redirect.
+
+**Production gotchas:** Preview \`redirect_uri\` mismatch. Clock skew on \`id_token\`. Mixing Google/Auth0 SDKs that still default to implicit. Step-up (WebAuthn) for money moves is separate from login.`,
+      `**Họ thực sự hỏi:** Implicit đã chết — bạn giữ token khỏi \`localStorage\` và vẫn nói chuyện IdP được không?
+
+**Cách senior trả lời:** **Authorization Code + PKCE** cho public client (không client secret trong SPA). Decision: ưu tiên **BFF** (Nuxt/Nitro hoặc Auth.js) đổi code và set cookie session/refresh **httpOnly**; browser không giữ secret IdP. Constraint: PKCE chặn \`?code=\` bị cướp đổi được nếu không có code_verifier; **không** thay hardening XSS.
+
+**Failure mode:** Implicit / token trên URL hash. Client secret trong \`VITE_*\`. Access trong Pinia persist. Silent refresh iframe ẩn (cookie third-party đã chết).
+
+**Measure:** Auth code không bao giờ bị log. Phát hiện reuse refresh. Bàn XSS: đọc được gì? Allowlist redirect URI chỉ host preview/prod.
+
+**Tradeoffs:** SPA thuần + PKCE + access memory làm được và nhẹ CSRF; BFF nhiều bộ phận hơn và là default senior cho UX cookie. Mobile/native cùng ý PKCE, redirect khác.
+
+**Production gotchas:** \`redirect_uri\` preview lệch. Lệch đồng hồ \`id_token\`. SDK Google/Auth0 vẫn default implicit. Step-up (WebAuthn) cho lệnh tiền tách khỏi login.`,
+    ),
+    followUps: [
+      l('What does PKCE not protect you against?', 'PKCE không bảo vệ bạn khỏi điều gì?'),
+      l('Why is a hidden iframe silent refresh a bad plan in 2026?', 'Vì sao silent refresh iframe ẩn là kế hoạch tệ năm 2026?'),
+    ],
+  }),
+  q({
+    id: 'service-worker-when-not',
+    category: 'situational',
+    tags: ['pwa', 'service-worker', 'caching'],
+    question: l('When should you NOT add a service worker?', 'Khi nào bạn KHÔNG nên thêm service worker?'),
+    answer: l(
+      `**What they actually ask:** Offline is a product decision — not a Workbox checkbox. When does an SW make the app worse?
+
+**How a senior answers:** Skip the SW when you have **no update UX**, **no kill switch**, personalized/auth HTML you might cache, A/B marketing HTML, or a team that will fight Vite HMR in dev. Decision: hashed statics can live on HTTP/CDN cache. Add an SW when offline/installability is a **named product** and you can precache revisioned assets + Network First for balances + never cache mutating APIs.
+
+**Failure mode:** \`skipWaiting()\` + \`clients.claim()\` mid-form so two tabs run two bundles. Caching \`GET /api/me\` by URL. Caching \`index.html\` forever so users never get a new hashed bundle. Registering in Vite dev.
+
+**Measure:** Canary that logged-in \`/api/me\` is **not** in Cache Storage. A header/kill-switch to unregister. “Refresh to update” actually used.
+
+**Tradeoffs:** App-shell PWA vs “just installable.” Immediate activate is snappy and dangerous; a Vue banner is the senior default. Offline-first needs a write queue — if PM didn’t ask, don’t fake it.
+
+**Production gotchas:** An SW is a persistent MITM on your origin — XSS that registers a hostile worker is a nightmare. iOS eviction. Captive-portal HTML 200 poisoning the API cache.`,
+      `**Họ thực sự hỏi:** Offline là quyết định product — không phải checkbox Workbox. Khi nào SW làm app tệ hơn?
+
+**Cách senior trả lời:** Bỏ SW khi **không có UX update**, **không có kill switch**, HTML cá nhân/auth có thể bị cache, HTML marketing A/B, hoặc team sẽ đánh nhau với Vite HMR lúc dev. Decision: static hash sống ổn trên HTTP/CDN. Thêm SW khi offline/cài được là **product có tên** và bạn precache asset có revision + Network First cho số dư + không cache API mutation.
+
+**Failure mode:** \`skipWaiting()\` + \`clients.claim()\` giữa form nên hai tab chạy hai bundle. Cache \`GET /api/me\` theo URL. Cache \`index.html\` mãi nên user không nhận bundle hash mới. Đăng ký trong Vite dev.
+
+**Measure:** Canary \`/api/me\` đã login **không** nằm Cache Storage. Header/kill-switch để unregister. Banner “Refresh to update” thật sự được dùng.
+
+**Tradeoffs:** PWA app-shell vs “chỉ cài được.” Activate ngay thì nhanh và nguy hiểm; banner Vue là default senior. Offline-first cần hàng đợi ghi — PM không hỏi thì đừng giả.
+
+**Production gotchas:** SW là MITM bền trên origin — XSS đăng ký worker địch là ác mộng. iOS eviction. HTML 200 captive portal đầu độc cache API.`,
+    ),
+    followUps: [
+      l('Which Workbox strategy for hashed JS vs /api/account vs checkout POST?', 'Workbox strategy nào cho JS đã hash vs /api/account vs checkout POST?'),
+      l('How do you ship a kill switch that unregisters a bad service worker?', 'Bạn ship kill switch unregister service worker xấu thế nào?'),
+    ],
   }),
 ]

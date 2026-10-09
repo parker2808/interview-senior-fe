@@ -2,7 +2,9 @@
 
 **Timeline:** Day 1 = **03/10/2026** → Day 30 = **01/11/2026**  
 **Daily pace:** about **90–120 minutes**  
-**Source of truth:** use the **Plan homepage** to open each day, then switch between the Plan and Lab tabs.
+**Source of truth:** use the **Plan homepage** to open each day, then switch between the Plan and Lab tabs. Docs and Q&A open in a **new tab** on purpose.
+
+> This is **interview prep**, not a curriculum to finish. Stay on the day page; do not treat the knowledge base as a course.
 
 ---
 

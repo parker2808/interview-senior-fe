@@ -1,59 +1,43 @@
 # Day 20 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+When do Server Actions help and when are they the wrong tool? What can middleware actually do? How do you handle metadata, images, fonts, and a first deploy?
 
-- Add a Server Action, metadata, and an asset/deploy note in Next.
+## What you will produce
 
-## What this day reuses
+- List which parts of a small admin flow belong in Server Actions, Route Handlers, or plain client mutations.
+- Write a deployment checklist: env vars, caching assumptions, image/font usage, and what to verify after deploy.
 
-- Reuse the customers route from Days 15-19.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/react-next/app/(admin)/customers/`
-- `apps/react-next/app/(admin)/customers/actions.ts`
-- `notes/day-20.md`
-- `algorithms/day-20/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-20
-```
-
-## Step-by-step
-
-1. Create one small save form through a Server Action or mock server mutation.
-2. Set route metadata/title.
-3. Write an image/font/deploy note.
+- **Decision:** Mutations that can live next to a form → Server Action. Webhooks / non-form HTTP → Route Handler. Optimistic UI / client-only → client mutation. Middleware for auth redirects and headers, not business logic.
+- **Constraint:** Lists and a checklist. No deploy of a new Next app today.
+- **Failure mode:** Putting a 200-line workflow in middleware. Server Actions without auth checks because ‘they run on the server’. Forgetting `next/image` host allowlists after deploy.
+- **Measure:** You can explain when Server Actions simplify a flow and when they do not. Middleware, SEO, and assets are tied to concrete use cases.
+- **Tradeoff:** Server Actions reduce boilerplate and hide the HTTP contract — which is great until a mobile client or a non-Next caller needs the same mutation.
+- **Production gotcha:** Middleware runs on the Edge: no Node APIs, size limits, and easy-to-get-wrong matcher config. Metadata that is static when the title is per-record. Fonts that shift CLS.
 
 ## Done when
 
-- The mutation demo works.
-- The metadata is meaningful.
-- There is an asset/deploy note.
+- You can explain when Server Actions simplify a flow and when they do not.
+- Middleware, SEO, and asset optimization are tied to concrete use cases.
+- Algo is done and the DP state choice is explainable.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add an optimistic UI note.
+Add one line on CSRF / origin checks for Server Actions and why ‘it is same-origin’ is not a complete answer.
 
-## Hints
+## Algorithm
 
-- One small mutation with a clear boundary is enough.
-
-## Algorithm task
-
-- **Problem:** Coin Change
+- **Problem:** Coin Change · DP
 - **Constraints:**
 - 1 ≤ coins.length ≤ 12
 - 0 ≤ amount ≤ 10^4
-- **Hint:** start from the **DP unbounded knapsack** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** dp[x] = min coins to make x; dp[0]=0, else Infinity.
 
 ```text
 algorithms/day-20/solution.ts
@@ -67,5 +51,5 @@ Open the full prompt: [day-20.md](../artifacts/algo/problems/day-20.md)
 ## Suggested commit
 
 ```text
-day-20: add next mutation and metadata
+day-20: Server Actions vs Route Handlers plus deploy checklist
 ```

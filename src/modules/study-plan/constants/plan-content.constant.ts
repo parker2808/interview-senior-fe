@@ -154,16 +154,20 @@ export const PLAN_WEEKS: StudyPlanWeek[] = [
 
 export const PLAN_GAPS: LocalizedText[] = [
   l(
-    'There is no standalone design-system document under documents/, so Week 1 intentionally combines architecture, CSS layout, accessibility, and design-system Q&A.',
-    'Trong documents/ chưa có một tài liệu design system riêng, nên Tuần 1 chủ động ghép architecture, CSS layout, accessibility và Q&A về design system.',
+    'Docs and Q&A open in a new tab on purpose. Stay on the day page; do not treat the knowledge base as a course to finish.',
+    'Docs và Q&A cố ý mở tab mới. Ở lại trang ngày; đừng biến knowledge base thành một giáo trình phải đọc hết.',
   ),
   l(
-    'Algorithms live in the study-plan module, not the shared documents area, so the daily algo links point to plan resources instead of /docs.',
-    'Phần thuật toán nằm trong module study-plan chứ không nằm ở khu documents dùng chung, nên link algo hằng ngày sẽ trỏ tới tài nguyên của plan thay vì /docs.',
+    'There is no standalone design-system document under documents/, so Week 1 combines architecture, CSS layout, accessibility, and design-system Q&A.',
+    'Trong documents/ chưa có tài liệu design system riêng, nên Tuần 1 ghép architecture, CSS layout, accessibility và Q&A design system.',
   ),
   l(
-    'The general Next.js document is useful but broad; the new Next.js Q&A links and the day-21 hands-on task fill the App Router and deployment-specific gaps.',
-    'Tài liệu Next.js tổng quát là hữu ích nhưng còn khá rộng; phần Q&A Next.js mới và task hands-on ở ngày 21 dùng để lấp khoảng trống về App Router và deployment.',
+    'Algorithms live in the study-plan module, so daily algo links stay inside the plan instead of /docs.',
+    'Thuật toán nằm trong module study-plan, nên link algo hằng ngày ở lại trong plan thay vì /docs.',
+  ),
+  l(
+    'Answer shape for every day: what they actually ask → your decision → constraint → failure mode → how you measure it.',
+    'Khung trả lời mỗi ngày: họ thực sự hỏi gì → quyết định của bạn → constraint → failure mode → bạn đo thế nào.',
   ),
 ]
 
@@ -409,7 +413,7 @@ export const PLAN_DAY_CONTENT: StudyPlanDayContent[] = [
     questionLinks: [
       qa('js-promise-combinators', 'Promise combinators', 'Các Promise combinator'),
       qa('promise-basics', 'Promise basics', 'Promise là gì'),
-      qa('dom-event-propagation-delegation', 'Event propagation and delegation', 'Event propagation và delegation'),
+      qa('auth-401-refresh-queue', '401 refresh queue', 'Hàng đợi refresh khi 401'),
     ],
     handsOn: [
       l('Compare Promise.all vs allSettled vs race on one realistic frontend case such as dashboard widgets or parallel lookups.', 'So sánh Promise.all, allSettled và race trên một case frontend thực tế như dashboard widget hoặc lookup song song.'),
@@ -466,8 +470,8 @@ export const PLAN_DAY_CONTENT: StudyPlanDayContent[] = [
     ],
     questionLinks: [
       qa('vue-reactivity-internals', 'Vue 3 reactivity internals', 'Cơ chế reactivity của Vue 3'),
-      qa('vue-ref-vs-reactive', 'ref vs reactive', 'ref hay reactive'),
       qa('vue-composables', 'What makes a good composable?', 'Composable tốt là như thế nào'),
+      qa('vue-markraw-shallow-performance', 'markRaw / shallowRef', 'markRaw / shallowRef'),
     ],
     handsOn: [
       l('Explain one real feature you built using ref/reactive/computed/watch, then rewrite the explanation as if an interviewer asked “why this design?”.', 'Giải thích một feature thật bạn đã làm với ref/reactive/computed/watch, rồi viết lại câu trả lời theo kiểu interviewer hỏi “vì sao thiết kế như vậy?”.'),
@@ -524,7 +528,7 @@ export const PLAN_DAY_CONTENT: StudyPlanDayContent[] = [
     ],
     questionLinks: [
       qa('pinia-design', 'What belongs in Pinia?', 'Cái gì nên đưa vào Pinia?'),
-      qa('nuxt-route-rules-caching', 'Nuxt route rules and caching', 'Route rules và caching của Nuxt'),
+      qa('tanstack-query-vs-global-store', 'Server state vs Pinia', 'Server state hay Pinia'),
       qa('role-permission-ui', 'Role and permission handling in UI', 'Thiết kế role/permission trong UI'),
     ],
     handsOn: [
@@ -757,7 +761,7 @@ export const PLAN_DAY_CONTENT: StudyPlanDayContent[] = [
     questionLinks: [
       qa('next-app-router-rsc', 'What App Router and RSC solve', 'App Router và RSC giải bài toán gì'),
       qa('next-data-fetching-cache-revalidation', 'Next data fetching, cache, and revalidation', 'Data fetching, cache và revalidation trong Next'),
-      qa('next-metadata-image-font-deployment', 'SEO, image/font optimization, and deployment basics', 'SEO, tối ưu image/font và deployment basics'),
+      qa('fe-ci-preview-deploys', 'Preview deploys and FE CI', 'Preview deploy và CI frontend'),
     ],
     handsOn: [
       l('Build a tiny `/customers` route in a Next lab: root layout, dashboard layout, server-fetched list page, one small client filter, loading.tsx, error.tsx, and page metadata.', 'Dựng một route `/customers` nhỏ trong lab Next: root layout, dashboard layout, list page fetch ở server, một bộ lọc nhỏ phía client, loading.tsx, error.tsx và metadata cho page.'),
@@ -790,7 +794,7 @@ export const PLAN_DAY_CONTENT: StudyPlanDayContent[] = [
     questionLinks: [
       qa('dashboard-15-apis', 'Dashboard with 15 APIs', 'Dashboard gọi 15 API'),
       qa('bff-when', 'When to introduce a BFF', 'Khi nào nên thêm BFF'),
-      qa('observability-frontend', 'Good frontend observability', 'Frontend observability tốt trông như thế nào'),
+      qa('adr-when-you-write-one', 'When to write an ADR', 'Khi nào viết ADR'),
     ],
     handsOn: [
       l('Take one admin/dashboard idea and outline widgets, API dependencies, failure boundaries, and which data can arrive progressively.', 'Chọn một ý tưởng admin/dashboard và vẽ ra widget, phụ thuộc API, boundary của lỗi và phần data nào có thể hiện dần.'),
@@ -818,8 +822,8 @@ export const PLAN_DAY_CONTENT: StudyPlanDayContent[] = [
     ],
     questionLinks: [
       qa('table-50k-rows', 'Table with 50,000 rows', 'Table với 50.000 bản ghi'),
-      qa('bundling-code-splitting', 'Bundling and code splitting', 'Bundling và code splitting'),
-      qa('core-web-vitals', 'Core Web Vitals', 'Core Web Vitals'),
+      qa('vite-vs-webpack-tradeoffs', 'Vite vs Webpack in CI', 'Vite hay Webpack trên CI'),
+      qa('service-worker-when-not', 'When not to add a service worker', 'Khi nào không nên thêm service worker'),
     ],
     handsOn: [
       l('Review a large-screen flow from your past work and list its 3 likely bottlenecks: data volume, render cost, or bundle cost.', 'Review một flow màn hình lớn từ kinh nghiệm cũ và liệt kê 3 bottleneck có khả năng nhất: lượng data, chi phí render hay chi phí bundle.'),
@@ -847,7 +851,7 @@ export const PLAN_DAY_CONTENT: StudyPlanDayContent[] = [
     ],
     questionLinks: [
       qa('csrf-vs-xss', 'CSRF vs XSS', 'CSRF và XSS'),
-      qa('third-party-script-risk', 'Evaluating third-party scripts', 'Đánh giá third-party script'),
+      qa('oauth-pkce-spa', 'OAuth/OIDC + PKCE for SPAs', 'OAuth/OIDC + PKCE cho SPA'),
       qa('feature-flags-rollout', 'Using feature flags safely', 'Dùng feature flag an toàn'),
     ],
     handsOn: [

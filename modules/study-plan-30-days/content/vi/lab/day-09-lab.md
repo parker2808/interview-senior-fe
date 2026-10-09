@@ -1,59 +1,42 @@
 # Day 9 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Khi nào một request lỗi chặn cả UI? `Promise.all` vs `allSettled` vs `race`? Huỷ search stale thế nào? Event delegation hay 200 listener từng hàng?
 
-- Chốt state ownership cho filter, selection và detail trong Vue app.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- So sánh Promise.all, allSettled và race trên một case frontend thực tế như dashboard widget hoặc lookup song song.
+- Phác thảo cách huỷ hoặc bỏ qua response stale trong một flow search.
 
-- Dùng lại component tree Day 8.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/vue-nuxt/composables/`
-- `apps/vue-nuxt/components/customers/`
-- `notes/day-09.md`
-- `algorithms/day-09/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm test:algo -- day-09
-```
-
-## Từng bước
-
-1. Quyết định state nào ở page, state nào ở URL, state nào ở composable.
-2. Đưa filter/search lên URL nếu hợp lý.
-3. Viết state map owner/reader/writer/reset rule.
+- **Quyết định:** Chọn một combinator cho từng case: all (auth + permission phải cùng thành công), allSettled (widget dashboard), race (timeout vs request). Phác AbortController cho search.
+- **Constraint:** Note so sánh cộng sketch AbortController / generation-token khoảng 10 dòng. Không viết feature search khách hàng mới.
+- **Failure mode:** `Promise.all` cho widget nên một 500 xoá trắng trang. Bỏ qua fetch lệch thứ tự nên query cũ đè query mới. Lấy `stopPropagation` làm công cụ thiết kế.
+- **Cách đo:** Nói được khi nào một lỗi chặn UI và khi nào không, và đi capture → target → bubble bằng một ví dụ DOM.
+- **Trade-off:** AbortController (huỷ thật, nhiều plumbing) hay ignore-stale theo sequence (đơn giản, vẫn tốn mạng). Typeahead nên abort.
+- **Gotcha production:** Abort fetch không abort server. Delegation trên `tbody` chết khi body bảng bị thay. Listener `once` và Vue `onUnmounted` dễ quên.
 
 ## Tiêu chí xong
 
-- Filter state có source of truth rõ.
-- Selection/reset behavior giải thích được.
-- State map xong.
+- Biết khi nào lỗi của một request nên chặn toàn bộ UI và khi nào thì không.
+- Giải thích được event propagation và delegation bằng một ví dụ DOM.
+- Bài algo xong và pattern two pointers đã rõ.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm note vì sao chưa cần Pinia.
+Viết một câu vì sao `race` sai cho dashboard ‘widget nào xong trước thì thắng’.
 
-## Gợi ý
+## Thuật toán
 
-- URL state chỉ giữ cái hữu ích khi share/refresh.
-
-## Bài thuật toán
-
-- **Bài:** Two Sum II (sorted)
+- **Bài:** Two Sum II · Two pointers
 - **Ràng buộc:**
 - 2 ≤ numbers.length ≤ 3·10^4
-- Đã sort non-decreasing
-- **Hint:** xem pattern **Two pointers** và mở đề đầy đủ nếu cần.
+- **Hint:** Hai con trỏ đầu-cuối: tổng nhỏ → tăng left; lớn → giảm right.
 
 ```text
 algorithms/day-09/solution.ts
@@ -67,5 +50,5 @@ Mở đề đầy đủ: [day-09.md](../artifacts/algo/problems/day-09.md)
 ## Commit gợi ý
 
 ```text
-day-09: clarify vue state ownership
+day-09: promise combinators and stale-search abort sketch
 ```

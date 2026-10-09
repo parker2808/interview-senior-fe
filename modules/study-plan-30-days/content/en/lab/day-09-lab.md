@@ -1,59 +1,42 @@
 # Day 9 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+When does one failed request block the whole UI? `Promise.all` vs `allSettled` vs `race`? How do you cancel a stale search? Event delegation vs 200 row listeners?
 
-- Lock down state ownership for filter, selection, and detail in the Vue app.
+## What you will produce
 
-## What this day reuses
+- Compare Promise.all vs allSettled vs race on one realistic frontend case such as dashboard widgets or parallel lookups.
+- Sketch how you would cancel or ignore stale responses in a search flow.
 
-- Reuse the Day 8 component tree.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/vue-nuxt/composables/`
-- `apps/vue-nuxt/components/customers/`
-- `notes/day-09.md`
-- `algorithms/day-09/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm test:algo -- day-09
-```
-
-## Step-by-step
-
-1. Decide what belongs in page state, URL state, and composables.
-2. Move filter/search into the URL where it makes sense.
-3. Write a state map with owner/reader/writer/reset rules.
+- **Decision:** Pick one combinator per case: all (auth + permissions must all succeed), allSettled (dashboard widgets), race (timeout vs request). Sketch AbortController for search.
+- **Constraint:** A comparison note plus a 10-line AbortController / generation-token sketch. No new Vue customer search feature.
+- **Failure mode:** `Promise.all` on widgets so one 500 blanks the page. Ignoring out-of-order fetch so an old query overwrites a new one. `stopPropagation` as a design tool.
+- **Measure:** You can say when one failure should block the UI and when it should not, and walk capture → target → bubble with one DOM example.
+- **Tradeoff:** AbortController (real cancel, more plumbing) vs ignore-stale-by-sequence (simple, still burns the network). Prefer abort for typeahead.
+- **Production gotcha:** Aborting a fetch does not abort the server. Delegation on `tbody` dies when the table body is replaced. `once` listeners and Vue `onUnmounted` are easy to forget.
 
 ## Done when
 
-- Filter state has a clear source of truth.
-- Selection and reset behavior are explainable.
-- The state map is done.
+- You know when failure of one request should block the whole UI and when it should not.
+- Event propagation and delegation are explainable with one DOM example.
+- Algo is done and the two-pointer pattern is clear.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a note on why Pinia is not needed yet.
+Write the one-liner for why `race` is the wrong tool for ‘first widget wins’ dashboards.
 
-## Hints
+## Algorithm
 
-- Only keep URL state that helps sharing or refresh.
-
-## Algorithm task
-
-- **Problem:** Two Sum II (sorted)
+- **Problem:** Two Sum II · Two pointers
 - **Constraints:**
 - 2 ≤ numbers.length ≤ 3·10^4
-- Đã sort non-decreasing
-- **Hint:** start from the **Two pointers** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** Two pointers at ends: too small → left++; too big → right--.
 
 ```text
 algorithms/day-09/solution.ts
@@ -67,5 +50,5 @@ Open the full prompt: [day-09.md](../artifacts/algo/problems/day-09.md)
 ## Suggested commit
 
 ```text
-day-09: clarify vue state ownership
+day-09: promise combinators and stale-search abort sketch
 ```

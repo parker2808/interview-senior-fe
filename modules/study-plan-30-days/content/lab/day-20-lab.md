@@ -1,69 +1,69 @@
 # Day 20 — Lab
 
-> **Timebox:** 45-60 phút / minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.  
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Companion repo: [lab-repo.md](../lab-repo.md)
+## What they will ask / Họ sẽ hỏi gì
 
-## Hôm nay build gì / What you will build
+- **EN:** When do Server Actions help and when are they the wrong tool? What can middleware actually do? How do you handle metadata, images, fonts, and a first deploy?
+- **VI:** Khi nào Server Actions giúp và khi nào chúng là sai tool? Middleware làm được gì thật? Metadata, image, font và deploy lần đầu bạn xử lý ra sao?
 
-- **VI:** Thêm Server Action, metadata và asset/deploy note trong Next.
-- **EN:** Add a Server Action, metadata, and an asset/deploy note in Next.
+## What you will produce / Bạn sẽ produce gì
 
-## Reuse từ ngày trước / Reuse from earlier days
+- **EN:** List which parts of a small admin flow belong in Server Actions, Route Handlers, or plain client mutations.
+  - **VI:** Liệt kê phần nào của một flow admin nhỏ nên nằm ở Server Actions, Route Handlers hay mutation phía client.
+- **EN:** Write a deployment checklist: env vars, caching assumptions, image/font usage, and what to verify after deploy.
+  - **VI:** Viết một deployment checklist: env vars, giả định về cache, dùng image/font thế nào và cần verify gì sau deploy.
 
-- **VI:** Dùng customers route Day 15-19.
-- **EN:** Reuse the customers route from Days 15-19.
+## How a senior works this / Senior làm thế nào
 
-## Folder(s) nên chạm / Folders to touch
-
-- `apps/react-next/app/(admin)/customers/`
-- `apps/react-next/app/(admin)/customers/actions.ts`
-- `notes/day-20.md`
-- `algorithms/day-20/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-20
-```
-
-## Từng bước / Step-by-step
-
-1. Tạo 1 save form nhỏ qua Server Action hoặc mock server mutation.
-   - EN: Create one small save form through a Server Action or mock server mutation.
-2. Đặt metadata/title cho route.
-   - EN: Set route metadata/title.
-3. Ghi note image/font/deploy assumption.
-   - EN: Write an image/font/deploy note.
+- **Decision / Quyết định:**
+  - EN: Mutations that can live next to a form → Server Action. Webhooks / non-form HTTP → Route Handler. Optimistic UI / client-only → client mutation. Middleware for auth redirects and headers, not business logic.
+  - VI: Mutation sống cạnh form → Server Action. Webhook / HTTP không phải form → Route Handler. Optimistic UI / chỉ client → mutation client. Middleware cho auth redirect và header, không phải business logic.
+- **Constraint / Ràng buộc:**
+  - EN: Lists and a checklist. No deploy of a new Next app today.
+  - VI: List và checklist. Hôm nay không deploy app Next mới.
+- **Failure mode:**
+  - EN: Putting a 200-line workflow in middleware. Server Actions without auth checks because ‘they run on the server’. Forgetting `next/image` host allowlists after deploy.
+  - VI: Nhét workflow 200 dòng vào middleware. Server Actions không check auth vì ‘chạy trên server’. Quên allowlist host của `next/image` sau deploy.
+- **Measure / Cách đo:**
+  - EN: You can explain when Server Actions simplify a flow and when they do not. Middleware, SEO, and assets are tied to concrete use cases.
+  - VI: Giải thích được khi nào Server Actions làm flow đơn giản hơn và khi nào thì không. Middleware, SEO và asset đã gắn với use case cụ thể.
+- **Tradeoff / Trade-off:**
+  - EN: Server Actions reduce boilerplate and hide the HTTP contract — which is great until a mobile client or a non-Next caller needs the same mutation.
+  - VI: Server Actions bớt boilerplate và giấu HTTP contract — tuyệt đến khi mobile client hoặc caller không phải Next cần cùng mutation.
+- **Production gotcha / Gotcha production:**
+  - EN: Middleware runs on the Edge: no Node APIs, size limits, and easy-to-get-wrong matcher config. Metadata that is static when the title is per-record. Fonts that shift CLS.
+  - VI: Middleware chạy trên Edge: không Node API, có giới hạn size, matcher dễ sai. Metadata tĩnh khi title theo từng record. Font làm lệch CLS.
 
 ## Done when / Tiêu chí xong
 
-- Mutation demo chạy được.
-  - EN: The mutation demo works.
-- Metadata có giá trị rõ.
-  - EN: The metadata is meaningful.
-- Có note asset/deploy.
-  - EN: There is an asset/deploy note.
+- Giải thích được khi nào Server Actions làm flow đơn giản hơn và khi nào thì không.
+  - EN: You can explain when Server Actions simplify a flow and when they do not.
+- Middleware, SEO và tối ưu asset đã gắn với use case cụ thể.
+  - EN: Middleware, SEO, and asset optimization are tied to concrete use cases.
+- Bài algo xong và giải thích được cách chọn state cho DP.
+  - EN: Algo is done and the DP state choice is explainable.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch / Stretch
 
-- Thêm optimistic UI note.
-  - EN: Add an optimistic UI note.
+- **EN:** Add one line on CSRF / origin checks for Server Actions and why ‘it is same-origin’ is not a complete answer.
+- **VI:** Thêm một dòng về CSRF / check origin cho Server Actions và vì sao ‘same-origin’ chưa phải câu đủ.
 
-## Hints
+## Algorithm / Thuật toán
 
-- Một mutation nhỏ nhưng rõ boundary là đủ.
-  - EN: One small mutation with a clear boundary is enough.
-
-## Algorithm task
-
-- **Problem:** Coin Change
-- **Constraints:**
+- **Problem / Bài:** Coin Change · DP / Coin Change · DP
+- **Constraints / Ràng buộc:**
+  - EN:
 - 1 ≤ coins.length ≤ 12
 - 0 ≤ amount ≤ 10^4
-- **Hint:** dp[x] = min số xu tạo x; khởi dp[0]=0, còn lại Infinity.
+  - VI:
+- 1 ≤ coins.length ≤ 12
+- 0 ≤ amount ≤ 10^4
+- **Hint:** dp[x] = min coins to make x; dp[0]=0, else Infinity.
+  - VI: dp[x] = min số xu tạo x; khởi dp[0]=0, còn lại Infinity.
 
 ```text
 algorithms/day-20/solution.ts
@@ -77,5 +77,5 @@ Open the full prompt: [day-20.md](../artifacts/algo/problems/day-20.md)
 ## Suggested commit
 
 ```text
-day-20: add next mutation and metadata
+day-20: Server Actions vs Route Handlers plus deploy checklist
 ```

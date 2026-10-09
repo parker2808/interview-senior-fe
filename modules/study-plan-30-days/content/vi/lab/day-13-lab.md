@@ -1,57 +1,42 @@
 # Day 13 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Cái gì vào Pinia, cái gì vào URL, cái gì vào cache Nuxt/server? Role/permission trên UI thế nào mà store không thành lớp bảo mật?
 
-- Thêm flow edit có keyboard support trong Vue app.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Vẽ state map cho một flow: ai sở hữu, ai đọc và dữ liệu stale được làm mới ra sao.
+- Đánh dấu một state nên đưa ra khỏi store và một state nên đưa vào layer dùng chung.
 
-- Dùng FormField/TextField Day 3 và flow hiện có.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/vue-nuxt/components/customers/`
-- `notes/day-13.md`
-- `algorithms/day-13/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm test:algo -- day-13
-```
-
-## Từng bước
-
-1. Mở editor từ row hoặc detail panel.
-2. Thêm ESC để đóng, return focus và focus visible rõ.
-3. Ghi 5 a11y checks đã tự test.
+- **Quyết định:** Vẽ map trước: source of truth từng field. URL cho filter share được, component cho UI thoáng qua, Pinia cho session client xuyên cây, server cache cho data remote.
+- **Constraint:** State map trên giấy hoặc trong note. Hôm nay không refactor Pinia store trên product.
+- **Failure mode:** Nhét current page, hàng table và auth user vào cùng store. Giấu permission chỉ bằng CSS. Cache không invalidate sau mutation.
+- **Cách đo:** Map có một source of truth cho từng mảnh state, và store vs cache vs URL đã được ghi.
+- **Trade-off:** Pinia store béo thì dễ tìm và khó test. Server cache đặt cạnh chỗ dùng thì tươi và khó share sang cây xa.
+- **Gotcha production:** Lệch hydration Pinia lúc SSR. Check permission chỉ tồn tại trên UI. Filter trong Pinia đáng ra là query param — refresh là mất.
 
 ## Tiêu chí xong
 
-- Flow edit mở/đóng được.
-- ESC và return focus hoạt động.
-- Có checklist a11y đã tick.
+- State map có source of truth rõ ràng.
+- Đã ghi rõ quyết định store vs cache vs URL.
+- Bài algo xong và pattern Floyd đã thấy hợp lý.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm initial focus thông minh cho field đầu tiên.
+Thêm mũi tên invalidate: mutation nào xoá cache key nào.
 
-## Gợi ý
+## Thuật toán
 
-- Hiểu cơ chế là đủ, chưa cần modal hoàn hảo.
-
-## Bài thuật toán
-
-- **Bài:** Linked List Cycle
+- **Bài:** Linked List Cycle · Floyd pointers
 - **Ràng buộc:**
-- Không dùng thêm O(n) Set nếu có thể (Floyd).
-- **Hint:** xem pattern **Floyd two pointers** và mở đề đầy đủ nếu cần.
+- Floyd cycle detection
+- **Hint:** slow/fast: nếu gặp nhau → cycle.
 
 ```text
 algorithms/day-13/solution.ts
@@ -65,5 +50,5 @@ Mở đề đầy đủ: [day-13.md](../artifacts/algo/problems/day-13.md)
 ## Commit gợi ý
 
 ```text
-day-13: add accessible vue edit flow
+day-13: state map with store vs cache vs URL ownership
 ```

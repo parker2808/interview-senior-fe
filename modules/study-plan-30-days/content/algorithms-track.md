@@ -6,7 +6,7 @@ Mỗi ngày có **đúng 1 bài** (hoặc 1 session review/mock). Không phải 
 
 | Bước | Ở đâu | Bạn làm gì |
 |---:|---|---|
-| 1 | Tab **Hướng dẫn** / plan ngày | Biết tên bài + pattern |
+| 1 | **Plan tab** (trang ngày) | Biết tên bài + pattern |
 | 2 | File đề `artifacts/algo/problems/day-NN.md` | Đọc đề, example, constraints |
 | 3 | Companion repo `senior-fe-lab/algo/day-NN/` | Viết `solution.ts` + test |
 | 4 | Worksheet section Algo (tuỳ chọn) | Ghi pattern / Big-O / lỗi hay gặp |

@@ -1,58 +1,42 @@
 # Day 23 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+A table with 50,000 rows — what do you do first? Is the bottleneck data volume, render cost, or bundle cost? Which optimization would you actually ship?
 
-- Run a small performance pass on the list or dashboard.
+## What you will produce
 
-## What this day reuses
+- Review a large-screen flow from your past work and list its 3 likely bottlenecks: data volume, render cost, or bundle cost.
+- Choose one optimization you would actually ship first and explain why it beats the alternatives.
 
-- Reuse the current dashboard/list flow.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/react-next/app/(admin)/customers/`
-- `apps/react-next/app/(admin)/dashboard/`
-- `notes/day-23.md`
-- `algorithms/day-23/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-23
-```
-
-## Step-by-step
-
-1. Pick one realistic simulated bottleneck.
-2. Apply one deliberate optimization.
-3. Record the before/after in the note.
+- **Decision:** Prioritize bottlenecks, then ship one fix. Pagination or query limits before virtualization; route-level split before micro-optimizing computed.
+- **Constraint:** A prioritized note from a system you shipped. No new virtualized table implementation today.
+- **Failure mode:** Listing ten techniques with no priority. Virtualizing before the API returns 50k. Code-splitting a 3 KB helper while the vendor chart library is 400 KB.
+- **Measure:** Bottlenecks are ranked. One optimization is tied to user impact and risk.
+- **Tradeoff:** Virtualization saves DOM and breaks find-in-page, a11y, and measurement. Splitting a route saves JS and costs a loading gap. Pick with the user task in mind.
+- **Production gotcha:** INP dies on a cheap-looking table because every keyup filters 10k rows on the main thread. Bundle analyzers that ignore async chunks you always preload.
 
 ## Done when
 
-- There is at least one small perf fix.
-- There is a before/after note.
-- The code is still readable.
+- The bottlenecks are prioritized, not just listed.
+- One optimization choice is tied to user impact and risk.
+- Warm-up algo session is complete.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Measure again with Profiler if available.
+Name the Core Web Vital that would move if your first fix worked.
 
-## Hints
+## Algorithm
 
-- Fix the biggest issue, not the flashiest one.
-
-## Algorithm task
-
-- **Problem:** Warm-up Easy (tự chọn)
+- **Problem:** Warm-up easy set
 - **Constraints:**
-- ≤10′
-- **Hint:** start from the **Warm-up** pattern and open the full prompt if you need a stronger nudge.
+- ≤10 minutes
+- **Hint:** Prefer a problem you failed before.
 
 ```text
 algorithms/day-23/solution.ts
@@ -66,5 +50,5 @@ Open the full prompt: [day-23.md](../artifacts/algo/problems/day-23.md)
 ## Suggested commit
 
 ```text
-day-23: apply focused perf improvements
+day-23: prioritize three bottlenecks and one ship-first fix
 ```

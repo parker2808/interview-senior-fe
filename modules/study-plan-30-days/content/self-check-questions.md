@@ -1,9 +1,22 @@
 # Self-check — câu hỏi Senior FE
 
-Dùng cuối tuần hoặc trước mock interview. Trả lời ngắn (bullet), không cần viết dài.
+Dùng cuối tuần hoặc trước mock interview. Trả lời ngắn (bullet), không cần viết dài. Gắn câu trả lời vào **một hệ thống bạn đã ship**, không phải một feature Capstone trên giấy.
+
+## Interview answer shape
+
+Mọi câu dưới đây nên nói theo cùng một khung:
+
+1. **Họ thực sự hỏi gì** — không trả lời slogan
+2. **Decision** — bạn chọn gì
+3. **Constraint** — thời gian, API, permission, bundle, team
+4. **Failure mode** — chuyện gì vỡ nếu chọn sai
+5. **Measure** — metric, user symptom, hoặc cách bạn biết fix có tác dụng
+6. **Tradeoff** — option bạn từ chối và cái giá
+
+Nếu không kể được failure + measure trong dưới 2 phút, câu đó chưa interview-ready.
 
 ## Product
-- User thật sự muốn hoàn thành task gì?
+- User thật sự muốn hoàn thành task gì trên hệ thống bạn đã ship?
 - Có thể giảm số step không?
 - Happy path và failure path là gì?
 - Requirement nào đang là assumption?

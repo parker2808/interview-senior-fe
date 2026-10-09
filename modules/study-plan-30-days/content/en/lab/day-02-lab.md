@@ -1,60 +1,42 @@
 # Day 2 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+A dashboard calls 15 APIs. What does the user see first, what can arrive late, and what fails independently? How do you keep hierarchy obvious in 10 seconds?
 
-- Turn the tokens into primitives: Button, Badge, and SectionTitle.
+## What you will produce
 
-## What this day reuses
+- Take one screen from Parker’s experience and redraw loading, empty, error, and permission-denied states.
+- Rewrite the heading, primary action, and helper copy so the hierarchy is obvious in under 10 seconds.
 
-- Reuse the Day 1 tokens.
+## How a senior works this
 
-## Folders to touch
-
-- `packages/ui/src/components/button/`
-- `packages/ui/src/components/status-badge/`
-- `notes/day-02.md`
-- `algorithms/day-02/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm storybook:ui
-pnpm test:ui
-pnpm test:algo -- day-02
-```
-
-## Step-by-step
-
-1. Create a Button with 3 basic variants.
-2. Create a StatusBadge for pending / verified / blocked.
-3. Write a short note about title-action-badge hierarchy.
+- **Decision:** Cover the four states before polishing the happy path. Rewrite heading / primary action / helper so a stranger knows what to do.
+- **Constraint:** Notes or a wire sketch only. Do not rebuild the screen. One real flow from a system you shipped.
+- **Failure mode:** A spinner that blocks the whole page while 14 of 15 widgets could render. Empty states with no next action. Errors that only say ‘Something went wrong’.
+- **Measure:** You can point at each state and say the user impact in one sentence. Time-to-understand the rewritten hierarchy is under 10 seconds.
+- **Tradeoff:** Progressive widgets vs one consistent skeleton. Progressive is faster to first paint; a full skeleton is calmer but hides useful data.
+- **Production gotcha:** Permission-denied is not an error. Mixing 403 into the generic error toast trains users to retry a request they will never be allowed to make.
 
 ## Done when
 
-- The primitives render.
-- Variants use tokens instead of hard-coded colors.
-- There is a hierarchy note.
+- The screen has explicit state coverage, not just the happy path.
+- You can explain one UX trade-off with product impact, not taste only.
+- Algo passes with O(n) reasoning.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a loading state to Button.
+Add a one-line rule for when lazy-loading a widget helps vs when it just delays the empty state.
 
-## Hints
+## Algorithm
 
-- Favor a clean API over fancy styling.
-
-## Algorithm task
-
-- **Problem:** Valid Anagram
+- **Problem:** Valid Anagram · Frequency map
 - **Constraints:**
 - 1 ≤ s.length, t.length ≤ 5·10^4
-- s, t chỉ gồm chữ thường a-z
-- **Hint:** start from the **Frequency map** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** Count 26 letters (array of 26) or a Map. O(n) time.
 
 ```text
 algorithms/day-02/solution.ts
@@ -68,5 +50,5 @@ Open the full prompt: [day-02.md](../artifacts/algo/problems/day-02.md)
 ## Suggested commit
 
 ```text
-day-02: add button and badge primitives
+day-02: redraw loading empty error and permission-denied states
 ```

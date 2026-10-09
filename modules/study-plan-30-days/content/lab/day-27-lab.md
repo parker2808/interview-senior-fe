@@ -1,67 +1,67 @@
 # Day 27 — Lab
 
-> **Timebox:** 45-60 phút / minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.  
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Companion repo: [lab-repo.md](../lab-repo.md)
+## What they will ask / Họ sẽ hỏi gì
 
-## Hôm nay build gì / What you will build
+- **EN:** How do you review code? What is your quality bar? How do you handle ambiguity? Which of those answers are still weak — concept, story, or articulation?
+- **VI:** Bạn review code thế nào? Quality bar của bạn là gì? Xử lý requirement mơ hồ ra sao? Câu nào vẫn yếu — khái niệm, story, hay diễn đạt?
 
-- **VI:** Polish vertical slice Vue để demo tự tin.
-- **EN:** Polish the Vue vertical slice so you can demo it confidently.
+## What you will produce / Bạn sẽ produce gì
 
-## Reuse từ ngày trước / Reuse from earlier days
+- **EN:** List the 5 questions you still answer weakly and group them by root cause: concept gap, story gap, or articulation gap.
+  - **VI:** Liệt kê 5 câu bạn vẫn trả lời yếu và gom nhóm theo root cause: thiếu khái niệm, thiếu story hay diễn đạt chưa rõ.
+- **EN:** Pick the top 2 weak spots and do one repair pass each today.
+  - **VI:** Chọn 2 điểm yếu lớn nhất và sửa một lượt tập trung cho từng điểm trong hôm nay.
 
-- **VI:** Dùng toàn bộ flow Vue tuần 2.
-- **EN:** Reuse the full Week 2 Vue flow.
+## How a senior works this / Senior làm thế nào
 
-## Folder(s) nên chạm / Folders to touch
-
-- `apps/vue-nuxt/`
-- `notes/day-27.md`
-- `algorithms/day-27/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm test:algo -- day-27
-```
-
-## Từng bước / Step-by-step
-
-1. Chọn 1 slice: customers list+detail hoặc field config.
-   - EN: Pick one slice: customers list+detail or field config.
-2. Polish state, copy và demo path cho slice đó.
-   - EN: Polish the states, copy, and demo path for that slice.
-3. Viết 3 trade-off trong note.
-   - EN: Write 3 trade-offs into the note.
+- **Decision / Quyết định:**
+  - EN: Triage before more study. Concept gap → reread + one example. Story gap → STAR from a shipped system. Articulation gap → record and cut.
+  - VI: Phân loại trước khi học thêm. Thiếu khái niệm → đọc lại + một ví dụ. Thiếu story → STAR từ hệ thống đã ship. Diễn đạt yếu → ghi âm và cắt.
+- **Constraint / Ràng buộc:**
+  - EN: A weak-spot list plus two repair passes. Not a Vue spike and not a new Next feature.
+  - VI: Danh sách điểm yếu cộng hai lượt sửa. Không phải spike Vue và không phải feature Next mới.
+- **Failure mode:**
+  - EN: A list of 20 topics. Repairing the topic you like instead of the one that would fail the loop. No spoken pass.
+  - VI: List 20 chủ đề. Sửa topic bạn thích thay vì topic sẽ trượt vòng. Không có lượt nói.
+- **Measure / Cách đo:**
+  - EN: A real weak-spot list with priorities, and two spots that got a concrete repair pass.
+  - VI: Danh sách điểm yếu thật kèm ưu tiên, và hai điểm đã được sửa một lượt cụ thể.
+- **Tradeoff / Trade-off:**
+  - EN: Breadth review feels safe and changes nothing. Two deep repairs raise the floor of the mock tomorrow.
+  - VI: Ôn rộng thì thấy an toàn và không đổi gì. Hai lượt sửa sâu nâng sàn buổi mock ngày mai.
+- **Production gotcha / Gotcha production:**
+  - EN: Ambiguity answers that skip the clarifying question. Code-review answers that only mention style. Quality bars with no example of something you rejected.
+  - VI: Câu ambiguity bỏ qua câu hỏi làm rõ. Câu code-review chỉ nói style. Quality bar không có ví dụ thứ bạn đã từ chối.
 
 ## Done when / Tiêu chí xong
 
-- Slice Vue demo được từ đầu tới cuối.
-  - EN: The Vue slice is demoable end to end.
-- Có trade-off note.
-  - EN: There is a trade-off note.
-- Có thể giới thiệu trong 2-3 phút.
-  - EN: You can present it in 2-3 minutes.
+- Đã có danh sách điểm yếu thật kèm thứ tự ưu tiên.
+  - EN: A real weak-spot list exists with priorities.
+- Hai điểm yếu đã được sửa bằng một lượt ôn tập cụ thể.
+  - EN: Two weak spots got a concrete repair pass.
+- Đã xong phần flashcard Big-O.
+  - EN: Big-O flashcards are complete.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch / Stretch
 
-- Thêm screenshot vào README.
-  - EN: Add a screenshot to the README.
+- **EN:** Write the clarifying questions you ask in the first 2 minutes of a vague design prompt.
+- **VI:** Viết các câu hỏi làm rõ bạn hỏi trong 2 phút đầu của đề design mơ hồ.
 
-## Hints
+## Algorithm / Thuật toán
 
-- Một slice mạch lạc tốt hơn ba slice dang dở.
-  - EN: One coherent slice beats three half-finished ones.
-
-## Algorithm task
-
-- **Problem:** Big-O flashcards
-- **Constraints:**
+- **Problem / Bài:** Big-O flashcards / Flashcard Big-O
+- **Constraints / Ràng buộc:**
+  - EN:
+- 10 minutes
+  - VI:
 - 10′
-- **Hint:** Viết bảng 6 dòng.
+- **Hint:** Write a 6-row table.
+  - VI: Viết bảng 6 dòng.
 
 ```text
 algorithms/day-27/solution.ts
@@ -75,5 +75,5 @@ Open the full prompt: [day-27.md](../artifacts/algo/problems/day-27.md)
 ## Suggested commit
 
 ```text
-day-27: polish vue vertical slice
+day-27: weak-spot triage and two repair passes
 ```

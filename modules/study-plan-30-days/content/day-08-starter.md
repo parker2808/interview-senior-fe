@@ -1,39 +1,60 @@
-# Day 8 — Hướng dẫn (10/10/2026)
+# Day 8 — Interview drill (10/10/2026)
 
-**Chủ đề:** Component architecture  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Component tree Capstone + trách nhiệm rõ; mirror tree bên React.
+**Theme:** JavaScript execution model / Execution model của JavaScript  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/architecture.md
-- documents/vi/vue3.md — component design
-- documents/vi/react.md — presentational vs container
+- **EN:** Refresh the JavaScript mental model that sits underneath frontend debugging interviews.
+- **VI:** Ôn lại mental model JavaScript nằm bên dưới các câu hỏi debug frontend.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** What prints, and why? Walk the event loop: call stack, microtasks, macrotasks. Explain a closure bug and TDZ without slogans.
+- **VI:** In ra gì, vì sao? Đi event loop: call stack, microtask, macrotask. Giải thích bug closure và TDZ không bằng khẩu hiệu.
 
-### 1) Capstone / FE craft
-Vẽ component tree List page (smart vs dumb). Ghi props/events từng node → capstone/04.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-08-component-tree.md`](./artifacts/day-08-component-tree.md)
+## Read
 
-### 2) React / Next lab
-Lab: tách CustomerTable (dumb) + CustomersPage (smart fetch mock). Không fetch trong dumb.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-08-lab.md`](./lab/day-08-lab.md)
+- `javascript` — JavaScript notes (opens in a new tab in the app / mở tab mới trong app)
+- `web-apis` — Web APIs notes (opens in a new tab in the app / mở tab mới trong app)
+- `practical-questions` — Practical debugging notes (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Binary Search** (Easy) · pattern **Binary search**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-08.md`](./artifacts/algo/problems/day-08.md)  
-→ Code + test trong lab repo: `algo/day-08/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `js-event-loop` — The event loop
+- `js-closures` — Closures
+- `js-hoisting-tdz` — Hoisting and TDZ
 
-- [ ] Tree 2 phía Vue-thinking + React lab khớp trách nhiệm; binary search O(log n).
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Write 3 interview snippets involving setTimeout, Promise, and closure capture. Predict the output before running them.
+  - **VI:** Viết 3 snippet phỏng vấn có setTimeout, Promise và closure capture. Đoán output trước khi chạy.
+- **EN:** For each snippet, explain the output in plain language, not jargon only.
+  - **VI:** Với mỗi snippet, giải thích output bằng ngôn ngữ dễ hiểu chứ không chỉ jargon.
+
+## Algorithm
+
+- **Problem:** Binary Search · Search on sorted data
+- Full prompt: [`artifacts/algo/problems/day-08.md`](./artifacts/algo/problems/day-08.md)
+- Code + test in the lab repo: `algorithms/day-08/`
+
+## Checkpoint
+
+- Giải thích được từng bước của một snippet event loop.
+  - EN: You can explain one event-loop snippet step by step.
+- Closure và TDZ đã trở nên cụ thể lại, không còn mơ hồ.
+  - EN: Closures and TDZ feel concrete again, not fuzzy.
+- Bài algo xong với reasoning O(log n).
+  - EN: Algo is done with O(log n) reasoning.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-08-lab.md`](./lab/day-08-lab.md)

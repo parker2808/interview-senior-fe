@@ -149,6 +149,10 @@ Tín hiệu senior là nói rất rõ: **người chịu trách nhiệm cuối c
       `“I use AI heavily for first drafts and comparisons, but I keep the scope small. For example, I might ask for three ways to model a typed API response, then I choose one and rewrite it to fit our codebase. If AI generates a huge component, that's a sign to step back and reshape the problem before considering merge.”`,
       `“Em dùng AI khá nhiều cho first draft và so sánh option, nhưng luôn giữ scope nhỏ. Ví dụ em có thể hỏi 3 cách model typed API response, sau đó tự chọn một cách và rewrite lại theo codebase của team. Nếu AI generate ra một component quá lớn, em xem đó là tín hiệu phải lùi lại và chia lại bài toán trước khi nghĩ tới chuyện merge.”`,
     ),
+    followUps: [
+      l('What is something you would never let AI decide on a PR?', 'Thứ gì bạn không bao giờ để AI quyết trên một PR?'),
+      l('How do you review a large AI-generated diff without rubber-stamping it?', 'Bạn review một diff AI lớn mà không stamp bừa thế nào?'),
+    ],
   }),
   q({
     id: 'mistake-hardship',
@@ -200,6 +204,10 @@ Tránh kiểu điểm yếu giả như “em quá cầu toàn”. Interviewer mu
       `“We once shipped a search flow where rapid typing could display stale results. I had focused on happy-path correctness and overlooked cancellation and response ordering. We fixed it with AbortController plus a request sequence guard, then moved the pattern into a shared helper and added a regression test. The real lesson was to treat concurrency and edge-state behavior as first-class requirements, not polish.”`,
       `“Có lần team em ship một search flow mà khi gõ nhanh có thể hiện kết quả cũ. Lúc đó em tập trung vào happy path mà bỏ sót cancellation và thứ tự response. Team fix bằng AbortController cộng với request sequence guard, sau đó em đưa pattern đó vào shared helper và thêm regression test. Bài học thật là phải coi concurrency và edge-state behavior là requirement chính, không phải polish.”`,
     ),
+    followUps: [
+      l('What process change did you keep after that incident?', 'Sau incident đó bạn giữ lại thay đổi process nào?'),
+      l('How do you talk about a mistake without sounding unsafe to hire?', 'Bạn kể sai lầm mà không nghe như không an toàn để hire thế nào?'),
+    ],
   }),
   q({
     id: 'what-is-senior',
@@ -335,6 +343,10 @@ For a senior candidate, motivation should sound like **intentional choice**, not
 
 Với candidate senior, động lực nên nghe như một **lựa chọn có chủ đích**, không phải vì bí quá nên apply đâu cũng được.`,
     ),
+    followUps: [
+      l('What specifically about this product or stack made you apply?', 'Điều cụ thể nào về product hoặc stack khiến bạn apply?'),
+      l('What would make this role a bad fit in six months?', 'Điều gì khiến role này không còn fit sau sáu tháng?'),
+    ],
   }),
   q({
     id: 'biggest-impact',
@@ -365,6 +377,10 @@ Các dạng impact tốt:
 
 Câu trả lời senior phải tách được **activity** với **outcome**. “Em làm một feature” là activity. “Em đưa vào một state model giúp giảm regressions ở ba flow khác nhau” mới là impact.`,
     ),
+    followUps: [
+      l('How did you measure that impact after the change shipped?', 'Bạn đo impact đó sau khi ship thế nào?'),
+      l('What part of that outcome would have happened without you?', 'Phần nào của outcome đó vẫn xảy ra nếu không có bạn?'),
+    ],
   }),
   q({
     id: 'mentoring-junior',
@@ -397,6 +413,10 @@ Tín hiệu senior là bạn biết đổi style mentoring theo người. Có b�
       `“If a junior is stuck in a component, I usually start by asking them to draw the state map and list inputs, derived data, and side effects. Once they can separate those, the implementation often becomes much simpler. That scales better than me just typing the code for them.”`,
       `“Nếu junior bị kẹt ở một component, em thường bắt đầu bằng việc bảo bạn ấy vẽ state map và liệt kê input, derived data và side effect. Khi tách được ba thứ đó thì phần implement thường tự đơn giản hơn nhiều. Cách đó scale tốt hơn là em nhảy vào code hộ.”`,
     ),
+    followUps: [
+      l('How do you mentor someone who wants answers instead of heuristics?', 'Bạn mentor người chỉ muốn đáp án thay vì heuristic thế nào?'),
+      l('When do you take the keyboard versus stay in review?', 'Khi nào bạn cầm bàn phím, khi nào chỉ ở review?'),
+    ],
   }),
   q({
     id: 'code-review-approach',
@@ -431,6 +451,10 @@ Em cố để lại comment giải thích **vì sao**, không chỉ nói “đ�
 
 Với PR quá lớn, hành vi senior thường là yêu cầu giảm scope trước, thay vì review mù một diff 2.000 dòng.`,
     ),
+    followUps: [
+      l('How do you handle a 2,000-line PR that already has product pressure?', 'Bạn xử lý PR 2.000 dòng đã có áp lực product thế nào?'),
+      l('What comment do you leave when the code works but the ownership is wrong?', 'Bạn comment gì khi code chạy nhưng ownership sai?'),
+    ],
   }),
   q({
     id: 'disagree-tech-decision',
@@ -460,6 +484,10 @@ Senior behavior is not “winning arguments.” It is helping the team make the 
 
 Hành vi senior không phải là “thắng tranh luận”. Mà là giúp team ra quyết định tốt nhất với thông tin đang có.`,
     ),
+    followUps: [
+      l('What do you do after the team picks the option you argued against?', 'Bạn làm gì sau khi team chọn option bạn đã phản đối?'),
+      l('When is a spike the right next step instead of more debate?', 'Khi nào spike là bước đúng thay vì tranh thêm?'),
+    ],
   }),
   q({
     id: 'handle-ambiguity',
@@ -490,6 +518,10 @@ Em thường:
 
 Mục tiêu là **giảm ambiguity với chi phí thấp** trước khi viết quá nhiều code.`,
     ),
+    followUps: [
+      l('What do you do when PM and design still cannot answer this week?', 'Bạn làm gì khi PM và design tuần này vẫn chưa trả lời được?'),
+      l('How do you write assumptions so they can be proven wrong cheaply?', 'Bạn viết assumption thế nào để chứng minh sai với chi phí thấp?'),
+    ],
   }),
   q({
     id: 'prioritize-deadline-scope',
@@ -519,6 +551,10 @@ The senior move is to make trade-offs explicit early, not to heroically absorb c
 
 Nước đi senior là làm trade-off lộ ra sớm, không phải cố hero gồng mọi thứ tới tuần cuối.`,
     ),
+    followUps: [
+      l('What do you refuse to cut even when the deadline is fixed?', 'Bạn từ chối cắt gì dù deadline đã cố định?'),
+      l('How do you tell a PM the current scope will slip without sounding blocked?', 'Bạn nói với PM scope hiện tại sẽ trễ mà không nghe như đang blocked thế nào?'),
+    ],
   }),
   q({
     id: 'influence-without-authority',
@@ -552,6 +588,10 @@ Các cách hiệu quả:
 
 Mọi người thường nghe theo người giúp biến sự phức tạp thành thứ dễ hiểu và giảm chi phí ra quyết định.`,
     ),
+    followUps: [
+      l('Give an example where evidence beat seniority in the room.', 'Cho ví dụ evidence thắng seniority trong phòng họp.'),
+      l('How do you influence a backend team you do not manage?', 'Bạn influence team backend bạn không quản lý thế nào?'),
+    ],
   }),
   q({
     id: 'stakeholder-communication',
@@ -577,6 +617,10 @@ Senior communication is about reducing surprises. You do that by surfacing assum
 
 Giao tiếp kiểu senior là giảm bất ngờ cho mọi bên. Muốn vậy phải lộ assumption, edge case và dependency sớm.`,
     ),
+    followUps: [
+      l('How do you escalate a contract mismatch without blaming backend?', 'Bạn escalate lệch contract mà không đổ backend thế nào?'),
+      l('What do you put in writing vs leave in a meeting?', 'Bạn ghi ra giấy điều gì, và để lại trong họp điều gì?'),
+    ],
   }),
   q({
     id: 'legacy-refactor-pitch',
@@ -626,6 +670,10 @@ Sau đó đưa ra một con đường thực tế:
 
 Debt work dễ được duyệt hơn khi được frame là **giảm risk hoặc mở đường cho delivery nhanh hơn**.`,
     ),
+    followUps: [
+      l('What number or incident made a refactor get scheduled?', 'Con số hoặc incident nào khiến một refactor được lên lịch?'),
+      l('How do you keep debt work from becoming a rewrite?', 'Bạn giữ debt work khỏi thành rewrite thế nào?'),
+    ],
   }),
   q({
     id: 'giving-feedback',
@@ -656,6 +704,10 @@ Pattern tốt:
 
 Tránh gắn nhãn kiểu “em cẩu thả”. Nên nói “PR này đã bỏ sót error-state handling hai lần, làm team phải rework nhiều khi review”. Mục tiêu là giúp người đó cải thiện, không phải xả bực.`,
     ),
+    followUps: [
+      l('How do you give the same feedback a second time if nothing changed?', 'Bạn đưa cùng feedback lần hai nếu không gì đổi thế nào?'),
+      l('When do you take feedback to a manager versus keep it 1:1?', 'Khi nào đưa feedback lên manager, khi nào giữ 1:1?'),
+    ],
   }),
   q({
     id: 'cross-team-collaboration',
@@ -684,6 +736,10 @@ Thành phần tốt thường có:
 
 Nói rõ bạn đã tạo alignment bằng cách nào: shared requirement, checkpoint demo, doc contract, rollout theo phase hay fallback plan. Phối hợp kiểu senior thường là **giảm failure do coordination**, không chỉ code nhanh hơn.`,
     ),
+    followUps: [
+      l('What did you do when the other team’s priority never moved?', 'Bạn làm gì khi ưu tiên của team kia không bao giờ dịch?'),
+      l('How do you keep a shared contract from rotting after the first demo?', 'Bạn giữ shared contract khỏi thối sau demo đầu thế nào?'),
+    ],
   }),
   q({
     id: 'onboarding-new-member',
@@ -710,6 +766,10 @@ The goal is not just to help them ship one ticket. It is to help them form the r
 
 Mục tiêu không chỉ là để họ ship 1 ticket. Mà là giúp họ hình thành mental model đúng càng sớm càng tốt.`,
     ),
+    followUps: [
+      l('What is a good first ticket on a Vue/Nuxt codebase?', 'Ticket đầu tốt trên codebase Vue/Nuxt là gì?'),
+      l('How do you know onboarding failed after two weeks?', 'Bạn biết onboarding thất bại sau hai tuần bằng dấu hiệu nào?'),
+    ],
   }),
   q({
     id: 'estimating-frontend-work',
@@ -742,6 +802,10 @@ Các chiều nên nhìn:
 
 Nếu task còn mơ hồ, hãy nói rõ điều đó và đề xuất spike hoặc estimate theo range. Estimate kiểu senior luôn có phần **vì sao con số này có thể sai**.`,
     ),
+    followUps: [
+      l('What usually makes a frontend estimate wrong after kickoff?', 'Điều gì thường làm estimate frontend sai sau kickoff?'),
+      l('How do you estimate a task that depends on an unwritten API?', 'Bạn estimate task phụ thuộc API chưa viết thế nào?'),
+    ],
   }),
   q({
     id: 'learning-react-as-vue-dev',
@@ -839,6 +903,10 @@ Với frontend, thường gồm:
 
 Senior engineer biết chỉnh quality bar theo context, nhưng không lấy lý do “gấp quá” để hợp thức hóa sự bất ổn có thể tránh được.`,
     ),
+    followUps: [
+      l('What is good enough for an internal admin vs a checkout?', 'Thế nào là đủ tốt cho admin nội bộ so với checkout?'),
+      l('Which quality item do you never skip on a Friday ship?', 'Mục quality nào bạn không bao giờ bỏ qua khi ship thứ Sáu?'),
+    ],
   }),
   q({
     id: 'when-to-say-no',
@@ -867,6 +935,10 @@ Ví dụ thường gặp:
 
 Một câu “không” kiểu senior thường đi kèm alternative: “Em không khuyến nghị làm X, nhưng em có thể hỗ trợ Y trong sprint này và Z ở bước tiếp theo.”`,
     ),
+    followUps: [
+      l('Give an example of a no that later proved correct.', 'Cho ví dụ một lần nói không sau đó đúng.'),
+      l('How do you say no to a founder without sounding blocked?', 'Bạn nói không với founder mà không nghe như blocked thế nào?'),
+    ],
   }),
   q({
     id: 'tradeoff-example',
@@ -897,6 +969,10 @@ Story trade-off tốt có thể là:
 
 Điều interviewer quan tâm không chỉ là lựa chọn cuối cùng, mà là bạn có giải thích được **context, option, risk và vì sao downside đã chọn là chấp nhận được** hay không.`,
     ),
+    followUps: [
+      l('What would make you reverse that trade-off today?', 'Điều gì khiến bạn đảo trade-off đó hôm nay?'),
+      l('How did you explain the losing option to the person who wanted it?', 'Bạn giải thích option thua cho người muốn nó thế nào?'),
+    ],
   }),
   q({
     id: 'proud-project',
@@ -925,6 +1001,10 @@ Lý do tốt thường là:
 
 Tránh chọn chỉ vì nó “to”. Nhiều khi story senior nhất lại là story bạn làm cho sự phức tạp trở nên đơn giản hơn với cả team.`,
     ),
+    followUps: [
+      l('What would you do differently if you started that project now?', 'Bạn sẽ làm khác gì nếu bắt đầu project đó hôm nay?'),
+      l('Who else deserves credit in that story, and for what?', 'Ai khác đáng credit trong story đó, và vì phần nào?'),
+    ],
   }),
   q({
     id: 'conflict-with-designer',
@@ -956,6 +1036,10 @@ Pattern thường là:
 
 Tránh biến nó thành “engineering vs product”. Cuộc trao đổi tốt nhất sẽ trở thành “làm sao đạt outcome đó với độ phức tạp và risk chấp nhận được?”`,
     ),
+    followUps: [
+      l('What if the designer is right and the complexity is justified?', 'Nếu designer đúng và độ phức tạp là đáng thì sao?'),
+      l('How do you keep the user outcome visible when the debate gets heated?', 'Bạn giữ user outcome lộ khi tranh cãi nóng thế nào?'),
+    ],
   }),
   q({
     id: 'career-growth-plan',
@@ -984,6 +1068,10 @@ Ví dụ các hướng phát triển:
 
 Câu trả lời nên nghe gắn với vài năm làm việc tới, chứ không phải một leadership script chung chung.`,
     ),
+    followUps: [
+      l('How does this role specifically help that growth plan?', 'Role này giúp growth plan đó cụ thể thế nào?'),
+      l('What are you not trying to become in the next two years?', 'Hai năm tới bạn không cố trở thành gì?'),
+    ],
   }),
   q({
     id: 'deal-with-production-pressure',
@@ -1013,6 +1101,10 @@ Interviewers want to hear that you can stay structured when the system is not.`,
 
 Interviewer muốn nghe rằng khi hệ thống rối, bạn vẫn giữ được cấu trúc suy nghĩ.`,
     ),
+    followUps: [
+      l('What do you communicate first in a production incident, and to whom?', 'Trong incident production bạn communicate gì trước, và với ai?'),
+      l('How do you stop yourself from shipping a speculative fix under pressure?', 'Bạn ngăn mình ship fix đoán mò dưới áp lực thế nào?'),
+    ],
   }),
   q({
     id: 'success-metrics-senior',
@@ -1046,5 +1138,9 @@ Em thường nhìn vào:
 
 Càng senior thì thành công của mình càng gắn với **team leverage và sức khỏe của hệ thống**, chứ không chỉ throughput cá nhân.`,
     ),
+    followUps: [
+      l('Which metric would you pick for your first 90 days here?', 'Metric nào bạn chọn cho 90 ngày đầu ở đây?'),
+      l('How do you notice the codebase is getting harder to evolve?', 'Bạn nhận ra codebase đang khó tiến hóa hơn thế nào?'),
+    ],
   }),
 ]

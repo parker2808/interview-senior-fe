@@ -1,57 +1,42 @@
 # Day 22 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+Design a dashboard that calls 15 APIs. What loads first, what fails independently, and do you need a BFF? What would you watch in production?
 
-- Build a small dashboard inside the Next app.
+## What you will produce
 
-## What this day reuses
+- Take one admin/dashboard idea and outline widgets, API dependencies, failure boundaries, and which data can arrive progressively.
+- State whether a BFF is justified or whether better API contracts are enough.
 
-- Reuse the customer data, shared UI, and the Week 3 cache/observability notes.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/react-next/app/(admin)/dashboard/`
-- `notes/day-22.md`
-- `algorithms/day-22/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-22
-```
-
-## Step-by-step
-
-1. Create a dashboard route with 3 mocked widgets.
-2. Give each widget clear loading/error/empty states.
-3. Write when a BFF would become necessary or why it still is not.
+- **Decision:** Separate architecture from UX behavior. Shell + critical widgets first; non-critical widgets isolate their own errors. BFF only if aggregation, auth, or chattiness is the real constraint.
+- **Constraint:** An outline, not a built dashboard. 45–60 minutes. Vue-first examples are fine.
+- **Failure mode:** A box diagram with no failure story. ‘We should have a BFF’ with no fan-out or contract pain. Observability as ‘we would add Sentry’.
+- **Measure:** The plan separates architecture from UX behavior and has a clear BFF vs direct-API opinion.
+- **Tradeoff:** Direct APIs keep ownership clear and multiply round-trips. A BFF hides backend seams and becomes another deploy + cache to reason about.
+- **Production gotcha:** A single loading gate for 15 calls. Correlation IDs that never make it to the browser. Widget retries that DDoS a dying endpoint.
 
 ## Done when
 
-- The dashboard route runs.
-- The widgets have clear states.
-- There is an architecture note.
+- The dashboard plan separates architecture from UX behavior.
+- There is a clear opinion on BFF vs direct APIs.
+- Algo is done and the rolling-DP idea is clear.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add partial failure for one widget.
+Name the three frontend signals you would alert on (JS errors, empty-widget rate, LCP of the shell).
 
-## Hints
+## Algorithm
 
-- Prioritize orchestration over fancy charts.
-
-## Algorithm task
-
-- **Problem:** House Robber
+- **Problem:** House Robber · DP 1D
 - **Constraints:**
 - 1 ≤ nums.length ≤ 100
-- **Hint:** start from the **DP 1D** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** dp[i] = max(dp[i-1], dp[i-2] + nums[i]).
 
 ```text
 algorithms/day-22/solution.ts
@@ -65,5 +50,5 @@ Open the full prompt: [day-22.md](../artifacts/algo/problems/day-22.md)
 ## Suggested commit
 
 ```text
-day-22: add next dashboard route
+day-22: dashboard outline with failure boundaries and BFF call
 ```

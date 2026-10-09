@@ -81,8 +81,10 @@ function openResource(path: string) {
       :lock-visible="navOpen"
     >
       <template #actions>
-        <NuxtLink
-          to="/docs?from=plan"
+        <a
+          href="/docs"
+          target="_blank"
+          rel="noopener noreferrer"
           class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface-elevated text-ink transition hover:border-accent hover:text-accent-ink"
           :aria-label="$t('plan.openDocs')"
           :title="$t('plan.openDocs')"
@@ -100,7 +102,7 @@ function openResource(path: string) {
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
           </svg>
-        </NuxtLink>
+        </a>
         <LocaleToggle />
         <ThemeToggle />
       </template>

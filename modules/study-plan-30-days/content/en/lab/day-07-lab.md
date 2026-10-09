@@ -1,58 +1,42 @@
 # Day 7 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+If you had two days on this screen, what would you ship now vs later? Tell one technical trade-off with product impact, not taste.
 
-- Build a static customer-flow shell inside the Vue app.
+## What you will produce
 
-## What this day reuses
+- Pick one screen from days 1-6 and produce a single-page redesign note: structure, state coverage, accessibility, and responsive behavior.
+- End by saying what you would ship now vs later if time is tight.
 
-- Reuse packages/ui and the AC notes from Days 1-6.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/vue-nuxt/pages/customers.vue`
-- `apps/vue-nuxt/components/`
-- `notes/day-07.md`
-- `algorithms/day-07/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm test:algo -- day-07
-```
-
-## Step-by-step
-
-1. Create a page shell with a title, filter bar, table area, and detail placeholder.
-2. Use the shared UI package instead of fresh custom UI.
-3. Note which boundaries should split into separate components later.
+- **Decision:** One page, one screen, ranked changes. Redesign is a priority list, not a wishlist or a new Vue app.
+- **Constraint:** Single-page note. Reuse days 1–6. No Capstone build, no customer-module scaffold.
+- **Failure mode:** A moodboard. ‘Make it modern.’ Shipping visual polish before state coverage or keyboard fixes.
+- **Measure:** You can speak one trade-off in under 2 minutes: decision, constraint, failure mode, how you would measure it.
+- **Tradeoff:** Ship state + keyboard fixes now; visual token cleanup later. Or the reverse if the interview company is a design-system team — say so.
+- **Production gotcha:** Mini redesigns die in review when they ignore the permission model or the real API shape. Keep one production constraint visible on the page.
 
 ## Done when
 
-- The Vue shell feels like a real flow.
-- There is a boundary note.
-- The repo structure is still clear.
+- Your redesign note shows priorities, not just a wishlist.
+- You can explain one trade-off out loud in under 2 minutes.
+- Timed algo review is complete.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Split the filter bar into its own component.
+Record yourself explaining the now-vs-later cut in 90 seconds.
 
-## Hints
-
-- This is not the data day yet.
-
-## Algorithm task
+## Algorithm
 
 - **Problem:** Week 1 timed review
 - **Constraints:**
-- Tự chấm: pass / partial / fail
-- **Hint:** start from the **Review** pattern and open the full prompt if you need a stronger nudge.
+- Self-score: pass / partial / fail
+- **Hint:** Name the pattern out loud before you type.
 
 ```text
 algorithms/day-07/solution.ts
@@ -66,5 +50,5 @@ Open the full prompt: [day-07.md](../artifacts/algo/problems/day-07.md)
 ## Suggested commit
 
 ```text
-day-07: create vue customer shell
+day-07: one-page redesign note with now-vs-later cut
 ```

@@ -1,57 +1,42 @@
 # Day 28 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Giữ được vòng 45–60 phút: intro, technical Q&A, và coding hoặc system design (autocomplete, recent project, phát triển design system) mà không reset không?
 
-- Đạt parity tương tự trên React/Next cho cùng slice.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Mô phỏng 45-60 phút: 10 phút intro/project, 20 phút technical/Q&A, 15-20 phút coding hoặc system design.
+- Tự chấm ngay sau buổi mock: câu mạnh nhất, câu yếu nhất và một vấn đề về timing.
 
-- Dùng cùng domain và slice Day 27.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/react-next/`
-- `notes/day-28.md`
-- `algorithms/day-28/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-28
-```
-
-## Từng bước
-
-1. Polish cùng slice trong Next app để so sánh trực tiếp với Vue.
-2. Đảm bảo loading/error/action path đủ demo.
-3. Viết 3 khác biệt DX/architecture giữa Vue và Next.
+- **Quyết định:** Một block không ngắt. Dùng timer. Chấm khi nhớ còn mới. Đây là mock, không phải spike parity React.
+- **Constraint:** 45–60 phút một lượt. Không dừng để mở docs. Không dựng Capstone Vue/React.
+- **Failure mode:** Ba drill ngắn có nghỉ. Chấm sáng hôm sau. Design autocomplete 40 phút rồi bỏ intro.
+- **Cách đo:** Mock đã chạy một block. Bài học đã ghi. Câu mạnh, câu yếu, một lỗi timing.
+- **Trade-off:** Coding hay system design ở đoạn cuối: chọn phía yếu hơn. Mock trong vùng an toàn giấu lỗ hổng.
+- **Gotcha production:** Đào sâu story Vue yêu thích rồi bỏ đói đoạn design. Nói ‘như hôm qua em đã nói’ — interviewer không có mặt.
 
 ## Tiêu chí xong
 
-- Slice Next demo được.
-- Có note so sánh Vue vs Next.
-- Có thể demo 2 app cạnh nhau.
+- Buổi mock đã diễn ra như một block liên tục.
+- Đã ghi lại bài học khi ký ức còn mới.
+- Đã xong bài algo cooldown.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm smoke test cho slice Next.
+Nếu có peer, đổi 15 phút Q&A. Nếu không, nghe recording 1.25× và đánh dấu filler.
 
-## Gợi ý
+## Thuật toán
 
-- Feature parity quan trọng hơn polish pixel.
-
-## Bài thuật toán
-
-- **Bài:** Cooldown Easy
+- **Bài:** Một bài cooldown dễ
 - **Ràng buộc:**
-- Optional nếu spike overtime
-- **Hint:** xem pattern **Cooldown** và mở đề đầy đủ nếu cần.
+- Giữ nhẹ sau buổi mock
+- **Hint:** Cooldown ngắn, không phải bỏ. Dùng để reset cách narrate.
 
 ```text
 algorithms/day-28/solution.ts
@@ -65,5 +50,5 @@ Mở đề đầy đủ: [day-28.md](../artifacts/algo/problems/day-28.md)
 ## Commit gợi ý
 
 ```text
-day-28: polish next parity slice
+day-28: mock round 1 score strongest weakest timing
 ```

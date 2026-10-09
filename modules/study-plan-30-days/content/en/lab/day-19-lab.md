@@ -1,57 +1,42 @@
 # Day 19 — Lab
 
-> **Timebox:** 45-60 minutes
+> Timebox 45-60 minutes. Interview drill, not a product build.
 
-Shared repo: [lab-repo.md](../lab-repo.md)
+## What they will ask
 
-## What you will build
+How does Next fetch, cache, and revalidate? SSR vs SSG vs ISR vs streaming — pick for marketing, admin list, and personalized detail. Map that to Nuxt `useAsyncData` / `useFetch`.
 
-- Practice server fetch, cache, and rendering trade-offs in Next.
+## What you will produce
 
-## What this day reuses
+- Write a comparison table: useAsyncData/useFetch in Nuxt vs server fetch / no-store / revalidate in Next.
+- For three page types (marketing, admin list, personalized detail), choose SSR/SSG/ISR/streaming and explain why.
 
-- Reuse the Day 18 App Router route.
+## How a senior works this
 
-## Folders to touch
-
-- `apps/react-next/app/(admin)/customers/`
-- `notes/day-19.md`
-- `algorithms/day-19/`
-
-## Starter / minimal commands
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-19
-```
-
-## Step-by-step
-
-1. Create 2 small paths: one with revalidate, one with no-store or client fetch.
-2. Write a stale-vs-fresh table for the same domain.
-3. Add a note about SSR/ISR/streaming choices.
+- **Decision:** Choose per page type, not per framework loyalty. Marketing → SSG/ISR. Admin list → SSR or no-store. Personalized detail → SSR + streaming the below-the-fold widgets.
+- **Constraint:** A comparison table in a note. No cache-experiment app today.
+- **Failure mode:** Reciting `revalidate: 60` with no idea who sees stale data. Treating ISR as ‘SSG but magic’. Streaming as a buzzword with no Suspense boundary.
+- **Measure:** Cache vs fresh is written by page type. Streaming and ISR sound like decisions, not slogans.
+- **Tradeoff:** Fresh admin data costs TTFB and origin load. ISR is cheap and can serve a deleted record for a minute. Say who is allowed to see stale.
+- **Production gotcha:** Next cache is not your CDN and not Pinia. `fetch` cache defaults have changed across versions — say which mental model you use (explicit `cache` / `next.revalidate`) and do not bluff a version you have not run.
 
 ## Done when
 
-- There are at least 2 fetch strategies.
-- The stale/fresh table is done.
-- The rendering trade-off is explainable.
+- Cache vs fresh data decisions are written by page type.
+- Streaming and ISR no longer sound like buzzwords only.
+- Algo is done and the DP recurrence is clear.
+- You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
 
-## Stretch goal
+## Stretch
 
-- Add a tag/path revalidation note.
+Add one row: tag-based revalidation vs time-based, and when you would pick each.
 
-## Hints
+## Algorithm
 
-- Mock responses are enough for reasoning.
-
-## Algorithm task
-
-- **Problem:** Climbing Stairs
+- **Problem:** Climbing Stairs · DP
 - **Constraints:**
 - 1 ≤ n ≤ 45
-- **Hint:** start from the **DP** pattern and open the full prompt if you need a stronger nudge.
+- **Hint:** dp[i] = dp[i-1] + dp[i-2] (Fibonacci).
 
 ```text
 algorithms/day-19/solution.ts
@@ -65,5 +50,5 @@ Open the full prompt: [day-19.md](../artifacts/algo/problems/day-19.md)
 ## Suggested commit
 
 ```text
-day-19: compare next cache strategies
+day-19: Next vs Nuxt fetch table and three rendering choices
 ```

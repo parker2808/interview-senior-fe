@@ -1,40 +1,60 @@
-# Day 28 — Hướng dẫn (30/10/2026)
+# Day 28 — Interview drill (30/10/2026)
 
-**Chủ đề:** Capstone React/Next spike  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Cùng slice với Day 27 bằng React + Next (ưu tiên Next nếu đã có lab).
+**Theme:** Mock round #1 / Mock round #1  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/react.md
-- documents/vi/nextjs.md
-- documents/vi/state-management-react.md
-- artifacts/capstone/spikes/react/README.md
+- **EN:** Run an integrated practice round before the final two days so the remaining gaps are visible.
+- **VI:** Chạy một vòng luyện tích hợp trước hai ngày cuối để những khoảng trống còn lại hiện ra rõ ràng.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** Can you hold a 45–60 minute loop: intro, technical Q&A, and either coding or system design (autocomplete, a recent project, design-system growth) without resetting?
+- **VI:** Giữ được vòng 45–60 phút: intro, technical Q&A, và coding hoặc system design (autocomplete, recent project, phát triển design system) mà không reset không?
 
-### 1) Capstone / FE craft
-Spike React/Next đạt parity feature Vue spike. README: khác biệt DX, bundling, data fetching.
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-28-react-spike.md`](./artifacts/day-28-react-spike.md)
+## Read
 
-### 2) React / Next lab
-Đây là ngày React chính: hoàn thiện slice + 1 test RTL smoke + note RSC/client boundary.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-28-lab.md`](./lab/day-28-lab.md)
+- `self-check-questions.md` — Self-check questions (opens in a new tab in the app / mở tab mới trong app)
+- `algorithms-track.md` — Algorithms track (opens in a new tab in the app / mở tab mới trong app)
+- `practical-questions` — Practical interview notes (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Cooldown Easy** (Easy) · pattern **Cooldown**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-28.md`](./artifacts/algo/problems/day-28.md)  
-→ Code + test trong lab repo: `algo/day-28/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `design-autocomplete` — Design an autocomplete box
+- `recent-project` — Recent project story
+- `design-system-strategy` — Design system growth strategy
 
-- [ ] Demo 2 spike cạnh nhau; nói được 3 khác biệt Vue vs React/Next.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Simulate 45-60 minutes: 10 minutes intro/project, 20 minutes technical/Q&A, 15-20 minutes coding or system design.
+  - **VI:** Mô phỏng 45-60 phút: 10 phút intro/project, 20 phút technical/Q&A, 15-20 phút coding hoặc system design.
+- **EN:** Score yourself immediately after: strongest answer, weakest answer, and one timing issue.
+  - **VI:** Tự chấm ngay sau buổi mock: câu mạnh nhất, câu yếu nhất và một vấn đề về timing.
+
+## Algorithm
+
+- **Problem:** Cooldown easy problem
+- Full prompt: [`artifacts/algo/problems/day-28.md`](./artifacts/algo/problems/day-28.md)
+- Code + test in the lab repo: `algorithms/day-28/`
+
+## Checkpoint
+
+- Buổi mock đã diễn ra như một block liên tục.
+  - EN: The mock happened as one uninterrupted block.
+- Đã ghi lại bài học khi ký ức còn mới.
+  - EN: You captured lessons while the memory was still fresh.
+- Đã xong bài algo cooldown.
+  - EN: Cooldown algo is complete.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-28-lab.md`](./lab/day-28-lab.md)

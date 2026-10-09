@@ -1,30 +1,43 @@
-# Project context — Senior FE 30-day prep
+# Project context — Senior FE 30-day interview prep
 
-## Goals
+Đây là **ôn phỏng vấn senior**, không phải dựng một Capstone từ Day 1.
 
-- Senior FE interviews: framework-agnostic craft + Capstone storytelling
-- Daily **React/Next** practice (Vue specialist gap-fill)
-- Daily **Algorithms** Easy→Medium with full problem statements in-plan
-- Code lives in a **companion lab repo**; this hub holds theory, worksheets, đề bài
+## Mục tiêu
 
-## Daily shape (90–120′)
+- Trả lời được câu hỏi frontend như người đã ship production: quyết định → constraint → failure mode → cách đo
+- Vue 3 + TypeScript là stack gốc; React / Next là lane so sánh, không bluff production depth
+- Mỗi ngày 1 bài thuật toán nhỏ để giữ nhịp live-coding
+- Code nằm ở **companion lab repo**; hub này giữ plan, docs, Q&A và đề
 
-1. **Lý thuyết** — đọc KB / brief (tab Hướng dẫn)
-2. **Thực hành** — Capstone craft + React/Next lab + Algo
-3. **Lab setup tab** — folder, lệnh, chỗ push
-4. **Checkpoint** — tick rồi mark day done
+## Hình dạng một ngày (90–120′)
 
-## Key links
+1. **Mục tiêu ngắn** trên Plan tab — biết hôm nay đang luyện quyết định gì
+2. **Docs** — mở knowledge base bằng **tab mới**, đọc đúng mục, không đọc hết giáo trình
+3. **Q&A** — mở bank bằng **tab mới**, trả lời thành tiếng rồi đối chiếu
+4. **Lab / hands-on** — một artifact đủ để kể lại trong phỏng vấn
+5. **1 algo** — đề trong plan, code trong lab repo
+6. **Checklist** — đủ thì dừng
+
+Nếu thiếu giờ: **docs + Q&A + 1 hands-on + 1 algo**.
+
+## Không làm gì
+
+- Không biến mỗi ngày thành tutorial cài npm
+- Không giả vờ React/Next là production stack chính
+- Không đọc hết `documents/` trong một ngày
+- Không dùng route in-app để mở docs/Q&A rồi lạc khỏi trang ngày
+
+## Link chính
 
 | Doc | Path |
 |---|---|
 | Plan | [30-day-study-plan.md](./30-day-study-plan.md) |
-| Lab repo guide | [lab-repo.md](./lab-repo.md) |
+| Daily index | [daily-index.md](./daily-index.md) |
+| Lab repo | [lab-repo.md](./lab-repo.md) |
 | Algorithms | [algorithms-track.md](./algorithms-track.md) |
-| React/Next | [react-next-track.md](./react-next-track.md) |
-| Project context | [project-context.md](./project-context.md) |
+| React / Next | [react-next-track.md](./react-next-track.md) |
 
-## Calendar
+## Lịch
 
 | | |
 |---|---|

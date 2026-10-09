@@ -1,38 +1,60 @@
-# Day 18 — Hướng dẫn (20/10/2026)
+# Day 18 — Interview drill (20/10/2026)
 
-**Chủ đề:** Race conditions + AbortController  
-**Timebox:** 90–120 phút  
-**Mục tiêu:** Biết stale response; cleanup useEffect đúng.
+**Theme:** App Router, layouts, loading, and errors / App Router, layout, loading và error  
+**Timebox:** 90-120 minutes
 
-## Lý thuyết — học gì hôm nay
+## Goal
 
-- documents/vi/javascript.md — abort/race
-- documents/vi/react.md — useEffect cleanup
+- **EN:** Understand the App Router as a system: routing, nested layouts, segment-level loading, and error boundaries.
+- **VI:** Hiểu App Router như một hệ thống: routing, nested layout, loading theo segment và error boundary.
 
-> Đọc có chọn lọc (20–25′). Không cần đọc cả file KB — chỉ đúng mục liên quan.
+## What they actually ask
 
-## Thực hành — làm gì hôm nay
+- **EN:** What problem do App Router and RSC actually solve? How do nested layouts and `loading.tsx` / `error.tsx` work per segment? When is a Client Component required?
+- **VI:** App Router và RSC giải bài toán gì? Nested layout và `loading.tsx` / `error.tsx` theo segment hoạt động ra sao? Khi nào bắt buộc Client Component?
 
-### 1) Capstone / FE craft
-Viết investigation log “search race”: reproduce, root cause, fix (ignore stale / abort / seq id).
+Train a spoken answer in this shape: **decision → constraint → failure mode → measure → tradeoff → production gotcha**.
 
-→ Làm trên tab **Worksheet**: [`artifacts/day-18-debug-stale-ui.md`](./artifacts/day-18-debug-stale-ui.md)
+## Read
 
-### 2) React / Next lab
-Lab: search-as-you-type với AbortController; verify request cũ bị abort khi gõ tiếp.
+Docs and plan links open in a **new tab** in the app. Stay on the day page. This is interview prep, not a curriculum to finish.
 
-→ Setup & path: tab **Lab setup** [`lab/day-18-lab.md`](./lab/day-18-lab.md)
+- `nextjs` — Next.js notes (opens in a new tab in the app / mở tab mới trong app)
+- `nuxt` — Nuxt notes (opens in a new tab in the app / mở tab mới trong app)
+- `react` — React notes (opens in a new tab in the app / mở tab mới trong app)
 
-### 3) Thuật toán
-**Number of Islands** (Medium) · pattern **Grid BFS/DFS**
+## Practice Q&A
 
-→ Đề đầy đủ: [`artifacts/algo/problems/day-18.md`](./artifacts/algo/problems/day-18.md)  
-→ Code + test trong lab repo: `algo/day-18/`
+Q&A links also open in a **new tab**. Answer out loud, then check the bank.
 
-## Checkpoint (tick trước khi mark Day done)
+- `next-app-router-rsc` — What App Router and RSC solve
+- `next-app-router-layouts-loading-error` — App Router layouts, routing, loading, and error states
+- `next-server-client-components` — Server vs Client Components
 
-- [ ] Có fix pattern ghi trong Capstone notes; lab abort hoạt động; Islands OK.
+## Hands-on
 
-## Links nhanh
+Interview drill — a note, snippet, or tiny spike. Not a product.
 
-- [Lab repo guide](./lab-repo.md) · [Algorithms track](./algorithms-track.md) · [React/Next track](./react-next-track.md)
+- **EN:** Sketch a tiny Next app tree with root layout, dashboard layout, one page, loading.tsx, and error.tsx.
+  - **VI:** Vẽ cây thư mục cho một app Next nhỏ với root layout, dashboard layout, một page, loading.tsx và error.tsx.
+- **EN:** For each file, write the Nuxt 3 idea it most closely matches.
+  - **VI:** Với mỗi file, ghi lại khái niệm Nuxt 3 gần nhất mà nó map tới.
+
+## Algorithm
+
+- **Problem:** Number of Islands · Grid BFS/DFS
+- Full prompt: [`artifacts/algo/problems/day-18.md`](./artifacts/algo/problems/day-18.md)
+- Code + test in the lab repo: `algorithms/day-18/`
+
+## Checkpoint
+
+- Giải thích được nested layout và loading theo segment mà không cần mở docs.
+  - EN: You can explain nested layouts and segment-level loading without looking up the docs.
+- Ranh giới Server vs Client rõ hơn mức “interactive thì client”.
+  - EN: The Server vs Client boundary is clearer than “interactive = client”.
+- Bài algo xong và thao tác duyệt grid vẫn ổn.
+  - EN: Algo is done and grid traversal still feels okay.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
+  - EN: You can explain one trade-off from today in under 2 minutes (decision → constraint → failure → measure).
+
+Lab: [`lab/day-18-lab.md`](./lab/day-18-lab.md)

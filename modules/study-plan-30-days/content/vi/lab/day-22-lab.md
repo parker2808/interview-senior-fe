@@ -1,57 +1,42 @@
 # Day 22 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Thiết kế dashboard gọi 15 API. Cái gì load trước, cái gì fail độc lập, và có cần BFF không? Bạn sẽ watch gì trên production?
 
-- Dựng một dashboard nhỏ trong Next app.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Chọn một ý tưởng admin/dashboard và vẽ ra widget, phụ thuộc API, boundary của lỗi và phần data nào có thể hiện dần.
+- Kết luận xem có cần BFF thật hay chỉ cần API contract tốt hơn là đủ.
 
-- Dùng customer data, shared UI và note cache/observability từ tuần 3.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/react-next/app/(admin)/dashboard/`
-- `notes/day-22.md`
-- `algorithms/day-22/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:next
-pnpm test:algo -- day-22
-```
-
-## Từng bước
-
-1. Tạo dashboard route với 3 widget mock.
-2. Cho mỗi widget loading/error/empty state rõ.
-3. Ghi note khi nào cần BFF hoặc chưa cần.
+- **Quyết định:** Tách kiến trúc khỏi hành vi UX. Shell + widget tối quan trọng trước; widget phụ cô lập lỗi của chúng. BFF chỉ khi aggregation, auth hoặc độ nói chuyện nhiều mới là constraint thật.
+- **Constraint:** Một outline, không phải dashboard dựng sẵn. 45–60 phút. Ví dụ Vue-first cũng được.
+- **Failure mode:** Sơ đồ hộp không có story lỗi. ‘Nên có BFF’ mà không có fan-out hay đau contract. Observability kiểu ‘sẽ thêm Sentry’.
+- **Cách đo:** Kế hoạch tách kiến trúc với hành vi UX và có quan điểm rõ BFF vs gọi API trực tiếp.
+- **Trade-off:** Gọi API trực tiếp thì ownership rõ và nhân số round-trip. BFF giấu đường nối backend và thành thêm một deploy + cache phải lý giải.
+- **Gotcha production:** Một cổng loading cho 15 call. Correlation ID không bao giờ tới browser. Widget retry DDoS một endpoint đang chết.
 
 ## Tiêu chí xong
 
-- Dashboard route chạy được.
-- Widget có state rõ.
-- Có architecture note.
+- Kế hoạch dashboard đã tách rõ kiến trúc với hành vi UX.
+- Đã có quan điểm rõ về BFF so với gọi API trực tiếp.
+- Bài algo xong và hiểu được ý tưởng DP cuộn.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm partial failure cho 1 widget.
+Gọi tên ba tín hiệu frontend bạn sẽ alert (lỗi JS, tỉ lệ widget rỗng, LCP của shell).
 
-## Gợi ý
+## Thuật toán
 
-- Ưu tiên orchestration hơn chart đẹp.
-
-## Bài thuật toán
-
-- **Bài:** House Robber
+- **Bài:** House Robber · DP 1D
 - **Ràng buộc:**
 - 1 ≤ nums.length ≤ 100
-- **Hint:** xem pattern **DP 1D** và mở đề đầy đủ nếu cần.
+- **Hint:** dp[i] = max(dp[i-1], dp[i-2] + nums[i]).
 
 ```text
 algorithms/day-22/solution.ts
@@ -65,5 +50,5 @@ Mở đề đầy đủ: [day-22.md](../artifacts/algo/problems/day-22.md)
 ## Commit gợi ý
 
 ```text
-day-22: add next dashboard route
+day-22: dashboard outline with failure boundaries and BFF call
 ```

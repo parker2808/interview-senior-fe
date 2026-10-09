@@ -1,59 +1,42 @@
 # Day 10 — Lab
 
-> **Timebox:** 45-60 phút
+> Timebox 45-60 phút. Drill phỏng vấn, không phải dựng sản phẩm.
 
-Repo dùng chung: [lab-repo.md](../lab-repo.md)
+## Họ sẽ hỏi gì
 
-## Hôm nay build gì
+Type một admin flow thật từ đầu tới cuối thế nào? Narrow ở đâu? Utility type nào mới chịu lực? Khi nào `unknown` hơn `any`?
 
-- Thêm model TypeScript và mock API typed cho flow Vue.
+## Bạn sẽ produce gì
 
-## Reuse từ ngày trước
+- Model một admin flow với DTO, UI model, mutation payload và error state type.
+- Ghi rõ chỗ nào cần strict và chỗ nào có thể cho phép linh hoạt hơn.
 
-- Dùng component tree + state map Day 8-9.
+## Senior làm thế nào
 
-## Folder nên sửa
-
-- `apps/vue-nuxt/types/`
-- `apps/vue-nuxt/server-mocks/`
-- `apps/vue-nuxt/composables/`
-- `algorithms/day-10/`
-
-## Lệnh tối thiểu
-
-```bash
-cd /path/to/senior-fe-lab
-pnpm dev:vue
-pnpm typecheck
-pnpm test:algo -- day-10
-```
-
-## Từng bước
-
-1. Định nghĩa Customer, CustomerStatus, FieldConfig, ApiError.
-2. Tạo composable mock trả list + detail typed.
-3. Nối typed data vào page shell.
+- **Quyết định:** Bốn type cho một flow: DTO (wire), UI model (view), mutation payload (ghi), error union (recoverable vs fatal). Map DTO→UI trong một hàm.
+- **Constraint:** Note type hoặc snippet `.ts`. Không dựng lại module Vue sẽ dùng các type đó.
+- **Failure mode:** Một type `Customer` dùng cho response, hàng table và body PUT. `any` cho error. Field optional nhưng sau mapper lại required.
+- **Cách đo:** Một model cụ thể cộng một guard hoặc utility type dùng có chủ đích (`Pick`, `Omit`, `Extract`, type predicate).
+- **Trade-off:** DTO strict bắt lệch backend và làm chậm iteration. Type lỏng ở biên cộng UI model chặt thường là thỏa hiệp production.
+- **Gotcha production:** Date string vs `Date`. ID nullable từ list endpoint. Error envelope đổi shape giữa 400 và 500. Zod/io-ts chỉ khi đã dùng — đừng bluff.
 
 ## Tiêu chí xong
 
-- Typecheck sạch.
-- Mock data render được.
-- Không còn any ở đường chính.
+- Đã có một type model cụ thể cho một flow thật.
+- Ít nhất một guard hoặc utility type được dùng có chủ đích.
+- Bài algo hoàn tất và pattern sliding window đã hiểu được.
+- Giải thích được một trade-off của hôm nay dưới 2 phút (quyết định → constraint → failure → cách đo).
 
-## Mục tiêu thêm
+## Stretch
 
-- Thêm discriminated union cho fetch state.
+Viết type guard cho error union và show chỗ narrow trong `if`.
 
-## Gợi ý
-
-- Mock API nhỏ là đủ.
-
-## Bài thuật toán
+## Thuật toán
 
 - **Bài:** Longest Substring Without Repeating Characters
 - **Ràng buộc:**
 - 0 ≤ s.length ≤ 5·10^4
-- **Hint:** xem pattern **Sliding window** và mở đề đầy đủ nếu cần.
+- **Hint:** Window [l,r] + Set/Map last index; khi trùng thì co l.
 
 ```text
 algorithms/day-10/solution.ts
@@ -67,5 +50,5 @@ Mở đề đầy đủ: [day-10.md](../artifacts/algo/problems/day-10.md)
 ## Commit gợi ý
 
 ```text
-day-10: add typed vue mock data
+day-10: model DTO UI mutation and error types for one flow
 ```
