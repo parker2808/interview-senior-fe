@@ -1,10 +1,10 @@
 # System Design
 
-Nguyên tắc thiết kế hệ thống Frontend và ra quyết định.
+Đây là vòng **system design frontend 45 phút**, không phải quiz folder structure. Interviewer xem bạn có **làm rõ product**, chọn **SPA vs SSR vs hybrid**, vẽ **hộp kèm failure mode**, và nói **cache invalidation** — phần khó.
+
+Chạy mọi câu trả lời theo **decision → constraint → failure mode → measure.** Vue 3 / Nuxt-first; Next.js khi họ hỏi hybrid React hoặc bạn cần so sánh RSC.
 
 ---
-
-## 16. System Design
 
 ## Table of Contents
 
@@ -14,346 +14,351 @@ Nguyên tắc thiết kế hệ thống Frontend và ra quyết định.
 
 3. [Thiết kế Component Library](#163-thiết-kế-component-library)
 
+4. [Ví dụ: Thiết kế dashboard lớn](#164-ví-dụ-thiết-kế-dashboard-lớn)
+
+5. [Ví dụ: Thiết kế hybrid marketing + app traffic cao](#165-ví-dụ-thiết-kế-hybrid-marketing--app-traffic-cao)
+
 ---
+
+## 16. System Design
 
 ### 16.1. Quyết định Kiến trúc Frontend
 
-**Câu hỏi:** Làm sao thiết kế architecture cho large-scale Vue app?
+**Họ thực sự hỏi gì**
 
-**Câu trả lời chuẩn Senior:**
+“Design frontend cho X.” Nếu bạn bắt đầu bằng `src/components/base/`, bạn đã lạc đề.
 
-#### **Folder Structure:**
+**Cách senior trả lời**
+
+- **Quyết định:** Dành **5–8 phút đầu cho constraint**, rồi chọn **mô hình render**, rồi vẽ **hộp runtime**, rồi API/state, rồi delivery (CDN, flag, observability). Folder structure là **chú thích cuối**.
+- **Ràng buộc:** Architecture là boundary, SLA, và chuyện gì xảy ra khi một hộp chết — không phải composable có nằm trong `/composables`.
+- **Failure mode:** Design platform microfrontend cho team 6 người; SSR dashboard đã auth không cần SEO; SPA không crawl được cho site content; bỏ quên auth, region, và realtime đến phút 40.
+- **Đo:** bạn nên **đề xuất** thước đo: LCP/INP, TTFB, error budget, p95 thời gian API của màn, thời gian rollback deploy, time-to-interactive trên máy mid-tier ở region tệ nhất.
+
+#### Cách chạy vòng phỏng vấn (nói to)
+
+Làm rõ, đừng giả định:
+
+| Hỏi | Vì sao nó đổi design |
+| --- | --- |
+| **User là ai?** Ops nội bộ vs consumer ẩn danh vs cả hai | Auth, SEO, mật độ UI, thanh a11y |
+| **SEO / URL share / OG?** | SSR/SSG vs SPA + prerender |
+| **Realtime?** Tick, collab, không | WS/SSE vs poll vs không (13.1) |
+| **Region / latency?** Một DC vs global | CDN, edge, API multi-region, i18n |
+| **Auth?** Cookie session, SSO, public | BFF, CSRF, SSR user payload |
+| **Scale?** Tool văn phòng 100 DAU vs marketing 10M | Caching, chi phí SSR, virtualization |
+| **Team / deploy?** Một team vs nhiều | Package vs MF (15.4) — default **một app** |
+| **Offline / mobile WebView?** | SW, payload size |
+| **SLA?** “Search vẫn chạy nếu recs chết” | Isolation, error boundary, timeout BFF |
+
+Rồi **nêu lựa chọn**:
+
+- **SPA (Vite + Vue):** tool đã login, nhu cầu SEO yếu, nhiều interaction. Hosting rẻ. Bạn vẫn cần **shell + CDN** và BFF.
+- **SSR (Nuxt):** first paint + SEO + personalization mỗi request. Tốn Node/Nitro, cache cẩn thận.
+- **SSG / ISR:** marketing, docs, catalog chịu stale N giây.
+- **Hybrid:** câu trả lời người lớn thường gặp — **route rules**. Marketing SSR/SSG, app CSR sau auth, một phần ISR. Nuxt `routeRules` / Next `revalidate` + client island.
+
+**Đừng** chọn microfrontend trừ khi họ ép constraint team/deploy (15.4).
+
+#### Vẽ hộp (whiteboard)
 
 ```
-src/
-├── assets/           # Static files
-├── components/       # Shared components
-│   ├── base/        # Base components (Button, Input)
-│   ├── layout/      # Layout components (Header, Footer)
-│   └── common/      # Common business components
-├── composables/      # Composition API logic
-├── modules/          # Feature modules
-│   ├── auth/
-│   │   ├── components/
-│   │   ├── composables/
-│   │   ├── stores/
-│   │   ├── types/
-│   │   └── routes.ts
-│   └── products/
-├── router/
-├── stores/
-├── types/
-├── utils/
-└── main.ts
+[User] → [CDN / edge] → [HTML: Nuxt/Nitro or static]
+                           ├─ hashed JS/CSS
+                           ├─ BFF (same origin /api)
+                           │    ├─ product APIs
+                           │    ├─ auth / session
+                           │    └─ aggregate DTOs
+                           ├─ WS/SSE gateway (optional)
+                           └─ flag service (short timeout, fail-safe)
+         Browser cache ← → Service worker (optional, mostly static)
 ```
 
-#### **Architecture Patterns:**
+Nói **một failure mỗi hộp**: CDN HTML stale, BFF timeout, WS drop, flag service down, JS 404 sau deploy. Nêu **kết quả user thấy** và mitigation (stale-while-revalidate, widget error, flag fail-closed, cache-bust HTML).
 
-| Pattern              | Khi nào dùng                        |
-| -------------------- | ----------------------------------- |
-| **Layered**          | Traditional apps, clear separation  |
-| **Feature-based**    | Large teams, domain-driven          |
-| **Micro-frontends**  | Multiple teams, independent deploy  |
-| **Component-driven** | Design systems, reusable components |
+#### Folder structure không phải architecture
 
-#### **Decision Framework:**
+Bạn có thể show cây feature-folder 10 dòng ([15.5](./architecture.md#155-kiến-trúc-thư-mục-và-feature)) để chứng minh đã ship Vue. Rồi pivot:
 
-**1. Team Size:**
+- **Boundary:** feature không deep-import nhau; BFF sở hữu aggregation; DS là package.
+- **SLA:** p95 checkout, dashboard “dùng được nếu một widget fail,” TTFB marketing.
+- **Failure mode:** session hết hạn (18.1), failover region, poison message trên WS, rollback deploy (14.1).
+- **Data:** server state (TanStack Query / `useAsyncData`) vs client UI state vs URL state.
 
-- **< 5 devs**: Đơn giản, flat structure
-- **5-20 devs**: Feature-based modules
-- **20+ devs**: Micro-frontends
+**Tradeoff**
 
-**2. Complexity:**
+- CPU SSR vs SEO/LCP.
+- BFF vs waterfall FE. BFF gần như luôn cho dashboard.
+- Edge rendering vs origin SSR (personalization vs cache hit ratio).
 
-- **Simple**: SPA, client-side routing
-- **Medium**: SSR với Nuxt
-- **Complex**: Micro-frontends, multi-tenant
+**Gotcha production**
 
-**3. Performance:**
+- Hydration mismatch từ `Date.now()`, `Math.random()`, flag, `window`.
+- SPA fallback nuốt 404 `/api`.
+- Pinia “global” cho server data lẽ ra phải là query cache.
 
-- **High traffic**: SSR, CDN, aggressive caching
-- **Interactive**: SPA, optimistic updates
-- **Data-heavy**: Virtualization, pagination
+**Câu hỏi nối**
+
+- Theming multi-tenant?
+- Trông thế nào trên Next App Router? (RSC cho content, client cho dashboard widget — cùng ý hybrid)
 
 ---
 
 ### 16.2. Chiến lược Caching
 
-**Câu trả lời chuẩn Senior:**
+**Họ thực sự hỏi gì**
 
-#### **Levels of Caching:**
+“Cache thế nào?” Junior liệt kê `localStorage`. Senior nói **tầng và invalidation**.
 
-```
-Browser Cache
-    ↓
-CDN Cache
-    ↓
-API Cache (Redis)
-    ↓
-Database
-```
+**Cách senior trả lời**
 
-#### **Frontend Caching Strategies:**
+- **Quyết định:** Cache ở **tầng ngoài cùng an toàn**: static hashed trên CDN mãi; HTML/JSON với TTL tường minh + **tag**; browser HTTP cache cho GET public; memory app / TanStack Query cho session; SW chỉ khi có câu chuyện purge. Không bao giờ cache HTML cá nhân hóa như `public`.
+- **Ràng buộc:** **Invalidation là phần khó.** Ai cũng set `max-age`. Ít người trả lời được “user đổi avatar — cache nào còn nói dối?”
+- **Failure mode:** `Cache-Control: public` trên `/api/me`; SW serve `index.html` một năm tuổi trỏ hashed file đã xóa; Redis TTL 24h trên giá; client cache không key theo tenant/user; “hard refresh” như strategy invalidation.
+- **Đo:** cache hit ratio ở CDN, **incident nội dung stale**, LCP vs TTL, origin QPS sau deploy, độ trễ purge.
 
-| Strategy           | Use Case             | TTL              |
-| ------------------ | -------------------- | ---------------- |
-| **Memory Cache**   | Current session data | Session lifetime |
-| **localStorage**   | User preferences     | Unlimited        |
-| **sessionStorage** | Temporary data       | Tab close        |
-| **IndexedDB**      | Large data, offline  | Unlimited        |
-| **Service Worker** | Static assets        | Until update     |
+#### Các tầng (browser → origin)
 
-#### **HTTP Caching Headers:**
+| Tầng | Thứ thuộc về đây | Invalidation |
+| --- | --- | --- |
+| **Browser HTTP** | `/_nuxt/x.js` hashed `immutable`; một số GET JSON | Đổi hash / URL; ETag cho thứ chưa hash |
+| **Memory / Query** | Data màn hình, 10s–vài phút | Query key + `invalidateQueries` lúc mutation |
+| **`localStorage` / IDB** | Preference, draft, offline queue — **không** auth token nếu tránh được | Version key; wipe lúc logout |
+| **CDN / edge** | HTML, JSON public, image | **Surrogate key / tag**, purge lúc publish, HTML TTL ngắn |
+| **App / Nitro cache** | SSR payload, BFF aggregate | Tag theo entity (`order:123`), request-scoped vs shared |
+| **API / Redis** | Join đắt | Cùng tag; đừng double-cache không có plan |
+| **Service worker** | Precache hashed asset; network-first cho HTML | Kill switch (`skipWaiting` + version `max`); không cache HTML mãi |
 
-```js
-// Cache static assets aggressively
-Cache-Control: public, max-age=31536000, immutable
+#### Pattern invalidation bạn nên nêu tên
 
-// Cache API with revalidation
-Cache-Control: private, max-age=3600, must-revalidate
+- **Hash filename** (content-addressed). Cache tốt nhất. Deploy = tên mới. HTML không được cache lâu bằng JS.
+- **TTL:** chấp nhận được cho “đủ tốt” (marketing ISR 60s). Sai cho inventory.
+- **ETag / `If-None-Match`:** polling rẻ (13.1).
+- **Surrogate-Key / cache tag:** “purge mọi thứ tagged `product:9`.” Đây là cách còn tỉnh. Nuxt/Nitro và CDN (Fastly, Cloudflare Cache Tags) hỗ trợ ý này.
+- **Event-driven purge:** lúc publish, BFF emit “invalidate `sku:9`.”
+- **Key cache:** `userId`, `locale`, `flag-bucket`, `currency`. Thiếu một key là **bug security**, không phải bug performance.
 
-// No cache for sensitive data
-Cache-Control: no-store, no-cache, must-revalidate
-```
+Nuxt cụ thể: key `useAsyncData`, `cachedEventHandler`, SWR (`stale-if-error` / `stale-while-revalidate`). Next: `revalidate`, `revalidateTag`. Cùng design.
 
-#### **Implementation:**
+**Tradeoff**
 
-**1. In-Memory Cache:**
+- Độ tươi vs chi phí origin vs độ phức tạp của tag.
+- SW offline vs tai tiếng “user kẹt app cũ.” Nhiều senior **không** gắn SW lên SaaS ship nhanh.
 
-```js
-// composables/useCache.js
-const cache = new Map();
+**Gotcha production**
 
-export function useCache(key, fetcher, ttl = 60000) {
-  const cached = cache.get(key);
+- `index.html` `max-age=31536000`.
+- CDN bỏ qua page `Set-Cookie` bị cache nhầm.
+- Query cache hiện order của user A cho user B sau login mà không đổi key (18.1).
+- Clock skew và `max-age`.
 
-  if (cached && Date.now() - cached.timestamp < ttl) {
-    return cached.data;
-  }
+**Câu hỏi nối**
 
-  const data = await fetcher();
-  cache.set(key, { data, timestamp: Date.now() });
-
-  return data;
-}
-
-// Usage
-const users = await useCache('users', () => fetchUsers(), 60000);
-```
-
-**2. Service Worker Cache:**
-
-```js
-// sw.js
-const CACHE_NAME = "v1";
-
-self.addEventListener("fetch", (e) => {
-  e.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.match(e.request).then((response) => {
-        // Stale-While-Revalidate
-        const fetchPromise = fetch(e.request).then((networkResponse) => {
-          cache.put(e.request, networkResponse.clone());
-          return networkResponse;
-        });
-
-        return response || fetchPromise;
-      });
-    })
-  );
-});
-```
-
-#### **Best Practices:**
-
-✅ **Cache invalidation**: Clear khi data thay đổi
-✅ **Cache keys**: Unique, predictable
-✅ **TTL appropriate**: Static > API > User-specific
-✅ **Versioning**: Bust cache khi deploy
+- Cache GraphQL thế nào? (persisted query + GET, hoặc phần lớn đừng cache ở CDN)
+- Cache gì trong service worker vs HTTP cache? (ưu tiên HTTP cho static)
 
 ---
 
 ### 16.3. Thiết kế Component Library
 
-**Câu hỏi:** Làm sao design một component library?
+**Họ thực sự hỏi gì**
 
-**Câu trả lời chuẩn Senior:**
+“Design component library cho 4 product team.”
 
-#### **Design Principles:**
+**Cách senior trả lời**
 
-| Principle        | Giải thích                   |
-| ---------------- | ---------------------------- |
-| **Composable**   | Components nhỏ, kết hợp được |
-| **Accessible**   | ARIA, keyboard navigation    |
-| **Customizable** | Props, slots, CSS variables  |
-| **Performant**   | Lazy load, tree-shakeable    |
-| **Type-safe**    | TypeScript definitions       |
+- **Quyết định:** Ship **token + primitive accessible + composition được document**, như **package có version** với peer `vue`. Ownership là một team (hoặc guild) với roadmap public. App consume pin semver; họ không fork button. Domain widget ở lại app (15.6).
+- **Ràng buộc:** DS là một **product**. A11y, theming, và compatibility quan trọng hơn Storybook đẹp.
+- **Failure mode:** Library bundle Vue; không token (hex trong mọi SFC); Icon button không phải `<button>` thật; major bump mỗi tháng; không owner nên tồn tại ba `Button.vue`; visual test chỉ Chrome desktop.
+- **Đo:** adoption, vi phạm a11y trên primitive, thời gian thêm variant, breakage mỗi release, byte bundle mỗi component import (tree-shake).
 
-#### **Structure:**
+**Token**
 
-```
-my-ui-library/
-├── src/
-│   ├── components/
-│   │   ├── Button/
-│   │   │   ├── Button.vue
-│   │   │   ├── Button.test.ts
-│   │   │   ├── Button.stories.ts
-│   │   │   └── index.ts
-│   │   └── Input/
-│   ├── composables/
-│   ├── types/
-│   ├── utils/
-│   └── index.ts
-├── docs/              # Documentation site
-├── package.json
-└── vite.config.ts
-```
+- Color, type, space, radius, elevation, motion — CSS variable, tên semantic (`--color-danger`), không `--blue-500` trong app.
+- Dark mode: swap token, đừng duplicate component. SSR: class trên `<html>` từ cookie để tránh flash.
 
-#### **Base Button Example:**
+**A11y (không thương lượng cho DS)**
 
-```vue
-<!-- Button.vue -->
-<script setup lang="ts">
-interface Props {
-  variant?: "primary" | "secondary" | "danger";
-  size?: "sm" | "md" | "lg";
-  disabled?: boolean;
-  loading?: boolean;
-}
+- Keyboard, focus order, name, focus trap `Dialog`, pattern listbox `Select`, contrast màu trên token.
+- Đừng ship widget `div` click. Primitive API nên làm **việc sai trở nên khó**.
+- Test: axe trên story, cộng keyboard e2e cho overlay widget.
 
-const props = withDefaults(defineProps<Props>(), {
-  variant: "primary",
-  size: "md",
-  disabled: false,
-  loading: false,
-});
+**Versioning và app consume**
 
-const emit = defineEmits<{
-  click: [event: MouseEvent];
-}>();
-</script>
+- Semver: breaking visual = **major** (padding làm lệch layout là breaking).
+- Map `exports`, entrypoint per-component, `sideEffects` cho CSS.
+- Changelog + codemod cho major.
+- Pin trong app; Renovate; đừng `workspace:*` mãi nếu lịch deploy tách.
 
-<template>
-  <button
-    :class="['btn', `btn--${variant}`, `btn--${size}`]"
-    :disabled="disabled || loading"
-    @click="emit('click', $event)"
-  >
-    <span v-if="loading" class="spinner" />
-    <slot />
-  </button>
-</template>
+**Ownership**
 
-<style scoped>
-.btn {
-  /* CSS variables for customization */
-  background: var(--btn-bg, #007bff);
-  color: var(--btn-color, white);
-  padding: var(--btn-padding, 0.5rem 1rem);
-  border-radius: var(--btn-radius, 4px);
-}
+- RFC cho primitive mới; request “app-specific” nhận **không** kèm composition thay thế.
+- Mô hình contribution: team PR được, DS owner merge.
 
-.btn--primary {
-  --btn-bg: #007bff;
-}
-.btn--secondary {
-  --btn-bg: #6c757d;
-}
-.btn--danger {
-  --btn-bg: #dc3545;
-}
-</style>
-```
+**Dark launching**
 
-#### **Publishing:**
+- `Button` v2 như `ButtonNext` hoặc flag trong package, migrate một app, rồi chuyển export. Cùng ý product flag (14.4) nhưng **cấp library**.
 
-```json
-{
-  "name": "@company/ui",
-  "version": "1.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./Button": {
-      "import": "./dist/Button.mjs",
-      "types": "./dist/Button.d.ts"
-    }
-  },
-  "files": ["dist"]
-}
-```
+**Tradeoff**
 
-#### **Documentation:**
+- Headless (logic) + app styling vs styled kit. Styled + token nhanh hơn cho một brand; headless nếu brand lệch mạnh.
+- Một package vs `@acme/ui-button`. Bắt đầu mono, tách nếu build đau.
 
-**Tools:**
+**Gotcha production**
 
-- **Storybook**: Interactive component demos
-- **VitePress**: Documentation site
-- **TSDoc**: API documentation
+- CSS order: utility app đánh nhau với DS.
+- Icon duplicate 3 cách.
+- Component chỉ sống trên Storybook, không chạy Nuxt SSR.
 
-**Example Storybook:**
+**Câu hỏi nối**
 
-```ts
-// Button.stories.ts
-import type { Meta, StoryObj } from "@storybook/vue3";
-import Button from "./Button.vue";
-
-const meta: Meta<typeof Button> = {
-  title: "Components/Button",
-  component: Button,
-  argTypes: {
-    variant: {
-      control: "select",
-      options: ["primary", "secondary", "danger"],
-    },
-  },
-};
-
-export default meta;
-type Story = StoryObj<typeof Button>;
-
-export const Primary: Story = {
-  args: {
-    variant: "primary",
-  },
-  render: (args) => ({
-    components: { Button },
-    setup() {
-      return { args };
-    },
-    template: '<Button v-bind="args">Click me</Button>',
-  }),
-};
-```
-
-#### **Versioning:**
-
-```
-MAJOR.MINOR.PATCH
-
-1.0.0 → 1.0.1  (Bug fix, backward compatible)
-1.0.0 → 1.1.0  (New feature, backward compatible)
-1.0.0 → 2.0.0  (Breaking changes)
-```
-
-#### **Best Practices:**
-
-✅ **Tree-shakeable**: Export individual components
-✅ **TypeScript**: Full type definitions
-✅ **Testing**: Unit + Visual regression
-✅ **Accessibility**: WCAG compliance
-✅ **Versioning**: Semantic versioning
-✅ **Changelog**: Document changes
-✅ **Peer dependencies**: Don't bundle Vue
+- Visual-regression test thế nào? (Playwright/Chromatic, token như fixture)
+- DS React + Vue? (share token, primitive native mỗi framework — đừng wrap Vue trong React)
 
 ---
 
-[← Quay lại Tổng quan](../README.md)
+### 16.4. Ví dụ: Thiết kế dashboard lớn
+
+**Họ thực sự hỏi gì**
+
+“Design analytics / ops dashboard.” Dùng đây như **dàn bài 45 phút đã làm.**
+
+**Cách senior trả lời**
+
+- **Quyết định:** **SPA hoặc Nuxt nặng CSR** (SEO thường không liên quan), **BFF aggregation**, **filter trong URL**, **virtualization** cho table/chart lớn, **permission trên server** với UI vừa ẩn **vừa** không gọi được, failure cấp widget, SSE/WS tùy chọn cho vài ô live — không phải socket cho cả JSON blob.
+- **Ràng buộc:** Power user, UI dày, 10k–100k hàng, 20 widget, API chậm, role chặt (xem PII vs không). First load phải hiện **cái gì đó**; widget chậm độc lập.
+- **Failure mode:** 12 waterfall từ browser; filter chỉ trong Pinia (không share, back button gãy); render 50k DOM row; giấu nút nhưng để endpoint; một chart throw whitescreen cả app; WS push thay cả table.
+- **Đo:** time-to-first-widget, p95 DTO dashboard BFF, INP khi scroll, query param đúng, tỷ lệ API 403 unauthorized, memory trên tab sống lâu.
+
+**Làm rõ (2 phút)**
+
+User nội bộ? Live mức nào? Bao nhiêu hàng? Export? Multi-region? Saved view?
+
+**Rendering**
+
+- Shell + nav SSR tùy chọn; widget client. `<ClientOnly>` cho chart.
+- Layout: lưới widget, mỗi cái `useAsyncData` / query riêng **hoặc** một BFF payload tách phía client nếu backend là một join đắt. Đừng mix không nghĩ: N widget × N API là bẫy kinh điển → **BFF `GET /bff/dashboard?…`**.
+
+**Filter trong URL**
+
+- `?from=&to=&status=&q=` là source of truth. Vue Router query ↔ helper typed. Back button chạy, link share được, SSR/bookmark chạy.
+- Đừng nhét secret vào URL. Có nhét **view state** không personal-private.
+- Debounce search; abort in-flight (13.5). Pagination cursor: thường **không** trong URL cho infinite grid; page index **có** cho table phân trang.
+
+**Virtualization**
+
+- Table: TanStack Virtual / `vue-virtual-scroller`. Chart: đừng vẽ 100k điểm — downsample trong BFF.
+- Đo số DOM node. Để ý INP: virtualization + cell nặng (sparkline) vẫn jank.
+
+**Permission**
+
+- Role từ session; **BFF lột field** (email, cost). FE ẩn cột vì UX, không bao giờ như security.
+- Widget catalog: user không xem billing thì BFF không trả billing, route không được register.
+- Audit: export đi qua endpoint có log.
+
+**Realtime**
+
+- Default: poll 30s + ETag, hoặc SSE cho “job xong / count badge.”
+- WS nếu nhiều người edit ops queue. Identity trên event; reconnect với cursor (13.1).
+
+**Failure isolation**
+
+- Error boundary **mỗi widget** (19.2). Header dashboard vẫn chạy.
+- Timeout mỗi widget; hiện last good data + marker stale.
+
+**Delivery**
+
+- Đã auth, không CDN cho JSON. Bundle: split chart vendor (12.3). Flag cho widget mới.
+
+**Tradeoff**
+
+- Một DTO BFF béo vs gọi widget song song với budget timeout gateway.
+- URL cho mọi filter vs saved view như server resource (URL giữ `?view=id`).
+
+**Gotcha production**
+
+- Timezone trong filter (`Z` vs local).
+- Thao tác “select all 40k hàng.”
+- Memory leak trong chart lib lúc widget unmount.
+
+**Câu hỏi nối**
+
+- Export CSV tập đã filter thế nào? (server-side, cùng query, không phải DOM)
+- Mobile? (thường surface khác, giảm)
+
+---
+
+### 16.5. Ví dụ: Thiết kế hybrid marketing + app traffic cao
+
+**Họ thực sự hỏi gì**
+
+“Có marketing site và product đã login. Một codebase hay hai? Nuxt hay Next?”
+
+**Cách senior trả lời**
+
+- **Quyết định:** **Một app Nuxt (hoặc Next) với hybrid route rules**, một design system, hai **runtime profile**: content public ở **edge/CDN** (SSG/ISR/SSR cache cao), app sau auth là **CSR/SSR-with-no-store**. Cùng repo, cùng token, **caching và auth khác**. Tách hai deploy chỉ khi org/lịch release đòi — không vì folder cảm giác khác.
+- **Ràng buộc:** Marketing quan tâm **CWV, SEO, OG, i18n, peak traffic (campaign)**. App quan tâm **auth, correctness, INP**. Một `Cache-Control` global sẽ hoặc **leak personalization** hoặc **giết performance SEO**.
+- **Failure mode:** SSR cả app đã login mỗi request lúc Super Bowl ad; cache HTML có tên user đã login; SPA cho blog (zero SEO); load `echarts` trên `/`; preview CMS draft công khai; cookie trên `.com` phá cache.
+- **Đo:** LCP/INP trên `/` từ RUM (không chỉ Lighthouse), TTFB cache hit ratio, CPU origin lúc campaign, auth error rate, crawl success, bundle của `/` vs `/app`.
+
+**Làm rõ**
+
+Traffic campaign gấp mấy? CMS? Personalization trên homepage (“Hi Ada”)? Region/language? App trên subdomain `app.` vs `/app`?
+
+**Hộp**
+
+```
+CDN (HTML cache keyed by path + locale, NOT cookie)
+  ├─ /          ISR/SSG  (CMS)     — long cache, purge on publish
+  ├─ /pricing   SSR/ISR            — A/B via edge bucket cookie carefully
+  ├─ /blog/:id  ISR + OG
+  └─ /app/**    no-store HTML      — shell + client app, BFF /api
+Auth cookies: host-only on app host, or path-scoped — never cacheable pages
+```
+
+**Nuxt vs Next (nói cả hai, chọn theo team)**
+
+- **Nuxt:** team Vue, `routeRules` (`isr`, `ssr: false` cho `/app/**`), Nitro BFF, payload `useAsyncData`. Tự nhiên nếu product là Vue.
+- **Next:** team React, App Router: RSC cho content, client component cho app, `revalidateTag` lúc CMS publish. Cùng hybrid.
+- Đừng chạy **hai framework** trừ khi hai org đã tồn tại. Token + DS vẫn share được.
+
+**Auth và caching**
+
+- Homepage ẩn danh: **không user cookie trên request** nếu muốn CDN hit. Personalization qua **edge fragment** hoặc client sau paint (“hydrate name”).
+- Login: bounce sang origin `/app`. Session cookie `Secure; HttpOnly; SameSite=Lax`.
+- CMS preview: route đã auth, `noindex`, không CDN.
+
+**Asset**
+
+- JS marketing: nhỏ. Split app chunk để `/` không tải dashboard (12.3).
+- Image: Nuxt Image / CDN, size tường minh (CLS).
+
+**Realtime / BFF**
+
+- Marketing: không. App: như 16.4 / 13.1.
+- Form (lead gen): POST tới BFF, idempotency, bot protection — UX vẫn do FE sở hữu.
+
+**Flag**
+
+- Campaign kill switch ở edge. Đừng chờ full rebuild nếu copy legal sai — CMS + purge.
+
+**Tradeoff**
+
+- Subdomain (`app.`) vs path (`/app`): subdomain đơn giản hóa **cách ly cookie/cache**; path đơn giản hóa absolute link và một CSP origin. Senior chọn isolation khi incident cache làm họ sợ.
+- ISR 30s vs on-demand purge: purge lúc publish tốt hơn; TTL là lưới an toàn.
+
+**Gotcha production**
+
+- `Vary: Cookie` trên `/` → cache hit ratio ~0.
+- OG image generate mỗi request làm chảy origin.
+- i18n URL duplicate không canonical.
+- App navigation dùng marketing layout (script analytics nặng trên mọi route `/app`).
+
+**Câu hỏi nối**
+
+- A/B hero mà không nổ cache thế nào? (edge bucket, `Vary` trên **một** cookie bucketing, hoặc experiment chỉ client cho element không SEO)
+- Rollback CMS publish xấu thế nào? (revision content trước + purge tag)
+
+---
+
+[← Back to Overview](../../README.md)

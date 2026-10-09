@@ -2,7 +2,7 @@
 
 > 🌍 **Language / Ngôn ngữ:** [🇻🇳 Tiếng Việt](./README.md) | [🇬🇧 English](./README-en.md)
 
-Tài liệu tổng hợp kiến thức chuẩn **Senior Frontend Developer**, tập trung vào **Vue 3**, **TypeScript**, và hệ sinh thái hiện đại.
+Tài liệu ôn **phỏng vấn Senior Frontend Developer** — **Vue 3**, **TypeScript**, và hệ sinh thái hiện đại. Viết cho **vòng live** (tradeoff, failure mode, cách ship production), không phải giáo trình.
 
 ---
 
@@ -43,7 +43,7 @@ Cách thêm UI module: [STRUCTURE.md](./STRUCTURE.md). Content track: [`modules/
 
 ## 📚 Cấu Trúc Tài Liệu
 
-Tài liệu được tổ chức thành 6 nhóm chính với 22 chủ đề, từ cơ bản đến nâng cao:
+Tài liệu được tổ chức thành 6 nhóm chính với 22 chủ đề. Đọc như coaching phỏng vấn, không phải khóa học: mỗi section là scenario, câu trả lời senior, tradeoff, gotcha production, và câu hỏi nối.
 
 ### I. Core Web Technologies
 
@@ -51,7 +51,7 @@ Tài liệu được tổ chức thành 6 nhóm chính với 22 chủ đề, t�
 
    1.1. [Core Concepts](./documents/vi/javascript.md#11-core-concepts): [High-order Array Functions](./documents/vi/javascript.md#111-high-order-array-functions), [Promise/Async-Await](./documents/vi/javascript.md#112-promise-vs-asyncawait), [Event Loop](./documents/vi/javascript.md#113-event-loop-microtask-macrotask), [var vs let vs const](./documents/vi/javascript.md#114-var-vs-let-vs-const)
 
-   1.2. [Advanced](./documents/vi/javascript.md#12-advanced-concepts): [Closure & Scope](./documents/vi/javascript.md#121-closure--scope), [Prototypes](./documents/vi/javascript.md#122-prototypes--inheritance), [`this`](./documents/vi/javascript.md#123-this-keyword), [ES6+](./documents/vi/javascript.md#124-es6-modern-features), [Memory Management](./documents/vi/javascript.md#125-memory-management--garbage-collection), [Hoisting](./documents/vi/javascript.md#126-hoisting--temporal-dead-zone)
+   1.2. [Advanced](./documents/vi/javascript.md#12-advanced-concepts): [Closure & Scope](./documents/vi/javascript.md#121-closure--scope), [Prototypes](./documents/vi/javascript.md#122-prototypes--inheritance), [`this`](./documents/vi/javascript.md#123-this-keyword), [ES6+](./documents/vi/javascript.md#124-es6-modern-features), [Memory Management](./documents/vi/javascript.md#125-memory-management--garbage-collection), [Hoisting](./documents/vi/javascript.md#126-hoisting--temporal-dead-zone), [AbortController & cancellation](./documents/vi/javascript.md#127-abortcontroller-concurrency-và-cancellation)
 
 2. **[TypeScript](./documents/vi/typescript.md)**
 
@@ -63,7 +63,7 @@ Tài liệu được tổ chức thành 6 nhóm chính với 22 chủ đề, t�
 
    3.1. [Flexbox](./documents/vi/css-layout.md#31-flexbox) vs [CSS Grid](./documents/vi/css-layout.md#32-css-grid)
 
-   3.2. [Responsive Design Strategy](./documents/vi/css-layout.md#34-responsive-design-strategy)
+   3.2. [Responsive Design Strategy](./documents/vi/css-layout.md#34-responsive-design-strategy), [stacking / overflow](./documents/vi/css-layout.md#35-stacking-context-và-z-index), [layout hiện đại](./documents/vi/css-layout.md#37-layout-hiện-đại-subgrid-has-cascade-layers)
 
 4. **[Browser & Web APIs](./documents/vi/web-apis.md)**
 
@@ -85,7 +85,7 @@ Tài liệu được tổ chức thành 6 nhóm chính với 22 chủ đề, t�
 
    6.1. [Nuxt vs Vue](./documents/vi/nuxt.md#62-nuxt-vs-vue)
 
-   6.2. [CSR vs SSR vs SSG vs SPA](./documents/vi/nuxt.md#63-csr-vs-ssr-vs-ssg-vs-spa)
+   6.2. [CSR vs SSR vs SSG vs SPA](./documents/vi/nuxt.md#63-csr-vs-ssr-vs-ssg-vs-spa), [data fetching](./documents/vi/nuxt.md#65-useasyncdata-vs-usefetch-vs-fetch), [hydration](./documents/vi/nuxt.md#68-hydration-clientonly-lazy-hydration)
 
 7. **[State Management](./documents/vi/state-management.md)**
 
@@ -131,7 +131,7 @@ Tài liệu được tổ chức thành 6 nhóm chính với 22 chủ đề, t�
 
     11.3. [E2E Testing (Playwright)](./documents/vi/testing.md#83-e2e-testing-với-playwright)
 
-    11.4. [Test Coverage](./documents/vi/testing.md#84-test-coverage), [TDD/BDD](./documents/vi/testing.md#85-phương-pháp-tddbdd)
+    11.4. [Test Coverage](./documents/vi/testing.md#84-test-coverage), [TDD/BDD](./documents/vi/testing.md#85-phương-pháp-tddbdd), [contract / visual / legacy](./documents/vi/testing.md#86-contract-test-visual-regression-và-vue-legacy)
 
 12. **[Performance & Optimization](./documents/vi/performance.md)** ⚡
 
@@ -219,7 +219,7 @@ Tài liệu được tổ chức thành 6 nhóm chính với 22 chủ đề, t�
 
     21.5. [Giải quyết Xung đột Git](./documents/vi/practical-questions.md#185-giải-quyết-xung-đột-git)
 
-    21.6. [Gộp Commits](./documents/vi/practical-questions.md#186-gộp-commits)
+    21.6. [Gộp Commits](./documents/vi/practical-questions.md#186-gộp-commits), [incident](./documents/vi/practical-questions.md#187-xử-lý-production-incident-với-tư-cách-frontend), [onboard tuần 1](./documents/vi/practical-questions.md#188-onboard-codebase-vue-lạ-trong-tuần-đầu)
 
 22. **[Monitoring & Error Handling](./documents/vi/monitoring.md)** 📊
 
@@ -240,7 +240,7 @@ Tài liệu được tổ chức thành 6 nhóm chính với 22 chủ đề, t�
 - **Tổng số Sections**: 100+ chủ đề con
 - **Code Examples**: 200+ ví dụ thực tế
 - **Bảng So sánh**: 20+ ma trận ra quyết định
-- **Cấp độ**: Senior Frontend Developer
+- **Cấp độ**: Senior Frontend Developer (judgment khi phỏng vấn, không phải giáo trình)
 
 ---
 
@@ -302,5 +302,5 @@ Nếu tài liệu này hữu ích cho bạn, hãy:
 
 **Chúc bạn thành công trong phỏng vấn Senior Frontend Developer! 🚀**
 
-_Cập nhật lần cuối: Tháng 9/2026_
-_Phiên bản: 3.2 (State Management React — 6 nhóm chính, 22 chủ đề)_
+_Cập nhật lần cuối: Tháng 10/2026_
+_Phiên bản: 3.3 (Viết lại cho phỏng vấn senior — cùng 22 chủ đề, judgment production)_

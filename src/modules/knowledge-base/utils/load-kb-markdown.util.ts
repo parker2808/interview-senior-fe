@@ -1,5 +1,4 @@
 const kbModules = import.meta.glob('@kb/**/*.md', {
-  query: '?raw',
   import: 'default',
   eager: true,
 })

@@ -2,6 +2,16 @@
 
 Interview **knowledge base** used by every study / practice module and the Nuxt Knowledge Base UI (`/docs`).
 
+These notes are written for **senior frontend interview prep**, not as a tutorial or university curriculum. Interviewers at this level assume the API is already known. Each section is shaped for a live round:
+
+1. **What they actually ask** — a production scenario, not “what is X”
+2. **How a senior answers** — decision → constraint → failure mode → how you measure
+3. **Tradeoffs** — when you would *not* use the thing
+4. **Production gotchas** — races, hydration, leaks, auth, cache, a11y
+5. **Follow-ups** — drills that separate mid-level from senior
+
+**English (`en/`) is the source of truth.** Vietnamese (`vi/`) matches the same structure and judgment.
+
 | Path | Language |
 |---|---|
 | [`en/`](./en/) | English topic notes |

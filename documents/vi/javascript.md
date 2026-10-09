@@ -1,6 +1,8 @@
 # JavaScript
 
-Tổng hợp kiến thức JavaScript từ core đến advanced cho Senior Frontend Developer.
+Phỏng vấn senior gần như không bao giờ bắt bạn thuộc lòng `map` vs `filter`. Họ xem bạn có giữ UI Vue/React đúng khi có race, mutation, và áp lực memory không: bảng 100k rows, dashboard waterfall bốn API, leak chỉ lộ sau một giờ trong DevTools. Thước đo là judgment — mutate cái gì, cancel cái gì, đo cái gì — không phải thuộc snippet giáo trình.
+
+Coi mỗi câu hỏi JS như một lần debug production: nêu constraint (main thread, identity, GC), failure mode (UI stale, freeze, leak), và cách chứng minh fix (Profiler, Performance panel, test fail trước).
 
 ---
 
@@ -30,6 +32,8 @@ Tổng hợp kiến thức JavaScript từ core đến advanced cho Senior Front
 
    2.6. [Hoisting & Temporal Dead Zone](#126-hoisting--temporal-dead-zone)
 
+   2.7. [AbortController, Concurrency và Cancellation](#127-abortcontroller-concurrency-và-cancellation)
+
 ---
 
 ## I. Core Web Technologies
@@ -40,225 +44,200 @@ Tổng hợp kiến thức JavaScript từ core đến advanced cho Senior Front
 
 #### 1.1.1. High-order Array Functions
 
-Các hàm mảng hiện đại đều **không mutate** mảng gốc (trừ nhóm mutate). Dưới đây là phiên bản rút gọn – dễ nhớ – chuẩn Senior.
+**Họ thực sự hỏi gì**
 
-#### **Không làm thay đổi mảng gốc**
+Bạn sở hữu một bảng Vue 3 (hoặc list React) bind vào `rows`. Đồng nghiệp viết `rows.sort(byName).filter(isActive).map(toView)`. Thứ tự gốc mất, child nhận `rows` qua prop mutate parent, page giật trên 100k records. Vì sao, và bạn ship cái gì thay thế?
 
-- **map** → tạo mảng mới bằng transform phần tử.
-- **filter** → lọc theo điều kiện.
-- **reduce** → gom thành 1 giá trị.
-- **slice** → cắt, không mutate.
-- **concat** → nối mảng.
-- **flat** → làm phẳng.
-- **find / findIndex** → tìm phần tử.
-- **every / some** → kiểm tra.
-- **toReversed / toSorted / toSpliced (ES2023)** → phiên bản immutable.
+**Cách senior trả lời**
 
-#### **Làm thay đổi mảng gốc (cẩn trọng khi dùng)**
+Quyết định trước: **mutate reactive source bạn sở hữu; copy khi mảng shared, là prop, hoặc là view suy ra.** Proxy Vue 3 đã observe thay đổi index/length, nên `push`/`splice` in-place trên state bạn sở hữu thường rẻ và đúng hơn. React so identity, nên `sort` in-place rồi `setRows(rows)` là no-op im lặng. Failure mode là aliasing tình cờ: `sort`, `reverse`, và `splice` mutate rồi trả cùng reference, nên “tôi đã sort một bản copy” là nói dối. Đo bằng Profiler (copy thừa vs miss update) và unit test assert thứ tự mảng nguồn sau khi render view suy ra. List lớn: một pass (`for…of` hoặc `reduce` fold thật) hơn `filter + map + sort` cấp phát ba mảng; virtualize DOM, đừng micro-optimize fold cho đến khi flame chart nói fold mới là vấn đề.
 
-- **push / pop / shift / unshift** → thêm/xóa đầu/cuối.
-- **splice** → thêm/xóa giữa mảng.
-- **sort / reverse** → mutate trực tiếp.
-- **fill / copyWithin** → ghi đè dữ liệu.
+**Tradeoff**
 
-**Ghi nhớ nhanh:**
+- **Đừng** clone 100k rows mỗi phím “cho immutability.” Đó là thói quen React áp vào Vue, và sẽ thua update in-place cộng `v-for` có key.
+- **Đừng** dùng `reduce` như `for` khoe. Nếu accumulator là object bạn mutate qua nhiều nhánh, `for…of` đặt tên rõ hơn khi review và dễ breakpoint.
+- `toSorted` / `toReversed` / `toSpliced` là default đúng cho view **suy ra**. Không phải lý do copy trong Pinia action nóng đã sở hữu mảng.
+- Chain `filter+map` là documentation tốt khi dataset nhỏ và pipeline *chính là* spec. Một pass khi bạn cần count, group, và list mà không đi data ba lần.
 
-- Nếu tên bắt đầu bằng **toX** → immutable.
-- Nếu là phương thức "ngắn, phổ thông" (push/pop/splice/sort) → mutate.
-- Với FE hiện đại (Vue/React), ưu tiên **immutable** để tránh re-render thừa.
+**Gotcha production**
+
+- Default `sort()` là lexical: `[10, 2, 1].sort()` → `[1, 10, 2]`. Luôn truyền comparator, và đừng sort trong `computed` mà mutate dependency.
+- Sparse array: `map`/`filter`/`forEach` bỏ lỗ; `[...arr]` và `Array.from` materialize `undefined`; `for…of` yield `undefined` cho lỗ. Payload API có index bị xóa cắn code CSV/export.
+- Vue: mutate mảng **prop** (hoặc Pinia `readonly()`) hoặc warn hoặc desync parent im lặng. Prop thuộc caller; emit hoặc copy.
+- React: `list.sort()` mutate state array trong cùng fiber render — concurrent feature biến đây thành heisenbug thật, không phải nit style.
+- `find` vs `filter[0]`: `find` dừng sớm; cả hai sai nếu predicate match nhầm row vì so `==` trên branded id.
+
+```ts
+// View suy ra: copy. Source of truth: để yên.
+const visible = computed(() =>
+  rows.value.toSorted((a, b) => a.name.localeCompare(b.name)).filter((r) => r.active)
+)
+
+// One-pass: 100k rows vừa lookup vừa đếm — không phải bài reduce.
+function indexById(rows: readonly Row[]) {
+  const byId = new Map<string, Row>()
+  let active = 0
+  for (const row of rows) {
+    byId.set(row.id, row)
+    if (row.active) active++
+  }
+  return { byId, active }
+}
+```
+
+**Câu hỏi nối**
+
+1. `const next = items.sort(cmp)` — `next === items` là gì? Vue vs React làm gì với assignment đó?
+2. Vì sao `toSorted` trong `computed` an toàn, còn `sort` trong `computed` là bug state?
+3. Khi nào virtualize (`content-visibility`, TanStack Virtual, `vue-virtual-scroller`) thay vì array method nhanh hơn?
+4. Sort list 100k mà không block input thế nào? (chunk, worker, hoặc sort trên server)
+5. Sparse vs empty: compact lỗ trước khi PATCH “removed indexes” ra sao?
+6. Vì sao `rows.filter(Boolean)` có thể drop cell `0` / `''` hợp lệ trong UI spreadsheet?
 
 ---
 
 #### 1.1.2. Promise vs Async/Await
 
-#### **Promise**
+**Họ thực sự hỏi gì**
 
-- Đại diện cho một giá trị _trong tương lai_ (pending → fulfilled/rejected).
-- Dễ bị chaining `.then().then()` → khó đọc nếu logic dài.
-- Các utility quan trọng:
-  - `Promise.all()` → chạy song song, fail nếu 1 cái fail.
-  - `Promise.race()` → trả về kết quả nhanh nhất.
-  - `Promise.allSettled()` → không fail cả nhóm.
-  - `Promise.any()` → lấy promise thành công đầu tiên.
+Dashboard `setup()` làm `const user = await getUser(); const posts = await getPosts(user.id); const flags = await getFlags()`. Flags không phụ thuộc user. Một trong ba 500 và page treo spinner. Walk through parallelism, failure policy, cancellation, và retry.
 
-#### **Async/Await**
+**Cách senior trả lời**
 
-- Syntactic sugar của Promise.
-- Giúp code trông như đồng bộ nhưng thực chất chạy bất đồng bộ.
-- `await` chỉ block trong phạm vi hàm async, **không** block event loop.
-- Dễ kết hợp try/catch để xử lý lỗi.
+`async/await` là syntax control-flow; quyết định là **combinator nào và abort signal nào**. Call độc lập đi `Promise.all` (fail-fast: một reject hủy cả nhóm — đúng nếu page không render thiếu cái nào). UI hiện được partial (flags optional) thì `allSettled` hoặc tách critical path khỏi optional. Waterfall chỉ khi data phụ thuộc thật (`posts` cần `user.id`). Constraint: `await` yield sang microtask queue — **không** block event loop, nhưng chuỗi await đã resolve vẫn đói paint. Failure mode: `catch { console.error }` rỗng trả `undefined` rồi vẽ empty state trông như “không có data.” Đo: waterfall Network panel (initiator chain), TTFB vs compute, integration test reject một nhánh rồi assert error user thấy — không phải một dòng log.
 
-**Ví dụ chuẩn Senior:**
+**Tradeoff**
+
+- `Promise.all` là búa sai khi 9/10 widget render được thiếu cái thứ 10. Fail-fast lúc đó UX tệ hơn error từng widget.
+- `allSettled` giấu outage hệ thống trừ khi bạn vẫn đếm reject và bật banner page-level.
+- `race` cho timeout, không phải “CDN nào nhanh hơn” mà không cancel thằng thua (bạn double-charge backend).
+- `any` bỏ qua fail sớm; vẫn cần timeout kẻo đợi reject pending cuối.
+- Đừng `await` trong loop id độc lập — waterfall tự rước. Đừng `Promise.all` 10k id — bound concurrency (pool 4–8).
+
+**Gotcha production**
+
+- `await` trong `forEach` không wait. Dùng `for…of` hoặc `Promise.all` trên mảng map. Vẫn lọt PR.
+- Retry kiểu `catch { return fetch() }` nhân đôi POST không idempotent. Backoff chỉ GET/PUT-idempotent, 429/503, không bao giờ 400/401/403.
+- SSR (Nuxt): promise reject sau unmount, hoặc client fetch race payload, hydrate empty rồi flash. Gắn fetch vào `AbortSignal` từ `onUnmounted` / `effectScope`.
+- `Promise.all` fetch không abort: reject đầu tiên throw, cái còn lại vẫn xong rồi `setState` trên component unmounted (React) hoặc ghi vào scope đã teardown (Vue).
+- Swallow: `catch (e) { console.error(e) }` không rethrow, không path user — dashboard “chạy trên máy tôi.”
 
 ```ts
-async function loadData() {
+async function loadDashboard(userId: string, signal: AbortSignal) {
   try {
-    const [user, posts] = await Promise.all([api.getUser(), api.getPosts()]);
-    return { user, posts };
+    const [user, flags] = await Promise.all([
+      api.getUser(userId, { signal }),
+      api.getFlags({ signal }),
+    ])
+    const posts = await api.getPosts(user.id, { signal }) // dependency thật
+    return { user, flags, posts }
   } catch (err) {
-    console.error("Load failed:", err);
+    if (signal.aborted) return null
+    reportError(err) // Sentry / otel — rồi fail UI contract
+    throw err
   }
 }
 ```
 
-**Tóm gọn:**
+**Câu hỏi nối**
 
-- Promise cho khả năng xử lý bất đồng bộ linh hoạt.
-- Async/await giúp code dễ đọc, nhưng vẫn dựa trên Promise.
+1. `all` vs `allSettled` vs `all` + `try` từng call — cái nào khớp widget dashboard vs trang checkout?
+2. Bound concurrency 6 không cần lib thế nào? Abort trong pool đó ra sao?
+3. Vì sao retry-on-error payment intent bị double-charge? Header hoặc idempotency key nào bạn muốn?
+4. `await Promise.resolve()` chạy trước hay sau `queueMicrotask`? Việc đó liên quan Vue `nextTick` thế nào?
+5. Test `getFlags` fail mà không fail `getUser` ra sao?
+6. React 18 `use` / `Suspense` đổi câu trả lời này thế nào so với Vue `async setup` + `<Suspense>`?
 
 ---
 
 #### 1.1.3. Event Loop, Microtask, Macrotask
 
-**Câu trả lời chuẩn Senior:**
+**Họ thực sự hỏi gì**
 
-JavaScript chạy đơn luồng (single-threaded) nên cần **Event Loop** để điều phối việc thực thi. Khi call stack trống, event loop sẽ lấy công việc từ các hàng đợi:
+Có thể mở bằng thứ tự `console.log` / `Promise` / `setTimeout`. Đó là warmup 20 giây. Câu thật: bạn set ref, đọc ngay `el.offsetHeight`, nhận giá trị cũ; hoặc page freeze khi `await` trong vòng parse chặt. Vue `nextTick`, Promise, và `setTimeout` khác nhau thế nào, và vì sao UI không paint?
 
-- **Microtask queue**: chứa Promise callbacks, queueMicrotask, MutationObserver. _Được ưu tiên chạy trước mọi loại task khác._
-- **Macrotask queue**: setTimeout, setInterval, setImmediate, I/O, DOM events.
+**Cách senior trả lời**
 
-**Event Loop thực thi theo chu trình:**
+Call stack chạy đến trống. Rồi **toàn bộ** microtask (Promise job, `queueMicrotask`, MutationObserver, scheduler flush của Vue) chạy trước khi browser paint hoặc lấy macrotask (`setTimeout`, I/O, input). Vue 3 queue DOM update như microtask; `nextTick` đợi flush đó, nên đây là API “đọc layout sau khi ref commit.” `Promise.resolve().then` cũng là microtask — có thể chạy *trước* job Vue nếu queue trước, nên không phải substitute. `setTimeout(0)` là macrotask: bạn đã yield cho paint và input — đúng để cắt long task, không phải để đo node vừa update. Failure mode: microtask starvation — chuỗi `await` trên promise đã resolve, hoặc `Promise.then` lập tức queue cái nữa, không bao giờ về renderer. Đo: Performance panel (long task >50ms, INP), và “total blocking time,” không phải output puzzle.
 
-1. Thực thi code đồng bộ vào call stack.
-2. Khi stack rỗng → xử lý _tất cả_ microtask trước.
-3. Sau khi microtask rỗng → lấy một macrotask và chạy.
-4. Lặp lại.
+**Tradeoff**
 
-`async/await` thực chất chỉ là syntactic sugar của Promise:
+- Đừng `setTimeout(0)` để “fix” timing Vue. Flake trên máy chậm và đánh nhau với layout.
+- Đừng `queueMicrotask` đệ quy xử queue khổng lồ; nhìn concurrent mà vẫn freeze paint. Chunk bằng `scheduler.yield()`, `await new Promise(r => setTimeout(r))`, hoặc `requestAnimationFrame` tùy bạn cần input hay một frame.
+- `nextTick` không phải “sau paint.” Cần đợi CSS transition start thì `rAF` (hai lần nếu cần sau layout).
+- Puzzle lồng `Promise` trong `setTimeout` trong `Promise` chỉ chứng minh bạn thuộc queue. 20 giây pivot sang long task.
 
-- `await` tạm dừng việc thực thi hàm async.
-- Giá trị trả về được wrap thành một Promise.
-- Phần phía sau `await` được đưa vào microtask queue nên vẫn theo đúng nguyên tắc ưu tiên microtask.
+**Gotcha production**
+
+- Vue: mutate rồi đọc DOM cùng tick là classic “sao height = 0?” Prefer `nextTick` rồi đọc, hoặc flush `flush: 'sync'` chỉ khi bạn chịu cost.
+- React 18: `flushSync` là búa tương đương; dùng trong list là phá INP.
+- `watch` `await` rồi ghi ref khác có thể loop microtask qua tick; cap hoặc so previous value.
+- `alert` / sync XHR / `JSON.parse` JSON khổng lồ trên main thread là freeze kiểu macrotask. Parse trong worker hoặc stream.
+- Hydration: microtask ghi DOM trước khi Vue/React hydrate sẽ desync và throw hydration mismatch.
+
+```ts
+rows.value = next
+
+await nextTick()          // Vue đã patch. Layout có thể vẫn dirty.
+const h = el.value?.offsetHeight  // read này force layout — batch các read
+
+// Cắt parse 200ms để input chạy. Không phải vòng microtask.
+async function parseChunks(chunks: string[]) {
+  for (const chunk of chunks) {
+    consume(JSON.parse(chunk))
+    await new Promise((r) => setTimeout(r, 0))
+  }
+}
+```
+
+**Câu hỏi nối**
+
+1. Thứ tự: `nextTick(cb)` vs `Promise.resolve().then(cb)` vs `setTimeout(cb, 0)` sau khi ghi ref. Ai thấy DOM mới?
+2. Microtask starvation là gì, hiện trên Performance trace ra sao?
+3. Vì sao `watchEffect` + `await` miss dependency hoặc loop?
+4. Đổi thế nào với Vue `flush: 'post'` vs `'sync'`?
+5. INP: yield ở đâu trong paste-handler parse CSV 5MB?
+6. Vì sao `MutationObserver` là nguồn microtask, và khi nào bất ngờ trong contenteditable?
 
 ---
 
 #### 1.1.4. var vs let vs const
 
-**Câu trả lời chuẩn Senior:**
+**Họ thực sự hỏi gì**
 
-| Đặc điểm          | `var`                          | `let`               | `const`         |
-| ----------------- | ------------------------------ | ------------------- | --------------- |
-| **Scope**         | Function-scoped                | Block-scoped        | Block-scoped    |
-| **Hoisting**      | ✅ Hoisted, init = `undefined` | ✅ Hoisted, TDZ     | ✅ Hoisted, TDZ |
-| **Re-declare**    | ✅ Cho phép                    | ❌ Error            | ❌ Error        |
-| **Re-assign**     | ✅ Cho phép                    | ✅ Cho phép         | ❌ Error        |
-| **Global Object** | ✅ Thêm vào `window`           | ❌ Không thêm       | ❌ Không thêm   |
-| **Best Practice** | ❌ Tránh dùng                  | ✅ Khi cần reassign | ✅✅ Mặc định   |
+Họ muốn bảng 20 giây, rồi bạn có biết `const` không freeze object, TDZ tồn tại trong ES module, và `await` trong `for (var …)` là bug khác puzzle `setTimeout` cổ điển.
 
-#### **Scope Differences**
+**Cách senior trả lời**
 
-```js
-// var: function-scoped
-function testVar() {
-  if (true) {
-    var x = 10;
-  }
-  console.log(x); // 10 - accessible outside block
-}
+| | `var` | `let` | `const` |
+| --- | --- | --- | --- |
+| Scope | function | block | block |
+| TDZ | không (init `undefined`) | có | có |
+| Rebind | có | có | không |
+| Bind `window` (script sloppy) | có | không | không |
 
-// let/const: block-scoped
-function testLet() {
-  if (true) {
-    let y = 20;
-    const z = 30;
-  }
-  console.log(y); // ReferenceError
-  console.log(z); // ReferenceError
-}
-```
+Default `const`. `let` khi binding phải dịch (index, retry count). Không `var` trong code mới. Constraint: `const` là bảo đảm **binding**, không phải immutability sâu — `const user = { role: 'admin' }; user.role = 'guest'` hợp lệ. Failure mode: coi `const` như `Object.freeze`, hoặc `var` trong loop shared với `await` nên mọi iteration thấy id cuối và bạn bắn N request cùng resource. Đo: lint (`no-var`, `prefer-const`) cộng review object thật sự cần `readonly` / `structuredClone` / Vue `readonly()`.
 
-#### **Hoisting Behavior**
+**Tradeoff**
 
-```js
-// var: hoisted and initialized with undefined
-console.log(a); // undefined
-var a = 5;
+- `Object.freeze` nông và có thể phá proxy Vue 3 (chúng expect intercept set). Dùng Vue `readonly()` hoặc copy-on-write, đừng freeze reactive state.
+- Rebind `let result` trong hàm 40 dòng thường tệ hơn early return với `const`.
+- `var` trong codebase đời `catch (var …)` không đáng rewrite cùng PR product — trừ khi nằm trong loop async.
 
-// let/const: hoisted but in TDZ
-console.log(b); // ReferenceError: Cannot access 'b' before initialization
-let b = 10;
+**Gotcha production**
 
-console.log(c); // ReferenceError
-const c = 15;
-```
+- TDZ trong module: module `store` mà file này import, trong khi `store.ts` import ngược file này và đọc export ở top level → `ReferenceError` lúc load, không phải `undefined` bí ẩn như `var`.
+- `for (let i = 0; i < n; i++) { await go(i) }` đúng (binding từng iteration). `for (var i …)` cộng closure vẫn capture một `i`.
+- `const state = reactive({…})` rồi `state = …` illegal; `state.x =` thì ổn. Candidate trộn hai cái này liên tục.
+- Destructure `const { items } = props` rồi expect `items` sống — Vue 3 mất reactivity trừ khi `toRefs` / `storeToRefs`. Đó là gotcha binding `const`, không phải trivia Vue.
 
-#### **Re-declaration & Re-assignment**
+**Câu hỏi nối**
 
-```js
-// var: can re-declare
-var x = 1;
-var x = 2; // ✅ OK
-
-// let: cannot re-declare, can re-assign
-let y = 1;
-let y = 2; // ❌ SyntaxError
-y = 3; // ✅ OK
-
-// const: cannot re-declare or re-assign
-const z = 1;
-const z = 2; // ❌ SyntaxError
-z = 3; // ❌ TypeError
-
-// ⚠️ const with objects/arrays - reference is immutable, content is not
-const obj = { name: "Alice" };
-obj.name = "Bob"; // ✅ OK - modifying content
-obj = {}; // ❌ TypeError - reassigning reference
-
-const arr = [1, 2, 3];
-arr.push(4); // ✅ OK - modifying content
-arr = []; // ❌ TypeError - reassigning reference
-```
-
-#### **Loop Scope Problem**
-
-```js
-// ❌ Classic var problem
-for (var i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 100);
-}
-// Output: 3, 3, 3 (all share same 'i')
-
-// ✅ let creates new binding per iteration
-for (let i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 100);
-}
-// Output: 0, 1, 2 (each iteration has own 'i')
-```
-
-#### **Global Object Pollution**
-
-```js
-// var adds to global object
-var globalVar = "I'm global";
-console.log(window.globalVar); // "I'm global" (browser)
-
-// let/const don't add to global object
-let blockVar = "I'm block-scoped";
-console.log(window.blockVar); // undefined
-```
-
-#### **Khi nào dùng cái gì?**
-
-```js
-// ✅ Mặc định: dùng const
-const API_URL = "https://api.example.com";
-const user = { name: "Alice" };
-
-// ✅ Khi cần reassign: dùng let
-let count = 0;
-for (let i = 0; i < 10; i++) {
-  count += i;
-}
-
-// ❌ Tránh var: chỉ dùng khi support IE cũ
-// var hasIssues = true;
-```
-
-**Ghi nhớ nhanh:**
-
-- `const` → mặc định (90% cases)
-- `let` → khi cần thay đổi giá trị
-- `var` → không dùng (legacy code only)
+1. `const` có chặn `array.push` không? Vì sao reviewer vẫn flag?
+2. Chỉ circular-import TDZ crash và cách phá cycle (function, lazy getter, module thứ ba).
+3. `for (const x of xs) { setTimeout(() => log(x)) }` vs `var` — giải thích không thuộc “block scope.”
+4. Vì sao `let` top-level trong Vue `script setup` không reactive? Cái nào reactive thật?
+5. `no-unsafe-finally` liên quan rebind `let` trong `try/finally` với `await` thế nào?
 
 ---
 
@@ -266,944 +245,325 @@ for (let i = 0; i < 10; i++) {
 
 #### 1.2.1. Closure & Scope
 
-**Câu trả lời chuẩn Senior:**
+**Họ thực sự hỏi gì**
 
-**Closure** là function có quyền truy cập vào variables của outer scope (lexical scope) ngay cả khi outer function đã return.
+Ô search vẫn fetch query trước. `watch` log `page` hôm qua. Debounce helper gửi args stale. Map module-level vẫn giữ export 20MB của user trước. Họ test bạn thấy **stale closure** và **retainer**, không phải viết `createCounter`.
 
-#### **Lexical Scope**
+**Cách senior trả lời**
 
-JavaScript dùng **lexical scoping** (static scoping) - scope được xác định tại thời điểm viết code, không phải runtime.
+Closure giữ **binding** nó đóng, không phải snapshot value — trừ khi bạn copy value vào `const` local lúc schedule. Vue: đọc ref mới nhất **trong** async callback (`page.value`), không ngoài trước `await`. React: `useEffect` / `useCallback` với `[]` cùng bug; `useRef` cho latest, hoặc thêm dep và abort. Constraint: cái closure retain không đủ điều kiện GC tới khi function được thả — event listener, `setInterval`, Pinia subscription, module singleton. Failure mode: debounce đóng `args` từ call đầu, hoặc listener `window` add trong `onMounted` capture `props.user` một lần. Đo: Memory panel retainers, và test bắn query thứ hai trước khi cái đầu resolve rồi assert kết quả đầu bị drop.
 
-```js
-function outer() {
-  const outerVar = "I'm outside";
+**Tradeoff**
 
-  function inner() {
-    console.log(outerVar); // Access outer scope
+- Singleton module-level (API client, cache) là nước đi performance đúng đến khi chúng retain data theo user qua logout. Lúc đó là bug bảo mật.
+- “Luôn latest ref” (`let latest = x; latest = x` mỗi call) đơn giản hơn abort, nhưng vẫn tốn network. Prefer abort **và** ignore stale.
+- React Compiler / Vue reactivity giảm một số class stale-closure; chúng không cứu listener bạn tự register.
+
+**Gotcha production**
+
+- Vue `watch(() => props.q, async (q) => { const p = page.value; await search(q, p) })` — nếu `page` phải là dependency thì không phải, trừ khi đọc trong source getter. Page stale.
+- `watch` trong util gọi từ `setup` mà không `onScopeDispose(stop)` leak hết session.
+- Debounce giữ latest args: store `args` trên object, không trong timeout closure từ call #1.
+- Response fetch giữ trong closure “để retry”: bạn retain `ArrayBuffer` 30MB. Retry theo URL, không theo body.
+- `rows` lớn đóng bởi handler `window` `'resize'` trong chart lib — classic detached-nhưng-vẫn-retain.
+
+```ts
+function debounceLatest<T extends unknown[]>(fn: (...args: T) => void, ms: number) {
+  let timer = 0
+  let last: T
+  return (...args: T) => {
+    last = args
+    clearTimeout(timer)
+    timer = window.setTimeout(() => fn(...last), ms)
   }
-
-  return inner;
 }
 
-const closureFunc = outer();
-closureFunc(); // "I'm outside" - closure still has access!
+// Vue: đọc latest bên trong; abort in-flight trước.
+watch(
+  () => props.query,
+  async (query, _prev, onCleanup) => {
+    const ac = new AbortController()
+    onCleanup(() => ac.abort())
+    const page = currentPage.value
+    results.value = await search(query, page, { signal: ac.signal })
+  }
+)
 ```
 
-#### **Practical Use Cases**
+**Câu hỏi nối**
 
-**1. Data Privacy (Private Variables)**
-
-```js
-function createCounter() {
-  let count = 0; // Private variable
-
-  return {
-    increment() {
-      count++;
-      return count;
-    },
-    decrement() {
-      count--;
-      return count;
-    },
-    getCount() {
-      return count;
-    },
-  };
-}
-
-const counter = createCounter();
-counter.increment(); // 1
-counter.increment(); // 2
-console.log(counter.count); // undefined - can't access directly!
-```
-
-**2. Function Factory**
-
-```js
-function makeMultiplier(multiplier) {
-  return function (number) {
-    return number * multiplier;
-  };
-}
-
-const double = makeMultiplier(2);
-const triple = makeMultiplier(3);
-
-console.log(double(5)); // 10
-console.log(triple(5)); // 15
-```
-
-**3. Event Handlers & Callbacks**
-
-```js
-function setupButtons() {
-  const buttons = document.querySelectorAll(".btn");
-
-  buttons.forEach((btn, index) => {
-    btn.addEventListener("click", () => {
-      // Closure captures 'index'
-      console.log(`Button ${index} clicked`);
-    });
-  });
-}
-```
-
-#### **Common Pitfall: Loop Closure**
-
-```js
-// ❌ Classic mistake with var
-for (var i = 0; i < 3; i++) {
-  setTimeout(() => {
-    console.log(i); // 3, 3, 3 (all print 3!)
-  }, 1000);
-}
-
-// ✅ Fix 1: Use let (block scope)
-for (let i = 0; i < 3; i++) {
-  setTimeout(() => {
-    console.log(i); // 0, 1, 2
-  }, 1000);
-}
-
-// ✅ Fix 2: IIFE (Immediately Invoked Function Expression)
-for (var i = 0; i < 3; i++) {
-  (function (captured) {
-    setTimeout(() => {
-      console.log(captured); // 0, 1, 2
-    }, 1000);
-  })(i);
-}
-```
-
-#### **Memory Implications**
-
-```js
-function heavyClosure() {
-  const hugeArray = new Array(1000000).fill("data");
-
-  return function () {
-    // This closure keeps hugeArray in memory!
-    console.log(hugeArray[0]);
-  };
-}
-
-// ✅ Better: Only keep what you need
-function optimizedClosure() {
-  const hugeArray = new Array(1000000).fill("data");
-  const firstItem = hugeArray[0]; // Extract only needed data
-
-  return function () {
-    console.log(firstItem); // hugeArray can be garbage collected
-  };
-}
-```
+1. Vì sao React `useEffect(() => fetch(id), [])` bỏ qua `id` sau? Tương đương Vue sai ở đâu?
+2. Debounce search để response muộn không thắng thế nào? (abort, sequence number, hoặc cả hai)
+3. Khi nào cache module-level là feature, khi nào là leak cross-tenant?
+4. `onMounted(() => window.addEventListener('click', handler))` — `handler` retain gì, ai gỡ khi keep-alive deactivate?
+5. Vì sao `watchEffect(async () => …)` nguy hiểm hơn `watch`?
+6. Chứng minh leak bằng retainer path trong Chrome DevTools thế nào?
 
 ---
 
 #### 1.2.2. Prototypes & Inheritance
 
-**Câu trả lời chuẩn Senior:**
+**Họ thực sự hỏi gì**
 
-JavaScript là **prototype-based language**. Mọi object đều có một internal link đến object khác gọi là **prototype**.
+Gần như không ai muốn bạn implement `new` bằng `Object.create`. Họ muốn: **class là constructor + prototype sugar**, và hit production — `instanceof` xuyên iframe, lib extend `Array`, hoặc Vue component gãy vì ai đó copy method lên reactive object.
 
-#### **Prototype Chain**
+**Cách senior trả lời**
 
-```js
-const obj = { a: 1 };
+Tôi dùng `class` cho type có identity và API share trên prototype (Error subclass, domain model `instanceof` trong catch). Không dựng UI app trên prototype inheritance — Vue component và composable là function + data. Constraint: method trên `.prototype` được share (tốt cho memory); class **field** là per-instance (arrow trên field nhân đôi function). Failure mode: `el instanceof HTMLElement` là `false` với node từ realm khác (iframe, pop-out, jsdom vs window). Tương tự `data instanceof Array` từ iframe. Đo: fix bằng `Array.isArray`, `node.nodeType`, hoặc `Object.prototype.toString`, và test chạy cửa sổ thứ hai nếu bạn thật sự embed iframe.
 
-// obj.__proto__ → Object.prototype → null
+**Tradeoff**
 
-obj.toString(); // Inherited from Object.prototype
-```
+- Đừng dùng prototype để share behavior trong Vue; composable là cơ chế reuse và type đúng.
+- Đừng `class Store extends Vue` năm 2026. Đó là khảo cổ Options API.
+- Subclass `Array` / `Promise` / `Error`: `Error` thì justified (name, stack, `instanceof` trong `catch`). Subclass `Array` vẫn bất ngờ `map` species và array interceptor của Vue — đừng.
 
-#### **Constructor Functions & Prototypes**
+**Gotcha production**
 
-```js
-function Person(name, age) {
-  this.name = name;
-  this.age = age;
-}
+- `structuredClone` / `postMessage` bỏ prototype. Gửi `User` nhận plain object. Rehydrate tường minh.
+- Vue `reactive` trên class instance có thể bọc proxy; `instanceof` vẫn đúng, `this` trong prototype method có thể thấy proxy. Prefer `markRaw` cho class instance không muốn proxy (map lib, chart instance).
+- Nhiều bản copy một package (hai class `Error`, hai Vue runtime) → `instanceof` fail. Đó là bundler, không phải trivia JS.
+- `Object.create(null)` không có `toString` / `__proto__`. Spread vào hoặc dùng làm dictionary — đừng giả định `hasOwnProperty`.
 
-// Add methods to prototype (shared across all instances)
-Person.prototype.greet = function () {
-  return `Hi, I'm ${this.name}`;
-};
+**Câu hỏi nối**
 
-Person.prototype.getAge = function () {
-  return this.age;
-};
-
-const john = new Person("John", 30);
-const jane = new Person("Jane", 25);
-
-console.log(john.greet()); // "Hi, I'm John"
-console.log(john.greet === jane.greet); // true - same reference!
-```
-
-#### **Prototype vs Instance Properties**
-
-```js
-function Car(brand) {
-  this.brand = brand; // Instance property (unique per instance)
-  this.drive = function () {
-    // ❌ Bad: creates new function for each instance
-    console.log("Driving");
-  };
-}
-
-Car.prototype.stop = function () {
-  // ✅ Good: shared across all instances
-  console.log("Stopping");
-};
-
-const car1 = new Car("Toyota");
-const car2 = new Car("Honda");
-
-console.log(car1.drive === car2.drive); // false - different functions
-console.log(car1.stop === car2.stop); // true - same reference
-```
-
-#### **Inheritance Patterns**
-
-**1. Prototypal Inheritance**
-
-```js
-function Animal(name) {
-  this.name = name;
-}
-
-Animal.prototype.eat = function () {
-  return `${this.name} is eating`;
-};
-
-function Dog(name, breed) {
-  Animal.call(this, name); // Call parent constructor
-  this.breed = breed;
-}
-
-// Set up inheritance
-Dog.prototype = Object.create(Animal.prototype);
-Dog.prototype.constructor = Dog;
-
-Dog.prototype.bark = function () {
-  return "Woof!";
-};
-
-const dog = new Dog("Buddy", "Golden Retriever");
-console.log(dog.eat()); // "Buddy is eating"
-console.log(dog.bark()); // "Woof!"
-```
-
-**2. ES6 Classes (Syntactic Sugar)**
-
-```js
-class Animal {
-  constructor(name) {
-    this.name = name;
-  }
-
-  eat() {
-    return `${this.name} is eating`;
-  }
-}
-
-class Dog extends Animal {
-  constructor(name, breed) {
-    super(name);
-    this.breed = breed;
-  }
-
-  bark() {
-    return "Woof!";
-  }
-}
-
-const dog = new Dog("Buddy", "Golden Retriever");
-```
-
-#### **Object.create() Pattern**
-
-```js
-const animalMethods = {
-  eat() {
-    return `${this.name} is eating`;
-  },
-  sleep() {
-    return `${this.name} is sleeping`;
-  },
-};
-
-function createAnimal(name) {
-  const animal = Object.create(animalMethods);
-  animal.name = name;
-  return animal;
-}
-
-const cat = createAnimal("Whiskers");
-console.log(cat.eat()); // "Whiskers is eating"
-```
-
-#### **Checking Prototype Chain**
-
-```js
-const dog = new Dog("Buddy", "Golden");
-
-// Check prototype chain
-console.log(dog instanceof Dog); // true
-console.log(dog instanceof Animal); // true
-console.log(dog instanceof Object); // true
-
-// Check own properties
-console.log(dog.hasOwnProperty("name")); // true
-console.log(dog.hasOwnProperty("eat")); // false (inherited)
-
-// Get prototype
-console.log(Object.getPrototypeOf(dog) === Dog.prototype); // true
-```
+1. Vì sao `iframe.contentWindow.Array !== Array`? API nào thay `instanceof Array`?
+2. Khi nào vẫn đặt method trên prototype trong lib thay vì class field arrow?
+3. `markRaw` sửa gì cho Google Map hoặc Monaco instance trong Vue?
+4. Giữ `instanceof AppError` qua `worker.postMessage` thế nào? (không giữ — gửi discriminant)
+5. Vì sao thêm method lên `Object.prototype` phá `for…in` trong SDK đối tác?
 
 ---
 
 #### 1.2.3. `this` Keyword
 
-**Câu trả lời chuẩn Senior:**
+**Họ thực sự hỏi gì**
 
-`this` trong JavaScript **không phải compile-time binding** mà là **runtime binding**. Giá trị của `this` phụ thuộc vào **cách function được gọi**.
+Method Options API Vue chạy đến khi ai đó đổi thành arrow. Class field chạy làm listener đến khi ai đó đưa method lên prototype để tiết kiệm memory. React không miễn dịch: `onClick={this.handle}` trần trong class component. Họ muốn rule binding **và** mapping framework.
 
-#### **4 Rules xác định `this`**
+**Cách senior trả lời**
 
-**1. Default Binding (Global Context)**
+`this` là binding theo call-site với `function`; arrow đóng lexical `this`. Vue **Options API**: `methods` bind vào instance — viết `onClick() { this.save() }`. Arrow trong `methods` capture `this` module (`undefined` trong ESM) và là bug. **Composition API** gần như không dùng `this`; đóng trên refs. Class public field `onClick = () => this.save()` bind per instance để pass làm listener; prototype method cần `.bind` hoặc wrapper. Failure mode: `addEventListener('click', obj.method)` tách receiver; `removeEventListener` fail nếu mỗi lần bind wrapper mới. Đo: test listener gỡ được, và Options-API `this.$emit` vẫn fire sau khi extract helper.
 
-```js
-function showThis() {
-  console.log(this);
-}
+**Tradeoff**
 
-showThis(); // Window (browser) / global (Node) trong non-strict mode
-// undefined trong strict mode
-```
+- Class-field arrow tốn một function mỗi instance. Widget 10k row: method trên prototype, bind một lần trong constructor — hoặc đừng dùng class.
+- Đừng trộn Options `this` với Composition cùng component mà không có rule. Team làm vậy mất một giờ mỗi bug.
+- `call`/`apply`/`bind` vẫn quan trọng khi wrap callback jQuery-era. Không nên xuất hiện trong Vue 3 mới.
 
-**2. Implicit Binding (Object Method)**
+**Gotcha production**
 
-```js
-const user = {
-  name: "John",
-  greet() {
-    console.log(this.name);
+- Vue 3 `script setup` không có `this`. Mixin migrate đọc `this.foo` là undefined, không phải miss reactive.
+- Destructure `const { save } = this` trong Options — mất receiver trừ khi `save` đã là arrow.
+- Listener `window` với function đã bind: lưu **cùng** reference để remove. Anonymous `() => this.x()` không gỡ được.
+- React class: `this.setState` trong method unbound là hiện vật bảo tàng; vẫn ra interview brownfield.
+- Standalone call strict-mode: `this === undefined`, biến `this.state.x` thành throw thay vì ghi global im lặng. Đó là feature.
+
+```ts
+// Options API: method, không phải arrow.
+export default defineComponent({
+  methods: {
+    onSubmit() {
+      this.$emit('save', this.form)
+    },
   },
-};
+})
 
-user.greet(); // "John" - this = user
-
-// ❌ Pitfall: Lost context
-const greet = user.greet;
-greet(); // undefined - this = global/undefined
+// Listener gỡ được thật.
+const onKey = (e: KeyboardEvent) => { /* dùng refs, không dùng this */ }
+onMounted(() => window.addEventListener('keydown', onKey))
+onUnmounted(() => window.removeEventListener('keydown', onKey))
 ```
 
-**3. Explicit Binding (call, apply, bind)**
+**Câu hỏi nối**
 
-```js
-function introduce(greeting, punctuation) {
-  return `${greeting}, I'm ${this.name}${punctuation}`;
-}
-
-const person = { name: "Alice" };
-
-// call: arguments individually
-console.log(introduce.call(person, "Hello", "!")); // "Hello, I'm Alice!"
-
-// apply: arguments as array
-console.log(introduce.apply(person, ["Hi", "."])); // "Hi, I'm Alice."
-
-// bind: returns new function with bound this
-const boundIntroduce = introduce.bind(person);
-console.log(boundIntroduce("Hey", "!!")); // "Hey, I'm Alice!!"
-```
-
-**4. `new` Binding (Constructor)**
-
-```js
-function User(name) {
-  this.name = name;
-  this.greet = function () {
-    return `Hi, I'm ${this.name}`;
-  };
-}
-
-const user = new User("Bob");
-console.log(user.greet()); // "Hi, I'm Bob"
-```
-
-#### **Arrow Functions & `this`**
-
-Arrow functions **không có `this` riêng**, inherit `this` từ enclosing scope (lexical this).
-
-```js
-const obj = {
-  name: "Alice",
-  regularFunc() {
-    console.log(this.name); // "Alice"
-
-    setTimeout(function () {
-      console.log(this.name); // undefined - this = global
-    }, 100);
-  },
-  arrowFunc() {
-    console.log(this.name); // "Alice"
-
-    setTimeout(() => {
-      console.log(this.name); // "Alice" - arrow function inherits this
-    }, 100);
-  },
-};
-```
-
-#### **Common Pitfalls & Solutions**
-
-**Pitfall 1: Event Handlers**
-
-```js
-class Button {
-  constructor() {
-    this.count = 0;
-  }
-
-  // ❌ Problem: lost context
-  handleClick() {
-    this.count++;
-    console.log(this.count);
-  }
-
-  setupWrong() {
-    document.querySelector(".btn").addEventListener("click", this.handleClick);
-    // this.handleClick called without object context
-  }
-
-  // ✅ Solution 1: Arrow function
-  setupArrow() {
-    document
-      .querySelector(".btn")
-      .addEventListener("click", () => this.handleClick());
-  }
-
-  // ✅ Solution 2: bind
-  setupBind() {
-    document
-      .querySelector(".btn")
-      .addEventListener("click", this.handleClick.bind(this));
-  }
-
-  // ✅ Solution 3: Class field arrow function
-  handleClickArrow = () => {
-    this.count++;
-    console.log(this.count);
-  };
-}
-```
-
-**Pitfall 2: Method Extraction**
-
-```js
-const calculator = {
-  value: 0,
-  add(n) {
-    this.value += n;
-    return this;
-  },
-  multiply(n) {
-    this.value *= n;
-    return this;
-  },
-};
-
-// ❌ Lost context
-const add = calculator.add;
-add(5); // Error: cannot read property 'value' of undefined
-
-// ✅ Bind context
-const boundAdd = calculator.add.bind(calculator);
-boundAdd(5);
-
-// ✅ Method chaining works fine
-calculator.add(5).multiply(2); // this preserved in chain
-```
-
-#### **Vue 3 Context**
-
-```vue
-<script setup>
-import { ref } from "vue";
-
-const count = ref(0);
-
-// ✅ Arrow function preserves component context
-const increment = () => {
-  count.value++;
-};
-
-// ✅ Regular function in setup also works (setup scope)
-function decrement() {
-  count.value--;
-}
-
-// ❌ Don't need to worry about 'this' in Composition API!
-// (Unlike Options API where 'this' refers to component instance)
-</script>
-```
+1. Vì sao arrow trong Vue `methods` gãy, còn arrow trong `setup()` đúng?
+2. Gỡ listener nếu `bind` mỗi lần render thế nào?
+3. Prototype method vs class field: memory vs an toàn `this`. Chọn gì cho canvas tool 50k instance?
+4. `'this'` trong lỗi TS `noImplicitThis` nói gì về wrapper jQuery plugin?
+5. Giải thích `super.method()` và `this` trong subclass mà không vẽ prototype chain 10 phút?
 
 ---
 
 #### 1.2.4. ES6+ Modern Features
 
-**Câu trả lời chuẩn Senior:**
+**Họ thực sự hỏi gì**
 
-#### **1. Destructuring**
+Không phải “destructuring là gì.” Họ cài bug: `user.age || 18` khi age là `0`; `JSON.parse(JSON.stringify(state))` drop `Date` và `Map`; barrel `import` kéo chart 200kb vào trang login. Optional chaining, nullish coalescing, clone, iterator, module.
 
-```js
-// Object destructuring
-const user = { name: "Alice", age: 30, city: "NYC" };
-const { name, age } = user;
+**Cách senior trả lời**
 
-// Renaming
-const { name: userName, age: userAge } = user;
+`?.` cho **optional thật**, không để giấu contract gãy. `??` default chỉ `null`/`undefined`; `||` còn coi `0`, `''`, `false` là thiếu — chết với count, giá, feature flag. `structuredClone` là deep copy in-process giữ `Date`, `Map`, `Set`, `ArrayBuffer`; `JSON.parse(JSON.stringify)` là serializer mất mát (không `undefined`, không function, Date thành string, Vue proxy thành plain nhưng nổ trên cycle). Dynamic `import()` là **ranh giới bundle**; static `import` là live binding. Failure mode: `data.items?.map(…)` skip im lặng payload 500, hoặc `structuredClone(vueProxy)` throw. Đo: bảng flag có `false`, và bundle analyzer trên dynamic import.
 
-// Default values
-const { country = "USA" } = user;
+**Tradeoff**
 
-// Nested destructuring
-const data = {
-  user: { profile: { email: "alice@example.com" } },
-};
-const {
-  user: {
-    profile: { email },
-  },
-} = data;
+- Đừng `?.` mọi field từ API bạn control. Nếu `user` luôn có sau 200, throw tốt hơn dashboard trống.
+- Đừng `structuredClone` bảng 50MB mỗi phím. Clone patch.
+- Đừng dynamic-import helper 2kb; bạn trả round trip và waterfall không vì gì. Có dynamic-import route chart admin.
+- Iterator (`for…of`, generator) là API đúng cho lazy stream; không nhanh hơn `for` trên array đã có.
 
-// Array destructuring
-const [first, second, ...rest] = [1, 2, 3, 4, 5];
-console.log(first); // 1
-console.log(rest); // [3, 4, 5]
+**Gotcha production**
 
-// Swapping variables
-let a = 1,
-  b = 2;
-[a, b] = [b, a];
+- `??` vs `||` trên số `v-model` và `page=0`.
+- `user?.profile?.email ?? 'unknown'` che `profile: null` từ endpoint partial; support sẽ không tìm ra.
+- `JSON.stringify` trên reactive state: cycle qua parent ref, hoặc `toRaw` trước. Key `undefined` biến mất; `NaN` thành `null`.
+- `structuredClone` không clone function, DOM node, hoặc một số Host object. Worker cần DTO, không phải class của bạn.
+- ESM live binding + TDZ: xem hoisting. `export default` không phải live binding giống `export let`.
+- `Object.entries` + numeric key: insertion order vs thứ tự bạn nghĩ `for…in` có thời IE. Đừng dựa object key order để rank; dùng array.
+
+```ts
+const page = Number(route.query.page ?? 0) // 0 là page thật
+const enabled = flag ?? true              // false phải thắng ||
+
+const copy = structuredClone(toRaw(doc))  // Date, Map giữ
+// JSON.stringify(doc) biến createdAt thành string và drop undefined
 ```
 
-#### **2. Spread & Rest Operators**
+**Câu hỏi nối**
 
-```js
-// Spread operator (...)
-const arr1 = [1, 2, 3];
-const arr2 = [...arr1, 4, 5]; // [1, 2, 3, 4, 5]
-
-const obj1 = { a: 1, b: 2 };
-const obj2 = { ...obj1, c: 3 }; // { a: 1, b: 2, c: 3 }
-
-// Shallow clone
-const clone = { ...original };
-
-// Merge objects (later properties override)
-const merged = { ...defaults, ...userOptions };
-
-// Rest parameters
-function sum(...numbers) {
-  return numbers.reduce((a, b) => a + b, 0);
-}
-sum(1, 2, 3, 4); // 10
-```
-
-#### **3. Optional Chaining (?.) & Nullish Coalescing (??)**
-
-```js
-const user = {
-  profile: {
-    address: {
-      city: "NYC",
-    },
-  },
-};
-
-// ❌ Old way
-const city =
-  user && user.profile && user.profile.address && user.profile.address.city;
-
-// ✅ Optional chaining
-const city = user?.profile?.address?.city; // "NYC"
-const zipCode = user?.profile?.address?.zipCode; // undefined (no error!)
-
-// Optional chaining with functions
-obj.method?.(); // Call only if method exists
-
-// Optional chaining with arrays
-const firstItem = arr?.[0];
-
-// Nullish coalescing (??) - only null/undefined trigger default
-const value = data ?? "default"; // Use 'default' only if data is null/undefined
-
-// vs OR operator (|| triggers on any falsy value)
-const count = 0;
-console.log(count || 10); // 10 (0 is falsy)
-console.log(count ?? 10); // 0 (0 is not null/undefined)
-```
-
-#### **4. Template Literals**
-
-```js
-const name = "Alice";
-const age = 30;
-
-// Multi-line strings
-const message = `
-  Hello ${name},
-  You are ${age} years old.
-  Next year you'll be ${age + 1}.
-`;
-
-// Tagged templates
-function highlight(strings, ...values) {
-  return strings.reduce(
-    (result, str, i) =>
-      result + str + (values[i] ? `<mark>${values[i]}</mark>` : ""),
-    ""
-  );
-}
-
-const html = highlight`Hello ${name}, you are ${age} years old`;
-// "Hello <mark>Alice</mark>, you are <mark>30</mark> years old"
-```
-
-#### **5. Enhanced Object Literals**
-
-```js
-const name = "Alice";
-const age = 30;
-
-// Shorthand property names
-const user = { name, age }; // { name: "Alice", age: 30 }
-
-// Shorthand method syntax
-const obj = {
-  // Old way
-  sayHello: function () {
-    return "Hello";
-  },
-  // New way
-  sayHi() {
-    return "Hi";
-  },
-};
-
-// Computed property names
-const propName = "dynamicKey";
-const obj = {
-  [propName]: "value",
-  [`${propName}_2`]: "value2",
-};
-```
-
-#### **6. Modules (import/export)**
-
-```js
-// Named exports
-export const PI = 3.14159;
-export function sum(a, b) {
-  return a + b;
-}
-export class Calculator {}
-
-// Default export
-export default function main() {
-  // ...
-}
-
-// Importing
-import main from "./main.js"; // default import
-import { PI, sum } from "./math.js"; // named imports
-import { sum as add } from "./math.js"; // rename
-import * as Math from "./math.js"; // namespace import
-
-// Re-exporting
-export { PI, sum } from "./math.js";
-export * from "./utils.js";
-```
+1. Khi nào `?.` là bug product? Cho một field API không được optional sau login.
+2. Vì sao clone `structuredClone(toRaw(x))` trong Vue thay vì `JSON` hoặc `{...x}`?
+3. Static vs dynamic import: giữ feature flag khỏi download module bị tắt thế nào?
+4. Vì sao `for…of` trên `NodeList` ổn, nhưng spread 50k node vào array trước filter thì không?
+5. `verbatimModuleSyntax` đổi gì về `import type` vs value import?
+6. Iterator vs array: khi nào expose generator từ composable?
 
 ---
 
 #### 1.2.5. Memory Management & Garbage Collection
 
-**Câu trả lời chuẩn Senior:**
+**Họ thực sự hỏi gì**
 
-#### **Memory Lifecycle**
+SPA ổn phút 0 và 1.5GB sau một ngày client-side routing. Họ muốn retainer: DOM detached, listener, Vue `watch` không `stop`, closure trên fetch body, `Map` metadata lẽ ra phải là `WeakMap`.
 
-1. **Allocate** memory
-2. **Use** memory (read/write)
-3. **Release** memory (garbage collection)
+**Cách senior trả lời**
 
-#### **Common Memory Leaks**
+GC thu object **không reach được từ root** (stack, global, DOM, closure còn register). Leak là root quên. Quyết định: mỗi `addEventListener`, `setInterval`, `IntersectionObserver`, `watch`, Pinia `$subscribe`, và cache module cần lifetime cặp với component/effect scope. Constraint: Chrome không free DOM node nếu JS closure vẫn trỏ tới — “tôi đã gỡ khỏi document” chưa đủ. Failure mode: keep-alive cache, chart instance không `dispose`, và global event bus. Đo: Memory → heap snapshot → **Retainers** trên object biết trước (`exportBlob` 20MB của user); hai snapshot rồi so. Tìm `Detached HTMLElement`.
 
-**1. Global Variables**
+**Tradeoff**
 
-```js
-// ❌ Accidental globals
-function leak() {
-  leakyVar = "This creates a global!"; // No 'var', 'let', or 'const'
-}
+- `WeakMap` / `WeakRef` / `FinalizationRegistry` cho metadata keyed theo object bạn không sở hữu. Không phải cache có SLA — entry yếu biến mất khi áp lực, đừng để auth token đó.
+- Đừng null mọi local trong `onUnmounted` như nghi lễ. Null thứ **thoát ra** (global, registry, listener).
+- `effectScope` / unmount component Vue đã stop watch tạo trong `setup`. Watch tạo trong **module trần** hoặc callback `setTimeout` thì không.
 
-// ✅ Use strict mode
-("use strict");
-function noLeak() {
-  leakyVar = "This will throw an error";
-}
-```
+**Gotcha production**
 
-**2. Forgotten Timers & Callbacks**
+- DOM detached: Vue ref vẫn giữ `$el` sau `v-if`, hoặc tooltip 3rd-party cache node.
+- Listener quên: `resize`, `scroll`, `popstate`, `matchMedia`, WebSocket `onmessage`.
+- `watch` / `watchEffect` trong Pinia action hoặc router guard — không `onScopeDispose`, sống mãi.
+- Closure trên `await res.arrayBuffer()` cất trong module `lastResult` để debug.
+- React: `useEffect` thiếu cleanup; Vue: `useEventListener` từ VueUse là pattern vì nó dispose.
+- SSR: `new Map()` module scope trên server là leak xuyên request ở một số runtime. Per-request, không per-module.
 
-```js
-// ❌ Memory leak
-const data = fetchHugeData();
-setInterval(() => {
-  console.log(data); // data never released
-}, 1000);
-
-// ✅ Clear timers when done
-const data = fetchHugeData();
-const timerId = setInterval(() => {
-  console.log(data);
-}, 1000);
-
-// Later...
-clearInterval(timerId);
-```
-
-**3. Detached DOM References**
-
-```js
-// ❌ Leak: element removed from DOM but still referenced
-const button = document.querySelector("#myButton");
-document.body.removeChild(button); // Element removed but 'button' still holds reference
-
-// ✅ Nullify references
-button = null;
-```
-
-**4. Closures Holding Large Objects**
-
-```js
-// ❌ Entire largeData stays in memory
-function createClosure() {
-  const largeData = new Array(1000000);
-  return function () {
-    console.log(largeData[0]);
-  };
-}
-
-// ✅ Only keep what you need
-function createOptimizedClosure() {
-  const largeData = new Array(1000000);
-  const firstItem = largeData[0];
-  return function () {
-    console.log(firstItem); // largeData can be GC'd
-  };
-}
-```
-
-**5. Event Listeners Not Removed**
-
-```js
-// ❌ Leak in SPA when component unmounts
-const element = document.querySelector("#btn");
-element.addEventListener("click", handleClick);
-// Component destroyed but listener remains
-
-// ✅ Remove listeners
-element.removeEventListener("click", handleClick);
-
-// ✅ Vue 3: auto cleanup in onUnmounted
-import { onMounted, onUnmounted } from "vue";
+```ts
+const meta = new WeakMap<HTMLElement, { rowId: string }>()
+// element chết thì metadata chết được. Map<HTMLElement, …> sẽ pin node.
 
 onMounted(() => {
-  window.addEventListener("resize", handleResize);
-});
-
-onUnmounted(() => {
-  window.removeEventListener("resize", handleResize);
-});
+  const stop = watch(filters, fetchList, { deep: true })
+  onScopeDispose(stop)
+})
 ```
 
-#### **WeakMap & WeakSet**
+**Câu hỏi nối**
 
-```js
-// Regular Map prevents garbage collection
-const map = new Map();
-let obj = { data: "large object" };
-map.set(obj, "metadata");
-obj = null; // Object still in memory (Map holds reference)
-
-// WeakMap allows garbage collection
-const weakMap = new WeakMap();
-let obj2 = { data: "large object" };
-weakMap.set(obj2, "metadata");
-obj2 = null; // Object can be garbage collected!
-
-// Use case: Private data
-const privateData = new WeakMap();
-
-class User {
-  constructor(name) {
-    privateData.set(this, { secretKey: Math.random() });
-    this.name = name;
-  }
-
-  getSecret() {
-    return privateData.get(this).secretKey;
-  }
-}
-```
-
-#### **Memory Profiling (Chrome DevTools)**
-
-```
-1. Open DevTools → Memory tab
-2. Take Heap Snapshot
-3. Interact with app
-4. Take another snapshot
-5. Compare snapshots to find leaks
-6. Check Detached DOM nodes
-7. Look for unexpected large objects
-```
+1. Xác nhận detached node trong DevTools thế nào? Vue thường retain bằng gì?
+2. Vì sao `WeakMap` đúng cho “data phụ trên DOM node” và sai cho “LRU response API”?
+3. Keep-alive: dispose gì ở `onDeactivated` vs `onUnmounted`?
+4. Vì sao Vue `ref` tới canvas leak WebGL context?
+5. Tìm listener leak mà không đọc cả codebase thế nào? (Performance event listener count, hoặc debug hook)
+6. Cache module-scope SSR: khi nào thắng performance, khi nào user A thấy user B?
 
 ---
 
 #### 1.2.6. Hoisting & Temporal Dead Zone
 
-**Câu trả lời chuẩn Senior:**
+**Họ thực sự hỏi gì**
 
-#### **Hoisting**
+Hai mươi giây: `function` declaration hoist đầy đủ; `var` hoist rồi gán `undefined`; `let`/`const`/`class` hoist vào TDZ đến lúc init. Rồi họ muốn bản production: **circular ESM import** throw `Cannot access X before initialization`, không phải puzzle `console.log(a)`.
 
-JavaScript moves declarations to the top of their scope during compilation phase.
+**Cách senior trả lời**
 
-**Function Hoisting**
+Tôi coi hoisting là vấn đề thứ tự load. Trong cycle, `a.ts` import `b.ts` import `a.ts`; cái execute sau đọc `const` export còn trong TDZ. Failure mode: composable bị Pinia store import, store bị composable import — chạy test (graph khác) rồi chết trên app. Đo: đúng `ReferenceError` TDZ lúc startup, rồi phá cycle bằng function (`getStore()`), module thứ ba, hoặc `import()` sau init. Tôi không “dùng `var` để tránh TDZ.”
 
-```js
-// ✅ Works: function declarations are fully hoisted
-sayHello(); // "Hello"
+**Tradeoff**
 
-function sayHello() {
-  console.log("Hello");
-}
+- Circular type (`import type`) miễn phí với `verbatimModuleSyntax`; circular **value** thì không. Đừng dồn cả domain vào một file chỉ để né cycle — tách constant shared.
+- Function declaration phá cycle vì chúng hoist; chúng cũng giấu cycle khỏi reviewer. Prefer lazy getter tường minh.
+- Barrel file (`index.ts` re-export) làm cycle dễ hơn. Import leaf trực tiếp trên hot path.
 
-// ❌ Error: function expressions are NOT hoisted
-sayHi(); // ReferenceError
+**Gotcha production**
 
-const sayHi = function () {
-  console.log("Hi");
-};
-```
+- `class` trong TDZ: `export class X extends Y` khi `Y` chưa init.
+- `const store = useFooStore()` top module trong util — Pinia chưa install, cộng TDZ nếu store module import util.
+- Vue SFC: import từ file component chạy `useRouter()` top level lúc SSR.
+- `typeof x` với `let x` trong TDZ vẫn throw. Bất ngờ người học `typeof undeclared === 'undefined'`.
 
-**Variable Hoisting**
+**Câu hỏi nối**
 
-```js
-// var: hoisted and initialized with undefined
-console.log(x); // undefined (not ReferenceError)
-var x = 5;
-
-// Equivalent to:
-var x;
-console.log(x);
-x = 5;
-
-// let/const: hoisted but NOT initialized (TDZ)
-console.log(y); // ReferenceError: Cannot access 'y' before initialization
-let y = 10;
-```
-
-#### **Temporal Dead Zone (TDZ)**
-
-The time between entering scope and declaration where variables cannot be accessed.
-
-```js
-{
-  // TDZ starts
-  console.log(a); // ReferenceError
-  console.log(b); // ReferenceError
-
-  let a = 1; // TDZ ends for 'a'
-  const b = 2; // TDZ ends for 'b'
-
-  console.log(a); // 1 ✅
-}
-```
-
-**TDZ with typeof**
-
-```js
-// ❌ ReferenceError (TDZ)
-console.log(typeof x);
-let x;
-
-// ✅ Works with var
-console.log(typeof y); // "undefined"
-var y;
-
-// ✅ Works with undeclared variables
-console.log(typeof undeclaredVar); // "undefined"
-```
-
-#### **Block Scope vs Function Scope**
-
-```js
-// var: function-scoped
-function testVar() {
-  if (true) {
-    var x = 10;
-  }
-  console.log(x); // 10 (accessible outside block)
-}
-
-// let/const: block-scoped
-function testLet() {
-  if (true) {
-    let y = 20;
-  }
-  console.log(y); // ReferenceError
-}
-
-// Classic var problem in loops
-for (var i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 100);
-} // Prints: 3, 3, 3
-
-// let creates new binding per iteration
-for (let i = 0; i < 3; i++) {
-  setTimeout(() => console.log(i), 100);
-} // Prints: 0, 1, 2
-```
-
-#### **Best Practices**
-
-```js
-// ✅ Always declare variables before use
-// ✅ Prefer const (immutable binding)
-const API_URL = "https://api.example.com";
-
-// ✅ Use let when reassignment needed
-let count = 0;
-count++;
-
-// ❌ Avoid var
-// var has function scope and hoisting issues
-
-// ✅ Declare functions before use (even though hoisted)
-function calculate() {
-  // ...
-}
-calculate();
-```
+1. Vì sao circular import in `undefined` với `var`/`function` nhưng throw với `const`?
+2. Cấu trúc Pinia store + composable tránh TDZ mà không god-module thế nào?
+3. `import type { Foo }` vs `import { type Foo }` — cái nào vẫn emit runtime import?
+4. Vì sao default export tệ hơn với cycle so với named live binding?
+5. Câu 20 giây nếu họ chỉ muốn hoisting, và bạn lái sang circular import thế nào?
 
 ---
 
+#### 1.2.7. AbortController, Concurrency và Cancellation
+
+**Họ thực sự hỏi gì**
+
+Typeahead: năm GET in-flight, cái chậm nhất thắng và overwrite input. Đổi route: `watch` vẫn ghi vào page trước. “Bọn mình dùng `let seq++`.” Vì sao `AbortController` là primitive, và nó compose với `Promise.all` thế nào?
+
+**Cách senior trả lời**
+
+Cancellation là một phần API contract, không phải nghĩ sau. Mỗi fetch, mỗi `addEventListener` `{ signal }`, mỗi Vue `watch` `onCleanup` nên share một `AbortSignal`. Quyết định: abort lúc unmount, lúc query đổi, và lúc timeout (`AbortSignal.timeout` hoặc `AbortSignal.any`). Constraint: abort **hợp tác** — `fetch` phải pass `signal`, `axios` phải dùng cùng; inner call quên vẫn complete. Failure mode: coi `AbortError` là fail user-facing (toast “network error” mỗi phím) hoặc ignore rồi apply data stale. Đo: Network panel hiện request cancelled (đỏ) khi query đổi; test response đầu không được ghi `results` sau abort.
+
+**Tradeoff**
+
+- Sequence number (`if (id !== latest) return`) là guard phụ ổn khi lib không abort được. Vẫn tốn server. Prefer cả hai.
+- `Promise.all([…], { signal })` không built-in — pass cùng signal vào từng call, và abort controller trong `catch` để sibling dừng.
+- Đừng abort mutation user đã confirm (pay, delete) trừ khi họ rời page *và* operation không an toàn apply mù. Gọi product.
+- Axios cancel token global đời 2018 không phải `AbortSignal`. Wrap nó.
+
+**Gotcha production**
+
+- `AbortError` / `DOMException` name `'AbortError'` — filter trước Sentry kẻo alert mọi typeahead cancelled.
+- Vue `watch` không `onCleanup(() => ac.abort())` thì race. React `useEffect` return phải abort.
+- `Promise.all` + một abort: cái kia vẫn chạy trừ khi nhận cùng signal.
+- HTTP/2 cancellation tốt cho server; HTTP/1.1 có thể không dừng work thật. Đừng giả định abort tiết kiệm CPU DB.
+- Gộp user abort và timeout: `AbortSignal.any([userSignal, AbortSignal.timeout(8_000)])` — polyfill browser cũ.
+- Retry sau abort là sai; retry sau 503 là đúng. Check `signal.aborted` trước.
+
+```ts
+watch(
+  () => route.query.q,
+  async (q, _p, onCleanup) => {
+    const ac = new AbortController()
+    onCleanup(() => ac.abort())
+    try {
+      const [hits, nextFacets] = await Promise.all([
+        search(q, { signal: ac.signal }),
+        getFacets(q, { signal: ac.signal }),
+      ])
+      results.value = hits
+      facetCounts.value = nextFacets
+    } catch (err) {
+      if ((err as DOMException).name === 'AbortError') return
+      throw err
+    }
+  }
+)
+```
+
+**Câu hỏi nối**
+
+1. Vì sao sequence number không đủ nếu response handler vẫn đụng IndexedDB?
+2. Abort `Promise.all` 3 call khi cái đầu fail thế nào? Có nên không?
+3. `AbortSignal.any` vs nested controller — ai sở hữu `abort()`?
+4. Timeout để đâu: client signal, HTTP gateway, hay cả hai?
+5. Tương tác với Vue `<Suspense>` và Nuxt `useAsyncData` cancellation thế nào?
+6. `POST /checkout` có nên abort lúc unmount? Bảo vệ câu trả lời product.
+
 ---
 
-[← Back to Overview](../README.md)
+[← Back to Overview](../../README.md)
