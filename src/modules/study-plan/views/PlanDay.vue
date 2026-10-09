@@ -7,6 +7,10 @@ import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGat
 import { getDay } from '@/modules/study-plan/constants/days.constant'
 import { useProgress } from '@/modules/study-plan/composables/use-progress.composable'
 import { stripPlanLocalePrefix } from '@/modules/study-plan/utils/plan-locale-path.util'
+import {
+  docsHref,
+  openInNewTab,
+} from '@/modules/study-plan/utils/open-app-link.util'
 
 const props = defineProps<{
   dayNumber: number
@@ -32,7 +36,7 @@ function openDoc(path: string) {
   if (normalized.startsWith('documents/')) {
     const m = normalized.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
     if (m) {
-      router.push(`/docs/${m[1]}/${m[2]}?from=plan`)
+      openInNewTab(docsHref(m[1], m[2]))
       return
     }
   }
@@ -40,8 +44,7 @@ function openDoc(path: string) {
 }
 
 function openDocs(payload: { lang: string; slug: string; hash?: string }) {
-  const hash = payload.hash ? `#${payload.hash}` : ''
-  router.push(`/docs/${payload.lang}/${payload.slug}?from=plan${hash}`)
+  openInNewTab(docsHref(payload.lang, payload.slug, payload.hash))
 }
 
 watch(

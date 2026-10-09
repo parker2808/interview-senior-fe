@@ -1,36 +1,40 @@
-# Daily index — 30 ngày
+# Daily index — 30 ngày ôn phỏng vấn senior
+
+**Source of truth:** Plan homepage trong app. Mỗi ngày: mục tiêu → docs (tab mới) → Q&A (tab mới) → hands-on → 1 algo.
+
+Đây không phải giáo trình Capstone. Mở link để luyện câu trả lời: quyết định → constraint → failure mode → cách đo.
 
 Plan: [30-day-study-plan.md](./30-day-study-plan.md) · Algo: [algorithms-track.md](./algorithms-track.md) · Lab: [lab-repo.md](./lab-repo.md)
 
-| Day | Ngày | Chủ đề | Hướng dẫn | Worksheet | Lab setup | Đề algo |
-|---:|---|---|---|---|---|---|
-| 1 | 03/10/2026 | JS core + User flow | [day-01-starter.md](./day-01-starter.md) | [artifacts/day-01-user-flow.md](./artifacts/day-01-user-flow.md) | [lab/day-01-lab.md](./lab/day-01-lab.md) | [day-01](./artifacts/algo/problems/day-01.md) |
-| 2 | 04/10/2026 | this/event loop + UI critique | [day-02-starter.md](./day-02-starter.md) | [artifacts/day-02-ui-critique.md](./artifacts/day-02-ui-critique.md) | [lab/day-02-lab.md](./lab/day-02-lab.md) | [day-02](./artifacts/algo/problems/day-02.md) |
-| 3 | 05/10/2026 | Promises + Forms | [day-03-starter.md](./day-03-starter.md) | [artifacts/day-03-form-states.md](./artifacts/day-03-form-states.md) | [lab/day-03-lab.md](./lab/day-03-lab.md) | [day-03](./artifacts/algo/problems/day-03.md) |
-| 4 | 06/10/2026 | TS + Data-heavy table | [day-04-starter.md](./day-04-starter.md) | [artifacts/day-04-data-heavy.md](./artifacts/day-04-data-heavy.md) | [lab/day-04-lab.md](./lab/day-04-lab.md) | [day-04](./artifacts/algo/problems/day-04.md) |
-| 5 | 07/10/2026 | Product AC + custom hooks | [day-05-starter.md](./day-05-starter.md) | [artifacts/day-05-product-review.md](./artifacts/day-05-product-review.md) | [lab/day-05-lab.md](./lab/day-05-lab.md) | [day-05](./artifacts/algo/problems/day-05.md) |
-| 6 | 08/10/2026 | Work management + React lab setup | [day-06-starter.md](./day-06-starter.md) | [artifacts/day-06-work-plan.md](./artifacts/day-06-work-plan.md) | [lab/day-06-lab.md](./lab/day-06-lab.md) | [day-06](./artifacts/algo/problems/day-06.md) |
-| 7 | 09/10/2026 | Capstone kickoff + composition | [day-07-starter.md](./day-07-starter.md) | [artifacts/capstone/00-feature-template.md](./artifacts/capstone/00-feature-template.md) | [lab/day-07-lab.md](./lab/day-07-lab.md) | [day-07](./artifacts/algo/problems/day-07.md) |
-| 8 | 10/10/2026 | Component architecture | [day-08-starter.md](./day-08-starter.md) | [artifacts/day-08-component-tree.md](./artifacts/day-08-component-tree.md) | [lab/day-08-lab.md](./lab/day-08-lab.md) | [day-08](./artifacts/algo/problems/day-08.md) |
-| 9 | 11/10/2026 | State ownership | [day-09-starter.md](./day-09-starter.md) | [artifacts/day-09-state-map.md](./artifacts/day-09-state-map.md) | [lab/day-09-lab.md](./lab/day-09-lab.md) | [day-09](./artifacts/algo/problems/day-09.md) |
-| 10 | 12/10/2026 | Data flow + TypeScript | [day-10-starter.md](./day-10-starter.md) | [artifacts/day-10-types-and-flow.md](./artifacts/day-10-types-and-flow.md) | [lab/day-10-lab.md](./lab/day-10-lab.md) | [day-10](./artifacts/algo/problems/day-10.md) |
-| 11 | 13/10/2026 | Design system primitives | [day-11-starter.md](./day-11-starter.md) | [artifacts/day-11-design-primitives.md](./artifacts/day-11-design-primitives.md) | [lab/day-11-lab.md](./lab/day-11-lab.md) | [day-11](./artifacts/algo/problems/day-11.md) |
-| 12 | 14/10/2026 | Responsive trade-offs | [day-12-starter.md](./day-12-starter.md) | [artifacts/day-12-responsive-tradeoffs.md](./artifacts/day-12-responsive-tradeoffs.md) | [lab/day-12-lab.md](./lab/day-12-lab.md) | [day-12](./artifacts/algo/problems/day-12.md) |
-| 13 | 15/10/2026 | A11y modal | [day-13-starter.md](./day-13-starter.md) | [artifacts/day-13-modal-a11y.md](./artifacts/day-13-modal-a11y.md) | [lab/day-13-lab.md](./lab/day-13-lab.md) | [day-13](./artifacts/algo/problems/day-13.md) |
-| 14 | 16/10/2026 | Keyboard review + week pack | [day-14-starter.md](./day-14-starter.md) | [artifacts/day-14-keyboard-result.md](./artifacts/day-14-keyboard-result.md) | [lab/day-14-lab.md](./lab/day-14-lab.md) | [day-14](./artifacts/algo/problems/day-14.md) |
-| 15 | 17/10/2026 | API contract + React Query | [day-15-starter.md](./day-15-starter.md) | [artifacts/day-15-api-contract.md](./artifacts/day-15-api-contract.md) | [lab/day-15-lab.md](./lab/day-15-lab.md) | [day-15](./artifacts/algo/problems/day-15.md) |
-| 16 | 18/10/2026 | Error matrix + Error Boundary | [day-16-starter.md](./day-16-starter.md) | [artifacts/day-16-error-matrix.md](./artifacts/day-16-error-matrix.md) | [lab/day-16-lab.md](./lab/day-16-lab.md) | [day-16](./artifacts/algo/problems/day-16.md) |
-| 17 | 19/10/2026 | FE security | [day-17-starter.md](./day-17-starter.md) | [artifacts/day-17-security.md](./artifacts/day-17-security.md) | [lab/day-17-lab.md](./lab/day-17-lab.md) | [day-17](./artifacts/algo/problems/day-17.md) |
-| 18 | 20/10/2026 | Race conditions + AbortController | [day-18-starter.md](./day-18-starter.md) | [artifacts/day-18-debug-stale-ui.md](./artifacts/day-18-debug-stale-ui.md) | [lab/day-18-lab.md](./lab/day-18-lab.md) | [day-18](./artifacts/algo/problems/day-18.md) |
-| 19 | 21/10/2026 | Performance + React memo | [day-19-starter.md](./day-19-starter.md) | [artifacts/day-19-performance.md](./artifacts/day-19-performance.md) | [lab/day-19-lab.md](./lab/day-19-lab.md) | [day-19](./artifacts/algo/problems/day-19.md) |
-| 20 | 22/10/2026 | Observability + Next App Router | [day-20-starter.md](./day-20-starter.md) | [artifacts/day-20-observability.md](./artifacts/day-20-observability.md) | [lab/day-20-lab.md](./lab/day-20-lab.md) | [day-20](./artifacts/algo/problems/day-20.md) |
-| 21 | 23/10/2026 | CI + Next data caching | [day-21-starter.md](./day-21-starter.md) | [artifacts/day-21-ci-and-adr.md](./artifacts/day-21-ci-and-adr.md) | [lab/day-21-lab.md](./lab/day-21-lab.md) | [day-21](./artifacts/algo/problems/day-21.md) |
-| 22 | 24/10/2026 | Test pyramid + RTL | [day-22-starter.md](./day-22-starter.md) | [artifacts/day-22-test-plan.md](./artifacts/day-22-test-plan.md) | [lab/day-22-lab.md](./lab/day-22-lab.md) | [day-22](./artifacts/algo/problems/day-22.md) |
-| 23 | 25/10/2026 | Form/API tests Vue+React | [day-23-starter.md](./day-23-starter.md) | [artifacts/day-23-test-snippets-vue-react.md](./artifacts/day-23-test-snippets-vue-react.md) | [lab/day-23-lab.md](./lab/day-23-lab.md) | [day-23](./artifacts/algo/problems/day-23.md) |
-| 24 | 26/10/2026 | E2E + coding interview sim | [day-24-starter.md](./day-24-starter.md) | [artifacts/day-24-e2e-and-ci.md](./artifacts/day-24-e2e-and-ci.md) | [lab/day-24-lab.md](./lab/day-24-lab.md) | [day-24](./artifacts/algo/problems/day-24.md) |
-| 25 | 27/10/2026 | AI-assisted + Server Actions | [day-25-starter.md](./day-25-starter.md) | [artifacts/day-25-ai-review.md](./artifacts/day-25-ai-review.md) | [lab/day-25-lab.md](./lab/day-25-lab.md) | [day-25](./artifacts/algo/problems/day-25.md) |
-| 26 | 28/10/2026 | Code review + Next Capstone page | [day-26-starter.md](./day-26-starter.md) | [artifacts/day-26-code-review.md](./artifacts/day-26-code-review.md) | [lab/day-26-lab.md](./lab/day-26-lab.md) | [day-26](./artifacts/algo/problems/day-26.md) |
-| 27 | 29/10/2026 | Capstone Vue spike | [day-27-starter.md](./day-27-starter.md) | [artifacts/day-27-vue-spike.md](./artifacts/day-27-vue-spike.md) | [lab/day-27-lab.md](./lab/day-27-lab.md) | [day-27](./artifacts/algo/problems/day-27.md) |
-| 28 | 30/10/2026 | Capstone React/Next spike | [day-28-starter.md](./day-28-starter.md) | [artifacts/day-28-react-spike.md](./artifacts/day-28-react-spike.md) | [lab/day-28-lab.md](./lab/day-28-lab.md) | [day-28](./artifacts/algo/problems/day-28.md) |
-| 29 | 31/10/2026 | DoD + delivery notes | [day-29-starter.md](./day-29-starter.md) | [artifacts/capstone/15-delivery-notes.md](./artifacts/capstone/15-delivery-notes.md) | [lab/day-29-lab.md](./lab/day-29-lab.md) | [day-29](./artifacts/algo/problems/day-29.md) |
-| 30 | 01/11/2026 | Full mock interview | [day-30-starter.md](./day-30-starter.md) | [artifacts/day-30-mock-outline.md](./artifacts/day-30-mock-outline.md) | [lab/day-30-lab.md](./lab/day-30-lab.md) | [day-30](./artifacts/algo/problems/day-30.md) |
+| Day | Ngày | Chủ đề phỏng vấn | Lab | Đề algo |
+|---:|---|---|---|---|
+| 1 | 03/10/2026 | Inventory the UI system | [lab](./lab/day-01-lab.md) | [Two Sum](./artifacts/algo/problems/day-01.md) |
+| 2 | 04/10/2026 | Make UI states readable | [lab](./lab/day-02-lab.md) | [Valid Anagram](./artifacts/algo/problems/day-02.md) |
+| 3 | 05/10/2026 | Accessible forms and feedback | [lab](./lab/day-03-lab.md) | [Contains Duplicate](./artifacts/algo/problems/day-03.md) |
+| 4 | 06/10/2026 | Responsive data-heavy UI | [lab](./lab/day-04-lab.md) | [Group Anagrams](./artifacts/algo/problems/day-04.md) |
+| 5 | 07/10/2026 | Keyboard-first interaction | [lab](./lab/day-05-lab.md) | [Top K Frequent](./artifacts/algo/problems/day-05.md) |
+| 6 | 08/10/2026 | Component APIs with TypeScript | [lab](./lab/day-06-lab.md) | [Valid Parentheses](./artifacts/algo/problems/day-06.md) |
+| 7 | 09/10/2026 | Week 1 mini redesign | [lab](./lab/day-07-lab.md) | [Week 1 review](./artifacts/algo/problems/day-07.md) |
+| 8 | 10/10/2026 | JavaScript execution model | [lab](./lab/day-08-lab.md) | [Binary Search](./artifacts/algo/problems/day-08.md) |
+| 9 | 11/10/2026 | Promises, fetch, browser events | [lab](./lab/day-09-lab.md) | [Two Sum II](./artifacts/algo/problems/day-09.md) |
+| 10 | 12/10/2026 | TypeScript for real FE models | [lab](./lab/day-10-lab.md) | [Longest substring](./artifacts/algo/problems/day-10.md) |
+| 11 | 13/10/2026 | Vue reactivity and composables | [lab](./lab/day-11-lab.md) | [Min Stack](./artifacts/algo/problems/day-11.md) |
+| 12 | 14/10/2026 | Nuxt rendering and data fetching | [lab](./lab/day-12-lab.md) | [Reverse Linked List](./artifacts/algo/problems/day-12.md) |
+| 13 | 15/10/2026 | State ownership, Pinia, cache | [lab](./lab/day-13-lab.md) | [Linked List Cycle](./artifacts/algo/problems/day-13.md) |
+| 14 | 16/10/2026 | Performance and debugging review | [lab](./lab/day-14-lab.md) | [Week 2 review](./artifacts/algo/problems/day-14.md) |
+| 15 | 17/10/2026 | React mental model for a Vue dev | [lab](./lab/day-15-lab.md) | [Level-order BFS](./artifacts/algo/problems/day-15.md) |
+| 16 | 18/10/2026 | State, refs, controlled inputs | [lab](./lab/day-16-lab.md) | [Max depth DFS](./artifacts/algo/problems/day-16.md) |
+| 17 | 19/10/2026 | Effects, async cleanup, error boundaries | [lab](./lab/day-17-lab.md) | [LCA of BST](./artifacts/algo/problems/day-17.md) |
+| 18 | 20/10/2026 | App Router, layouts, loading, errors | [lab](./lab/day-18-lab.md) | [Number of Islands](./artifacts/algo/problems/day-18.md) |
+| 19 | 21/10/2026 | Next data fetching, cache, rendering | [lab](./lab/day-19-lab.md) | [Climbing Stairs](./artifacts/algo/problems/day-19.md) |
+| 20 | 22/10/2026 | Server Actions, middleware, SEO | [lab](./lab/day-20-lab.md) | [Coin Change](./artifacts/algo/problems/day-20.md) |
+| 21 | 23/10/2026 | Small Next.js hands-on | [lab](./lab/day-21-lab.md) | [Week 3 review](./artifacts/algo/problems/day-21.md) |
+| 22 | 24/10/2026 | Design an admin dashboard | [lab](./lab/day-22-lab.md) | [House Robber](./artifacts/algo/problems/day-22.md) |
+| 23 | 25/10/2026 | Data-heavy surfaces + performance | [lab](./lab/day-23-lab.md) | [Warm-up set](./artifacts/algo/problems/day-23.md) |
+| 24 | 26/10/2026 | Security, release, resilience | [lab](./lab/day-24-lab.md) | [Live-coding sim](./artifacts/algo/problems/day-24.md) |
+| 25 | 27/10/2026 | Behavioral: intro, impact, seniority | [lab](./lab/day-25-lab.md) | [Weak-topic #1](./artifacts/algo/problems/day-25.md) |
+| 26 | 28/10/2026 | Behavioral: project, trade-off, React gap | [lab](./lab/day-26-lab.md) | [Weak-topic #2](./artifacts/algo/problems/day-26.md) |
+| 27 | 29/10/2026 | Cross-stack review and weak spots | [lab](./lab/day-27-lab.md) | [Big-O flashcards](./artifacts/algo/problems/day-27.md) |
+| 28 | 30/10/2026 | Mock round #1 | [lab](./lab/day-28-lab.md) | [Cooldown](./artifacts/algo/problems/day-28.md) |
+| 29 | 31/10/2026 | Final review and company fit | [lab](./lab/day-29-lab.md) | [Pattern review](./artifacts/algo/problems/day-29.md) |
+| 30 | 01/11/2026 | Full mock + retrospective | [lab](./lab/day-30-lab.md) | [Mock live-coding](./artifacts/algo/problems/day-30.md) |

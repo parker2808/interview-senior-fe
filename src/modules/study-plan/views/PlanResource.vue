@@ -4,6 +4,10 @@ import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vu
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import ResourceDoc from '@/modules/study-plan/components/ResourceDoc/ResourceDoc.vue'
 import { stripPlanLocalePrefix } from '@/modules/study-plan/utils/plan-locale-path.util'
+import {
+  docsHref,
+  openInNewTab,
+} from '@/modules/study-plan/utils/open-app-link.util'
 
 const props = defineProps<{
   path: string
@@ -17,7 +21,7 @@ function openDoc(path: string) {
   if (normalized.startsWith('documents/')) {
     const m = normalized.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
     if (m) {
-      router.push(`/docs/${m[1]}/${m[2]}?from=plan`)
+      openInNewTab(docsHref(m[1], m[2]))
       return
     }
   }
@@ -25,8 +29,7 @@ function openDoc(path: string) {
 }
 
 function openDocs(payload: { lang: string; slug: string; hash?: string }) {
-  const hash = payload.hash ? `#${payload.hash}` : ''
-  router.push(`/docs/${payload.lang}/${payload.slug}?from=plan${hash}`)
+  openInNewTab(docsHref(payload.lang, payload.slug, payload.hash))
 }
 </script>
 

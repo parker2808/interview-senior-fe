@@ -2,6 +2,10 @@
 import type {
   StudyPlanDayContent,
 } from '@/modules/study-plan/constants/plan-content.constant'
+import {
+  docsHref,
+  interviewHref,
+} from '@/modules/study-plan/utils/open-app-link.util'
 
 const props = defineProps<{
   content: StudyPlanDayContent
@@ -14,21 +18,15 @@ const lang = computed<'en' | 'vi'>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
 
-function openStudyLink(link: StudyPlanDayContent['studyLinks'][number]) {
-  if (link.kind === 'docs') {
-    router.push(`/docs/${lang.value}/${link.slug}?from=plan`)
-    return
-  }
+const linkClass =
+  'inline-flex min-h-10 items-center rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink'
 
-  router.push(`/plan/doc/${encodeURIComponent(link.path)}`)
-}
-
-function openQuestion(id: string) {
-  router.push(`/interview?q=${encodeURIComponent(id)}`)
+function openPlanDoc(path: string) {
+  router.push(`/plan/doc/${encodeURIComponent(path)}`)
 }
 
 function openAlgo() {
-  router.push(`/plan/doc/${encodeURIComponent(props.content.algorithm.path)}`)
+  openPlanDoc(props.content.algorithm.path)
 }
 </script>
 
@@ -48,13 +46,27 @@ function openAlgo() {
         <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
           {{ $t('plan.study') }}
         </p>
+        <p class="mt-1 text-[11px] leading-4 text-ink-faint">
+          {{ $t('plan.openNewTabHint') }}
+        </p>
         <div class="mt-3 flex flex-wrap gap-2">
+          <a
+            v-for="link in content.studyLinks.filter((item) => item.kind === 'docs')"
+            :key="`docs:${link.slug}`"
+            :href="docsHref(lang, link.slug)"
+            target="_blank"
+            rel="noopener noreferrer"
+            :class="linkClass"
+          >
+            {{ link.label[lang] }}
+            <span class="ml-1 text-ink-faint" aria-hidden="true">↗</span>
+          </a>
           <button
-            v-for="link in content.studyLinks"
-            :key="`${link.kind}:${link.kind === 'docs' ? link.slug : link.path}`"
+            v-for="link in content.studyLinks.filter((item) => item.kind === 'plan')"
+            :key="`plan:${link.path}`"
             type="button"
-            class="min-h-10 rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
-            @click="openStudyLink(link)"
+            :class="linkClass"
+            @click="openPlanDoc(link.path)"
           >
             {{ link.label[lang] }}
           </button>
@@ -65,16 +77,21 @@ function openAlgo() {
         <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
           {{ $t('plan.qa') }}
         </p>
+        <p class="mt-1 text-[11px] leading-4 text-ink-faint">
+          {{ $t('plan.openNewTabHint') }}
+        </p>
         <div class="mt-3 flex flex-wrap gap-2">
-          <button
+          <a
             v-for="question in content.questionLinks"
             :key="question.id"
-            type="button"
-            class="min-h-10 rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
-            @click="openQuestion(question.id)"
+            :href="interviewHref(question.id)"
+            target="_blank"
+            rel="noopener noreferrer"
+            :class="linkClass"
           >
             {{ question.label[lang] }}
-          </button>
+            <span class="ml-1 text-ink-faint" aria-hidden="true">↗</span>
+          </a>
         </div>
       </section>
     </div>
@@ -107,7 +124,7 @@ function openAlgo() {
         </div>
         <button
           type="button"
-          class="min-h-10 rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
+          :class="linkClass"
           @click="openAlgo"
         >
           {{ $t('plan.open') }}
