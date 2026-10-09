@@ -32,7 +32,7 @@ repo/
 **Rules**
 
 1. **One KB** — never copy `en/` / `vi/` into a module.
-2. **In-app** — Nuxt Knowledge Base at `/docs/:lang/:slug`; study-plan day links navigate there.
+2. **In-app** — Nuxt Knowledge Base at `/docs/:lang/:slug`. Study-plan day links open this in a **new tab** so the day page stays put.
 3. Bundle via Vite aliases `@kb` → `documents/`, `@plan` → plan content.
 
 See root [README.md](../README.md) for the topic index and [STRUCTURE.md](../STRUCTURE.md) for UI module layout.
