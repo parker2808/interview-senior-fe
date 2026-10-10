@@ -1,10 +1,4 @@
-import { marked } from 'marked'
-import { FLAT_TOPICS } from '@/modules/knowledge-base/constants/doc-catalog.constant'
-import {
-  kbPath,
-  loadKbMarkdown,
-} from '@/modules/knowledge-base/utils/load-kb-markdown.util'
-import { enhanceMarkdownHtml } from '@/modules/knowledge-base/utils/toc.util'
+import type { KnowledgeCatalog } from '@/modules/content/types'
 import type { DocLang } from '@/modules/core/constants/locale.constant'
 
 export type DocSearchHit = {
@@ -28,8 +22,6 @@ type IndexEntry = {
   haystack: string
 }
 
-let cached: IndexEntry[] | null = null
-
 function normalize(s: string) {
   return s
     .toLowerCase()
@@ -40,46 +32,12 @@ function normalize(s: string) {
     .trim()
 }
 
-function decodeEntities(s: string) {
-  return s
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-}
-
-/** Pull headings + ids from the same HTML pipeline the reader uses. */
-function extractIndexedHeadings(
-  md: string,
-): Array<{ level: number; text: string; id: string }> {
-  const rawHtml = marked.parse(md, { async: false }) as string
-  const { html } = enhanceMarkdownHtml(rawHtml)
-  const out: Array<{ level: number; text: string; id: string }> = []
-  const re = /<h([1-6])([^>]*)>([\s\S]*?)<\/h\1>/gi
-  let m: RegExpExecArray | null
-  while ((m = re.exec(html))) {
-    const level = Number(m[1])
-    const attrs = m[2]
-    const inner = m[3]
-    const id = attrs.match(/\sid=["']([^"']+)["']/i)?.[1]
-    const text = decodeEntities(inner.replace(/<[^>]+>/g, '')).trim()
-    if (!id || !text) continue
-    if (text === 'Table of Contents' || text === 'Mục lục') continue
-    out.push({ level, text, id })
-  }
-  return out
-}
-
-function buildIndex(): IndexEntry[] {
-  if (cached) return cached
+function buildIndex(catalog: KnowledgeCatalog | null | undefined): IndexEntry[] {
   const entries: IndexEntry[] = []
+  if (!catalog) return entries
 
-  for (const topic of FLAT_TOPICS) {
+  for (const topic of catalog.docs) {
     for (const lang of ['vi', 'en'] as DocLang[]) {
-      const loaded = loadKbMarkdown(kbPath(lang, topic.slug))
-      if (!loaded.ok) continue
-
       const topicTitle = topic.title[lang]
       entries.push({
         slug: topic.slug,
@@ -88,28 +46,26 @@ function buildIndex(): IndexEntry[] {
         heading: topicTitle,
         headingId: '',
         level: 0,
-        haystack: normalize(`${topicTitle} ${topic.slug} ${topic.group}`),
+        haystack: normalize(`${topicTitle} ${topic.slug} ${topic.category}`),
       })
-
-      for (const h of extractIndexedHeadings(loaded.text)) {
+      for (const heading of topic.headings) {
         entries.push({
           slug: topic.slug,
           lang,
           topicTitle,
-          heading: h.text,
-          headingId: h.id,
-          level: h.level,
-          haystack: normalize(`${h.text} ${topicTitle} ${topic.slug}`),
+          heading: heading.text[lang],
+          headingId: heading.id[lang],
+          level: heading.level,
+          haystack: normalize(
+            `${heading.text[lang]} ${topicTitle} ${topic.slug}`,
+          ),
         })
       }
     }
   }
-
-  cached = entries
   return entries
 }
 
-/** Subsequence fuzzy: "hois" matches "hoisting". */
 function subsequenceMatch(query: string, text: string): boolean {
   let qi = 0
   for (let i = 0; i < text.length && qi < query.length; i++) {
@@ -129,20 +85,14 @@ function scoreEntry(query: string, entry: IndexEntry): number {
   if (h.includes(q)) return 160 - Math.min(h.indexOf(q), 40)
   if (hay.includes(q)) return 120
 
-  // word prefix (hois → hoisting)
   const words = h.split(/[\s/-]+/).filter(Boolean)
   for (const w of words) {
     if (w.startsWith(q)) return 150
   }
 
-  // fuzzy only within a single word that shares the first letter
   if (q.length >= 3) {
     for (const w of words) {
-      if (
-        w.length >= q.length &&
-        w[0] === q[0] &&
-        subsequenceMatch(q, w)
-      ) {
+      if (w.length >= q.length && w[0] === q[0] && subsequenceMatch(q, w)) {
         return 90
       }
     }
@@ -154,10 +104,11 @@ function scoreEntry(query: string, entry: IndexEntry): number {
 export function searchDocs(
   query: string,
   lang: DocLang,
+  catalog: KnowledgeCatalog | null | undefined,
   limit = 40,
 ): DocSearchHit[] {
   const q = query.trim()
-  const index = buildIndex().filter((e) => e.lang === lang)
+  const index = buildIndex(catalog).filter((e) => e.lang === lang)
 
   if (!q) {
     return index

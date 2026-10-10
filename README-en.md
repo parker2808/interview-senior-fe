@@ -14,10 +14,12 @@ Content track: [`modules/study-plan-30-days/`](./modules/study-plan-30-days/) ·
 - **Stack:** Nuxt 3 + TypeScript + Tailwind — see [STRUCTURE.md](./STRUCTURE.md)
 - **Hub:** `/` · **Knowledge Base:** `/docs/:lang/:slug` · **Plan:** `/plan`
 
+KB / plan / Q&A live in the private repo [`parker2808/interview-fe-data`](https://github.com/parker2808/interview-fe-data) and are pulled **at build time** (`CONTENT_REPO_TOKEN` or `CONTENT_LOCAL_PATH`). The public app no longer bundles markdown or the Q&A bank.
+
 ```bash
 npm install
-npm run dev      # http://localhost:3000
-npm run build
+CONTENT_LOCAL_PATH=/path/to/interview-fe-data npm run dev
+CONTENT_LOCAL_PATH=/path/to/interview-fe-data npm run build
 ```
 
 Progress: default **View** mode; unlock **Edit** with a 6-digit passcode via `POST /api/auth/edit` (env `EDIT_PASSCODE`). Cloud: Nitro + **private** Blob (`GET/PUT /api/progress`).
@@ -30,10 +32,10 @@ Progress: default **View** mode; unlock **Edit** with a 6-digit passcode via `PO
 STRUCTURE.md                    # UI module conventions (src/modules)
 nuxt.config.ts · app.vue
 pages/                          # thin routes
-src/modules/{hub,knowledge-base,study-plan,core}/
-documents/                      # shared KB vi|en
-modules/study-plan-30-days/content/
-server/api/                     # progress + edit auth
+src/modules/{hub,knowledge-base,study-plan,core,content}/
+scripts/                        # pull-data, export, validate
+schema/
+server/api/                     # progress + content APIs + auth
 i18n/locales/
 ```
 
@@ -47,189 +49,189 @@ The documentation is organized into 6 main groups with 22 topics. Read them as i
 
 ### I. Core Web Technologies
 
-1. **[JavaScript](./documents/en/javascript.md)**
+1. **[JavaScript](https://parker-interview-senior-fe.vercel.app/docs/en/javascript)**
 
-   1.1. [Core Concepts](./documents/en/javascript.md#11-core-concepts): [High-order Array Functions](./documents/en/javascript.md#111-high-order-array-functions), [Promise/Async-Await](./documents/en/javascript.md#112-promise-vs-asyncawait), [Event Loop](./documents/en/javascript.md#113-event-loop-microtask-macrotask), [var vs let vs const](./documents/en/javascript.md#114-var-vs-let-vs-const)
+   1.1. [Core Concepts](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#11-core-concepts): [High-order Array Functions](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#111-high-order-array-functions), [Promise/Async-Await](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#112-promise-vs-asyncawait), [Event Loop](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#113-event-loop-microtask-macrotask), [var vs let vs const](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#114-var-vs-let-vs-const)
 
-   1.2. [Advanced](./documents/en/javascript.md#12-advanced-concepts): [Closure & Scope](./documents/en/javascript.md#121-closure--scope), [Prototypes](./documents/en/javascript.md#122-prototypes--inheritance), [`this`](./documents/en/javascript.md#123-this-keyword), [ES6+](./documents/en/javascript.md#124-es6-modern-features), [Memory Management](./documents/en/javascript.md#125-memory-management--garbage-collection), [Hoisting](./documents/en/javascript.md#126-hoisting--temporal-dead-zone), [AbortController & cancellation](./documents/en/javascript.md#127-abortcontroller-concurrency-and-cancellation)
+   1.2. [Advanced](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#12-advanced-concepts): [Closure & Scope](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#121-closure--scope), [Prototypes](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#122-prototypes--inheritance), [`this`](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#123-this-keyword), [ES6+](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#124-es6-modern-features), [Memory Management](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#125-memory-management--garbage-collection), [Hoisting](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#126-hoisting--temporal-dead-zone), [AbortController & cancellation](https://parker-interview-senior-fe.vercel.app/docs/en/javascript#127-abortcontroller-concurrency-and-cancellation)
 
-2. **[TypeScript](./documents/en/typescript.md)**
+2. **[TypeScript](https://parker-interview-senior-fe.vercel.app/docs/en/typescript)**
 
-   2.1. [Core Concepts](./documents/en/typescript.md#21-core-concepts): [Interface vs Type](./documents/en/typescript.md#211-interface-vs-type), [Generics](./documents/en/typescript.md#212-generics), [Type Narrowing](./documents/en/typescript.md#213-type-narrowing)
+   2.1. [Core Concepts](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#21-core-concepts): [Interface vs Type](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#211-interface-vs-type), [Generics](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#212-generics), [Type Narrowing](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#213-type-narrowing)
 
-   2.2. [Advanced Types](./documents/en/typescript.md#22-advanced-types): [Utility Types](./documents/en/typescript.md#221-utility-types), [Type Guards](./documents/en/typescript.md#222-type-guards--predicates), [Mapped Types](./documents/en/typescript.md#223-mapped-types), [Conditional Types](./documents/en/typescript.md#224-conditional-types), [Template Literals](./documents/en/typescript.md#225-template-literal-types)
+   2.2. [Advanced Types](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#22-advanced-types): [Utility Types](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#221-utility-types), [Type Guards](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#222-type-guards--predicates), [Mapped Types](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#223-mapped-types), [Conditional Types](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#224-conditional-types), [Template Literals](https://parker-interview-senior-fe.vercel.app/docs/en/typescript#225-template-literal-types)
 
-3. **[CSS Layout](./documents/en/css-layout.md)**
+3. **[CSS Layout](https://parker-interview-senior-fe.vercel.app/docs/en/css-layout)**
 
-   3.1. [Flexbox](./documents/en/css-layout.md#31-flexbox) vs [CSS Grid](./documents/en/css-layout.md#32-css-grid)
+   3.1. [Flexbox](https://parker-interview-senior-fe.vercel.app/docs/en/css-layout#31-flexbox) vs [CSS Grid](https://parker-interview-senior-fe.vercel.app/docs/en/css-layout#32-css-grid)
 
-   3.2. [Responsive Design Strategy](./documents/en/css-layout.md#34-responsive-design-strategy), [stacking / overflow](./documents/en/css-layout.md#35-stacking-context-and-z-index), [modern layout](./documents/en/css-layout.md#37-modern-layout-subgrid-has-cascade-layers)
+   3.2. [Responsive Design Strategy](https://parker-interview-senior-fe.vercel.app/docs/en/css-layout#34-responsive-design-strategy), [stacking / overflow](https://parker-interview-senior-fe.vercel.app/docs/en/css-layout#35-stacking-context-and-z-index), [modern layout](https://parker-interview-senior-fe.vercel.app/docs/en/css-layout#37-modern-layout-subgrid-has-cascade-layers)
 
-4. **[Browser & Web APIs](./documents/en/web-apis.md)**
+4. **[Browser & Web APIs](https://parker-interview-senior-fe.vercel.app/docs/en/web-apis)**
 
-   4.1. [IndexedDB](./documents/en/web-apis.md#41-indexeddb), [Web Workers](./documents/en/web-apis.md#42-web-workers), [Service Workers](./documents/en/web-apis.md#43-service-workers--pwa)
+   4.1. [IndexedDB](https://parker-interview-senior-fe.vercel.app/docs/en/web-apis#41-indexeddb), [Web Workers](https://parker-interview-senior-fe.vercel.app/docs/en/web-apis#42-web-workers), [Service Workers](https://parker-interview-senior-fe.vercel.app/docs/en/web-apis#43-service-workers--pwa)
 
-   4.2. [Intersection Observer](./documents/en/web-apis.md#44-intersection-observer), [Modern APIs](./documents/en/web-apis.md#45-modern-apis), [multi-tab auth](./documents/en/web-apis.md#46-broadcastchannel-and-storage-events-multi-tab-auth)
+   4.2. [Intersection Observer](https://parker-interview-senior-fe.vercel.app/docs/en/web-apis#44-intersection-observer), [Modern APIs](https://parker-interview-senior-fe.vercel.app/docs/en/web-apis#45-modern-apis), [multi-tab auth](https://parker-interview-senior-fe.vercel.app/docs/en/web-apis#46-broadcastchannel-and-storage-events-multi-tab-auth)
 
 ---
 
 ### II. Vue Ecosystem
 
-5. **[Vue 3](./documents/en/vue3.md)**
+5. **[Vue 3](https://parker-interview-senior-fe.vercel.app/docs/en/vue3)**
 
-   5.1. [Core Concepts](./documents/en/vue3.md#51-core-concepts): [Virtual DOM](./documents/en/vue3.md#511-virtual-dom), [Composition API](./documents/en/vue3.md#512-options-api-vs-composition-api), [Reactivity](./documents/en/vue3.md#5110-reactivity-setup-computed-watch), [Lifecycle](./documents/en/vue3.md#5111-lifecycle-vue-2-vs-vue-3), [Props](./documents/en/vue3.md#515-props-passing-data-from-parent-to-child), [Computed](./documents/en/vue3.md#516-computed-vs-method), [Watch](./documents/en/vue3.md#517-computed-vs-watch)
+   5.1. [Core Concepts](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#51-core-concepts): [Virtual DOM](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#511-virtual-dom), [Composition API](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#512-options-api-vs-composition-api), [Reactivity](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#5110-reactivity-setup-computed-watch), [Lifecycle](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#5111-lifecycle-vue-2-vs-vue-3), [Props](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#515-props-passing-data-from-parent-to-child), [Computed](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#516-computed-vs-method), [Watch](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#517-computed-vs-watch)
 
-   5.2. [Advanced Features](./documents/en/vue3.md#52-advanced-features): [Teleport](./documents/en/vue3.md#521-teleport), [Suspense](./documents/en/vue3.md#522-suspense), [Custom Directives](./documents/en/vue3.md#523-custom-directives), [Plugins](./documents/en/vue3.md#524-plugins), [Render Functions](./documents/en/vue3.md#525-render-functions--jsx), [Provide/Inject](./documents/en/vue3.md#526-provide--inject), [slots / keep-alive / hydration](./documents/en/vue3.md#528-slots--scoped-slots)
+   5.2. [Advanced Features](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#52-advanced-features): [Teleport](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#521-teleport), [Suspense](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#522-suspense), [Custom Directives](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#523-custom-directives), [Plugins](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#524-plugins), [Render Functions](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#525-render-functions--jsx), [Provide/Inject](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#526-provide--inject), [slots / keep-alive / hydration](https://parker-interview-senior-fe.vercel.app/docs/en/vue3#528-slots--scoped-slots)
 
-6. **[Nuxt.js](./documents/en/nuxt.md)**
+6. **[Nuxt.js](https://parker-interview-senior-fe.vercel.app/docs/en/nuxt)**
 
-   6.1. [Nuxt vs Vue](./documents/en/nuxt.md#62-nuxt-vs-vue)
+   6.1. [Nuxt vs Vue](https://parker-interview-senior-fe.vercel.app/docs/en/nuxt#62-nuxt-vs-vue)
 
-   6.2. [CSR vs SSR vs SSG vs SPA](./documents/en/nuxt.md#63-csr-vs-ssr-vs-ssg-vs-spa), [data fetching](./documents/en/nuxt.md#65-useasyncdata-vs-usefetch-vs-fetch), [hydration](./documents/en/nuxt.md#68-hydration-clientonly-lazy-hydration)
+   6.2. [CSR vs SSR vs SSG vs SPA](https://parker-interview-senior-fe.vercel.app/docs/en/nuxt#63-csr-vs-ssr-vs-ssg-vs-spa), [data fetching](https://parker-interview-senior-fe.vercel.app/docs/en/nuxt#65-useasyncdata-vs-usefetch-vs-fetch), [hydration](https://parker-interview-senior-fe.vercel.app/docs/en/nuxt#68-hydration-clientonly-lazy-hydration)
 
-7. **[State Management](./documents/en/state-management.md)**
+7. **[State Management](https://parker-interview-senior-fe.vercel.app/docs/en/state-management)**
 
-   7.1. [Vuex vs Pinia](./documents/en/state-management.md#71-vuex-vs-pinia)
+   7.1. [Vuex vs Pinia](https://parker-interview-senior-fe.vercel.app/docs/en/state-management#71-vuex-vs-pinia)
 
-   7.2. [State Flow](./documents/en/state-management.md#72-state-flow), [commit vs dispatch](./documents/en/state-management.md#74-vuex-commit-vs-dispatch)
+   7.2. [State Flow](https://parker-interview-senior-fe.vercel.app/docs/en/state-management#72-state-flow), [commit vs dispatch](https://parker-interview-senior-fe.vercel.app/docs/en/state-management#74-vuex-commit-vs-dispatch)
 
-   7.3. [Global vs Local State](./documents/en/state-management.md#73-when-to-use-global-vs-local-state), [SSR hydration](./documents/en/state-management.md#76-ssr-hydration-of-stores), [server cache vs store](./documents/en/state-management.md#77-server-cache-vs-client-store)
+   7.3. [Global vs Local State](https://parker-interview-senior-fe.vercel.app/docs/en/state-management#73-when-to-use-global-vs-local-state), [SSR hydration](https://parker-interview-senior-fe.vercel.app/docs/en/state-management#76-ssr-hydration-of-stores), [server cache vs store](https://parker-interview-senior-fe.vercel.app/docs/en/state-management#77-server-cache-vs-client-store)
 
 ---
 
 ### III. React Ecosystem
 
-8. **[React](./documents/en/react.md)**
+8. **[React](https://parker-interview-senior-fe.vercel.app/docs/en/react)**
 
-   8.1. [Core Concepts](./documents/en/react.md#201-core-concepts): [Virtual DOM](./documents/en/react.md#2011-virtual-dom--reconciliation), [Hooks](./documents/en/react.md#2012-class-components-vs-function-components--hooks), [JSX](./documents/en/react.md#2013-jsx--rendering-model), [Props/State](./documents/en/react.md#2014-props-vs-state), [`useEffect`](./documents/en/react.md#2017-effects-useeffect-vs-vue-watch--lifecycle), [`useMemo`](./documents/en/react.md#2018-derived-values-usememo-vs-vue-computed)
+   8.1. [Core Concepts](https://parker-interview-senior-fe.vercel.app/docs/en/react#201-core-concepts): [Virtual DOM](https://parker-interview-senior-fe.vercel.app/docs/en/react#2011-virtual-dom--reconciliation), [Hooks](https://parker-interview-senior-fe.vercel.app/docs/en/react#2012-class-components-vs-function-components--hooks), [JSX](https://parker-interview-senior-fe.vercel.app/docs/en/react#2013-jsx--rendering-model), [Props/State](https://parker-interview-senior-fe.vercel.app/docs/en/react#2014-props-vs-state), [`useEffect`](https://parker-interview-senior-fe.vercel.app/docs/en/react#2017-effects-useeffect-vs-vue-watch--lifecycle), [`useMemo`](https://parker-interview-senior-fe.vercel.app/docs/en/react#2018-derived-values-usememo-vs-vue-computed)
 
-   8.2. [Advanced](./documents/en/react.md#202-advanced-features): [Context](./documents/en/react.md#2021-context-vs-vue-provide--inject), [Portals](./documents/en/react.md#2022-portals-vs-vue-teleport), [Suspense](./documents/en/react.md#2023-suspense), [Error Boundaries](./documents/en/react.md#2024-error-boundaries), [Custom Hooks](./documents/en/react.md#2025-custom-hooks-vs-vue-composables)
+   8.2. [Advanced](https://parker-interview-senior-fe.vercel.app/docs/en/react#202-advanced-features): [Context](https://parker-interview-senior-fe.vercel.app/docs/en/react#2021-context-vs-vue-provide--inject), [Portals](https://parker-interview-senior-fe.vercel.app/docs/en/react#2022-portals-vs-vue-teleport), [Suspense](https://parker-interview-senior-fe.vercel.app/docs/en/react#2023-suspense), [Error Boundaries](https://parker-interview-senior-fe.vercel.app/docs/en/react#2024-error-boundaries), [Custom Hooks](https://parker-interview-senior-fe.vercel.app/docs/en/react#2025-custom-hooks-vs-vue-composables)
 
-9. **[Next.js](./documents/en/nextjs.md)**
+9. **[Next.js](https://parker-interview-senior-fe.vercel.app/docs/en/nextjs)**
 
-   9.1. [Next vs React](./documents/en/nextjs.md#212-nextjs-vs-react), [Nuxt ↔ Next](./documents/en/nextjs.md#213-nuxt--next-mental-map)
+   9.1. [Next vs React](https://parker-interview-senior-fe.vercel.app/docs/en/nextjs#212-nextjs-vs-react), [Nuxt ↔ Next](https://parker-interview-senior-fe.vercel.app/docs/en/nextjs#213-nuxt--next-mental-map)
 
-   9.2. [CSR/SSR/SSG/RSC](./documents/en/nextjs.md#214-csr-vs-ssr-vs-ssg-vs-spa-and-rsc), [App Router](./documents/en/nextjs.md#215-app-router-fundamentals)
+   9.2. [CSR/SSR/SSG/RSC](https://parker-interview-senior-fe.vercel.app/docs/en/nextjs#214-csr-vs-ssr-vs-ssg-vs-spa-and-rsc), [App Router](https://parker-interview-senior-fe.vercel.app/docs/en/nextjs#215-app-router-fundamentals)
 
-10. **[State Management (React)](./documents/en/state-management-react.md)**
+10. **[State Management (React)](https://parker-interview-senior-fe.vercel.app/docs/en/state-management-react)**
 
-    10.1. [Layers of state](./documents/en/state-management-react.md#221-layers-of-state), [RTK vs Zustand vs Jotai](./documents/en/state-management-react.md#222-redux-toolkit-vs-zustand-vs-jotai)
+    10.1. [Layers of state](https://parker-interview-senior-fe.vercel.app/docs/en/state-management-react#221-layers-of-state), [RTK vs Zustand vs Jotai](https://parker-interview-senior-fe.vercel.app/docs/en/state-management-react#222-redux-toolkit-vs-zustand-vs-jotai)
 
-    10.2. [Server state (Query/SWR)](./documents/en/state-management-react.md#225-server-state-tanstack-query--swr), [Next patterns](./documents/en/state-management-react.md#226-nextjs-state-patterns)
+    10.2. [Server state (Query/SWR)](https://parker-interview-senior-fe.vercel.app/docs/en/state-management-react#225-server-state-tanstack-query--swr), [Next patterns](https://parker-interview-senior-fe.vercel.app/docs/en/state-management-react#226-nextjs-state-patterns)
 
-    10.3. [Vuex/Pinia → React](./documents/en/state-management-react.md#227-vuex--pinia--react-map)
+    10.3. [Vuex/Pinia → React](https://parker-interview-senior-fe.vercel.app/docs/en/state-management-react#227-vuex--pinia--react-map)
 
 ---
 
 ### IV. Development Practices
 
-11. **[Testing](./documents/en/testing.md)** ⭐
+11. **[Testing](https://parker-interview-senior-fe.vercel.app/docs/en/testing)** ⭐
 
-    11.1. [Unit Testing (Vitest)](./documents/en/testing.md#81-unit-testing-with-vitest)
+    11.1. [Unit Testing (Vitest)](https://parker-interview-senior-fe.vercel.app/docs/en/testing#81-unit-testing-with-vitest)
 
-    11.2. [Component Testing (Vue Test Utils)](./documents/en/testing.md#82-component-testing-with-vue-test-utils)
+    11.2. [Component Testing (Vue Test Utils)](https://parker-interview-senior-fe.vercel.app/docs/en/testing#82-component-testing-with-vue-test-utils)
 
-    11.3. [E2E Testing (Playwright)](./documents/en/testing.md#83-e2e-testing-with-playwright)
+    11.3. [E2E Testing (Playwright)](https://parker-interview-senior-fe.vercel.app/docs/en/testing#83-e2e-testing-with-playwright)
 
-    11.4. [Test Coverage](./documents/en/testing.md#84-test-coverage), [TDD/BDD](./documents/en/testing.md#85-tddbdd-methodology), [contracts / visual / legacy](./documents/en/testing.md#86-contract-tests-visual-regression-and-legacy-vue)
+    11.4. [Test Coverage](https://parker-interview-senior-fe.vercel.app/docs/en/testing#84-test-coverage), [TDD/BDD](https://parker-interview-senior-fe.vercel.app/docs/en/testing#85-tddbdd-methodology), [contracts / visual / legacy](https://parker-interview-senior-fe.vercel.app/docs/en/testing#86-contract-tests-visual-regression-and-legacy-vue)
 
-12. **[Performance & Optimization](./documents/en/performance.md)** ⚡
+12. **[Performance & Optimization](https://parker-interview-senior-fe.vercel.app/docs/en/performance)** ⚡
 
-    12.1. [Core Performance](./documents/en/performance.md#91-core-performance): [Storage](./documents/en/performance.md#911-storage-localstorage-vs-sessionstorage-vs-cookie), [Optimization](./documents/en/performance.md#912-performance-optimization), [Code Review](./documents/en/performance.md#913-code-review-checklist)
+    12.1. [Core Performance](https://parker-interview-senior-fe.vercel.app/docs/en/performance#91-core-performance): [Storage](https://parker-interview-senior-fe.vercel.app/docs/en/performance#911-storage-localstorage-vs-sessionstorage-vs-cookie), [Optimization](https://parker-interview-senior-fe.vercel.app/docs/en/performance#912-performance-optimization), [Code Review](https://parker-interview-senior-fe.vercel.app/docs/en/performance#913-code-review-checklist)
 
-    12.2. [Advanced](./documents/en/performance.md#92-advanced-optimization): [Code Splitting](./documents/en/performance.md#921-code-splitting-strategies), [Tree Shaking](./documents/en/performance.md#922-tree-shaking), [Debounce/Throttle](./documents/en/performance.md#923-debounce-vs-throttle), [Image/Font](./documents/en/performance.md#924-image--font-optimization), [Core Web Vitals](./documents/en/performance.md#925-core-web-vitals-in-2026)
+    12.2. [Advanced](https://parker-interview-senior-fe.vercel.app/docs/en/performance#92-advanced-optimization): [Code Splitting](https://parker-interview-senior-fe.vercel.app/docs/en/performance#921-code-splitting-strategies), [Tree Shaking](https://parker-interview-senior-fe.vercel.app/docs/en/performance#922-tree-shaking), [Debounce/Throttle](https://parker-interview-senior-fe.vercel.app/docs/en/performance#923-debounce-vs-throttle), [Image/Font](https://parker-interview-senior-fe.vercel.app/docs/en/performance#924-image--font-optimization), [Core Web Vitals](https://parker-interview-senior-fe.vercel.app/docs/en/performance#925-core-web-vitals-in-2026)
 
-13. **[Security](./documents/en/security.md)** 🔒
+13. **[Security](https://parker-interview-senior-fe.vercel.app/docs/en/security)** 🔒
 
-    13.1. [Prevent XSS](./documents/en/security.md#101-preventing-xss)
+    13.1. [Prevent XSS](https://parker-interview-senior-fe.vercel.app/docs/en/security#101-preventing-xss)
 
-    13.2. [Protect Against CSRF](./documents/en/security.md#102-protecting-against-csrf)
+    13.2. [Protect Against CSRF](https://parker-interview-senior-fe.vercel.app/docs/en/security#102-protecting-against-csrf)
 
-    13.3. [Authentication Best Practices](./documents/en/security.md#103-authentication-best-practices)
+    13.3. [Authentication Best Practices](https://parker-interview-senior-fe.vercel.app/docs/en/security#103-authentication-best-practices)
 
-    13.4. [Input Validation](./documents/en/security.md#104-input-validation--sanitization), [HTTPS & CORS](./documents/en/security.md#105-https--cors), [supply chain](./documents/en/security.md#106-supply-chain-security), [secrets](./documents/en/security.md#107-secrets-in-vite-and-nuxt)
+    13.4. [Input Validation](https://parker-interview-senior-fe.vercel.app/docs/en/security#104-input-validation--sanitization), [HTTPS & CORS](https://parker-interview-senior-fe.vercel.app/docs/en/security#105-https--cors), [supply chain](https://parker-interview-senior-fe.vercel.app/docs/en/security#106-supply-chain-security), [secrets](https://parker-interview-senior-fe.vercel.app/docs/en/security#107-secrets-in-vite-and-nuxt)
 
-14. **[Accessibility (A11y)](./documents/en/accessibility.md)** ♿
+14. **[Accessibility (A11y)](https://parker-interview-senior-fe.vercel.app/docs/en/accessibility)** ♿
 
-    14.1. [ARIA Attributes](./documents/en/accessibility.md#111-aria-attributes)
+    14.1. [ARIA Attributes](https://parker-interview-senior-fe.vercel.app/docs/en/accessibility#111-aria-attributes)
 
-    14.2. [Keyboard Navigation](./documents/en/accessibility.md#112-keyboard-navigation)
+    14.2. [Keyboard Navigation](https://parker-interview-senior-fe.vercel.app/docs/en/accessibility#112-keyboard-navigation)
 
-    14.3. [Semantic HTML](./documents/en/accessibility.md#113-semantic-html)
+    14.3. [Semantic HTML](https://parker-interview-senior-fe.vercel.app/docs/en/accessibility#113-semantic-html)
 
-    14.4. [WCAG Guidelines](./documents/en/accessibility.md#114-wcag-guidelines), [CI + design-system a11y](./documents/en/accessibility.md#115-testing-a11y-in-ci-and-design-system-prs)
+    14.4. [WCAG Guidelines](https://parker-interview-senior-fe.vercel.app/docs/en/accessibility#114-wcag-guidelines), [CI + design-system a11y](https://parker-interview-senior-fe.vercel.app/docs/en/accessibility#115-testing-a11y-in-ci-and-design-system-prs)
 
 ---
 
 ### V. Infrastructure & Tools
 
-15. **[Build Tools](./documents/en/build-tools.md)**
+15. **[Build Tools](https://parker-interview-senior-fe.vercel.app/docs/en/build-tools)**
 
-    15.1. [Vite vs Webpack](./documents/en/build-tools.md#121-vite-vs-webpack), [CI builds](./documents/en/build-tools.md#122-ci-build-performance), [3MB chunk debug](./documents/en/build-tools.md#123-how-youd-debug-a-3mb-main-chunk)
+    15.1. [Vite vs Webpack](https://parker-interview-senior-fe.vercel.app/docs/en/build-tools#121-vite-vs-webpack), [CI builds](https://parker-interview-senior-fe.vercel.app/docs/en/build-tools#122-ci-build-performance), [3MB chunk debug](https://parker-interview-senior-fe.vercel.app/docs/en/build-tools#123-how-youd-debug-a-3mb-main-chunk)
 
-16. **[Networking](./documents/en/networking.md)**
+16. **[Networking](https://parker-interview-senior-fe.vercel.app/docs/en/networking)**
 
-    16.1. [REST vs WebSocket](./documents/en/networking.md#131-websocket-vs-rest), [REST from FE](./documents/en/networking.md#132-rest-design-from-the-frontend), [optimistic UI](./documents/en/networking.md#133-loading-error-empty-and-optimistic-ui)
+    16.1. [REST vs WebSocket](https://parker-interview-senior-fe.vercel.app/docs/en/networking#131-websocket-vs-rest), [REST from FE](https://parker-interview-senior-fe.vercel.app/docs/en/networking#132-rest-design-from-the-frontend), [optimistic UI](https://parker-interview-senior-fe.vercel.app/docs/en/networking#133-loading-error-empty-and-optimistic-ui)
 
-17. **[DevOps](./documents/en/devops.md)**
+17. **[DevOps](https://parker-interview-senior-fe.vercel.app/docs/en/devops)**
 
-    17.1. [GitOps & ArgoCD Pipeline](./documents/en/devops.md#141-gitops--argocd-pipeline), [FE CI/CD](./documents/en/devops.md#142-frontend-cicd-pipeline-youd-design), [feature flags](./documents/en/devops.md#144-feature-flags)
+    17.1. [GitOps & ArgoCD Pipeline](https://parker-interview-senior-fe.vercel.app/docs/en/devops#141-gitops--argocd-pipeline), [FE CI/CD](https://parker-interview-senior-fe.vercel.app/docs/en/devops#142-frontend-cicd-pipeline-youd-design), [feature flags](https://parker-interview-senior-fe.vercel.app/docs/en/devops#144-feature-flags)
 
 ---
 
 ### VI. Professional Skills
 
-18. **[Architecture & Design Patterns](./documents/en/architecture.md)** 🏗️
+18. **[Architecture & Design Patterns](https://parker-interview-senior-fe.vercel.app/docs/en/architecture)** 🏗️
 
-    18.1. [Component Patterns](./documents/en/architecture.md#151-component-patterns)
+    18.1. [Component Patterns](https://parker-interview-senior-fe.vercel.app/docs/en/architecture#151-component-patterns)
 
-    18.2. [Design Patterns](./documents/en/architecture.md#152-design-patterns)
+    18.2. [Design Patterns](https://parker-interview-senior-fe.vercel.app/docs/en/architecture#152-design-patterns)
 
-    18.3. [SOLID Principles](./documents/en/architecture.md#153-solid-principles-in-frontend)
+    18.3. [SOLID Principles](https://parker-interview-senior-fe.vercel.app/docs/en/architecture#153-solid-principles-in-frontend)
 
-    18.4. [Module Federation & Micro-frontends](./documents/en/architecture.md#154-module-federation--micro-frontends), [feature folders](./documents/en/architecture.md#155-folder-and-feature-architecture)
+    18.4. [Module Federation & Micro-frontends](https://parker-interview-senior-fe.vercel.app/docs/en/architecture#154-module-federation--micro-frontends), [feature folders](https://parker-interview-senior-fe.vercel.app/docs/en/architecture#155-folder-and-feature-architecture)
 
-19. **[System Design](./documents/en/system-design.md)**
+19. **[System Design](https://parker-interview-senior-fe.vercel.app/docs/en/system-design)**
 
-    19.1. [Frontend Architecture Decisions](./documents/en/system-design.md#161-frontend-architecture-decisions)
+    19.1. [Frontend Architecture Decisions](https://parker-interview-senior-fe.vercel.app/docs/en/system-design#161-frontend-architecture-decisions)
 
-    19.2. [Caching Strategies](./documents/en/system-design.md#162-caching-strategies)
+    19.2. [Caching Strategies](https://parker-interview-senior-fe.vercel.app/docs/en/system-design#162-caching-strategies)
 
-    19.3. [Component Library Design](./documents/en/system-design.md#163-component-library-design), [dashboard design](./documents/en/system-design.md#164-example-design-a-large-dashboard), [marketing+app hybrid](./documents/en/system-design.md#165-example-design-a-high-traffic-marketing--app-hybrid)
+    19.3. [Component Library Design](https://parker-interview-senior-fe.vercel.app/docs/en/system-design#163-component-library-design), [dashboard design](https://parker-interview-senior-fe.vercel.app/docs/en/system-design#164-example-design-a-large-dashboard), [marketing+app hybrid](https://parker-interview-senior-fe.vercel.app/docs/en/system-design#165-example-design-a-high-traffic-marketing--app-hybrid)
 
-20. **[Leadership & Soft Skills](./documents/en/leadership.md)** 👥
+20. **[Leadership & Soft Skills](https://parker-interview-senior-fe.vercel.app/docs/en/leadership)** 👥
 
-    20.1. [Technical Mentorship](./documents/en/leadership.md#171-technical-mentorship)
+    20.1. [Technical Mentorship](https://parker-interview-senior-fe.vercel.app/docs/en/leadership#171-technical-mentorship)
 
-    20.2. [Architecture Decision Records (ADR)](./documents/en/leadership.md#172-architecture-decision-records-adr)
+    20.2. [Architecture Decision Records (ADR)](https://parker-interview-senior-fe.vercel.app/docs/en/leadership#172-architecture-decision-records-adr)
 
-    20.3. [Complexity Estimation](./documents/en/leadership.md#173-complexity-estimation)
+    20.3. [Complexity Estimation](https://parker-interview-senior-fe.vercel.app/docs/en/leadership#173-complexity-estimation)
 
-    20.4. [Conflict Resolution](./documents/en/leadership.md#174-conflict-resolution), [pushing back](./documents/en/leadership.md#175-saying-no--pushing-back-on-pm), [review as leadership](./documents/en/leadership.md#176-code-review-as-leadership)
+    20.4. [Conflict Resolution](https://parker-interview-senior-fe.vercel.app/docs/en/leadership#174-conflict-resolution), [pushing back](https://parker-interview-senior-fe.vercel.app/docs/en/leadership#175-saying-no--pushing-back-on-pm), [review as leadership](https://parker-interview-senior-fe.vercel.app/docs/en/leadership#176-code-review-as-leadership)
 
-21. **[Practical Interview Questions](./documents/en/practical-questions.md)** 💼
+21. **[Practical Interview Questions](https://parker-interview-senior-fe.vercel.app/docs/en/practical-questions)** 💼
 
-    21.1. [401 Error Handling & Authentication](./documents/en/practical-questions.md#181-handling-401-error--redirect-to-login)
+    21.1. [401 Error Handling & Authentication](https://parker-interview-senior-fe.vercel.app/docs/en/practical-questions#181-handling-401-error--redirect-to-login)
 
-    21.2. [Project Management Process](./documents/en/practical-questions.md#182-project-management-tools--process)
+    21.2. [Project Management Process](https://parker-interview-senior-fe.vercel.app/docs/en/practical-questions#182-project-management-tools--process)
 
-    21.3. [Bug vs Feature Assessment](./documents/en/practical-questions.md#183-assessing-issue-bug-or-feature-request)
+    21.3. [Bug vs Feature Assessment](https://parker-interview-senior-fe.vercel.app/docs/en/practical-questions#183-assessing-issue-bug-or-feature-request)
 
-    21.4. [Git Workflow](./documents/en/practical-questions.md#184-git-workflow)
+    21.4. [Git Workflow](https://parker-interview-senior-fe.vercel.app/docs/en/practical-questions#184-git-workflow)
 
-    21.5. [Resolving Git Conflicts](./documents/en/practical-questions.md#185-resolving-git-conflicts)
+    21.5. [Resolving Git Conflicts](https://parker-interview-senior-fe.vercel.app/docs/en/practical-questions#185-resolving-git-conflicts)
 
-    21.6. [Squashing Commits](./documents/en/practical-questions.md#186-squashing-commits), [incidents](./documents/en/practical-questions.md#187-how-you-handle-a-production-incident-as-frontend), [week-1 onboarding](./documents/en/practical-questions.md#188-how-you-onboard-onto-an-unknown-vue-codebase-in-week-1)
+    21.6. [Squashing Commits](https://parker-interview-senior-fe.vercel.app/docs/en/practical-questions#186-squashing-commits), [incidents](https://parker-interview-senior-fe.vercel.app/docs/en/practical-questions#187-how-you-handle-a-production-incident-as-frontend), [week-1 onboarding](https://parker-interview-senior-fe.vercel.app/docs/en/practical-questions#188-how-you-onboard-onto-an-unknown-vue-codebase-in-week-1)
 
-22. **[Monitoring & Error Handling](./documents/en/monitoring.md)** 📊
+22. **[Monitoring & Error Handling](https://parker-interview-senior-fe.vercel.app/docs/en/monitoring)** 📊
 
-    22.1. [Error Tracking (Sentry)](./documents/en/monitoring.md#191-error-tracking-with-sentry)
+    22.1. [Error Tracking (Sentry)](https://parker-interview-senior-fe.vercel.app/docs/en/monitoring#191-error-tracking-with-sentry)
 
-    22.2. [Error Boundaries](./documents/en/monitoring.md#192-error-boundaries-in-vue)
+    22.2. [Error Boundaries](https://parker-interview-senior-fe.vercel.app/docs/en/monitoring#192-error-boundaries-in-vue)
 
-    22.3. [Performance Monitoring](./documents/en/monitoring.md#193-performance-monitoring)
+    22.3. [Performance Monitoring](https://parker-interview-senior-fe.vercel.app/docs/en/monitoring#193-performance-monitoring)
 
-    22.4. [Logging Strategy](./documents/en/monitoring.md#194-logging-strategy), [alerting](./documents/en/monitoring.md#195-alerting), [error-spike playbook](./documents/en/monitoring.md#196-feature-flag--error-spike-playbook)
+    22.4. [Logging Strategy](https://parker-interview-senior-fe.vercel.app/docs/en/monitoring#194-logging-strategy), [alerting](https://parker-interview-senior-fe.vercel.app/docs/en/monitoring#195-alerting), [error-spike playbook](https://parker-interview-senior-fe.vercel.app/docs/en/monitoring#196-feature-flag--error-spike-playbook)
 
 ---
 

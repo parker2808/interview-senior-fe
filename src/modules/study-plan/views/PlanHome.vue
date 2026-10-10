@@ -5,12 +5,12 @@ import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import DayList from '@/modules/study-plan/components/DayList/DayList.vue'
 import ProgressTools from '@/modules/study-plan/components/ProgressTools/ProgressTools.vue'
 import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
-import { PLAN_GAPS } from '@/modules/study-plan/constants/plan-content.constant'
-import {
-  DAYS,
-  PLAN_RESOURCES,
-} from '@/modules/study-plan/constants/days.constant'
 import { useProgress } from '@/modules/study-plan/composables/use-progress.composable'
+import {
+  planResourceHref,
+  usePlanIndex,
+} from '@/modules/study-plan/composables/use-plan-index.composable'
+import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 
 const router = useRouter()
 const { locale } = useI18n()
@@ -18,6 +18,8 @@ const { locale } = useI18n()
 const lang = computed<'en' | 'vi'>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
+
+const { data: plan } = await usePlanIndex()
 
 const {
   source,
@@ -51,16 +53,16 @@ const navOpen = ref(false)
 
 const filteredDays = computed(() =>
   weekFilter.value === 0
-    ? DAYS
-    : DAYS.filter((d) => d.week === weekFilter.value),
+    ? plan.value.days
+    : plan.value.days.filter((d) => d.week === weekFilter.value),
 )
 
 function openDay(day: number) {
   router.push(`/plan/day/${day}`)
 }
 
-function openResource(path: string) {
-  router.push(`/plan/doc/${encodeURIComponent(path)}`)
+function openResource(id: string) {
+  router.push(planResourceHref(id))
   navOpen.value = false
 }
 </script>
@@ -195,7 +197,7 @@ function openResource(path: string) {
         <button
           type="button"
           class="mt-3 min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink sm:mt-0"
-          @click="openResource('lab-repo.md')"
+          @click="openResource('lab')"
         >
           {{ $t('plan.setupCta') }}
         </button>
@@ -205,12 +207,12 @@ function openResource(path: string) {
       </p>
       <ul class="mt-4 space-y-2 text-sm text-ink">
         <li
-          v-for="(item, index) in PLAN_GAPS"
+          v-for="(item, index) in plan.gaps"
           :key="index"
           class="flex items-start gap-2"
         >
           <span class="mt-1 text-accent-ink">•</span>
-          <span>{{ item[lang] }}</span>
+          <span>{{ pickLocale(item, lang) }}</span>
         </li>
       </ul>
     </section>
@@ -229,11 +231,11 @@ function openResource(path: string) {
         :class="navOpen ? 'flex' : 'hidden sm:flex'"
       >
         <button
-          v-for="r in PLAN_RESOURCES"
+          v-for="r in plan.resources"
           :key="r.id"
           type="button"
           class="min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"
-          @click="openResource(r.path)"
+          @click="openResource(r.id)"
         >
           {{ $t(`plan.resources.${r.id}`) }}
         </button>
@@ -243,6 +245,7 @@ function openResource(path: string) {
     <main class="mt-6 pb-10">
       <DayList
         :days="filteredDays"
+        :weeks="plan.weeks"
         :week-filter="weekFilter"
         :is-done="isDone"
         :read-only="readOnly"

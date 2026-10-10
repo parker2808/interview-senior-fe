@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { marked } from 'marked'
-import { loadMarkdown, isBundledPath } from '@/modules/study-plan/utils/load-markdown.util'
-import { classifyMarkdownHref } from '@/modules/study-plan/utils/markdown-links.util'
-import { autolinkMarkdownPaths } from '@/modules/study-plan/utils/autolink-md.util'
+import BlockRenderer from '@/modules/content/components/BlockRenderer/BlockRenderer.vue'
+import { classifyContentHref } from '@/modules/content/utils/content-links.util'
+import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 import {
-  applyPlanHeadingI18n,
-  stripPlanLocalePrefix,
-} from '@/modules/study-plan/utils/plan-locale-path.util'
+  usePlanIndex,
+  usePlanResource,
+} from '@/modules/study-plan/composables/use-plan-index.composable'
 
 const props = defineProps<{
   path: string
@@ -21,23 +20,22 @@ const { locale, t } = useI18n()
 const lang = computed<'en' | 'vi'>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
-const loaded = computed(() => loadMarkdown(props.path, lang.value))
-const html = computed(() => {
-  const raw = marked.parse(loaded.value.text, { async: false }) as string
-  return applyPlanHeadingI18n(
-    autolinkMarkdownPaths(raw, loaded.value.path),
-    t,
-  )
-})
+const resourceId = computed(() => props.path)
+const { data: resource } = await usePlanResource(resourceId)
+const { data: plan } = usePlanIndex()
+
+const aliases = computed(() =>
+  (plan.value?.resources ?? []).flatMap((item) => [item.id, ...item.aliases]),
+)
 
 function onDocClick(e: MouseEvent) {
   const a = (e.target as HTMLElement).closest('a')
   if (!a) return
   const href = a.getAttribute('href')
-  const result = classifyMarkdownHref(
-    loaded.value.path,
+  const result = classifyContentHref(
     href || '',
-    (path) => isBundledPath(path, lang.value),
+    resource.value?.id || props.path,
+    aliases.value,
   )
   if (result.kind === 'ignore' || result.kind === 'hash') return
   e.preventDefault()
@@ -47,7 +45,7 @@ function onDocClick(e: MouseEvent) {
   }
   if (result.kind === 'docs') {
     emit('open-docs', {
-      lang: result.lang || 'vi',
+      lang: result.lang || lang.value,
       slug: result.slug,
       hash: result.hash,
     })
@@ -62,9 +60,17 @@ function onDocClick(e: MouseEvent) {
 <template>
   <article class="animate-fade-up rounded-2xl border border-line bg-surface-elevated p-4 sm:p-6">
     <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-accent-ink">
-      {{ path.startsWith('documents/') ? t('plan.resourceKb') : t('plan.resourceDoc') }}
+      {{ t('plan.resourceDoc') }}
     </p>
-    <h2 class="mb-4 break-all text-lg font-bold sm:text-xl">{{ stripPlanLocalePrefix(loaded.path) }}</h2>
-    <div class="prose-doc" v-html="html" @click="onDocClick" />
+    <h2 class="mb-4 break-all text-lg font-bold sm:text-xl">
+      {{ resource ? pickLocale(resource.title, lang) : path }}
+    </h2>
+    <BlockRenderer
+      v-if="resource"
+      :sections="resource.sections"
+      :lang="lang"
+      @click="onDocClick"
+    />
+    <p v-else class="text-ink-muted">{{ t('plan.dayNotFound') }}</p>
   </article>
 </template>

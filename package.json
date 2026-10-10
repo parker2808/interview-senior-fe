@@ -6,9 +6,15 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "nuxt dev",
+    "predev": "node scripts/pull-data.mjs",
     "build": "nuxt build",
+    "prebuild": "node scripts/pull-data.mjs",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "data:export": "node scripts/export-data.mjs",
+    "data:migrate": "node scripts/migrate-data.mjs",
+    "data:validate": "node scripts/validate-content.mjs",
+    "data:pull": "node scripts/pull-data.mjs"
   },
   "repository": {
     "type": "git",

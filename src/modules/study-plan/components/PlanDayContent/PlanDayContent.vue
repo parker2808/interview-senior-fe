@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type {
-  StudyPlanDayContent,
-} from '@/modules/study-plan/constants/plan-content.constant'
+import type { PlanDaySummary } from '@/modules/content/types'
 import {
   docsHref,
   interviewHref,
 } from '@/modules/study-plan/utils/open-app-link.util'
+import { planResourceHref } from '@/modules/study-plan/composables/use-plan-index.composable'
+import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 
 const props = defineProps<{
-  content: StudyPlanDayContent
+  content: PlanDaySummary
 }>()
 
 const router = useRouter()
@@ -21,12 +21,12 @@ const lang = computed<'en' | 'vi'>(() =>
 const linkClass =
   'inline-flex min-h-10 items-center rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink'
 
-function openPlanDoc(path: string) {
-  router.push(`/plan/doc/${encodeURIComponent(path)}`)
+function openPlanDoc(id: string) {
+  router.push(planResourceHref(id))
 }
 
 function openAlgo() {
-  openPlanDoc(props.content.algorithm.path)
+  openPlanDoc(props.content.algorithm.resourceId)
 }
 </script>
 
@@ -37,7 +37,7 @@ function openAlgo() {
         {{ $t('plan.goal') }}
       </p>
       <p class="mt-2 text-sm leading-6 text-ink sm:text-base">
-        {{ content.goal[lang] }}
+        {{ pickLocale(content.goal, lang) }}
       </p>
     </section>
 
@@ -58,17 +58,17 @@ function openAlgo() {
             rel="noopener noreferrer"
             :class="linkClass"
           >
-            {{ link.label[lang] }}
+            {{ pickLocale(link.label, lang) }}
             <span class="ml-1 text-ink-faint" aria-hidden="true">↗</span>
           </a>
           <button
             v-for="link in content.studyLinks.filter((item) => item.kind === 'plan')"
-            :key="`plan:${link.path}`"
+            :key="`plan:${link.resourceId}`"
             type="button"
             :class="linkClass"
-            @click="openPlanDoc(link.path)"
+            @click="openPlanDoc(link.resourceId)"
           >
-            {{ link.label[lang] }}
+            {{ pickLocale(link.label, lang) }}
           </button>
         </div>
       </section>
@@ -89,7 +89,7 @@ function openAlgo() {
             rel="noopener noreferrer"
             :class="linkClass"
           >
-            {{ question.label[lang] }}
+            {{ pickLocale(question.label, lang) }}
             <span class="ml-1 text-ink-faint" aria-hidden="true">↗</span>
           </a>
         </div>
@@ -107,7 +107,7 @@ function openAlgo() {
           class="flex items-start gap-2"
         >
           <span class="mt-1 text-accent-ink">•</span>
-          <span>{{ item[lang] }}</span>
+          <span>{{ pickLocale(item, lang) }}</span>
         </li>
       </ul>
     </section>
@@ -119,7 +119,7 @@ function openAlgo() {
             {{ $t('plan.algorithm') }}
           </p>
           <p class="mt-2 text-sm leading-6 text-ink sm:text-base">
-            {{ content.algorithm.label[lang] }}
+            {{ pickLocale(content.algorithm.label, lang) }}
           </p>
         </div>
         <button
@@ -143,7 +143,7 @@ function openAlgo() {
           class="flex items-start gap-2"
         >
           <span class="mt-0.5 text-base text-accent-ink">☐</span>
-          <span>{{ item[lang] }}</span>
+          <span>{{ pickLocale(item, lang) }}</span>
         </li>
       </ul>
     </section>
@@ -152,7 +152,7 @@ function openAlgo() {
       v-if="content.note"
       class="rounded-xl border border-dashed border-line bg-surface px-3 py-2 text-sm leading-6 text-ink-muted"
     >
-      {{ content.note[lang] }}
+      {{ pickLocale(content.note, lang) }}
     </p>
   </div>
 </template>

@@ -3,11 +3,11 @@ import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import ResourceDoc from '@/modules/study-plan/components/ResourceDoc/ResourceDoc.vue'
-import { stripPlanLocalePrefix } from '@/modules/study-plan/utils/plan-locale-path.util'
 import {
   docsHref,
   openInNewTab,
 } from '@/modules/study-plan/utils/open-app-link.util'
+import { planResourceHref } from '@/modules/study-plan/composables/use-plan-index.composable'
 
 const props = defineProps<{
   path: string
@@ -17,15 +17,14 @@ const router = useRouter()
 const { t } = useI18n()
 
 function openDoc(path: string) {
-  const normalized = stripPlanLocalePrefix(path)
-  if (normalized.startsWith('documents/')) {
-    const m = normalized.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
+  if (path.startsWith('documents/')) {
+    const m = path.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
     if (m) {
       openInNewTab(docsHref(m[1], m[2]))
       return
     }
   }
-  router.push(`/plan/doc/${encodeURIComponent(normalized)}`)
+  router.push(planResourceHref(path))
 }
 
 function openDocs(payload: { lang: string; slug: string; hash?: string }) {

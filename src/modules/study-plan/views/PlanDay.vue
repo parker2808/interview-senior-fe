@@ -4,9 +4,11 @@ import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vu
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import DayDetail from '@/modules/study-plan/components/DayDetail/DayDetail.vue'
 import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
-import { getDay } from '@/modules/study-plan/constants/days.constant'
 import { useProgress } from '@/modules/study-plan/composables/use-progress.composable'
-import { stripPlanLocalePrefix } from '@/modules/study-plan/utils/plan-locale-path.util'
+import { usePlanDay } from '@/modules/study-plan/composables/use-plan-index.composable'
+import {
+  planResourceHref,
+} from '@/modules/study-plan/composables/use-plan-index.composable'
 import {
   docsHref,
   openInNewTab,
@@ -18,7 +20,8 @@ const props = defineProps<{
 
 const router = useRouter()
 const { t } = useI18n()
-const day = computed(() => getDay(props.dayNumber))
+const dayNumber = computed(() => props.dayNumber)
+const { data: day } = await usePlanDay(dayNumber)
 
 const {
   readOnly,
@@ -32,15 +35,14 @@ const {
 } = useProgress()
 
 function openDoc(path: string) {
-  const normalized = stripPlanLocalePrefix(path)
-  if (normalized.startsWith('documents/')) {
-    const m = normalized.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
+  if (path.startsWith('documents/')) {
+    const m = path.match(/^documents\/(vi|en)\/([^/]+)\.md$/)
     if (m) {
       openInNewTab(docsHref(m[1], m[2]))
       return
     }
   }
-  router.push(`/plan/doc/${encodeURIComponent(normalized)}`)
+  router.push(planResourceHref(path))
 }
 
 function openDocs(payload: { lang: string; slug: string; hash?: string }) {

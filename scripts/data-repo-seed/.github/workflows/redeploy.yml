@@ -1,0 +1,19 @@
+name: Redeploy site
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  vercel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Deploy Hook
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$VERCEL_DEPLOY_HOOK_URL" ]; then
+            echo "Add repository secret VERCEL_DEPLOY_HOOK_URL (Vercel Deploy Hook)."
+            exit 1
+          fi
+          curl -fsS -X POST "$VERCEL_DEPLOY_HOOK_URL"

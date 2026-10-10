@@ -4,11 +4,13 @@ import {
   searchDocs,
   type DocSearchHit,
 } from '@/modules/knowledge-base/utils/doc-search-index.util'
+import { useKbCatalog } from '@/modules/knowledge-base/composables/use-kb-catalog.composable'
 
 const props = defineProps<{
   open: boolean
   lang: DocLang
 }>()
+const { data: catalog } = useKbCatalog()
 
 const emit = defineEmits<{
   'update:open': [value: boolean]
@@ -19,7 +21,9 @@ const query = ref('')
 const inputRef = ref<HTMLInputElement | null>(null)
 const activeIndex = ref(0)
 
-const results = computed(() => searchDocs(query.value, props.lang, 50))
+const results = computed(() =>
+  searchDocs(query.value, props.lang, catalog.value, 50),
+)
 
 watch(
   () => props.open,
