@@ -9,3 +9,4 @@
 - When generated plan content starts showing both languages inline, split it into locale-specific files or locale-keyed data and route it through the same locale selection mechanism the app already uses.
 - Never set `nitro.hooks.compiled` in `nuxt.config`. `defu` replaces the Vercel preset hook that writes `.vercel/output/config.json`. Without that file the Nuxt build can exit 0 and Vercel still fails with `No Output Directory named "dist"`. Register extra compiled work via `hooks['nitro:init']` then `nitro.hooks.hook('compiled')`.
 - When Vercel reports a missing `dist` after a completed build, diff `nuxt.config` / Nitro preset / output hooks first. Do not pile speculative GitHub tarball/clone/trees fallbacks until the output tree is proven.
+- The repo’s main `README.md` is English. The Vietnamese twin is `README-vi.md`. Do not leave Vietnamese in `README.md` or keep a `README-en.md` sidecar.

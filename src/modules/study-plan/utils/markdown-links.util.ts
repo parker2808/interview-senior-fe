@@ -62,6 +62,7 @@ export function classifyMarkdownHref(
   if (
     stripped.startsWith('documents/') ||
     stripped === 'README.md' ||
+    stripped === 'README-vi.md' ||
     stripped === 'README-en.md' ||
     stripped === 'jd1.md' ||
     stripped.startsWith('modules/') ||
@@ -93,13 +94,17 @@ export function classifyMarkdownHref(
   if (
     resolved.startsWith('documents/') ||
     resolved === 'README.md' ||
+    resolved === 'README-vi.md' ||
     resolved === 'README-en.md' ||
     resolved === 'jd1.md' ||
     resolved.startsWith('modules/')
   ) {
     return {
       kind: 'github',
-      url: GITHUB_BLOB_MAIN + resolved + (hash ? `#${hash}` : ''),
+      url:
+        GITHUB_BLOB_MAIN +
+        resolved.replace(/(^|\/)README-en\.md$/, '$1README.md') +
+        (hash ? `#${hash}` : ''),
     }
   }
 

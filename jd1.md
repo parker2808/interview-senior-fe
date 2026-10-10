@@ -1,4 +1,4 @@
-Based on the job description, here's a prioritized focus guide mapped to the README-en.md topics:
+Based on the job description, here's a prioritized focus guide mapped to the README.md topics:
 
 ## 🎯 **HIGH PRIORITY** (Must Know)
 
