@@ -16,6 +16,7 @@
 - [x] DocToc: all heading levels as nested tree; chevron on every parent
 - [x] TOC expand-all / collapse-all; auto-expand active branch; stable while scrolling
 - [x] README.md is English; Vietnamese moved to README-vi.md; drop README-en.md
+- [x] Rewrite README as a project doc (stack, APIs, mermaid, local/deploy); slim STRUCTURE.md
 
 ## Review
 - Draft PR: https://github.com/parker2808/interview-senior-fe/pull/26

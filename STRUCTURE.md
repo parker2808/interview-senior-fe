@@ -1,86 +1,57 @@
-# Frontend Project Structure
+# UI module conventions
 
-Adapted from [product-details STRUCTURE.md](https://github.com/parker2808/product-details/blob/main/STRUCTURE.md) for this Nuxt app.
+Project overview, APIs, auth, and data flow: **[README.md](./README.md)** ([Tiếng Việt](./README-vi.md)).
+
+This file is only how `src/modules/` is laid out.
 
 ## Overview
 
 ```text
-/
-  app.vue · nuxt.config.ts · tailwind.config.ts · tsconfig.json
-  pages/                          # Thin route wrappers only
-  layouts/
-  server/api/                     # Nitro API (progress, auth)
-  locales/                        # @nuxtjs/i18n message files
-  public/
-  .data/content/                  # gitignored — pulled at build from interview-fe-data
-  schema/                         # Localized / block JSON Schema
-  scripts/                        # pull-data, export, validate
-  src/
-    assets/css/
-    modules/                      # Feature UI modules
-      core/                       # Shared UI / helpers
-      hub/
-      knowledge-base/
-      study-plan/
+pages/                    # thin route wrappers
+src/modules/              # feature UI
+server/api/               # Nitro
+scripts/                  # pull / export / validate
+.data/content/            # gitignored — pulled at build
 ```
 
-## Module-Based Architecture (`src/modules/`)
+Content JSON lives in private `parker2808/interview-fe-data`, not in this repo.
 
-Each feature lives in its own self-contained module:
+## Module layout
 
 ```text
 src/modules/[module-name]/
-├── components/               # Vue components (PascalCase folders/files)
+├── components/               # PascalCase folders/files
 ├── composables/              # *.composable.ts
-├── stores/                   # *.store.ts (Pinia when needed)
-├── queries/                  # *.query.ts
-├── mutations/                # *.mutation.ts
 ├── services/                 # *.service.ts
 ├── enums/                    # *.enum.ts
 ├── constants/                # *.constant.ts
-├── types/
-│   ├── entities/             # *.type.ts
-│   ├── forms/
-│   └── requests/
-├── styles/                   # module styles when needed
+├── types/entities/           # *.type.ts
 ├── utils/                    # *.util.ts
-├── helpers/                  # *.helper.ts
-├── mockups/                  # *.mockup.ts
-└── views/                    # Page-level Vue (PascalCase)
+└── views/                    # page-level Vue (PascalCase)
 ```
 
-## Naming Conventions
+## Naming
 
-- **Vue components / views**: PascalCase (`DocSidebar/DocSidebar.vue`, `HubHome.vue`)
-- **Everything else**: kebab-case + suffix (`doc-catalog.constant.ts`, `use-progress.composable.ts`)
-- **Module dirs**: kebab-case (`knowledge-base/`, `study-plan/`)
-- **Alias**: `@/*` → `src/*` (e.g. `@/modules/hub/views/HubHome.vue`)
+- **Vue components / views**: PascalCase (`DocSidebar/DocSidebar.vue`)
+- **Everything else**: kebab-case + suffix (`use-progress.composable.ts`)
+- **Module dirs**: kebab-case (`knowledge-base/`)
+- **Alias**: `@/*` → `src/*`
 
-## Pages ↔ Views
+## Pages ↔ views
 
-`pages/` only wires routes; UI lives in module `views/`:
+`pages/` only wires the route; UI lives in the module view:
 
 ```vue
-<!-- pages/index.vue -->
 <script setup lang="ts">
 import HubHome from '@/modules/hub/views/HubHome.vue'
 </script>
-
 <template>
   <HubHome />
 </template>
 ```
 
-## Content vs UI modules
-
-| Path | Owns |
-|---|---|
-| `parker2808/interview-fe-data` | Bilingual JSON (KB, plan, Q&A) — private, pulled at build |
-| `.data/content/` | Local/Nitro copy of that tree (gitignored, server assets only) |
-| `src/modules/<feature>/` | Feature UI per this structure |
-
-## Creating a New UI Module
+## New UI module
 
 ```bash
-MODULE_NAME="your-module-name" && mkdir -p "src/modules/$MODULE_NAME"/{components,composables,stores,queries,mutations,services,enums,constants,styles,utils,helpers,mockups,views,types/{entities,forms,requests}}
+MODULE_NAME="your-module-name" && mkdir -p "src/modules/$MODULE_NAME"/{components,composables,services,enums,constants,utils,views,types/entities}
 ```
