@@ -13,8 +13,13 @@
 - [x] Harden public reads (CDN cache, validate/cap search, in-memory rate limit)
 - [x] i18n vi/en + README.md / README-vi.md
 - [x] Build + unit tests
-- [ ] Browser/API verify + draft PR screenshots
+- [x] Browser/API verify + draft PR screenshots
 
 ## Review
 
-(filled after implementation)
+- Draft PR: https://github.com/parker2808/interview-senior-fe/pull/27
+- Unit tests: 18 passed (`npm test`)
+- Build: `CONTENT_LOCAL_PATH` stub + `NUXT_SESSION_PASSWORD` — Nuxt/Nitro Vercel preset succeeded
+- Unauthenticated curl: KB/plan APIs 200 + `public, s-maxage=86400, stale-while-revalidate=604800`; `/api/interview/questions` and `/api/progress` GET/PUT 401 + `private, no-store`; `/interview` 302 → `/login?redirect=/interview`; search rejects long `q` / bad `lang`
+- Security headers on pages: nosniff, DENY, strict-origin-when-cross-origin
+- Real GitHub OAuth cannot be completed in this environment (no OAuth App). Allowlist covered by unit tests.
