@@ -11,8 +11,8 @@
 - [x] Switch KB / plan / search / TOC to APIs + block renderer
 - [x] Remove migrated markdown/TS from the app repo
 - [x] Rebase main (#24 HttpOnly cookie sessions) and use cookie-or-Bearer on Q&A
-- [ ] `NUXT_IGNORE_LOCK=1 npm run build` + browser verify
-- [ ] Draft PRs (app + data) with Parker setup steps
+- [x] `NUXT_IGNORE_LOCK=1 npm run build` + browser verify
+- [x] Draft app PR #25 (data-repo PR blocked: no access)
 
 ## Notes
 - Data repo is private and **not accessible** with this run's GitHub token (404). App work continues with `CONTENT_LOCAL_PATH`.
