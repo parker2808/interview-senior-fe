@@ -38,7 +38,12 @@
     },
     "backHub": "Hub",
     "backPlan": "Plan",
-    "emptySearch": "No results"
+    "emptySearch": "No results",
+    "searching": "Searching…",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "expandSection": "Expand section",
+    "collapseSection": "Collapse section"
   },
   "plan": {
     "title": "30-day study plan",

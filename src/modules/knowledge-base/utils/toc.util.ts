@@ -1,22 +1,10 @@
 import type { TocItem } from '@/modules/knowledge-base/types/entities/doc.type'
+import {
+  nextHeadingId,
+  slugifyHeading,
+} from '@/modules/knowledge-base/utils/heading-anchor.util'
 
-/**
- * GitHub-flavored heading id (matches README / in-doc ToC anchors
- * like `#211-interface-vs-type` from "2.1.1. Interface vs Type").
- */
-export function slugifyHeading(text: string): string {
-  return (
-    text
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9\s-]/g, '')
-      .trim()
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .slice(0, 80) || 'section'
-  )
-}
+export { slugifyHeading }
 
 function decodeBasicEntities(s: string) {
   return s
@@ -36,28 +24,17 @@ export function enhanceMarkdownHtml(html: string): {
   const toc: TocItem[] = []
   const used = new Set<string>()
 
-  const nextId = (text: string) => {
-    const base = slugifyHeading(text)
-    let id = base
-    let n = 2
-    while (used.has(id)) {
-      id = `${base}-${n++}`
-    }
-    used.add(id)
-    return id
-  }
-
   const enhanced = html.replace(
     /<h([1-6])([^>]*)>([\s\S]*?)<\/h\1>/gi,
     (_full, levelStr: string, attrs: string, inner: string) => {
       const level = Number(levelStr)
       const text = decodeBasicEntities(inner.replace(/<[^>]+>/g, '')).trim()
       const existing = attrs.match(/\sid=["']([^"']+)["']/i)?.[1]
-      const id = existing || nextId(text)
+      const id = existing || nextHeadingId(text, used)
       if (existing) used.add(existing)
       const cleanAttrs = attrs.replace(/\sid=["'][^"']*["']/i, '')
-      if (level === 2 || level === 3) {
-        toc.push({ id, text, level: level as 2 | 3 })
+      if (level >= 2) {
+        toc.push({ id, text, level })
       }
       return `<h${level}${cleanAttrs} id="${id}">${inner}</h${level}>`
     },

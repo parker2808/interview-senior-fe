@@ -11,6 +11,10 @@
 - [x] `NUXT_IGNORE_LOCK=1 npm run build` + browser verify (desktop/mobile, light/dark)
 - [x] Before/after screenshots on the PR
 - [x] i18n for BlockRenderer chrome labels (`key-takeaways` → Nhớ nhanh)
+- [x] KB search-all: server index + GET /api/knowledge-base/search (diacritics, body/code)
+- [x] DocSearch: debounce, skeleton, empty, keyboard, heading anchors
+- [x] DocToc: all heading levels as nested tree; chevron on every parent
+- [x] TOC expand-all / collapse-all; auto-expand active branch; stable while scrolling
 
 ## Review
 - Draft PR: https://github.com/parker2808/interview-senior-fe/pull/26

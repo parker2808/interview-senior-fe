@@ -554,14 +554,14 @@ onUnmounted(() => observer?.disconnect())
             v-if="tocOpen"
             :items="toc"
             :active-id="activeHeading"
-            class="rounded-xl border border-line bg-surface-elevated"
+            class="max-h-[min(24rem,50vh)] overflow-y-auto rounded-xl border border-line bg-surface-elevated"
             @navigate="jumpTo"
           />
         </div>
       </main>
 
       <aside
-        class="hidden w-56 shrink-0 overflow-y-auto border-l border-line bg-surface-elevated/50 xl:block"
+        class="hidden w-64 shrink-0 overflow-y-auto border-l border-line bg-surface-elevated/50 xl:block"
       >
         <DocToc
           :items="toc"

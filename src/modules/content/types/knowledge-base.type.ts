@@ -23,7 +23,7 @@ export type KnowledgeDoc = {
 export type KnowledgeHeading = {
   id: Localized
   text: Localized
-  level: 2 | 3
+  level: number
 }
 
 export type KnowledgeDocSummary = {

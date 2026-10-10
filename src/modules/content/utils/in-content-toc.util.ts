@@ -1,5 +1,6 @@
 import type { ContentBlock, ContentSection, Localized } from '@/modules/content/types'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
+import { ensureSectionHeadingIds } from '@/modules/knowledge-base/utils/heading-anchor.util'
 
 const TOC_HEADING = /^(table of contents|mục lục)$/i
 
@@ -78,7 +79,7 @@ export function prepareReadableSections(
   }
 
   return {
-    sections: readable,
+    sections: ensureSectionHeadingIds(readable, lang),
     hiddenIds: [...new Set(hiddenIds)],
   }
 }

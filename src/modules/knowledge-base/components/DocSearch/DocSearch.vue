@@ -1,16 +1,12 @@
 <script setup lang="ts">
 import type { DocLang } from '@/modules/core/constants/locale.constant'
-import {
-  searchDocs,
-  type DocSearchHit,
-} from '@/modules/knowledge-base/utils/doc-search-index.util'
-import { useKbCatalog } from '@/modules/knowledge-base/composables/use-kb-catalog.composable'
+import type { DocSearchHit } from '@/modules/knowledge-base/utils/doc-search-index.util'
+import { highlightSearchText } from '@/modules/knowledge-base/utils/search-text.util'
 
 const props = defineProps<{
   open: boolean
   lang: DocLang
 }>()
-const { data: catalog } = useKbCatalog()
 
 const emit = defineEmits<{
   'update:open': [value: boolean]
@@ -20,24 +16,76 @@ const emit = defineEmits<{
 const query = ref('')
 const inputRef = ref<HTMLInputElement | null>(null)
 const activeIndex = ref(0)
+const pending = ref(false)
+const results = ref<DocSearchHit[]>([])
+const searched = ref('')
 
-const results = computed(() =>
-  searchDocs(query.value, props.lang, catalog.value, 50),
-)
+let debounceTimer: ReturnType<typeof setTimeout> | null = null
+let requestSeq = 0
 
 watch(
   () => props.open,
   (open) => {
     if (open) {
       query.value = ''
+      results.value = []
+      searched.value = ''
+      pending.value = false
       activeIndex.value = 0
       nextTick(() => inputRef.value?.focus())
+    } else if (debounceTimer) {
+      clearTimeout(debounceTimer)
+      debounceTimer = null
     }
   },
 )
 
 watch(results, () => {
   activeIndex.value = 0
+})
+
+async function runSearch(raw: string) {
+  const q = raw.trim()
+  const seq = ++requestSeq
+  if (q.length < 2) {
+    results.value = []
+    searched.value = q
+    pending.value = false
+    return
+  }
+  pending.value = true
+  try {
+    const data = await $fetch<{ hits: DocSearchHit[] }>(
+      '/api/knowledge-base/search',
+      { query: { q, lang: props.lang, limit: 40 } },
+    )
+    if (seq !== requestSeq) return
+    results.value = data.hits || []
+    searched.value = q
+  } catch {
+    if (seq !== requestSeq) return
+    results.value = []
+    searched.value = q
+  } finally {
+    if (seq === requestSeq) pending.value = false
+  }
+}
+
+watch([query, () => props.lang], ([value]) => {
+  if (debounceTimer) clearTimeout(debounceTimer)
+  const q = String(value || '').trim()
+  if (!props.open) return
+  if (q.length < 2) {
+    requestSeq += 1
+    pending.value = false
+    results.value = []
+    searched.value = q
+    return
+  }
+  pending.value = true
+  debounceTimer = setTimeout(() => {
+    void runSearch(q)
+  }, 280)
 })
 
 function onKey(e: KeyboardEvent) {
@@ -53,7 +101,10 @@ function onKey(e: KeyboardEvent) {
   }
   if (e.key === 'ArrowDown') {
     e.preventDefault()
-    activeIndex.value = Math.min(activeIndex.value + 1, results.value.length - 1)
+    activeIndex.value = Math.min(
+      activeIndex.value + 1,
+      Math.max(results.value.length - 1, 0),
+    )
   } else if (e.key === 'ArrowUp') {
     e.preventDefault()
     activeIndex.value = Math.max(activeIndex.value - 1, 0)
@@ -64,7 +115,10 @@ function onKey(e: KeyboardEvent) {
 }
 
 onMounted(() => window.addEventListener('keydown', onKey))
-onUnmounted(() => window.removeEventListener('keydown', onKey))
+onUnmounted(() => {
+  window.removeEventListener('keydown', onKey)
+  if (debounceTimer) clearTimeout(debounceTimer)
+})
 
 function choose(hit: DocSearchHit) {
   emit('select', {
@@ -74,28 +128,12 @@ function choose(hit: DocSearchHit) {
   emit('update:open', false)
 }
 
-function highlight(text: string) {
-  const q = query.value.trim()
-  if (!q) return text
-  const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  try {
-    const exact = new RegExp(`(${escaped})`, 'ig')
-    if (exact.test(text)) {
-      return text.replace(
-        exact,
-        '<mark class="rounded bg-accent-soft px-0.5 text-accent-ink">$1</mark>',
-      )
-    }
-    // Prefix-in-word: "hois" → mark "Hois" in "Hoisting"
-    const prefix = new RegExp(`\\b(${escaped}[\\w-]*)`, 'i')
-    return text.replace(
-      prefix,
-      '<mark class="rounded bg-accent-soft px-0.5 text-accent-ink">$1</mark>',
-    )
-  } catch {
-    return text
-  }
-}
+const showEmpty = computed(
+  () =>
+    !pending.value &&
+    searched.value.length >= 2 &&
+    !results.value.length,
+)
 </script>
 
 <template>
@@ -118,13 +156,34 @@ function highlight(text: string) {
             class="min-h-11 w-full rounded-lg border border-line bg-white px-3 text-base outline-none focus:border-accent"
             :placeholder="$t('docs.searchPlaceholder')"
             autocomplete="off"
+            aria-autocomplete="list"
+            :aria-busy="pending"
           />
         </div>
-        <ul class="flex-1 overflow-y-auto p-2">
-          <li v-if="!results.length" class="px-3 py-4 text-sm text-ink-muted">
+        <ul class="flex-1 overflow-y-auto p-2" role="listbox">
+          <li
+            v-if="pending && !results.length"
+            class="space-y-2 px-2 py-2"
+            role="status"
+            aria-live="polite"
+            :aria-label="$t('docs.searching')"
+          >
+            <div
+              v-for="row in 5"
+              :key="row"
+              class="search-skel rounded-lg px-3 py-2"
+            >
+              <div class="skeleton-bar h-4 w-2/3" />
+              <div class="skeleton-bar mt-2 h-3 w-full" />
+            </div>
+          </li>
+          <li
+            v-else-if="showEmpty"
+            class="px-3 py-4 text-sm text-ink-muted"
+          >
             {{ $t('docs.emptySearch') }}
           </li>
-          <li v-for="(hit, i) in results" :key="hit.id">
+          <li v-for="(hit, i) in results" :key="hit.id" role="option" :aria-selected="i === activeIndex">
             <button
               type="button"
               class="flex min-h-12 w-full flex-col items-start gap-0.5 rounded-lg px-3 py-2 text-left text-sm transition"
@@ -138,13 +197,16 @@ function highlight(text: string) {
             >
               <span
                 class="font-medium text-ink"
-                v-html="highlight(hit.heading)"
+                v-html="highlightSearchText(hit.headingTitle, searched)"
+              />
+              <span
+                v-if="hit.snippet && hit.kind === 'body'"
+                class="line-clamp-2 text-xs text-ink-muted"
+                v-html="hit.snippet"
               />
               <span class="text-xs text-ink-faint">
-                <template v-if="hit.level === 0">{{ hit.slug }}</template>
-                <template v-else
-                  >{{ hit.topicTitle }} · {{ hit.slug }}</template
-                >
+                <template v-if="hit.kind === 'title'">{{ hit.slug }}</template>
+                <template v-else>{{ hit.title }} · {{ hit.slug }}</template>
               </span>
             </button>
           </li>
@@ -156,3 +218,21 @@ function highlight(text: string) {
     </div>
   </Teleport>
 </template>
+
+<style scoped>
+.skeleton-bar {
+  border-radius: 0.5rem;
+  background: var(--line);
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+</style>

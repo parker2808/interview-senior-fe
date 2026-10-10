@@ -38,7 +38,12 @@
     },
     "backHub": "Hub",
     "backPlan": "Plan",
-    "emptySearch": "Không có kết quả"
+    "emptySearch": "Không có kết quả",
+    "searching": "Đang tìm…",
+    "expandAll": "Mở tất cả",
+    "collapseAll": "Thu tất cả",
+    "expandSection": "Mở mục",
+    "collapseSection": "Thu mục"
   },
   "plan": {
     "title": "Kế hoạch ôn 30 ngày",
