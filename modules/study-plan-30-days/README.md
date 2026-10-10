@@ -1,9 +1,8 @@
-# 30-day study plan (content track)
+# 30-day study plan
 
-Markdown plan, daily starters, worksheets, and Capstone artifacts.
+Site copy (days, labs, resources) now lives in the private data repo `parker2808/interview-fe-data` and is served by `/api/plan/*`.
 
-- **Content:** [`content/`](./content/) — start from [daily-index.md](./content/daily-index.md)
-- **UI:** Nuxt module [`src/modules/study-plan/`](../../src/modules/study-plan/) at route `/plan`
-- **Run app:** from repo root — `npm install && npm run dev`
+This folder keeps the **companion lab template** (TypeScript starters), not the published articles.
 
-Progress / edit APIs: Nitro `server/api/progress` and `server/api/auth/edit` (env `EDIT_PASSCODE`, Blob tokens).
+- **UI:** Nuxt module [`src/modules/study-plan/`](../../src/modules/study-plan/) at `/plan`
+- **Lab template:** [`lab-template/`](./lab-template/)

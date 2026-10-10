@@ -1,16 +1,13 @@
 <script setup lang="ts">
-import { marked } from 'marked'
-import type { DayMeta } from '@/modules/study-plan/constants/days.constant'
+import type { PlanDay } from '@/modules/content/types'
 import PlanDayContent from '@/modules/study-plan/components/PlanDayContent/PlanDayContent.vue'
-import { getPlanDayContent } from '@/modules/study-plan/constants/plan-content.constant'
-import { loadMarkdown } from '@/modules/study-plan/utils/load-markdown.util'
-import { classifyMarkdownHref } from '@/modules/study-plan/utils/markdown-links.util'
-import { isBundledPath } from '@/modules/study-plan/utils/load-markdown.util'
-import { autolinkMarkdownPaths } from '@/modules/study-plan/utils/autolink-md.util'
-import { applyPlanHeadingI18n } from '@/modules/study-plan/utils/plan-locale-path.util'
+import BlockRenderer from '@/modules/content/components/BlockRenderer/BlockRenderer.vue'
+import { classifyContentHref } from '@/modules/content/utils/content-links.util'
+import { pickLocale } from '@/modules/content/utils/pick-locale.util'
+import { usePlanIndex } from '@/modules/study-plan/composables/use-plan-index.composable'
 
 const props = defineProps<{
-  day: DayMeta
+  day: PlanDay
   done: boolean
   readOnly: boolean
 }>()
@@ -24,14 +21,14 @@ const emit = defineEmits<{
 }>()
 
 type DayTab = 'plan' | 'lab'
-const { locale, t } = useI18n()
+const { locale } = useI18n()
+const { data: plan } = usePlanIndex()
 
 const lang = computed<'en' | 'vi'>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
 
 const tab = ref<DayTab>('plan')
-const planContent = computed(() => getPlanDayContent(props.day.day))
 
 watch(
   () => props.day.day,
@@ -40,30 +37,18 @@ watch(
   },
 )
 
-const activePath = computed(() => {
-  if (tab.value === 'lab') return props.day.lab
-  return ''
-})
-
-const html = computed(() => {
-  if (!activePath.value) return ''
-
-  const raw = marked.parse(loadMarkdown(activePath.value, lang.value).text, {
-    async: false,
-  }) as string
-  const resolvedPath = loadMarkdown(activePath.value, lang.value).path
-  return applyPlanHeadingI18n(autolinkMarkdownPaths(raw, resolvedPath), t)
-})
+const aliases = computed(() =>
+  (plan.value?.resources ?? []).flatMap((item) => [item.id, ...item.aliases]),
+)
 
 function onDocClick(e: MouseEvent) {
   const a = (e.target as HTMLElement).closest('a')
   if (!a) return
   const href = a.getAttribute('href')
-  const resolvedPath = loadMarkdown(activePath.value, lang.value).path
-  const result = classifyMarkdownHref(
-    resolvedPath,
+  const result = classifyContentHref(
     href || '',
-    (path) => isBundledPath(path, lang.value),
+    props.day.lab.resourceId,
+    aliases.value,
   )
   if (result.kind === 'ignore' || result.kind === 'hash') return
   e.preventDefault()
@@ -73,7 +58,7 @@ function onDocClick(e: MouseEvent) {
   }
   if (result.kind === 'docs') {
     emit('open-docs', {
-      lang: result.lang || 'vi',
+      lang: result.lang || lang.value,
       slug: result.slug,
       hash: result.hash,
     })
@@ -93,7 +78,7 @@ function onDocClick(e: MouseEvent) {
           Day {{ String(day.day).padStart(2, '0') }} · {{ day.date }}
         </p>
         <h2 class="mt-1 text-xl font-bold sm:text-2xl">
-          {{ planContent ? planContent.title[lang] : day.theme }}
+          {{ pickLocale(day.title, lang) }}
         </h2>
       </div>
       <label
@@ -144,12 +129,12 @@ function onDocClick(e: MouseEvent) {
       </button>
     </div>
 
-    <PlanDayContent v-if="tab === 'plan' && planContent" :content="planContent" />
+    <PlanDayContent v-if="tab === 'plan'" :content="day" />
 
-    <div
+    <BlockRenderer
       v-if="tab === 'lab'"
-      class="prose-doc"
-      v-html="html"
+      :sections="day.lab.sections"
+      :lang="lang"
       @click="onDocClick"
     />
 

@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import type { DayMeta } from '@/modules/study-plan/constants/days.constant'
+import type { PlanDaySummary, PlanWeek } from '@/modules/content/types'
 import PlanDayContent from '@/modules/study-plan/components/PlanDayContent/PlanDayContent.vue'
-import {
-  PLAN_WEEKS,
-  getPlanDayContent,
-} from '@/modules/study-plan/constants/plan-content.constant'
+import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 
 const props = defineProps<{
-  days: DayMeta[]
+  days: PlanDaySummary[]
+  weeks: PlanWeek[]
   weekFilter: number
   isDone: (day: number) => boolean
   readOnly: boolean
@@ -28,20 +26,18 @@ const lang = computed<'en' | 'vi'>(() =>
 )
 
 const visibleWeeks = computed(() =>
-  PLAN_WEEKS.filter((week) =>
+  props.weeks.filter((week) =>
     props.weekFilter === 0 ? true : week.week === props.weekFilter,
   ),
 )
 
 const daysByWeek = computed(() => {
-  const grouped = new Map<number, DayMeta[]>()
-
+  const grouped = new Map<number, PlanDaySummary[]>()
   for (const day of props.days) {
     const items = grouped.get(day.week) ?? []
     items.push(day)
     grouped.set(day.week, items)
   }
-
   return grouped
 })
 
@@ -69,11 +65,11 @@ function toggleOpen(day: number) {
         >
           <option :value="0">{{ $t('plan.allWeeks') }}</option>
           <option
-            v-for="week in PLAN_WEEKS"
+            v-for="week in weeks"
             :key="week.week"
             :value="week.week"
           >
-            {{ week.title[lang] }}
+            {{ pickLocale(week.title, lang) }}
           </option>
         </select>
       </label>
@@ -89,13 +85,13 @@ function toggleOpen(day: number) {
           <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
             <div class="min-w-0">
               <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
-                {{ week.range[lang] }}
+                {{ pickLocale(week.range, lang) }}
               </p>
               <h3 class="mt-1 text-lg font-bold text-ink sm:text-xl">
-                {{ week.title[lang] }}
+                {{ pickLocale(week.title, lang) }}
               </h3>
               <p class="mt-2 max-w-3xl text-sm leading-6 text-ink-muted">
-                {{ week.goal[lang] }}
+                {{ pickLocale(week.goal, lang) }}
               </p>
               <ul class="mt-3 space-y-1 text-sm text-ink">
                 <li
@@ -104,7 +100,7 @@ function toggleOpen(day: number) {
                   class="flex items-start gap-2"
                 >
                   <span class="mt-1 text-accent-ink">•</span>
-                  <span>{{ outcome[lang] }}</span>
+                  <span>{{ pickLocale(outcome, lang) }}</span>
                 </li>
               </ul>
             </div>
@@ -154,10 +150,10 @@ function toggleOpen(day: number) {
                       <span class="text-xs text-ink-faint">{{ d.date }}</span>
                     </div>
                     <h4 class="mt-1 text-sm font-semibold text-ink sm:text-base">
-                      {{ getPlanDayContent(d.day)?.title[lang] ?? d.theme }}
+                      {{ pickLocale(d.title, lang) }}
                     </h4>
                     <p class="mt-1 text-sm text-ink-muted">
-                      {{ getPlanDayContent(d.day)?.goal[lang] }}
+                      {{ pickLocale(d.goal, lang) }}
                     </p>
                   </div>
                   <span class="shrink-0 text-xs font-semibold text-ink-faint">
@@ -176,10 +172,10 @@ function toggleOpen(day: number) {
             </div>
 
             <div
-              v-if="openDays.has(d.day) && getPlanDayContent(d.day)"
+              v-if="openDays.has(d.day)"
               class="border-t border-line px-3 py-4 sm:px-4"
             >
-              <PlanDayContent :content="getPlanDayContent(d.day)!" />
+              <PlanDayContent :content="d" />
               <button
                 type="button"
                 class="mt-4 min-h-10 rounded-lg border border-line bg-surface px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink sm:hidden"

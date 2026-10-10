@@ -12,9 +12,9 @@ Adapted from [product-details STRUCTURE.md](https://github.com/parker2808/produc
   server/api/                     # Nitro API (progress, auth)
   locales/                        # @nuxtjs/i18n message files
   public/
-  documents/                      # Shared interview KB (vi|en markdown)
-  modules/                        # Content tracks (markdown only)
-    study-plan-30-days/content/
+  .data/content/                  # gitignored — pulled at build from interview-fe-data
+  schema/                         # Localized / block JSON Schema
+  scripts/                        # pull-data, export, validate
   src/
     assets/css/
     modules/                      # Feature UI modules
@@ -75,8 +75,8 @@ import HubHome from '@/modules/hub/views/HubHome.vue'
 
 | Path | Owns |
 |---|---|
-| `documents/` | Shared bilingual interview KB |
-| `modules/<track>/content/` | Track markdown (plan, worksheets) — not Nuxt UI |
+| `parker2808/interview-fe-data` | Bilingual JSON (KB, plan, Q&A) — private, pulled at build |
+| `.data/content/` | Local/Nitro copy of that tree (gitignored, server assets only) |
 | `src/modules/<feature>/` | Feature UI per this structure |
 
 ## Creating a New UI Module

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import type { DocGroup } from '@/modules/knowledge-base/constants/doc-catalog.constant'
+import type { KnowledgeGroup } from '@/modules/content/types'
 import type { DocLang } from '@/modules/core/constants/locale.constant'
+import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 
 defineProps<{
-  catalog: DocGroup[]
+  catalog: KnowledgeGroup[]
   lang: DocLang
   activeSlug: string
 }>()
@@ -31,7 +32,7 @@ defineEmits<{
             "
             @click="$emit('select', topic.slug)"
           >
-            {{ topic.title[lang] }}
+            {{ pickLocale(topic.title, lang) }}
           </button>
         </li>
       </ul>

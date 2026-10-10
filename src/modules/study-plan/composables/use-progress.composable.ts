@@ -1,4 +1,4 @@
-import { DAYS } from '@/modules/study-plan/constants/days.constant'
+import { usePlanIndex } from '@/modules/study-plan/composables/use-plan-index.composable'
 import {
   bitmaskToDoneMap,
   decodeShareToken,
@@ -50,6 +50,9 @@ const publicMeta = ref<{
 const statusMessage = ref('')
 
 export function useProgress() {
+  const { data: planIndex } = usePlanIndex()
+  const days = computed(() => planIndex.value?.days ?? [])
+
   const {
     isEditMode,
     modeLabel,
@@ -238,10 +241,12 @@ export function useProgress() {
   }
 
   const completedCount = computed(
-    () => DAYS.filter((d) => !!activeDoneMap.value[d.day]).length,
+    () => days.value.filter((d) => !!activeDoneMap.value[d.day]).length,
   )
   const percent = computed(() =>
-    Math.round((completedCount.value / DAYS.length) * 100),
+    Math.round(
+      (completedCount.value / Math.max(days.value.length, 1)) * 100,
+    ),
   )
 
   function isDone(day: number) {
@@ -271,7 +276,8 @@ export function useProgress() {
   }
 
   function weekStats(week: number) {
-    const inWeek = week === 0 ? DAYS : DAYS.filter((d) => d.week === week)
+    const inWeek =
+      week === 0 ? days.value : days.value.filter((d) => d.week === week)
     const done = inWeek.filter((d) => isDone(d.day)).length
     return { total: inWeek.length, done }
   }

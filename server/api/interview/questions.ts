@@ -1,11 +1,8 @@
 import { verifyInterviewToken } from '../../utils/interviewAuth'
-import {
-  INTERVIEW_CATEGORIES,
-  INTERVIEW_QUESTIONS,
-} from '../../data/interview-questions'
+import { readInterviewBank } from '../../utils/contentStore'
 import { readInterviewSessionToken } from '../../utils/sessionCookie'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler(async (event) => {
   setResponseHeaders(event, {
     'Cache-Control': 'no-store',
   })
@@ -29,9 +26,10 @@ export default defineEventHandler((event) => {
     })
   }
 
+  const bank = await readInterviewBank()
   return {
     ok: true,
-    categories: INTERVIEW_CATEGORIES,
-    questions: INTERVIEW_QUESTIONS,
+    categories: bank.categories,
+    questions: bank.questions,
   }
 })

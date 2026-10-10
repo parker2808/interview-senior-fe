@@ -1,16 +1,7 @@
-import { marked } from 'marked'
-import {
-  DEFAULT_DOC_SLUG,
-  DOC_CATALOG,
-  FLAT_TOPICS,
-  getAdjacentTopics,
-  getTopic,
-} from '@/modules/knowledge-base/constants/doc-catalog.constant'
-import {
-  kbPath,
-  loadKbMarkdown,
-} from '@/modules/knowledge-base/utils/load-kb-markdown.util'
-import { enhanceMarkdownHtml } from '@/modules/knowledge-base/utils/toc.util'
+import type { KnowledgeDocResponse } from '@/modules/content/types'
+import { tocFromSections } from '@/modules/content/utils/block-toc.util'
+import { pickLocale } from '@/modules/content/utils/pick-locale.util'
+import { useKbCatalog } from '@/modules/knowledge-base/composables/use-kb-catalog.composable'
 import {
   pushRecentDoc,
   readRecentDocs,
@@ -20,6 +11,7 @@ import { DOC_LANGS } from '@/modules/core/constants/locale.constant'
 
 export function useDocReader(lang: Ref<string>, slug: Ref<string>) {
   const recent = ref(readRecentDocs())
+  const { data: catalog } = useKbCatalog()
 
   const safeLang = computed<DocLang>(() =>
     DOC_LANGS.includes(lang.value as DocLang)
@@ -27,26 +19,40 @@ export function useDocReader(lang: Ref<string>, slug: Ref<string>) {
       : 'vi',
   )
 
-  const topic = computed(() => getTopic(slug.value))
-  const path = computed(() => kbPath(safeLang.value, slug.value))
-  const loaded = computed(() => loadKbMarkdown(path.value))
+  const { data: doc, pending, error } = useAsyncData(
+    () => `kb-doc-${slug.value}`,
+    () => $fetch<KnowledgeDocResponse>(`/api/knowledge-base/docs/${slug.value}`),
+    { watch: [slug] },
+  )
 
-  const rendered = computed(() => {
-    const rawHtml = marked.parse(loaded.value.text, { async: false }) as string
-    return enhanceMarkdownHtml(rawHtml)
-  })
+  const topic = computed(() =>
+    catalog.value?.docs.find((item) => item.slug === slug.value),
+  )
 
-  const adjacent = computed(() => getAdjacentTopics(slug.value))
+  const toc = computed(() =>
+    tocFromSections(doc.value?.sections, safeLang.value),
+  )
+
+  const adjacent = computed(
+    () => doc.value?.adjacent ?? { prev: null, next: null },
+  )
 
   const title = computed(() => {
-    if (!topic.value) return slug.value
-    return topic.value.title[safeLang.value] || topic.value.title.vi
+    if (doc.value) return pickLocale(doc.value.title, safeLang.value)
+    if (topic.value) return pickLocale(topic.value.title, safeLang.value)
+    return slug.value
   })
+
+  const loaded = computed(() => ({
+    ok: Boolean(doc.value && !error.value),
+    path: slug.value,
+    text: '',
+  }))
 
   watch(
     [safeLang, slug],
     ([l, s]) => {
-      if (!getTopic(s)) return
+      if (!topic.value && !doc.value) return
       pushRecentDoc(s, l)
       recent.value = readRecentDocs()
     },
@@ -54,15 +60,17 @@ export function useDocReader(lang: Ref<string>, slug: Ref<string>) {
   )
 
   return {
-    catalog: DOC_CATALOG,
-    flatTopics: FLAT_TOPICS,
-    defaultSlug: DEFAULT_DOC_SLUG,
+    catalog: computed(() => catalog.value?.groups ?? []),
+    flatTopics: computed(() => catalog.value?.docs ?? []),
+    defaultSlug: computed(
+      () => catalog.value?.defaultSlug ?? 'javascript',
+    ),
     safeLang,
     topic,
-    path,
     loaded,
-    html: computed(() => rendered.value.html),
-    toc: computed(() => rendered.value.toc),
+    pending,
+    doc,
+    toc,
     adjacent,
     title,
     recent,

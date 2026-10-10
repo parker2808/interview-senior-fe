@@ -10,6 +10,8 @@ import { useDocReader } from '@/modules/knowledge-base/composables/use-doc-reade
 import { DOC_LANGS, type DocLang } from '@/modules/core/constants/locale.constant'
 import { DEFAULT_DOC_SLUG } from '@/modules/knowledge-base/constants/doc-catalog.constant'
 import { classifyKbHref } from '@/modules/knowledge-base/utils/kb-links.util'
+import BlockRenderer from '@/modules/content/components/BlockRenderer/BlockRenderer.vue'
+import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 
 const HEADER_OFFSET = 56
 
@@ -35,7 +37,7 @@ const {
   catalog,
   safeLang,
   loaded,
-  html,
+  doc,
   toc,
   adjacent,
   title,
@@ -236,7 +238,7 @@ function restoreLangScroll() {
 }
 
 watch(
-  () => [html.value, route.fullPath] as const,
+  () => [doc.value, safeLang.value, route.fullPath] as const,
   () => {
     if (langPreserve.value) restoreLangScroll()
     else syncHashScroll()
@@ -415,13 +417,14 @@ onUnmounted(() => observer?.disconnect())
         ref="mainRef"
         class="docs-main min-h-0 min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8"
       >
-        <article v-if="loaded.ok" class="animate-fade-up mx-auto max-w-prose">
-          <div
-            ref="proseRef"
-            class="prose-doc"
-            v-html="html"
-            @click="onDocClick"
-          />
+        <article v-if="loaded.ok && doc" class="animate-fade-up mx-auto max-w-prose">
+          <div ref="proseRef">
+            <BlockRenderer
+              :sections="doc.sections"
+              :lang="safeLang"
+              @click="onDocClick"
+            />
+          </div>
 
           <footer
             class="mt-10 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:justify-between"
@@ -431,7 +434,7 @@ onUnmounted(() => observer?.disconnect())
               :to="withFromQuery(`/docs/${safeLang}/${adjacent.prev.slug}`)"
               class="inline-flex min-h-11 items-center rounded-lg border border-line bg-white px-4 text-sm font-semibold"
             >
-              ← {{ $t('docs.prev') }}: {{ adjacent.prev.title[safeLang] }}
+              ← {{ $t('docs.prev') }}: {{ pickLocale(adjacent.prev.title, safeLang) }}
             </NuxtLink>
             <span v-else />
             <NuxtLink
@@ -439,7 +442,7 @@ onUnmounted(() => observer?.disconnect())
               :to="withFromQuery(`/docs/${safeLang}/${adjacent.next.slug}`)"
               class="inline-flex min-h-11 items-center rounded-lg border border-line bg-white px-4 text-sm font-semibold sm:ml-auto"
             >
-              {{ $t('docs.next') }}: {{ adjacent.next.title[safeLang] }} →
+              {{ $t('docs.next') }}: {{ pickLocale(adjacent.next.title, safeLang) }} →
             </NuxtLink>
           </footer>
         </article>
