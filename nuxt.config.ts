@@ -8,6 +8,13 @@ const srcRoot = path.resolve(rootDir, 'src')
 const contentDir = path.resolve(rootDir, '.data/content')
 mkdirSync(contentDir, { recursive: true })
 
+function copyContentIntoNitroOutput(nitro: { options: { output: { serverDir: string } } }) {
+  if (!existsSync(path.join(contentDir, 'knowledge-base'))) return
+  const dest = path.join(nitro.options.output.serverDir, '.data/content')
+  mkdirSync(dest, { recursive: true })
+  cpSync(contentDir, dest, { recursive: true, dereference: true })
+}
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-01-15',
   devtools: { enabled: true },
@@ -70,25 +77,18 @@ export default defineNuxtConfig({
     },
   },
 
+  // Do NOT set nitro.hooks.compiled here — defu replaces the Vercel preset
+  // hook that writes .vercel/output/config.json, and Vercel then looks for dist.
+  hooks: {
+    'nitro:init'(nitro) {
+      nitro.hooks.hook('compiled', () => {
+        copyContentIntoNitroOutput(nitro)
+      })
+    },
+  },
+
   nitro: {
     preset: 'vercel',
-    // .data/ is gitignored, so Nitro will not pack it as serverAssets.
-    // Copy the pulled tree into the serverless output so runtime fs reads work.
-    hooks: {
-      compiled(nitro) {
-        const from = contentDir
-        if (!existsSync(path.join(from, 'knowledge-base'))) return
-        const dest = path.join(nitro.options.output.serverDir, '.data/content')
-        mkdirSync(dest, { recursive: true })
-        cpSync(from, dest, { recursive: true, dereference: true })
-      },
-    },
-    serverAssets: [
-      {
-        baseName: 'siteContent',
-        dir: '.data/content',
-      },
-    ],
   },
 
   typescript: {
