@@ -88,12 +88,65 @@ function copyLocal(src) {
   console.log(`Pulled local content from ${from} → ${dest}`)
 }
 
-async function downloadRepo(token) {
+function redact(text) {
+  return String(text || '')
+    .replaceAll(process.env.CONTENT_REPO_TOKEN || '___never___', '[token]')
+    .slice(0, 500)
+}
+
+function finishCopy(tree, tmp, method) {
+  if (!tree) {
+    fail(
+      [
+        `Downloaded ${owner}/${repo}@${ref} via ${method} but did not find knowledge-base/, plan/, qna/.`,
+        `Entries: ${listTopEntries(tmp)}`,
+      ].join('\n'),
+    )
+  }
+  resetDest()
+  cpSync(tree, dest, { recursive: true, dereference: true })
+  rmSync(tmp, { recursive: true, force: true })
+  console.log(`Pulled ${owner}/${repo}@${ref} via ${method} → ${dest}`)
+}
+
+/**
+ * Fine-grained PATs often 404 GET /repos/.../tarball. git clone with
+ * an Authorization header works with Contents: Read.
+ */
+function gitClone(token, url, label) {
+  const tmp = mkdtempSync(path.join(tmpdir(), 'interview-fe-data-'))
+  const repoDir = path.join(tmp, 'repo')
+  try {
+    execFileSync(
+      'git',
+      [
+        '-c',
+        `http.extraHeader=Authorization: Bearer ${token}`,
+        'clone',
+        '--depth',
+        '1',
+        '--branch',
+        ref,
+        '--single-branch',
+        url,
+        repoDir,
+      ],
+      { stdio: ['ignore', 'pipe', 'pipe'] },
+    )
+  } catch (err) {
+    const stderr = redact(err?.stderr?.toString?.() || err?.message || err)
+    rmSync(tmp, { recursive: true, force: true })
+    throw new Error(`${label} failed for ${owner}/${repo}@${ref}: ${stderr}`)
+  }
+  finishCopy(findContentTree(repoDir), tmp, label)
+}
+
+async function downloadTarball(token) {
   const url = `https://api.github.com/repos/${owner}/${repo}/tarball/${encodeURIComponent(ref)}`
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json, application/octet-stream',
+      Accept: 'application/vnd.github+json',
       'User-Agent': 'interview-senior-fe-pull-data',
       'X-GitHub-Api-Version': '2022-11-28',
     },
@@ -101,37 +154,57 @@ async function downloadRepo(token) {
   })
   if (!res.ok) {
     const body = await res.text().catch(() => '')
-    fail(
-      [
-        `Failed to download ${owner}/${repo}@${ref} (HTTP ${res.status}).`,
-        body.slice(0, 400),
-        '',
-        'Check CONTENT_REPO_TOKEN (fine-grained PAT, Contents: Read on interview-fe-data)',
-        'and CONTENT_REPO_REF (default main).',
-        'The previous Vercel deployment keeps serving until a new build succeeds.',
-      ].join('\n'),
+    throw new Error(
+      `tarball HTTP ${res.status}: ${redact(body)}`,
     )
   }
   const tmp = mkdtempSync(path.join(tmpdir(), 'interview-fe-data-'))
   const tarball = path.join(tmp, 'repo.tgz')
-  if (!res.body) fail('GitHub tarball response had no body.')
+  if (!res.body) throw new Error('GitHub tarball response had no body.')
   await pipeline(Readable.fromWeb(res.body), createWriteStream(tarball))
   const extractDir = path.join(tmp, 'extract')
   mkdirSync(extractDir, { recursive: true })
-  execFileSync('tar', ['-xzf', tarball, '-C', extractDir], { stdio: 'pipe' })
-  const tree = findContentTree(extractDir)
-  if (!tree) {
-    fail(
-      [
-        `Downloaded ${owner}/${repo}@${ref} but did not find knowledge-base/, plan/, qna/.`,
-        `Extracted entries: ${listTopEntries(extractDir)}`,
-      ].join('\n'),
-    )
+  try {
+    execFileSync('tar', ['-xzf', tarball, '-C', extractDir], { stdio: 'pipe' })
+  } catch (err) {
+    rmSync(tmp, { recursive: true, force: true })
+    throw new Error(`tar extract failed: ${redact(err?.stderr?.toString?.() || err)}`)
   }
-  resetDest()
-  cpSync(tree, dest, { recursive: true, dereference: true })
-  rmSync(tmp, { recursive: true, force: true })
-  console.log(`Pulled ${owner}/${repo}@${ref} → ${dest}`)
+  finishCopy(findContentTree(extractDir), tmp, 'tarball')
+}
+
+async function downloadRepo(token) {
+  const errors = []
+  const httpsUrl = `https://github.com/${owner}/${repo}.git`
+  const tokenUrl = `https://x-access-token:${token}@github.com/${owner}/${repo}.git`
+  for (const [url, label] of [
+    [httpsUrl, 'git-clone'],
+    [tokenUrl, 'git-clone-token-url'],
+  ]) {
+    try {
+      gitClone(token, url, label)
+      return
+    } catch (err) {
+      errors.push(err instanceof Error ? err.message : String(err))
+    }
+  }
+  try {
+    await downloadTarball(token)
+    return
+  } catch (err) {
+    errors.push(err instanceof Error ? err.message : String(err))
+  }
+  fail(
+    [
+      `Failed to download ${owner}/${repo}@${ref}.`,
+      ...errors.map((line) => `- ${line}`),
+      '',
+      `CONTENT_REPO_TOKEN is set (${token.length} chars).`,
+      'Check the fine-grained PAT has Contents: Read on interview-fe-data',
+      'and CONTENT_REPO_REF (default main).',
+      'The previous Vercel deployment keeps serving until a new build succeeds.',
+    ].join('\n'),
+  )
 }
 
 async function main() {
@@ -141,7 +214,7 @@ async function main() {
     copyLocal(local)
     return
   }
-  const token = process.env.CONTENT_REPO_TOKEN
+  const token = String(process.env.CONTENT_REPO_TOKEN || '').trim()
   if (!token) {
     fail(
       [
@@ -163,6 +236,9 @@ async function main() {
       ].join('\n'),
     )
   }
+  console.log(
+    `Pulling ${owner}/${repo}@${ref} (CONTENT_REPO_TOKEN set, ${token.length} chars)`,
+  )
   await downloadRepo(token)
 }
 
