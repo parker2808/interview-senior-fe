@@ -110,7 +110,7 @@ function headingTag(level: number) {
           v-else-if="block.type === 'key-takeaways'"
           class="content-takeaways"
         >
-          <p class="content-senior__label">Key takeaways</p>
+          <p class="content-senior__label">{{ $t('content.keyTakeaways') }}</p>
           <ul>
             <li
               v-for="(item, i) in block.items"

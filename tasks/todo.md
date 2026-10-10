@@ -9,7 +9,8 @@
 - [x] KB lang toggle: keep position (heading index + ratio); no remount/scroll-to-top
 - [x] Commit, push, draft PR
 - [x] `NUXT_IGNORE_LOCK=1 npm run build` + browser verify (desktop/mobile, light/dark)
-- [ ] Before/after screenshots on the PR
+- [x] Before/after screenshots on the PR
+- [x] i18n for BlockRenderer chrome labels (`key-takeaways` → Nhớ nhanh)
 
 ## Review
 - Draft PR: https://github.com/parker2808/interview-senior-fe/pull/26

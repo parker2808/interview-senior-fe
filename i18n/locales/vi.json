@@ -137,6 +137,9 @@
     "networkError": "Lỗi mạng. Kiểm tra kết nối rồi thử lại.",
     "genericError": "Không xác thực được mã."
   },
+  "content": {
+    "keyTakeaways": "Nhớ nhanh"
+  },
   "common": {
     "vi": "VI",
     "en": "EN",

@@ -137,6 +137,9 @@
     "networkError": "Network error. Check your connection and try again.",
     "genericError": "Could not verify the code."
   },
+  "content": {
+    "keyTakeaways": "Key takeaways"
+  },
   "common": {
     "vi": "VI",
     "en": "EN",
