@@ -11,6 +11,7 @@ import {
   createWriteStream,
   mkdtempSync,
   readdirSync,
+  writeFileSync,
 } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
@@ -94,12 +95,86 @@ function redact(text) {
     .slice(0, 500)
 }
 
+function githubHeaders(token) {
+  return {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/vnd.github+json',
+    'User-Agent': 'interview-senior-fe-pull-data',
+    'X-GitHub-Api-Version': '2022-11-28',
+  }
+}
+
+async function githubJson(token, pathname) {
+  const url = `https://api.github.com${pathname}`
+  const res = await fetch(url, { headers: githubHeaders(token) })
+  const body = await res.text()
+  if (!res.ok) {
+    throw new Error(`${pathname} HTTP ${res.status}: ${redact(body)}`)
+  }
+  return JSON.parse(body)
+}
+
+/**
+ * Fine-grained Contents: Read works on the Git Trees/Blobs API.
+ * Archive download and sometimes git clone 404 with the same token.
+ */
+async function downloadViaGitApi(token) {
+  const tmp = mkdtempSync(path.join(tmpdir(), 'interview-fe-data-'))
+  const repoDir = path.join(tmp, 'repo')
+  mkdirSync(repoDir, { recursive: true })
+  try {
+    const tree = await githubJson(
+      token,
+      `/repos/${owner}/${repo}/git/trees/${encodeURIComponent(ref)}?recursive=1`,
+    )
+    const blobs = (tree.tree || []).filter(
+      (item) => item.type === 'blob' && item.path && !item.path.startsWith('.git/'),
+    )
+    if (!blobs.length) {
+      throw new Error(`git tree ${ref} had no files (truncated=${tree.truncated})`)
+    }
+    console.log(`Git tree ${owner}/${repo}@${ref}: ${blobs.length} files`)
+    for (const item of blobs) {
+      const blob = await githubJson(token, `/repos/${owner}/${repo}/git/blobs/${item.sha}`)
+      const destPath = path.join(repoDir, item.path)
+      mkdirSync(path.dirname(destPath), { recursive: true })
+      const buf =
+        blob.encoding === 'base64'
+          ? Buffer.from(blob.content.replace(/\n/g, ''), 'base64')
+          : Buffer.from(blob.content || '', 'utf8')
+      writeFileSync(destPath, buf)
+    }
+  } catch (err) {
+    rmSync(tmp, { recursive: true, force: true })
+    throw err
+  }
+  finishCopy(findContentTree(repoDir), tmp, 'git-api')
+}
+
+function listJsonSample(dir, acc = [], prefix = '') {
+  if (acc.length >= 20 || !existsSync(dir)) return acc
+  for (const name of readdirSync(dir)) {
+    if (acc.length >= 20) break
+    const rel = prefix ? `${prefix}/${name}` : name
+    const full = path.join(dir, name)
+    try {
+      const statDir = existsSync(full) && readdirSync(full)
+      if (statDir) listJsonSample(full, acc, rel)
+      else if (name.endsWith('.json')) acc.push(rel)
+    } catch {
+      if (name.endsWith('.json')) acc.push(rel)
+    }
+  }
+  return acc
+}
+
 function finishCopy(tree, tmp, method) {
   if (!tree) {
     fail(
       [
         `Downloaded ${owner}/${repo}@${ref} via ${method} but did not find knowledge-base/, plan/, qna/.`,
-        `Entries: ${listTopEntries(tmp)}`,
+        `Top entries: ${listTopEntries(tmp)}`,
+        `JSON sample: ${listJsonSample(tmp).join(', ') || '(none)'}`,
       ].join('\n'),
     )
   }
@@ -175,6 +250,12 @@ async function downloadTarball(token) {
 
 async function downloadRepo(token) {
   const errors = []
+  try {
+    await downloadViaGitApi(token)
+    return
+  } catch (err) {
+    errors.push(err instanceof Error ? err.message : String(err))
+  }
   const httpsUrl = `https://github.com/${owner}/${repo}.git`
   const tokenUrl = `https://x-access-token:${token}@github.com/${owner}/${repo}.git`
   for (const [url, label] of [
