@@ -3,6 +3,7 @@ import {
   INTERVIEW_CATEGORIES,
   INTERVIEW_QUESTIONS,
 } from '../../data/interview-questions'
+import { readInterviewSessionToken } from '../../utils/sessionCookie'
 
 export default defineEventHandler((event) => {
   setResponseHeaders(event, {
@@ -16,13 +17,15 @@ export default defineEventHandler((event) => {
     })
   }
 
-  const auth = getHeader(event, 'authorization') || ''
-  const token = auth.startsWith('Bearer ') ? auth.slice(7).trim() : ''
+  const token = readInterviewSessionToken(event)
   if (!verifyInterviewToken(token)) {
     throw createError({
       statusCode: 401,
       statusMessage: 'Unauthorized',
-      data: { error: 'Valid interview session required' },
+      data: {
+        error: 'Valid interview session required',
+        code: 'SESSION_EXPIRED',
+      },
     })
   }
 

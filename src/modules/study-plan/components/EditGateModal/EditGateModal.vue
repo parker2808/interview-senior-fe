@@ -57,13 +57,16 @@ function onSubmit(e: Event) {
         class="w-full max-w-md rounded-2xl border border-line bg-surface-elevated p-5 shadow-xl sm:p-6"
         @submit="onSubmit"
       >
-        <h2 id="edit-gate-title" class="text-xl font-bold">Mã chỉnh sửa</h2>
+        <h2 id="edit-gate-title" class="text-xl font-bold">
+          {{ $t('plan.gateTitle') }}
+        </h2>
         <p class="mt-2 text-sm text-ink-muted">
-          Nhập mã 6 số để mở <strong>chế độ Sửa</strong>. Bỏ qua để dùng
-          <strong>chế độ Xem</strong>.
+          {{ $t('plan.gateHint') }}
         </p>
         <label class="mt-4 block">
-          <span class="mb-1 block text-sm font-medium">Mã 6 số</span>
+          <span class="mb-1 block text-sm font-medium">{{
+            $t('plan.gateLabel')
+          }}</span>
           <input
             type="password"
             inputmode="numeric"
@@ -86,7 +89,7 @@ function onSubmit(e: Event) {
             class="min-h-11 flex-1 rounded-lg bg-accent px-4 text-sm font-semibold text-[var(--bg-elevated)] disabled:opacity-50"
             :disabled="unlocking || digits.length !== 6"
           >
-            {{ unlocking ? 'Đang mở…' : 'Mở khóa' }}
+            {{ unlocking ? $t('plan.unlocking') : $t('plan.unlock') }}
           </button>
           <button
             type="button"
@@ -94,7 +97,7 @@ function onSubmit(e: Event) {
             :disabled="unlocking"
             @click="emit('skip')"
           >
-            Chỉ xem
+            {{ $t('plan.viewOnly') }}
           </button>
         </div>
       </form>

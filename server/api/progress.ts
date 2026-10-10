@@ -4,6 +4,7 @@ import {
   writeProgress,
 } from '../utils/progressStore'
 import { safeEqualString, verifyEditToken } from '../utils/editAuth'
+import { EDIT_SESSION_COOKIE } from '../utils/sessionCookie'
 
 const DAY_COUNT = 30
 
@@ -48,6 +49,11 @@ function assertWriteAuth(event: Parameters<typeof getHeader>[0]) {
     return { ok: true as const, via: 'edit-token' }
   }
 
+  const cookieToken = getCookie(event, EDIT_SESSION_COOKIE) || ''
+  if (cookieToken && verifyEditToken(cookieToken)) {
+    return { ok: true as const, via: 'edit-cookie' }
+  }
+
   const expected = process.env.PROGRESS_WRITE_TOKEN
   if (expected && progressHeader && safeEqualString(progressHeader, expected)) {
     return { ok: true as const, via: 'write-token' }
@@ -65,7 +71,8 @@ function assertWriteAuth(event: Parameters<typeof getHeader>[0]) {
   return {
     ok: false as const,
     status: 401,
-    error: 'Invalid or missing write auth (x-progress-token or x-edit-token)',
+    error:
+      'Invalid or missing write auth (cookie, x-progress-token, or x-edit-token)',
   }
 }
 

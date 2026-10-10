@@ -24,7 +24,7 @@ const {
   loadError,
   categories,
   questions,
-  boot,
+  sessionReady,
   submitPasscode,
   lock,
 } = useInterviewUnlock()
@@ -33,10 +33,6 @@ const categoryFilter = ref<'all' | InterviewCategoryId>('all')
 const query = ref('')
 const openIds = ref<Set<string>>(new Set())
 const focusedId = ref('')
-
-onMounted(() => {
-  boot()
-})
 
 const filtered = computed(() => {
   const q = query.value.trim().toLowerCase()
@@ -73,7 +69,14 @@ function collapseAll() {
   openIds.value = new Set()
 }
 
-const gateOpen = computed(() => !unlocked.value)
+const contentLoading = computed(
+  () =>
+    !sessionReady.value ||
+    loadingQuestions.value ||
+    (unlocked.value && !questions.value.length && !loadError.value),
+)
+const gateOpen = computed(() => sessionReady.value && !unlocked.value && !contentLoading.value)
+const showQuestions = computed(() => unlocked.value && !contentLoading.value)
 
 const requestedQuestionId = computed(() => {
   const q = route.query.q
@@ -141,7 +144,7 @@ watch(
       </template>
     </AppTopBar>
 
-    <div v-if="unlocked" class="px-4 pt-6 sm:px-6 lg:px-8">
+    <div v-if="showQuestions" class="px-4 pt-6 sm:px-6 lg:px-8">
       <header class="max-w-3xl">
         <p class="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">
           {{ $t('interview.eyebrow') }}
@@ -235,7 +238,7 @@ watch(
     </div>
 
     <div
-      v-else-if="loadingQuestions"
+      v-else-if="contentLoading"
       class="px-4 pt-16 text-center text-sm text-ink-muted"
     >
       {{ $t('interview.loading') }}

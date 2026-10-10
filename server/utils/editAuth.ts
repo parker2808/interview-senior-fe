@@ -88,6 +88,7 @@ export function verifyPasscode(passcode: string) {
       ok: false as const,
       status: 503,
       error: 'EDIT_PASSCODE is not configured on the site',
+      code: 'PASSCODE_NOT_CONFIGURED' as const,
     }
   }
   if (!isSixDigitPasscode(expected)) {
@@ -95,6 +96,7 @@ export function verifyPasscode(passcode: string) {
       ok: false as const,
       status: 503,
       error: 'EDIT_PASSCODE must be a 6-digit code',
+      code: 'PASSCODE_NOT_CONFIGURED' as const,
     }
   }
   if (!isSixDigitPasscode(passcode)) {
@@ -102,10 +104,16 @@ export function verifyPasscode(passcode: string) {
       ok: false as const,
       status: 401,
       error: 'Passcode must be exactly 6 digits',
+      code: 'PASSCODE_FORMAT' as const,
     }
   }
   if (!safeEqualString(passcode, expected)) {
-    return { ok: false as const, status: 401, error: 'Invalid passcode' }
+    return {
+      ok: false as const,
+      status: 401,
+      error: 'Invalid passcode',
+      code: 'INVALID_PASSCODE' as const,
+    }
   }
   return { ok: true as const }
 }
