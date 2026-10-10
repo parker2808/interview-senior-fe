@@ -2,7 +2,6 @@
 import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
-import InterviewPinGate from '@/modules/interview-qa/components/InterviewPinGate/InterviewPinGate.vue'
 import QuestionCard from '@/modules/interview-qa/components/QuestionCard/QuestionCard.vue'
 import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
 import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
@@ -20,15 +19,10 @@ const lang = computed<InterviewLang>(() =>
 
 const {
   unlocked,
-  unlocking,
   loadingQuestions,
-  unlockError,
   loadError,
   categories,
   questions,
-  sessionReady,
-  submitPasscode,
-  lock,
   reload,
 } = await useInterviewUnlock()
 
@@ -72,10 +66,7 @@ function collapseAll() {
   openIds.value = new Set()
 }
 
-const contentLoading = computed(
-  () => !sessionReady.value || loadingQuestions.value,
-)
-const gateOpen = computed(() => sessionReady.value && !unlocked.value && !contentLoading.value)
+const contentLoading = computed(() => loadingQuestions.value)
 const showQuestions = computed(
   () => unlocked.value && !contentLoading.value && !loadError.value,
 )
@@ -121,26 +112,11 @@ watch(
 
 <template>
   <div class="mx-auto min-h-screen max-w-hub pb-10">
-    <InterviewPinGate
-      :open="gateOpen"
-      :unlocking="unlocking || loadingQuestions"
-      :error="unlockError || loadError"
-      @submit="submitPasscode"
-    />
-
     <AppTopBar
       :title="$t('interview.title')"
       :home-label="t('interview.backHub')"
     >
       <template #actions>
-        <button
-          v-if="unlocked"
-          type="button"
-          class="hidden min-h-10 rounded-lg border border-line bg-white px-3 text-sm font-semibold sm:inline-flex sm:items-center"
-          @click="lock"
-        >
-          {{ $t('interview.lock') }}
-        </button>
         <LocaleToggle />
         <ThemeToggle />
       </template>

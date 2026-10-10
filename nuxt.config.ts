@@ -19,7 +19,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-01-15',
   devtools: { enabled: true },
 
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/i18n', 'nuxt-auth-utils'],
 
   css: ['~/src/assets/css/main.css'],
 
@@ -40,7 +40,7 @@ export default defineNuxtConfig({
         {
           name: 'description',
           content:
-            'Hub, knowledge base, 30-day plan, and PIN-locked interview Q&A for Senior Frontend prep.',
+            'Hub, knowledge base, 30-day plan, and GitHub-protected interview Q&A for Senior Frontend prep.',
         },
       ],
     },
@@ -84,6 +84,47 @@ export default defineNuxtConfig({
       nitro.hooks.hook('compiled', () => {
         copyContentIntoNitroOutput(nitro)
       })
+    },
+  },
+
+  runtimeConfig: {
+    session: {
+      maxAge: 60 * 60 * 24 * 7,
+      cookie: {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+      },
+    },
+    oauth: {
+      github: {
+        clientId: '',
+        clientSecret: '',
+      },
+    },
+  },
+
+  routeRules: {
+    '/api/knowledge-base/**': {
+      headers: {
+        'Cache-Control':
+          'public, s-maxage=86400, stale-while-revalidate=604800',
+      },
+    },
+    '/api/plan/**': {
+      headers: {
+        'Cache-Control':
+          'public, s-maxage=86400, stale-while-revalidate=604800',
+      },
+    },
+    '/api/auth/**': {
+      headers: { 'Cache-Control': 'private, no-store' },
+    },
+    '/api/interview/**': {
+      headers: { 'Cache-Control': 'private, no-store' },
+    },
+    '/api/progress': {
+      headers: { 'Cache-Control': 'private, no-store' },
     },
   },
 

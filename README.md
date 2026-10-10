@@ -2,7 +2,7 @@
 
 > 🌍 **Language / Ngôn ngữ:** [🇬🇧 English](./README.md) | [🇻🇳 Tiếng Việt](./README-vi.md)
 
-Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 30-day plan with labs, and a PIN-protected Q&A bank.
+Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 30-day plan with labs, and a GitHub-protected Q&A bank.
 
 **Live:** [parker-interview-senior-fe.vercel.app](https://parker-interview-senior-fe.vercel.app)
 
@@ -10,7 +10,7 @@ Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 3
 
 - **Knowledge base** — 22 vi/en topics, sidebar, full-text search, nested heading TOC
 - **30-day plan** — daily checkpoints, lab links, view vs edit progress
-- **Interview Q&A** — model answers behind a 6-digit PIN
+- **Interview Q&A** — model answers behind GitHub OAuth (allowlisted owner)
 - **i18n** — `vi` / `en`, no URL prefix; locale cookie
 - **Light / dark** theme
 
@@ -56,28 +56,54 @@ Build (`predev` / `prebuild`) runs `scripts/pull-data.mjs` → `.data/content`, 
 
 | Method | Path | Auth |
 |---|---|---|
-| `GET` | `/api/knowledge-base/docs` | public |
-| `GET` | `/api/knowledge-base/docs/:slug` | public |
-| `GET` | `/api/knowledge-base/search?q=&lang=vi\|en&limit=` | public |
-| `GET` | `/api/plan/days` | public |
-| `GET` | `/api/plan/days/:n` | public |
-| `GET` | `/api/plan/resources/:id` | public |
-| `GET` | `/api/interview/questions` | interview session |
-| `POST` | `/api/auth/interview` | body `{ passcode }` → HttpOnly cookie |
-| `POST` | `/api/auth/edit` | body `{ passcode }` → HttpOnly cookie |
-| `GET` | `/api/auth/session` | reports interview + edit scopes |
-| `DELETE` | `/api/auth/session?scope=interview\|edit\|all` | clears cookies |
-| `GET` | `/api/progress` | public read (Blob) |
-| `PUT` / `POST` | `/api/progress` | edit session |
+| `GET` | `/api/knowledge-base/docs` | public (CDN cache) |
+| `GET` | `/api/knowledge-base/docs/:slug` | public (CDN cache) |
+| `GET` | `/api/knowledge-base/search?q=&lang=vi\|en&limit=` | public (CDN cache + input caps + best-effort rate limit) |
+| `GET` | `/api/plan/days` | public (CDN cache) |
+| `GET` | `/api/plan/days/:n` | public (CDN cache) |
+| `GET` | `/api/plan/resources/:id` | public (CDN cache) |
+| `GET` | `/api/interview/questions` | GitHub session |
+| `GET` | `/auth/github` | GitHub OAuth start + callback |
+| `POST` | `/api/auth/logout` | clears sealed session |
+| `GET` | `/api/auth/session` | `{ ok, authenticated, user }` |
+| `GET` | `/api/progress` | GitHub session |
+| `PUT` / `POST` | `/api/progress` | GitHub session |
+
+Every other `/api/**` route is **default-deny** (`401` JSON) unless it is added to the public allowlist in `src/modules/core/utils/public-api.util.ts`.
+
+Public reads send `Cache-Control: public, s-maxage=86400, stale-while-revalidate=604800`. Session, Q&A, and progress responses send `private, no-store` and must not be CDN-cached.
+
+Search rejects oversized/`lang`/`limit` abuse (`q` max 100, `limit` cap 50). The in-process search rate limit is best-effort only (one Vercel isolate). **Enable Vercel Firewall** for real protection: Project → Firewall → add a rate-limit rule on `/api/knowledge-base/search` (for example 30 requests / minute / IP) and optionally on `/api/**`.
 
 ### Auth
 
-HttpOnly cookies, 12h. **`INTERVIEW_PASSCODE` ≠ `EDIT_PASSCODE`** — one PIN does not unlock both.
+GitHub OAuth via [`nuxt-auth-utils`](https://github.com/atinux/nuxt-auth-utils). Sealed HttpOnly cookie (`nuxt-session`), 7 days, `Secure` in production, `SameSite=Lax`. Library uses OAuth `state` (and PKCE when the provider supports it).
 
-- Interview cookie unlocks `GET /api/interview/questions`
-- Edit cookie unlocks plan progress writes
-- Optional `PROGRESS_WRITE_TOKEN` / `x-edit-token` for progress writes
-- Token HMAC secrets: `INTERVIEW_TOKEN_SECRET`, `EDIT_TOKEN_SECRET`
+**Public (no login):** knowledge base + plan pages (read-only) and their content APIs.
+
+**Login required:** `/interview`, `/api/interview/*`, plan edit / progress mutations, and every non-allowlisted API.
+
+Only GitHub user `parker2808` is allowed (override with `AUTH_ALLOWED_GITHUB_LOGINS`). If `AUTH_ALLOWED_GITHUB_IDS` is set, **both** login and numeric id must match. Anyone else who completes GitHub login lands on `/auth/not-allowed` with **no session**.
+
+#### GitHub OAuth setup (Parker)
+
+1. GitHub → Settings → Developer settings → **OAuth Apps** → New OAuth App.
+2. **Homepage URL:** `https://parker-interview-senior-fe.vercel.app`
+3. **Authorization callback URL:** `https://parker-interview-senior-fe.vercel.app/auth/github`  
+   GitHub OAuth Apps accept **one** callback URL. Preview deployments (`*.vercel.app`) cannot sign in unless you create a second OAuth App whose callback is that preview origin, or skip login on previews.
+4. For local dev, create a **second** OAuth App: homepage `http://localhost:3000`, callback `http://localhost:3000/auth/github`. Put those client id/secret only in local `.env`.
+5. Generate a session password (32+ characters): `openssl rand -base64 32`
+6. In Vercel → Project → Settings → Environment Variables, set:
+
+   | Variable | Production |
+   |---|---|
+   | `NUXT_SESSION_PASSWORD` | the 32+ char secret |
+   | `NUXT_OAUTH_GITHUB_CLIENT_ID` | production OAuth App client id |
+   | `NUXT_OAUTH_GITHUB_CLIENT_SECRET` | production client secret |
+   | `AUTH_ALLOWED_GITHUB_LOGINS` | `parker2808` |
+   | `AUTH_ALLOWED_GITHUB_IDS` | optional numeric id from `https://api.github.com/users/parker2808` |
+
+7. Redeploy. Then **remove** `INTERVIEW_PASSCODE`, `EDIT_PASSCODE`, `INTERVIEW_TOKEN_SECRET`, `EDIT_TOKEN_SECRET`, and `PROGRESS_WRITE_TOKEN` from Vercel (they are unused).
 
 ### i18n
 
@@ -115,30 +141,38 @@ sequenceDiagram
   Note over Browser,Page: Client navigation keeps the same fetch and shows skeletons while pending
 ```
 
-## PIN unlock
+## GitHub OAuth
 
 ```mermaid
 sequenceDiagram
-  participant UI
-  participant Auth as POST /api/auth/interview
-  participant Session as GET /api/auth/session
-  participant Bank as GET /api/interview/questions
-  UI->>Auth: JSON passcode
-  Auth-->>UI: Set-Cookie HttpOnly
-  UI->>Session: cookie
-  Session-->>UI: interview valid
-  UI->>Bank: cookie
-  Bank-->>UI: questions
+  participant Browser
+  participant App
+  participant GitHub
+  Browser->>App: GET /login?redirect=/interview
+  Browser->>App: GET /auth/github?redirect=/interview
+  App->>GitHub: authorize + state
+  GitHub-->>Browser: consent
+  Browser->>App: GET /auth/github?code&state
+  App->>GitHub: exchange code
+  GitHub-->>App: user profile
+  alt login (and id) on allowlist
+    App->>Browser: Set-Cookie sealed HttpOnly session
+    App->>Browser: redirect /interview
+    Browser->>App: GET /api/interview/questions
+    App-->>Browser: questions
+  else anyone else
+    App->>Browser: redirect /auth/not-allowed (no session)
+  end
 ```
 
-Edit mode is the same sequence against `POST /api/auth/edit` and `PUT /api/progress`.
+Plan view stays public. Edit controls and `/api/progress` appear only with a valid session.
 
 ## Local development
 
 **Needs:** Node 22+, npm, and either a local checkout of `interview-fe-data` or a GitHub PAT that can read that private repo.
 
 ```bash
-cp .env.example .env          # fill PINs locally; never commit secrets
+cp .env.example .env          # fill OAuth + session password; never commit secrets
 # Option A — local data repo
 CONTENT_LOCAL_PATH=/path/to/interview-fe-data npm run dev
 # Option B — token pull
@@ -164,10 +198,11 @@ No secret values belong in git. Copy `.env.example` and fill locally / on Vercel
 | `CONTENT_REPO_REF` | optional | Git ref to pull (default `main`) |
 | `CONTENT_REPO_OWNER` / `CONTENT_REPO_NAME` | optional | Override data-repo coordinates |
 | `CONTENT_LOCAL_PATH` | local | Checkout or export of the data repo; skips GitHub |
-| `INTERVIEW_PASSCODE` | Vercel + local | 6-digit Q&A PIN |
-| `EDIT_PASSCODE` | Vercel + local | 6-digit plan-edit PIN (must differ) |
-| `INTERVIEW_TOKEN_SECRET` / `EDIT_TOKEN_SECRET` | optional | HMAC secrets for session tokens |
-| `PROGRESS_WRITE_TOKEN` | optional | Alternate progress write auth |
+| `NUXT_SESSION_PASSWORD` | Vercel + local | 32+ chars; seals the HttpOnly session cookie |
+| `NUXT_OAUTH_GITHUB_CLIENT_ID` | Vercel + local | GitHub OAuth App client id |
+| `NUXT_OAUTH_GITHUB_CLIENT_SECRET` | Vercel + local | GitHub OAuth App client secret |
+| `AUTH_ALLOWED_GITHUB_LOGINS` | Vercel + local | Comma-separated logins (default `parker2808`) |
+| `AUTH_ALLOWED_GITHUB_IDS` | optional | Comma-separated numeric GitHub ids; AND-matched with login |
 | `BLOB_READ_WRITE_TOKEN` | Vercel | Private Blob store for `/api/progress` |
 | `VERCEL_DEPLOY_HOOK_URL` | **data repo** secret | Action on `main` triggers a site rebuild |
 

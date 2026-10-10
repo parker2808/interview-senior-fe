@@ -16,7 +16,7 @@ Feature UI follows [STRUCTURE.md](../STRUCTURE.md):
 - `src/modules/hub/` — hub landing
 - `src/modules/knowledge-base/` — docs reader
 - `src/modules/study-plan/` — 30-day plan UI
-- `src/modules/interview-qa/` — PIN-gated Q&A
+- `src/modules/interview-qa/` — GitHub-gated Q&A
 - `src/modules/content/` — block types + renderer
 - `src/modules/core/` — shared components
 

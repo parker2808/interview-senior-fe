@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AuthMenu from '@/modules/core/components/AuthMenu/AuthMenu.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import { HUB_MODULES } from '@/modules/hub/constants/hub-modules.constant'
@@ -19,6 +20,7 @@ import { HUB_MODULES } from '@/modules/hub/constants/hub-modules.constant'
         </p>
       </div>
       <div class="flex items-center gap-2 self-start">
+        <AuthMenu />
         <LocaleToggle />
         <ThemeToggle />
       </div>

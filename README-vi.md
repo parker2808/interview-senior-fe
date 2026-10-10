@@ -2,7 +2,7 @@
 
 > 🌍 **Language / Ngôn ngữ:** [🇬🇧 English](./README.md) | [🇻🇳 Tiếng Việt](./README-vi.md)
 
-App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ, kế hoạch 30 ngày kèm lab, và ngân hàng Q&A khoá PIN.
+App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ, kế hoạch 30 ngày kèm lab, và ngân hàng Q&A khoá bằng GitHub.
 
 **Live:** [parker-interview-senior-fe.vercel.app](https://parker-interview-senior-fe.vercel.app)
 
@@ -10,7 +10,7 @@ App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ,
 
 - **Knowledge base** — 22 chủ đề vi/en, sidebar, tìm full-text, TOC lồng heading
 - **Kế hoạch 30 ngày** — checkpoint theo ngày, lab, xem / sửa tiến độ
-- **Interview Q&A** — câu trả lời mẫu sau mã 6 số
+- **Interview Q&A** — câu trả lời mẫu sau GitHub OAuth (allowlist chủ site)
 - **i18n** — `vi` / `en`, không prefix URL; cookie locale
 - **Theme** sáng / tối
 
@@ -56,28 +56,45 @@ Build (`predev` / `prebuild`) chạy `scripts/pull-data.mjs` → `.data/content`
 
 | Method | Path | Auth |
 |---|---|---|
-| `GET` | `/api/knowledge-base/docs` | public |
-| `GET` | `/api/knowledge-base/docs/:slug` | public |
-| `GET` | `/api/knowledge-base/search?q=&lang=vi\|en&limit=` | public |
-| `GET` | `/api/plan/days` | public |
-| `GET` | `/api/plan/days/:n` | public |
-| `GET` | `/api/plan/resources/:id` | public |
-| `GET` | `/api/interview/questions` | phiên interview |
-| `POST` | `/api/auth/interview` | body `{ passcode }` → cookie HttpOnly |
-| `POST` | `/api/auth/edit` | body `{ passcode }` → cookie HttpOnly |
-| `GET` | `/api/auth/session` | báo scope interview + edit |
-| `DELETE` | `/api/auth/session?scope=interview\|edit\|all` | xoá cookie |
-| `GET` | `/api/progress` | đọc public (Blob) |
-| `PUT` / `POST` | `/api/progress` | phiên edit |
+| `GET` | `/api/knowledge-base/docs` | public (cache CDN) |
+| `GET` | `/api/knowledge-base/docs/:slug` | public (cache CDN) |
+| `GET` | `/api/knowledge-base/search?q=&lang=vi\|en&limit=` | public (cache CDN + giới hạn input + rate limit best-effort) |
+| `GET` | `/api/plan/days` | public (cache CDN) |
+| `GET` | `/api/plan/days/:n` | public (cache CDN) |
+| `GET` | `/api/plan/resources/:id` | public (cache CDN) |
+| `GET` | `/api/interview/questions` | session GitHub |
+| `GET` | `/auth/github` | bắt đầu + callback OAuth |
+| `POST` | `/api/auth/logout` | xoá session |
+| `GET` | `/api/auth/session` | `{ ok, authenticated, user }` |
+| `GET` | `/api/progress` | session GitHub |
+| `PUT` / `POST` | `/api/progress` | session GitHub |
+
+Mọi `/api/**` khác là **default-deny** (`401` JSON) trừ khi được thêm vào allowlist trong `src/modules/core/utils/public-api.util.ts`.
+
+API đọc public gửi `Cache-Control: public, s-maxage=86400, stale-while-revalidate=604800`. Session, Q&A, progress gửi `private, no-store` — không cache trên CDN.
+
+Search từ chối `q` quá dài (tối đa 100), `lang`/`limit` sai (`limit` tối đa 50). Rate limit in-process chỉ là best-effort (một isolate Vercel). **Bật Vercel Firewall** để chặn spam thật: Project → Firewall → rule rate-limit cho `/api/knowledge-base/search` (ví dụ 30 request / phút / IP).
 
 ### Auth
 
-Cookie HttpOnly, 12 giờ. **`INTERVIEW_PASSCODE` ≠ `EDIT_PASSCODE`** — một PIN không mở cả hai.
+GitHub OAuth qua [`nuxt-auth-utils`](https://github.com/atinux/nuxt-auth-utils). Cookie HttpOnly đã niêm (`nuxt-session`), 7 ngày, `Secure` trên production, `SameSite=Lax`. Thư viện dùng OAuth `state` (và PKCE nếu provider hỗ trợ).
 
-- Cookie interview mở `GET /api/interview/questions`
-- Cookie edit mở ghi tiến độ plan
-- Tuỳ chọn `PROGRESS_WRITE_TOKEN` / `x-edit-token` để ghi progress
-- Secret HMAC: `INTERVIEW_TOKEN_SECRET`, `EDIT_TOKEN_SECRET`
+**Public (không login):** trang knowledge base + plan (chỉ đọc) và API nội dung tương ứng.
+
+**Cần login:** `/interview`, `/api/interview/*`, sửa plan / ghi progress, và mọi API không nằm trong allowlist.
+
+Chỉ GitHub user `parker2808` được phép (đổi bằng `AUTH_ALLOWED_GITHUB_LOGINS`). Nếu có `AUTH_ALLOWED_GITHUB_IDS` thì **cả** login và id số phải khớp. Người khác login xong vào `/auth/not-allowed` và **không** có session.
+
+#### Setup OAuth (Parker)
+
+1. GitHub → Settings → Developer settings → **OAuth Apps** → New OAuth App.
+2. **Homepage URL:** `https://parker-interview-senior-fe.vercel.app`
+3. **Authorization callback URL:** `https://parker-interview-senior-fe.vercel.app/auth/github`  
+   OAuth App của GitHub chỉ nhận **một** callback. Preview (`*.vercel.app`) không login được trừ khi tạo OAuth App thứ hai cho origin đó.
+4. Local: OAuth App thứ hai, homepage `http://localhost:3000`, callback `http://localhost:3000/auth/github`.
+5. Tạo mật khẩu session (32+ ký tự): `openssl rand -base64 32`
+6. Thêm biến trên Vercel: `NUXT_SESSION_PASSWORD`, `NUXT_OAUTH_GITHUB_CLIENT_ID`, `NUXT_OAUTH_GITHUB_CLIENT_SECRET`, `AUTH_ALLOWED_GITHUB_LOGINS=parker2808`, tuỳ chọn `AUTH_ALLOWED_GITHUB_IDS`.
+7. Redeploy. Xoá `INTERVIEW_PASSCODE`, `EDIT_PASSCODE`, `INTERVIEW_TOKEN_SECRET`, `EDIT_TOKEN_SECRET`, `PROGRESS_WRITE_TOKEN`.
 
 ### i18n
 
@@ -115,30 +132,38 @@ sequenceDiagram
   Note over Browser,Page: Client navigation giữ cùng fetch và hiện skeleton khi pending
 ```
 
-## Mở khoá PIN
+## GitHub OAuth
 
 ```mermaid
 sequenceDiagram
-  participant UI
-  participant Auth as POST /api/auth/interview
-  participant Session as GET /api/auth/session
-  participant Bank as GET /api/interview/questions
-  UI->>Auth: JSON passcode
-  Auth-->>UI: Set-Cookie HttpOnly
-  UI->>Session: cookie
-  Session-->>UI: interview valid
-  UI->>Bank: cookie
-  Bank-->>UI: questions
+  participant Browser
+  participant App
+  participant GitHub
+  Browser->>App: GET /login?redirect=/interview
+  Browser->>App: GET /auth/github?redirect=/interview
+  App->>GitHub: authorize + state
+  GitHub-->>Browser: consent
+  Browser->>App: GET /auth/github?code&state
+  App->>GitHub: exchange code
+  GitHub-->>App: user profile
+  alt login (và id) trong allowlist
+    App->>Browser: Set-Cookie session HttpOnly
+    App->>Browser: redirect /interview
+    Browser->>App: GET /api/interview/questions
+    App-->>Browser: questions
+  else người khác
+    App->>Browser: redirect /auth/not-allowed (không session)
+  end
 ```
 
-Chế độ sửa plan cùng chuỗi với `POST /api/auth/edit` và `PUT /api/progress`.
+Trang plan vẫn public. Nút sửa và `/api/progress` chỉ hiện khi đã có session.
 
 ## Chạy local
 
 **Cần:** Node 22+, npm, và checkout local của `interview-fe-data` hoặc PAT đọc được repo private đó.
 
 ```bash
-cp .env.example .env          # điền PIN local; không commit secret
+cp .env.example .env          # điền OAuth + session password; không commit secret
 # Cách A — data repo local
 CONTENT_LOCAL_PATH=/path/to/interview-fe-data npm run dev
 # Cách B — kéo bằng token
@@ -164,10 +189,11 @@ Không để giá trị secret trong git. Copy `.env.example` rồi điền loca
 | `CONTENT_REPO_REF` | tuỳ chọn | Git ref để kéo (mặc định `main`) |
 | `CONTENT_REPO_OWNER` / `CONTENT_REPO_NAME` | tuỳ chọn | Đổi toạ độ data repo |
 | `CONTENT_LOCAL_PATH` | local | Checkout hoặc export data repo; bỏ qua GitHub |
-| `INTERVIEW_PASSCODE` | Vercel + local | PIN 6 số cho Q&A |
-| `EDIT_PASSCODE` | Vercel + local | PIN 6 số sửa plan (phải khác) |
-| `INTERVIEW_TOKEN_SECRET` / `EDIT_TOKEN_SECRET` | tuỳ chọn | Secret HMAC cho session token |
-| `PROGRESS_WRITE_TOKEN` | tuỳ chọn | Auth ghi progress thay thế |
+| `NUXT_SESSION_PASSWORD` | Vercel + local | 32+ ký tự; niêm cookie session |
+| `NUXT_OAUTH_GITHUB_CLIENT_ID` | Vercel + local | Client id OAuth App |
+| `NUXT_OAUTH_GITHUB_CLIENT_SECRET` | Vercel + local | Client secret OAuth App |
+| `AUTH_ALLOWED_GITHUB_LOGINS` | Vercel + local | Login cách nhau bằng dấu phẩy (mặc định `parker2808`) |
+| `AUTH_ALLOWED_GITHUB_IDS` | tuỳ chọn | Id số GitHub; AND với login |
 | `BLOB_READ_WRITE_TOKEN` | Vercel | Blob private cho `/api/progress` |
 | `VERCEL_DEPLOY_HOOK_URL` | secret **data repo** | Action trên `main` kích hoạt rebuild site |
 

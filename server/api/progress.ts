@@ -1,10 +1,9 @@
+import { privateCacheHeaders } from '@/modules/core/utils/cache-headers.util'
 import {
   emptyProgress,
   readProgress,
   writeProgress,
 } from '../utils/progressStore'
-import { safeEqualString, verifyEditToken } from '../utils/editAuth'
-import { EDIT_SESSION_COOKIE } from '../utils/sessionCookie'
 
 const DAY_COUNT = 30
 
@@ -38,52 +37,8 @@ function normalizePayload(raw: unknown) {
   return payload
 }
 
-function assertWriteAuth(event: Parameters<typeof getHeader>[0]) {
-  const editHeader = getHeader(event, 'x-edit-token')
-  if (editHeader && verifyEditToken(editHeader)) {
-    return { ok: true as const, via: 'edit-token' }
-  }
-
-  const progressHeader = getHeader(event, 'x-progress-token')
-  if (progressHeader && verifyEditToken(progressHeader)) {
-    return { ok: true as const, via: 'edit-token' }
-  }
-
-  const cookieToken = getCookie(event, EDIT_SESSION_COOKIE) || ''
-  if (cookieToken && verifyEditToken(cookieToken)) {
-    return { ok: true as const, via: 'edit-cookie' }
-  }
-
-  const expected = process.env.PROGRESS_WRITE_TOKEN
-  if (expected && progressHeader && safeEqualString(progressHeader, expected)) {
-    return { ok: true as const, via: 'write-token' }
-  }
-
-  if (!expected && !process.env.EDIT_PASSCODE) {
-    return {
-      ok: false as const,
-      status: 503,
-      error:
-        'Neither PROGRESS_WRITE_TOKEN nor EDIT_PASSCODE is configured on the site',
-    }
-  }
-
-  return {
-    ok: false as const,
-    status: 401,
-    error:
-      'Invalid or missing write auth (cookie, x-progress-token, or x-edit-token)',
-  }
-}
-
 export default defineEventHandler(async (event) => {
-  setResponseHeaders(event, {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, PUT, POST, OPTIONS',
-    'Access-Control-Allow-Headers':
-      'Content-Type, x-progress-token, x-edit-token',
-    'Cache-Control': 'no-store',
-  })
+  setResponseHeaders(event, privateCacheHeaders())
 
   if (event.method === 'OPTIONS') {
     setResponseStatus(event, 204)
@@ -112,11 +67,6 @@ export default defineEventHandler(async (event) => {
   }
 
   if (event.method === 'PUT' || event.method === 'POST') {
-    const auth = assertWriteAuth(event)
-    if (!auth.ok) {
-      throw createError({ statusCode: auth.status, statusMessage: auth.error })
-    }
-
     let raw: unknown
     try {
       raw = await readBody(event)

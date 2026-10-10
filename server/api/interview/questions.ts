@@ -1,28 +1,13 @@
-import { verifyInterviewToken } from '../../utils/interviewAuth'
+import { privateCacheHeaders } from '@/modules/core/utils/cache-headers.util'
 import { readInterviewBank } from '../../utils/contentStore'
-import { readInterviewSessionToken } from '../../utils/sessionCookie'
 
 export default defineEventHandler(async (event) => {
-  setResponseHeaders(event, {
-    'Cache-Control': 'no-store',
-  })
+  setResponseHeaders(event, privateCacheHeaders())
 
   if (event.method !== 'GET') {
     throw createError({
       statusCode: 405,
       statusMessage: `Method ${event.method} not allowed`,
-    })
-  }
-
-  const token = readInterviewSessionToken(event)
-  if (!verifyInterviewToken(token)) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Unauthorized',
-      data: {
-        error: 'Valid interview session required',
-        code: 'SESSION_EXPIRED',
-      },
     })
   }
 
