@@ -37,12 +37,12 @@ function walkLocalized(value, pathHint) {
 
   const keys = Object.keys(value)
   const hasLocaleKey = keys.includes('en') || keys.includes('vi')
-  const onlyLocaleKeys = keys.every((key) => key === 'en' || key === 'vi')
-  const stringValues = keys.every(
-    (key) => typeof value[key] === 'string' || value[key] == null,
-  )
+  const extraKeys = keys.filter((key) => key !== 'en' && key !== 'vi')
+  const localeValuesAreStrings =
+    (!keys.includes('en') || typeof value.en === 'string' || value.en == null) &&
+    (!keys.includes('vi') || typeof value.vi === 'string' || value.vi == null)
 
-  if (hasLocaleKey && onlyLocaleKeys && stringValues) {
+  if (hasLocaleKey && localeValuesAreStrings) {
     if (typeof value.en !== 'string') fail(pathHint, 'missing `en`')
     if (typeof value.vi !== 'string') fail(pathHint, 'missing `vi`')
     const en = String(value.en ?? '')
@@ -51,6 +51,9 @@ function walkLocalized(value, pathHint) {
     if (en.trim() || vi.trim()) {
       if (!en.trim()) fail(pathHint, 'missing non-empty `en`')
       if (!vi.trim()) fail(pathHint, 'missing non-empty `vi`')
+    }
+    for (const key of extraKeys) {
+      walkLocalized(value[key], `${pathHint}.${key}`)
     }
     return
   }

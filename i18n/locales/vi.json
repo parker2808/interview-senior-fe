@@ -25,6 +25,9 @@
     "closeNav": "Đóng",
     "noToc": "Không có mục lục",
     "notFound": "Không tìm thấy tài liệu",
+    "loading": "Đang tải tài liệu…",
+    "loadError": "Không tải được tài liệu.",
+    "empty": "Không có dữ liệu",
     "groups": {
       "core": "I. Core Web",
       "vue": "II. Vue Ecosystem",
@@ -35,11 +38,19 @@
     },
     "backHub": "Hub",
     "backPlan": "Plan",
-    "emptySearch": "Không có kết quả"
+    "emptySearch": "Không có kết quả",
+    "searching": "Đang tìm…",
+    "expandAll": "Mở tất cả",
+    "collapseAll": "Thu tất cả",
+    "expandSection": "Mở mục",
+    "collapseSection": "Thu mục"
   },
   "plan": {
     "title": "Kế hoạch ôn 30 ngày",
-    "eyebrow": "Senior FE · 03/10 → 01/11/2026",
+    "eyebrow": "Senior FE",
+    "loading": "Đang tải kế hoạch…",
+    "loadError": "Không tải được kế hoạch.",
+    "empty": "Không có dữ liệu",
     "backHub": "Hub",
     "openDocs": "Knowledge Base",
     "backPlan": "Quay lại Plan",
@@ -121,7 +132,7 @@
     "example": "Ví dụ / story",
     "followUps": "Follow-up hay gặp",
     "empty": "Không có câu hỏi khớp.",
-    "loading": "Đang tải…"
+    "loading": "Đang tải câu hỏi…"
   },
   "auth": {
     "wrongCode": "Mã không đúng. Bạn vẫn có thể xem.",
@@ -131,11 +142,16 @@
     "networkError": "Lỗi mạng. Kiểm tra kết nối rồi thử lại.",
     "genericError": "Không xác thực được mã."
   },
+  "content": {
+    "keyTakeaways": "Nhớ nhanh"
+  },
   "common": {
     "vi": "VI",
     "en": "EN",
     "scrollTop": "Lên đầu trang",
     "themeDark": "Chế độ tối",
-    "themeLight": "Chế độ sáng"
+    "themeLight": "Chế độ sáng",
+    "retry": "Thử lại",
+    "retrying": "Đang thử lại…"
   }
 }

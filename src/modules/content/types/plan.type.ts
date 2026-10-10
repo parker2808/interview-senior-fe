@@ -35,7 +35,8 @@ export type PlanWeek = {
 
 export type PlanDaySummary = {
   day: number
-  date: string
+  /** Legacy calendar label from the data repo. The app strips this and does not display it. */
+  date?: string
   week: number
   title: Localized
   goal: Localized

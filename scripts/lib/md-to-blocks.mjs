@@ -36,10 +36,27 @@ function serializeTokens(tokens) {
 }
 
 function listItemMarkdown(item) {
-  if (Array.isArray(item.tokens) && item.tokens.length) {
-    return serializeTokens(item.tokens)
+  const nested = (item.tokens || []).filter((token) => token?.type === 'list')
+  const leadTokens = (item.tokens || []).filter((token) => token?.type !== 'list')
+  const text = leadTokens.length
+    ? serializeTokens(leadTokens)
+    : String(item.text || '').trim()
+  if (nested.length) {
+    return {
+      text: text.trim(),
+      children: listFromToken(nested[0]),
+    }
   }
-  return String(item.text || '').trim()
+  return text.trim()
+}
+
+function listFromToken(token) {
+  return {
+    type: 'list',
+    style: token.ordered ? 'ol' : 'ul',
+    items: (token.items || []).map((item) => listItemMarkdown(item)),
+    raw: token.raw,
+  }
 }
 
 function isLabelText(text) {
@@ -83,12 +100,7 @@ function tokensToMonoBlocks(tokens) {
     }
 
     if (token.type === 'list') {
-      blocks.push({
-        type: 'list',
-        style: token.ordered ? 'ol' : 'ul',
-        items: (token.items || []).map((item) => listItemMarkdown(item)),
-        raw: token.raw,
-      })
+      blocks.push(listFromToken(token))
       continue
     }
 
@@ -217,10 +229,7 @@ function localizedRaw(block, lang) {
   if (!block) return ''
   if (block.type === 'paragraph') return block.text[lang]
   if (block.type === 'list') {
-    const bullet = block.style === 'ol' ? '1.' : '-'
-    return (block.items || [])
-      .map((item) => `${bullet} ${item[lang] || ''}`)
-      .join('\n')
+    return listToMarkdown(block, lang)
   }
   if (block.type === 'code') {
     return `\`\`\`${block.lang || ''}\n${block.code[lang] || ''}\n\`\`\``
@@ -245,12 +254,8 @@ export function monoToMarkdown(block) {
       return `${'#'.repeat(block.level)} ${block.text}`
     case 'paragraph':
       return block.text
-    case 'list': {
-      const bullet = block.style === 'ol' ? '1.' : '-'
-      return (block.items || [])
-        .map((item) => `${bullet} ${item}`)
-        .join('\n')
-    }
+    case 'list':
+      return listToMarkdown(block)
     case 'code':
       return `\`\`\`${block.lang || ''}\n${block.code}\n\`\`\``
     case 'table':
@@ -341,8 +346,46 @@ function zipAlign(enBlocks, viBlocks) {
   return pairs
 }
 
+function listItemText(item, lang) {
+  if (item == null) return ''
+  if (typeof item === 'string') return item
+  if (lang && item[lang] != null) return String(item[lang])
+  if (item.text != null) {
+    return typeof item.text === 'string' ? item.text : listItemText(item.text, lang)
+  }
+  return String(item.en || item.vi || '')
+}
+
+function listToMarkdown(block, lang, indent = '') {
+  const bullet = block.style === 'ol' ? '1.' : '-'
+  return (block.items || [])
+    .map((item) => {
+      const text = listItemText(item, lang).replace(/\s+/g, ' ').trim()
+      const line = `${indent}${bullet} ${text}`
+      const children = item && typeof item === 'object' ? item.children : null
+      if (!children) return line
+      return `${line}\n${listToMarkdown(children, lang, `${indent}  `)}`
+    })
+    .join('\n')
+}
+
 function loc(en, vi) {
   return { en: en ?? '', vi: vi ?? '' }
+}
+
+function mergeListItem(en, vi) {
+  const enText = listItemText(en, 'en') || listItemText(en)
+  const viText = listItemText(vi, 'vi') || listItemText(vi)
+  const item = loc(enText, viText)
+  const enChild = en && typeof en === 'object' ? en.children : null
+  const viChild = vi && typeof vi === 'object' ? vi.children : null
+  if (enChild || viChild) {
+    item.children = mergePair(
+      enChild || { type: 'list', style: viChild?.style || 'ul', items: [] },
+      viChild || { type: 'list', style: enChild?.style || 'ul', items: [] },
+    )
+  }
+  return item
 }
 
 function mergePair(en, vi) {
@@ -378,8 +421,8 @@ function mergePair(en, vi) {
     case 'list':
       return {
         type,
-        style: en.style,
-        items: zipArrays(en.items, vi.items).map(([a, b]) => loc(a, b)),
+        style: en.style || vi.style || 'ul',
+        items: zipArrays(en.items, vi.items).map(([a, b]) => mergeListItem(a, b)),
       }
     case 'callout':
       return { type, kind: en.kind || 'quote', text: loc(en.text, vi.text) }
@@ -547,13 +590,19 @@ export function fillMissingLocale(value) {
   }
   if (!value || typeof value !== 'object') return value
   const keys = Object.keys(value)
-  if (
-    keys.length <= 2 &&
-    keys.every((key) => key === 'en' || key === 'vi') &&
-    keys.every((key) => typeof value[key] === 'string')
-  ) {
-    if (value.en.trim() && !value.vi.trim()) value.vi = value.en
-    if (value.vi.trim() && !value.en.trim()) value.en = value.vi
+  const en = value.en
+  const vi = value.vi
+  if (typeof en === 'string' || typeof vi === 'string') {
+    if (typeof en === 'string' && en.trim() && !(typeof vi === 'string' && vi.trim())) {
+      value.vi = en
+    }
+    if (typeof vi === 'string' && vi.trim() && !(typeof en === 'string' && en.trim())) {
+      value.en = vi
+    }
+    for (const key of keys) {
+      if (key === 'en' || key === 'vi') continue
+      fillMissingLocale(value[key])
+    }
     return value
   }
   for (const child of Object.values(value)) fillMissingLocale(child)

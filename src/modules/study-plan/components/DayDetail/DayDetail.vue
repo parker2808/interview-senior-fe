@@ -75,7 +75,7 @@ function onDocClick(e: MouseEvent) {
     <header class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
       <div>
         <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
-          Day {{ String(day.day).padStart(2, '0') }} · {{ day.date }}
+          Day {{ String(day.day).padStart(2, '0') }}
         </p>
         <h2 class="mt-1 text-xl font-bold sm:text-2xl">
           {{ pickLocale(day.title, lang) }}

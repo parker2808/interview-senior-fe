@@ -71,8 +71,10 @@ export function classifyKbHref(href: string): KbHrefResult {
 
   if (
     stripped === 'README.md' ||
+    stripped === 'README-vi.md' ||
     stripped === 'README-en.md' ||
     stripped.endsWith('/README.md') ||
+    stripped.endsWith('/README-vi.md') ||
     stripped.endsWith('/README-en.md') ||
     stripped === 'jd1.md' ||
     stripped.startsWith('modules/')
@@ -80,8 +82,10 @@ export function classifyKbHref(href: string): KbHrefResult {
     const repoPath = stripped
       .replace(/^\.\.\//, '')
       .replace(/^documents\//, 'documents/')
-    // From documents/en/foo.md, ../../README-en.md → README-en.md
-    const cleaned = stripped.replace(/^(\.\.\/)+/, '')
+    // From documents/en/foo.md, ../../README.md → README.md
+    const cleaned = stripped
+      .replace(/^(\.\.\/)+/, '')
+      .replace(/(^|\/)README-en\.md$/, '$1README.md')
     return {
       kind: 'github',
       url: GITHUB_BLOB_MAIN + cleaned + (hash ? `#${hash}` : ''),

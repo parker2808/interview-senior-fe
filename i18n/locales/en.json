@@ -25,6 +25,9 @@
     "closeNav": "Close",
     "noToc": "No headings",
     "notFound": "Document not found",
+    "loading": "Loading document…",
+    "loadError": "Could not load this document.",
+    "empty": "No data",
     "groups": {
       "core": "I. Core Web",
       "vue": "II. Vue Ecosystem",
@@ -35,11 +38,19 @@
     },
     "backHub": "Hub",
     "backPlan": "Plan",
-    "emptySearch": "No results"
+    "emptySearch": "No results",
+    "searching": "Searching…",
+    "expandAll": "Expand all",
+    "collapseAll": "Collapse all",
+    "expandSection": "Expand section",
+    "collapseSection": "Collapse section"
   },
   "plan": {
     "title": "30-day study plan",
-    "eyebrow": "Senior FE · 03/10 → 01/11/2026",
+    "eyebrow": "Senior FE",
+    "loading": "Loading plan…",
+    "loadError": "Could not load the study plan.",
+    "empty": "No data",
     "backHub": "Hub",
     "openDocs": "Knowledge Base",
     "backPlan": "Back to Plan",
@@ -121,7 +132,7 @@
     "example": "Example / story",
     "followUps": "Likely follow-ups",
     "empty": "No matching questions.",
-    "loading": "Loading…"
+    "loading": "Loading questions…"
   },
   "auth": {
     "wrongCode": "Incorrect code. You can still view.",
@@ -131,11 +142,16 @@
     "networkError": "Network error. Check your connection and try again.",
     "genericError": "Could not verify the code."
   },
+  "content": {
+    "keyTakeaways": "Key takeaways"
+  },
   "common": {
     "vi": "VI",
     "en": "EN",
     "scrollTop": "Back to top",
     "themeDark": "Dark mode",
-    "themeLight": "Light mode"
+    "themeLight": "Light mode",
+    "retry": "Retry",
+    "retrying": "Retrying…"
   }
 }

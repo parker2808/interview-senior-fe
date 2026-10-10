@@ -11,6 +11,8 @@ import {
   usePlanIndex,
 } from '@/modules/study-plan/composables/use-plan-index.composable'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
+import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
+import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
 
 const router = useRouter()
 const { locale } = useI18n()
@@ -19,7 +21,22 @@ const lang = computed<'en' | 'vi'>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
 
-const { data: plan } = await usePlanIndex()
+const {
+  data: plan,
+  pending,
+  error,
+  refresh,
+} = await usePlanIndex()
+
+const retrying = ref(false)
+async function retry() {
+  retrying.value = true
+  try {
+    await refresh()
+  } finally {
+    retrying.value = false
+  }
+}
 
 const {
   source,
@@ -51,11 +68,12 @@ const {
 const weekFilter = ref(0)
 const navOpen = ref(false)
 
-const filteredDays = computed(() =>
-  weekFilter.value === 0
-    ? plan.value.days
-    : plan.value.days.filter((d) => d.week === weekFilter.value),
-)
+const filteredDays = computed(() => {
+  const days = plan.value?.days ?? []
+  return weekFilter.value === 0
+    ? days
+    : days.filter((d) => d.week === weekFilter.value)
+})
 
 function openDay(day: number) {
   router.push(`/plan/day/${day}`)
@@ -110,7 +128,26 @@ function openResource(id: string) {
       </template>
     </AppTopBar>
 
-    <div class="animate-fade-up px-4 pt-5 sm:px-6 sm:pt-8">
+    <ContentSkeleton
+      v-if="pending && !plan"
+      variant="plan-home"
+      class="px-4 pt-5 sm:px-6 sm:pt-8"
+    />
+    <ContentStatus
+      v-else-if="error"
+      class="mx-4 mt-5 sm:mx-6"
+      kind="error"
+      :message="$t('plan.loadError')"
+      :retrying="retrying"
+      @retry="retry"
+    />
+    <ContentStatus
+      v-else-if="!plan?.days.length"
+      class="mx-4 mt-5 sm:mx-6"
+      kind="empty"
+      :message="$t('plan.empty')"
+    />
+    <div v-else class="animate-fade-up px-4 pt-5 sm:px-6 sm:pt-8">
     <header class="flex flex-col gap-4 border-b border-line pb-5 sm:flex-row sm:items-start sm:justify-between">
       <div class="min-w-0">
         <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">

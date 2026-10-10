@@ -171,12 +171,50 @@ html[data-theme='dark'] {
     @apply mb-1;
   }
 
+  .prose-doc li > .content-list__item > p,
+  .prose-doc li > p {
+    @apply mb-2;
+  }
+
+  .prose-doc li > .content-list__item > p:last-child,
+  .prose-doc li > p:last-child {
+    @apply mb-0;
+  }
+
+  .prose-doc li > ul,
+  .prose-doc li > ol,
+  .prose-doc li > .content-list__item > ul,
+  .prose-doc li > .content-list__item > ol {
+    @apply mb-2 mt-2;
+  }
+
   .prose-doc ul {
     list-style: disc;
   }
 
   .prose-doc ol {
     list-style: decimal;
+  }
+
+  .prose-doc ul ul {
+    list-style: circle;
+  }
+
+  .prose-doc ul ul ul {
+    list-style: square;
+  }
+
+  .prose-doc ol ol {
+    list-style: lower-alpha;
+  }
+
+  .prose-doc ol ol ol {
+    list-style: lower-roman;
+  }
+
+  .prose-doc li > pre,
+  .prose-doc li > .content-list__item > pre {
+    @apply mt-2;
   }
 
   .prose-doc pre {

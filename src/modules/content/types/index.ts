@@ -9,6 +9,7 @@ export type {
   KeyTakeawaysBlock,
   ListBlock,
   MarkdownBlock,
+  NestedListItem,
   ParagraphBlock,
   SeniorAnswerBlock,
   TableAlign,

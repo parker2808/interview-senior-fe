@@ -10,59 +10,80 @@ import {
   unlockInterview,
 } from '@/modules/interview-qa/services/interview-auth.service'
 
-export function useInterviewUnlock() {
+type InterviewBankPayload = {
+  ok: true
+  categories: InterviewCategoryMeta[]
+  questions: InterviewQuestion[]
+}
+
+const emptyBank = (): InterviewBankPayload => ({
+  ok: true,
+  categories: [],
+  questions: [],
+})
+
+export async function useInterviewUnlock() {
   const { t } = useI18n()
   const { refresh } = useAuthSession()
 
   const unlocked = useState('interview-unlocked', () => false)
   const unlocking = useState('interview-unlocking', () => false)
-  const loadingQuestions = useState('interview-loading-questions', () => false)
   const unlockError = useState('interview-unlock-error', () => '')
   const loadError = useState('interview-load-error', () => '')
-  const categories = useState<InterviewCategoryMeta[]>(
-    'interview-categories',
-    () => [],
-  )
-  const questions = useState<InterviewQuestion[]>(
-    'interview-questions',
-    () => [],
-  )
-  const sessionReady = useState('interview-session-ready', () => false)
 
-  async function loadQuestions() {
-    loadingQuestions.value = true
-    loadError.value = ''
-    try {
-      const data = await fetchInterviewQuestions()
-      categories.value = data.categories
-      questions.value = data.questions
-      unlocked.value = true
-    } catch (err: unknown) {
-      unlocked.value = false
-      categories.value = []
-      questions.value = []
-      loadError.value = localizeAuthError(t, err)
-    } finally {
-      loadingQuestions.value = false
-    }
-  }
-
-  useAsyncData(
+  const sessionAsync = await useAsyncData(
     'interview-session-boot',
     async () => {
       const session = await refresh()
-      sessionReady.value = true
       unlocked.value = session.interview
       return session
     },
     { server: true },
   )
 
-  onMounted(() => {
-    if (unlocked.value && !questions.value.length) {
-      void loadQuestions()
+  const questionsAsync = await useAsyncData(
+    'interview-questions',
+    () => fetchInterviewQuestions(),
+    {
+      server: true,
+      immediate: Boolean(sessionAsync.data.value?.interview),
+      default: emptyBank,
+    },
+  )
+
+  const categories = computed(
+    () => questionsAsync.data.value?.categories ?? [],
+  )
+  const questions = computed(
+    () => questionsAsync.data.value?.questions ?? [],
+  )
+  const loadingQuestions = computed(() => Boolean(questionsAsync.pending.value))
+  const sessionReady = computed(() => !sessionAsync.pending.value)
+
+  watch(
+    () => questionsAsync.error.value,
+    (err) => {
+      loadError.value = err ? localizeAuthError(t, err) : ''
+    },
+    { immediate: true },
+  )
+
+  async function loadQuestions() {
+    loadError.value = ''
+    try {
+      await questionsAsync.refresh()
+      if (questionsAsync.error.value) {
+        throw questionsAsync.error.value
+      }
+      unlocked.value = true
+    } catch (err: unknown) {
+      loadError.value = localizeAuthError(t, err)
+      const status = Number((err as { status?: number }).status || 0)
+      if (status === 401) unlocked.value = false
+      else unlocked.value = true
+      throw err
     }
-  })
+  }
 
   async function submitPasscode(passcode: string) {
     unlockError.value = ''
@@ -95,8 +116,8 @@ export function useInterviewUnlock() {
     await lockInterviewSession()
     await refresh()
     unlocked.value = false
-    categories.value = []
-    questions.value = []
+    questionsAsync.data.value = emptyBank()
+    questionsAsync.error.value = null
     unlockError.value = ''
     loadError.value = ''
   }
