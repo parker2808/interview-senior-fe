@@ -68,6 +68,11 @@
     "expand": "Expand",
     "collapse": "Collapse",
     "unlock": "Unlock",
+    "unlocking": "Unlocking…",
+    "viewOnly": "View only",
+    "gateTitle": "Edit passcode",
+    "gateHint": "Enter the 6-digit code to open Edit mode. Skip to stay in View mode.",
+    "gateLabel": "6-digit code",
     "quickDocs": "Quick resources",
     "overview": "Senior interview prep, not a curriculum",
     "overviewSub": "Each day trains a decision you can say out loud: constraint, failure mode, trade-off, and how you would measure it. Docs and Q&A open in a new tab. Keep the day to about 2 hours: short reading, targeted Q&A, one hands-on, one algorithm.",
@@ -117,6 +122,14 @@
     "followUps": "Likely follow-ups",
     "empty": "No matching questions.",
     "loading": "Loading…"
+  },
+  "auth": {
+    "wrongCode": "Incorrect code. You can still view.",
+    "mustBeSixDigits": "The code must be exactly 6 digits.",
+    "notConfigured": "Passcode is not configured on the server.",
+    "sessionExpired": "Session expired. Enter the code again.",
+    "networkError": "Network error. Check your connection and try again.",
+    "genericError": "Could not verify the code."
   },
   "common": {
     "vi": "VI",

@@ -68,6 +68,11 @@
     "expand": "Mở chi tiết",
     "collapse": "Thu gọn",
     "unlock": "Mở khóa",
+    "unlocking": "Đang mở…",
+    "viewOnly": "Chỉ xem",
+    "gateTitle": "Mã chỉnh sửa",
+    "gateHint": "Nhập mã 6 số để mở chế độ Sửa. Bỏ qua để dùng chế độ Xem.",
+    "gateLabel": "Mã 6 số",
     "quickDocs": "Tài liệu nhanh",
     "overview": "Ôn phỏng vấn senior, không phải giáo trình",
     "overviewSub": "Mỗi ngày luyện một quyết định nói được thành tiếng: constraint, failure mode, trade-off và cách đo. Docs và Q&A mở tab mới. Giữ khoảng 2 giờ: đọc ngắn, Q&A có mục tiêu, một hands-on, một thuật toán.",
@@ -117,6 +122,14 @@
     "followUps": "Follow-up hay gặp",
     "empty": "Không có câu hỏi khớp.",
     "loading": "Đang tải…"
+  },
+  "auth": {
+    "wrongCode": "Mã không đúng. Bạn vẫn có thể xem.",
+    "mustBeSixDigits": "Mã phải đúng 6 chữ số.",
+    "notConfigured": "Máy chủ chưa cấu hình mã PIN.",
+    "sessionExpired": "Phiên đã hết hạn. Nhập lại mã.",
+    "networkError": "Lỗi mạng. Kiểm tra kết nối rồi thử lại.",
+    "genericError": "Không xác thực được mã."
   },
   "common": {
     "vi": "VI",

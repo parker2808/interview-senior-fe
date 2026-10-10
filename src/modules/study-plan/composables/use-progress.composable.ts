@@ -9,7 +9,6 @@ import {
 } from '@/modules/study-plan/utils/progress-codec.util'
 import {
   fetchCloudProgress,
-  getEditToken,
   getWriteToken,
   publishCloudProgress,
   setWriteToken,
@@ -173,41 +172,12 @@ export function useProgress() {
       return false
     }
 
-    const editTok = (getEditToken() || '').trim()
-    let token = (tokenOverride || '').trim()
-    let kind: 'write-token' | 'edit-token' = 'write-token'
-
-    if (!token && editTok) {
-      token = editTok
-      kind = 'edit-token'
-    }
-    if (!token) {
-      token = (getWriteToken() || '').trim()
-      kind = 'write-token'
-    }
-    if (!token && import.meta.client) {
-      token = (
-        window.prompt(
-          'Nhập PROGRESS_WRITE_TOKEN (lưu tạm trong sessionStorage — không commit):',
-          '',
-        ) || ''
-      ).trim()
-      kind = 'write-token'
-    }
-    if (!token) {
-      statusMessage.value =
-        'Đã hủy — cần editToken hoặc PROGRESS_WRITE_TOKEN để publish.'
-      return false
+    const payload = {
+      ...toExportJson(localDoneMap.value),
+      owner: 'Parker',
     }
 
-    if (kind === 'write-token') setWriteToken(token)
-    statusMessage.value = 'Đang publish lên cloud…'
-    try {
-      const payload = {
-        ...toExportJson(localDoneMap.value),
-        owner: 'Parker',
-      }
-      const result = await publishCloudProgress(payload, token, kind)
+    const finishOk = (result: { progress?: object } | null) => {
       const published = (result?.progress || payload) as {
         updatedAt?: string
         completed?: number[]
@@ -216,6 +186,49 @@ export function useProgress() {
         published.updatedAt || 'now'
       } (${published.completed?.length ?? 0} ngày).`
       return true
+    }
+
+    statusMessage.value = 'Đang publish lên cloud…'
+
+    const forcedWriteToken = (tokenOverride || '').trim()
+    if (forcedWriteToken) {
+      setWriteToken(forcedWriteToken)
+      try {
+        return finishOk(
+          await publishCloudProgress(payload, forcedWriteToken, 'write-token'),
+        )
+      } catch (err: unknown) {
+        statusMessage.value = `Publish thất bại: ${
+          err instanceof Error ? err.message : err
+        }`
+        return false
+      }
+    }
+
+    try {
+      return finishOk(await publishCloudProgress(payload, '', 'cookie'))
+    } catch {
+      /* cookie session missing or rejected — fall back to write token */
+    }
+
+    let token = (getWriteToken() || '').trim()
+    if (!token && import.meta.client) {
+      token = (
+        window.prompt(
+          'Nhập PROGRESS_WRITE_TOKEN (lưu tạm trong sessionStorage — không commit):',
+          '',
+        ) || ''
+      ).trim()
+    }
+    if (!token) {
+      statusMessage.value =
+        'Đã hủy — cần phiên chỉnh sửa hoặc PROGRESS_WRITE_TOKEN để publish.'
+      return false
+    }
+
+    setWriteToken(token)
+    try {
+      return finishOk(await publishCloudProgress(payload, token, 'write-token'))
     } catch (err: unknown) {
       statusMessage.value = `Publish thất bại: ${
         err instanceof Error ? err.message : err
