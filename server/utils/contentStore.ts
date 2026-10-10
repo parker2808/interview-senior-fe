@@ -11,6 +11,10 @@ import type {
   PlanResource,
   InterviewBank,
 } from '@/modules/content/types'
+import {
+  stripPlanDayDates,
+  stripPlanIndexDates,
+} from '@/modules/content/utils/plan-dates.util'
 
 const DISK_ROOT = join(process.cwd(), '.data/content')
 
@@ -54,7 +58,9 @@ export async function readKnowledgeDoc(slug: string): Promise<KnowledgeDoc> {
 
 export async function readPlanIndex(): Promise<PlanIndex> {
   try {
-    return await readContentJson<PlanIndex>('plan/index.json')
+    return stripPlanIndexDates(
+      await readContentJson<PlanIndex>('plan/index.json'),
+    )
   } catch {
     const meta = await readContentJson<PlanMeta>('plan/meta.json')
     const days: PlanDaySummary[] = []
@@ -63,13 +69,15 @@ export async function readPlanIndex(): Promise<PlanIndex> {
       const { lab: _lab, ...summary } = day
       days.push(summary)
     }
-    return { ...meta, days }
+    return stripPlanIndexDates({ ...meta, days })
   }
 }
 
 export async function readPlanDay(n: number): Promise<PlanDay> {
   const id = String(n).padStart(2, '0')
-  return readContentJson<PlanDay>(`plan/days/day-${id}.json`)
+  return stripPlanDayDates(
+    await readContentJson<PlanDay>(`plan/days/day-${id}.json`),
+  )
 }
 
 export async function readPlanResource(id: string): Promise<PlanResource> {

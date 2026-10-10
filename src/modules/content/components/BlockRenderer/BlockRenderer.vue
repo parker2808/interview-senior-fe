@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import type { ContentSection } from '@/modules/content/types'
+import ContentList from '@/modules/content/components/ContentList/ContentList.vue'
+import { prepareReadableSections } from '@/modules/content/utils/in-content-toc.util'
+import { looksLikeBlockMarkdown } from '@/modules/content/utils/list-block.util'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 import {
   renderInline,
@@ -15,12 +18,16 @@ const emit = defineEmits<{
   click: [event: MouseEvent]
 }>()
 
+const prepared = computed(() => prepareReadableSections(props.sections, props.lang))
+
 function text(value: { en: string; vi: string } | undefined) {
   return pickLocale(value, props.lang)
 }
 
 function html(value: { en: string; vi: string } | undefined) {
-  return renderInline(text(value))
+  const raw = text(value)
+  if (looksLikeBlockMarkdown(raw)) return renderMarkdown(raw)
+  return renderInline(raw)
 }
 
 function md(value: { en: string; vi: string } | undefined) {
@@ -34,32 +41,31 @@ function headingTag(level: number) {
 
 <template>
   <div class="prose-doc" @click="emit('click', $event)">
-    <template v-for="(section, sIndex) in sections" :key="`${text(section.id)}-${sIndex}`">
+    <span
+      v-for="id in prepared.hiddenIds"
+      :id="id"
+      :key="`toc-anchor-${id}`"
+      class="sr-only"
+    />
+    <template
+      v-for="(section, sIndex) in prepared.sections"
+      :key="`${text(section.id)}-${sIndex}`"
+    >
       <template v-for="(block, bIndex) in section.blocks" :key="`${block.type}-${bIndex}`">
         <component
           :is="headingTag(block.level)"
           v-if="block.type === 'heading'"
           :id="text(block.id)"
-        >
-          {{ text(block.text) }}
-        </component>
+          v-html="html(block.text)"
+        />
 
         <p v-else-if="block.type === 'paragraph'" v-html="html(block.text)" />
 
-        <ul v-else-if="block.type === 'list' && block.style === 'ul'">
-          <li
-            v-for="(item, i) in block.items"
-            :key="i"
-            v-html="html(item)"
-          />
-        </ul>
-        <ol v-else-if="block.type === 'list'">
-          <li
-            v-for="(item, i) in block.items"
-            :key="i"
-            v-html="html(item)"
-          />
-        </ol>
+        <ContentList
+          v-else-if="block.type === 'list'"
+          :block="block"
+          :lang="lang"
+        />
 
         <blockquote
           v-else-if="block.type === 'callout'"
@@ -109,8 +115,9 @@ function headingTag(level: number) {
             <li
               v-for="(item, i) in block.items"
               :key="i"
-              v-html="html(item)"
-            />
+            >
+              <div class="content-list__item" v-html="html(item)" />
+            </li>
           </ul>
         </section>
 

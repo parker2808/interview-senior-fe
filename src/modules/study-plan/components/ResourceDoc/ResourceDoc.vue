@@ -6,6 +6,8 @@ import {
   usePlanIndex,
   usePlanResource,
 } from '@/modules/study-plan/composables/use-plan-index.composable'
+import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
+import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
 
 const props = defineProps<{
   path: string
@@ -21,7 +23,22 @@ const lang = computed<'en' | 'vi'>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
 const resourceId = computed(() => props.path)
-const { data: resource } = await usePlanResource(resourceId)
+const {
+  data: resource,
+  pending,
+  error,
+  refresh,
+} = await usePlanResource(resourceId)
+
+const retrying = ref(false)
+async function retry() {
+  retrying.value = true
+  try {
+    await refresh()
+  } finally {
+    retrying.value = false
+  }
+}
 const { data: plan } = usePlanIndex()
 
 const aliases = computed(() =>
@@ -71,6 +88,18 @@ function onDocClick(e: MouseEvent) {
       :lang="lang"
       @click="onDocClick"
     />
-    <p v-else class="text-ink-muted">{{ t('plan.dayNotFound') }}</p>
+    <ContentSkeleton v-else-if="pending" variant="plan-resource" />
+    <ContentStatus
+      v-else-if="error"
+      kind="error"
+      :message="t('plan.loadError')"
+      :retrying="retrying"
+      @retry="retry"
+    />
+    <ContentStatus
+      v-else
+      kind="empty"
+      :message="t('plan.dayNotFound')"
+    />
   </article>
 </template>

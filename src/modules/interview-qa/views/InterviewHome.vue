@@ -4,6 +4,8 @@ import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vu
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import InterviewPinGate from '@/modules/interview-qa/components/InterviewPinGate/InterviewPinGate.vue'
 import QuestionCard from '@/modules/interview-qa/components/QuestionCard/QuestionCard.vue'
+import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
+import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
 import { useInterviewUnlock } from '@/modules/interview-qa/composables/use-interview-unlock.composable'
 import type {
   InterviewCategoryId,
@@ -27,7 +29,8 @@ const {
   sessionReady,
   submitPasscode,
   lock,
-} = useInterviewUnlock()
+  reload,
+} = await useInterviewUnlock()
 
 const categoryFilter = ref<'all' | InterviewCategoryId>('all')
 const query = ref('')
@@ -70,13 +73,12 @@ function collapseAll() {
 }
 
 const contentLoading = computed(
-  () =>
-    !sessionReady.value ||
-    loadingQuestions.value ||
-    (unlocked.value && !questions.value.length && !loadError.value),
+  () => !sessionReady.value || loadingQuestions.value,
 )
 const gateOpen = computed(() => sessionReady.value && !unlocked.value && !contentLoading.value)
-const showQuestions = computed(() => unlocked.value && !contentLoading.value)
+const showQuestions = computed(
+  () => unlocked.value && !contentLoading.value && !loadError.value,
+)
 
 const requestedQuestionId = computed(() => {
   const q = route.query.q
@@ -237,11 +239,20 @@ watch(
       </div>
     </div>
 
+    <div v-else-if="contentLoading" class="px-4 pt-6 sm:px-6 lg:px-8">
+      <ContentSkeleton variant="qa" />
+    </div>
+
     <div
-      v-else-if="contentLoading"
-      class="px-4 pt-16 text-center text-sm text-ink-muted"
+      v-else-if="unlocked && loadError"
+      class="px-4 pt-6 sm:px-6 lg:px-8"
     >
-      {{ $t('interview.loading') }}
+      <ContentStatus
+        kind="error"
+        :message="loadError"
+        :retrying="loadingQuestions"
+        @retry="reload"
+      />
     </div>
   </div>
 </template>

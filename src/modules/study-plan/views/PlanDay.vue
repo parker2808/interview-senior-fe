@@ -13,6 +13,8 @@ import {
   docsHref,
   openInNewTab,
 } from '@/modules/study-plan/utils/open-app-link.util'
+import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
+import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
 
 const props = defineProps<{
   dayNumber: number
@@ -21,7 +23,22 @@ const props = defineProps<{
 const router = useRouter()
 const { t } = useI18n()
 const dayNumber = computed(() => props.dayNumber)
-const { data: day } = await usePlanDay(dayNumber)
+const {
+  data: day,
+  pending,
+  error,
+  refresh,
+} = await usePlanDay(dayNumber)
+
+const retrying = ref(false)
+async function retry() {
+  retrying.value = true
+  try {
+    await refresh()
+  } finally {
+    retrying.value = false
+  }
+}
 
 const {
   readOnly,
@@ -95,7 +112,19 @@ onMounted(() => {
         @open-doc="openDoc"
         @open-docs="openDocs"
       />
-      <p v-else class="text-ink-muted">{{ t('plan.dayNotFound') }}</p>
+      <ContentSkeleton v-else-if="pending" variant="plan-day" />
+      <ContentStatus
+        v-else-if="error"
+        kind="error"
+        :message="t('plan.loadError')"
+        :retrying="retrying"
+        @retry="retry"
+      />
+      <ContentStatus
+        v-else
+        kind="empty"
+        :message="t('plan.dayNotFound')"
+      />
     </div>
   </div>
 </template>

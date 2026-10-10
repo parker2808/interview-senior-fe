@@ -18,10 +18,14 @@ export type ParagraphBlock = {
   text: Localized
 }
 
+export type NestedListItem = Localized & {
+  children?: ListBlock
+}
+
 export type ListBlock = {
   type: 'list'
   style: 'ul' | 'ol'
-  items: Localized[]
+  items: Array<Localized | NestedListItem>
 }
 
 export type CalloutBlock = {

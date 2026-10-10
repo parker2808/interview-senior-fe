@@ -147,7 +147,6 @@ function toggleOpen(day: number) {
                       <span class="font-mono text-sm font-semibold text-accent-ink">
                         Day {{ String(d.day).padStart(2, '0') }}
                       </span>
-                      <span class="text-xs text-ink-faint">{{ d.date }}</span>
                     </div>
                     <h4 class="mt-1 text-sm font-semibold text-ink sm:text-base">
                       {{ pickLocale(d.title, lang) }}

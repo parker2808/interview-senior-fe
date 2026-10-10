@@ -16,7 +16,9 @@ export default {
     if (to.hash) return false
     const a = docsParts(to.path)
     const b = from?.path ? docsParts(from.path) : null
-    if (a && b && a.slug === b.slug && a.lang !== b.lang) return false
+    // Locale toggle on the same KB doc must not force the window (or
+    // `.docs-main`) back to top — the page restores via heading index.
+    if (a && b && a.slug === b.slug) return false
     return { top: 0, left: 0 }
   },
 } satisfies RouterConfig

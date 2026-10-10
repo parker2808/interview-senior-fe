@@ -11,6 +11,8 @@ import { DOC_LANGS, type DocLang } from '@/modules/core/constants/locale.constan
 import { DEFAULT_DOC_SLUG } from '@/modules/knowledge-base/constants/doc-catalog.constant'
 import { classifyKbHref } from '@/modules/knowledge-base/utils/kb-links.util'
 import BlockRenderer from '@/modules/content/components/BlockRenderer/BlockRenderer.vue'
+import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
+import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 
 const HEADER_OFFSET = 56
@@ -35,12 +37,15 @@ const backLabel = computed(() =>
 
 const {
   catalog,
+  catalogPending,
   safeLang,
-  loaded,
+  pending,
+  error,
   doc,
   toc,
   adjacent,
   title,
+  refresh,
 } = useDocReader(lang, slug)
 
 const sidebarOpen = ref(false)
@@ -54,7 +59,8 @@ const headerOffset = ref(HEADER_OFFSET)
 
 /** Preserve reading position across VI↔EN on the same slug */
 const langPreserve = ref<{
-  tocIndex: number
+  headingIndex: number
+  offsetInSection: number
   ratio: number
 } | null>(null)
 
@@ -127,19 +133,49 @@ function onSearchSelect(payload: { slug: string; hash?: string }) {
   }
 }
 
+function headingEls() {
+  const root = proseRef.value
+  if (!root) return []
+  return Array.from(root.querySelectorAll<HTMLElement>('h1,h2,h3,h4,h5,h6')).filter(
+    (el) => el.id,
+  )
+}
+
+function captureLangScroll() {
+  const headings = headingEls()
+  const container = scrollEl()
+  const viewTop =
+    container === window
+      ? headerOffset.value
+      : (container as HTMLElement).getBoundingClientRect().top + headerOffset.value
+  let headingIndex = headings.length ? 0 : -1
+  for (let i = 0; i < headings.length; i += 1) {
+    if (headings[i].getBoundingClientRect().top <= viewTop + 12) headingIndex = i
+    else break
+  }
+  const heading = headingIndex >= 0 ? headings[headingIndex] : null
+  return {
+    headingIndex,
+    offsetInSection: heading
+      ? heading.getBoundingClientRect().top - viewTop
+      : 0,
+    ratio: getScrollTop() / getScrollHeight(),
+  }
+}
+
 function switchLang(next: DocLang) {
   if (!import.meta.client) {
     setLocale(next)
     return
   }
-  const tocIndex = toc.value.findIndex((item) => item.id === activeHeading.value)
-  langPreserve.value = {
-    tocIndex: tocIndex >= 0 ? tocIndex : -1,
-    ratio: getScrollTop() / getScrollHeight(),
-  }
+  if (next === safeLang.value && locale.value === next) return
+  langPreserve.value = captureLangScroll()
   setLocale(next)
-  const hash = window.location.hash
-  router.push(withFromQuery(`/docs/${next}/${slug.value}${hash}`))
+  if (String(route.params.lang) === next) return
+  void router.replace({
+    path: `/docs/${next}/${slug.value}`,
+    query: fromPlan.value ? { ...route.query, from: 'plan' } : route.query,
+  })
 }
 
 watch(locale, (l) => {
@@ -222,26 +258,60 @@ function syncHashScroll() {
   })
 }
 
-function restoreLangScroll() {
+function restoreLangScroll(attempt = 0) {
   const preserved = langPreserve.value
   if (!preserved) return
+
+  const headings = headingEls()
+  const mapped =
+    preserved.headingIndex >= 0 ? headings[preserved.headingIndex] : null
+
+  if (mapped) {
+    const container = scrollEl()
+    if (container === window) {
+      const top =
+        mapped.getBoundingClientRect().top +
+        window.scrollY -
+        headerOffset.value -
+        preserved.offsetInSection
+      setScrollTop(top, false)
+    } else {
+      const root = container as HTMLElement
+      const top =
+        mapped.getBoundingClientRect().top -
+        root.getBoundingClientRect().top +
+        root.scrollTop -
+        headerOffset.value -
+        preserved.offsetInSection
+      setScrollTop(top, false)
+    }
+    if (mapped.id) {
+      history.replaceState(null, '', `#${mapped.id}`)
+      activeHeading.value = mapped.id
+    }
+    langPreserve.value = null
+    return
+  }
+
+  if (attempt < 10) {
+    requestAnimationFrame(() => restoreLangScroll(attempt + 1))
+    return
+  }
+
+  setScrollTop(preserved.ratio * getScrollHeight(), false)
   langPreserve.value = null
-  nextTick(() => {
-    requestAnimationFrame(() => {
-      if (preserved.tocIndex >= 0 && toc.value[preserved.tocIndex]) {
-        scrollToId(toc.value[preserved.tocIndex].id, true, false)
-        return
-      }
-      setScrollTop(preserved.ratio * getScrollHeight(), false)
-    })
-  })
 }
 
 watch(
-  () => [doc.value, safeLang.value, route.fullPath] as const,
+  () => [doc.value, safeLang.value, route.params.lang] as const,
   () => {
-    if (langPreserve.value) restoreLangScroll()
-    else syncHashScroll()
+    if (langPreserve.value) {
+      nextTick(() => {
+        requestAnimationFrame(() => restoreLangScroll())
+      })
+      return
+    }
+    syncHashScroll()
   },
   { flush: 'post' },
 )
@@ -363,7 +433,9 @@ onUnmounted(() => observer?.disconnect())
       <aside
         class="hidden w-64 shrink-0 overflow-y-auto border-r border-line bg-surface-elevated/70 lg:block xl:w-72"
       >
+        <ContentSkeleton v-if="catalogPending && !catalog.length" variant="sidebar" class="p-4" />
         <DocSidebar
+          v-else
           :catalog="catalog"
           :lang="safeLang"
           :active-slug="slug"
@@ -402,7 +474,13 @@ onUnmounted(() => observer?.disconnect())
                 </svg>
               </button>
             </div>
+            <ContentSkeleton
+              v-if="catalogPending && !catalog.length"
+              variant="sidebar"
+              class="flex-1 p-4"
+            />
             <DocSidebar
+              v-else
               class="flex-1"
               :catalog="catalog"
               :lang="safeLang"
@@ -417,7 +495,7 @@ onUnmounted(() => observer?.disconnect())
         ref="mainRef"
         class="docs-main min-h-0 min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8"
       >
-        <article v-if="loaded.ok && doc" class="animate-fade-up mx-auto max-w-prose">
+        <article v-if="doc" class="animate-fade-up mx-auto max-w-prose">
           <div ref="proseRef">
             <BlockRenderer
               :sections="doc.sections"
@@ -446,7 +524,23 @@ onUnmounted(() => observer?.disconnect())
             </NuxtLink>
           </footer>
         </article>
-        <p v-else class="text-ink-muted">{{ $t('docs.notFound') }}</p>
+        <ContentSkeleton
+          v-else-if="pending"
+          variant="doc"
+          class="mx-auto max-w-prose"
+        />
+        <ContentStatus
+          v-else-if="error"
+          kind="error"
+          :message="$t('docs.loadError')"
+          :retrying="pending"
+          @retry="refresh"
+        />
+        <ContentStatus
+          v-else
+          kind="empty"
+          :message="$t('docs.empty')"
+        />
 
         <div class="mt-8 lg:hidden">
           <button

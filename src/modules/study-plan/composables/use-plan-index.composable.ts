@@ -1,24 +1,23 @@
 import type { PlanDay, PlanIndex, PlanResource } from '@/modules/content/types'
+import {
+  stripPlanDayDates,
+  stripPlanIndexDates,
+} from '@/modules/content/utils/plan-dates.util'
 
 export function usePlanIndex() {
   return useAsyncData(
     'plan-index',
-    () => $fetch<PlanIndex>('/api/plan/days'),
-    {
-      default: () => ({
-        weeks: [],
-        gaps: [],
-        resources: [],
-        days: [],
-      }),
-    },
+    async () => stripPlanIndexDates(await $fetch<PlanIndex>('/api/plan/days')),
   )
 }
 
 export function usePlanDay(dayNumber: Ref<number> | ComputedRef<number>) {
   return useAsyncData(
     () => `plan-day-${dayNumber.value}`,
-    () => $fetch<PlanDay>(`/api/plan/days/${dayNumber.value}`),
+    async () =>
+      stripPlanDayDates(
+        await $fetch<PlanDay>(`/api/plan/days/${dayNumber.value}`),
+      ),
     { watch: [dayNumber] },
   )
 }

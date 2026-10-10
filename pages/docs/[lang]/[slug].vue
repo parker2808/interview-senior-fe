@@ -8,19 +8,25 @@ import { useKbCatalog } from '@/modules/knowledge-base/composables/use-kb-catalo
 
 definePageMeta({
   name: DocsRoute.Reader,
+  key: (route) => `kb-doc-${String(route.params.slug || '')}`,
 })
 
 const route = useRoute()
 const lang = String(route.params.lang || '')
 const slug = String(route.params.slug || '')
-const { data: catalog } = await useKbCatalog()
+const { data: catalog, error } = await useKbCatalog()
 
-const known = catalog.value?.docs.some((doc) => doc.slug === slug)
 const defaultSlug = catalog.value?.defaultSlug || DEFAULT_DOC_SLUG
+const known = catalog.value?.docs.some((doc) => doc.slug === slug)
 
-if (!DOC_LANGS.includes(lang as 'vi' | 'en') || !known) {
+if (!DOC_LANGS.includes(lang as 'vi' | 'en')) {
   await navigateTo(
-    `/docs/${DEFAULT_DOC_LANG}/${defaultSlug}`,
+    `/docs/${DEFAULT_DOC_LANG}/${slug || defaultSlug}`,
+    { replace: true },
+  )
+} else if (!error.value && catalog.value?.docs.length && slug && !known) {
+  await navigateTo(
+    `/docs/${lang}/${defaultSlug}`,
     { replace: true },
   )
 }

@@ -13,6 +13,33 @@
         "vi": { "type": "string", "minLength": 1 }
       }
     },
+    "listItem": {
+      "oneOf": [
+        { "$ref": "#/$defs/localized" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["en", "vi", "children"],
+          "properties": {
+            "en": { "type": "string" },
+            "vi": { "type": "string" },
+            "children": { "$ref": "#/$defs/listBlock" }
+          }
+        }
+      ]
+    },
+    "listBlock": {
+      "type": "object",
+      "required": ["type", "style", "items"],
+      "properties": {
+        "type": { "const": "list" },
+        "style": { "enum": ["ul", "ol"] },
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/listItem" }
+        }
+      }
+    },
     "block": {
       "oneOf": [
         {
@@ -33,18 +60,7 @@
             "text": { "$ref": "#/$defs/localized" }
           }
         },
-        {
-          "type": "object",
-          "required": ["type", "style", "items"],
-          "properties": {
-            "type": { "const": "list" },
-            "style": { "enum": ["ul", "ol"] },
-            "items": {
-              "type": "array",
-              "items": { "$ref": "#/$defs/localized" }
-            }
-          }
-        },
+        { "$ref": "#/$defs/listBlock" },
         {
           "type": "object",
           "required": ["type", "kind", "text"],

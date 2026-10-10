@@ -11,7 +11,7 @@ import { DOC_LANGS } from '@/modules/core/constants/locale.constant'
 
 export function useDocReader(lang: Ref<string>, slug: Ref<string>) {
   const recent = ref(readRecentDocs())
-  const { data: catalog } = useKbCatalog()
+  const catalogAsync = useKbCatalog()
 
   const safeLang = computed<DocLang>(() =>
     DOC_LANGS.includes(lang.value as DocLang)
@@ -19,40 +19,43 @@ export function useDocReader(lang: Ref<string>, slug: Ref<string>) {
       : 'vi',
   )
 
-  const { data: doc, pending, error } = useAsyncData(
+  const docAsync = useAsyncData(
     () => `kb-doc-${slug.value}`,
     () => $fetch<KnowledgeDocResponse>(`/api/knowledge-base/docs/${slug.value}`),
     { watch: [slug] },
   )
 
   const topic = computed(() =>
-    catalog.value?.docs.find((item) => item.slug === slug.value),
+    catalogAsync.data.value?.docs.find((item) => item.slug === slug.value),
   )
 
   const toc = computed(() =>
-    tocFromSections(doc.value?.sections, safeLang.value),
+    tocFromSections(docAsync.data.value?.sections, safeLang.value),
   )
 
   const adjacent = computed(
-    () => doc.value?.adjacent ?? { prev: null, next: null },
+    () => docAsync.data.value?.adjacent ?? { prev: null, next: null },
   )
 
   const title = computed(() => {
-    if (doc.value) return pickLocale(doc.value.title, safeLang.value)
+    if (docAsync.data.value) return pickLocale(docAsync.data.value.title, safeLang.value)
     if (topic.value) return pickLocale(topic.value.title, safeLang.value)
     return slug.value
   })
 
-  const loaded = computed(() => ({
-    ok: Boolean(doc.value && !error.value),
-    path: slug.value,
-    text: '',
-  }))
+  const pending = computed(
+    () => Boolean(docAsync.pending.value || catalogAsync.pending.value),
+  )
+  const error = computed(() => docAsync.error.value || catalogAsync.error.value)
+
+  async function refresh() {
+    await Promise.all([docAsync.refresh(), catalogAsync.refresh()])
+  }
 
   watch(
     [safeLang, slug],
     ([l, s]) => {
-      if (!topic.value && !doc.value) return
+      if (!topic.value && !docAsync.data.value) return
       pushRecentDoc(s, l)
       recent.value = readRecentDocs()
     },
@@ -60,19 +63,22 @@ export function useDocReader(lang: Ref<string>, slug: Ref<string>) {
   )
 
   return {
-    catalog: computed(() => catalog.value?.groups ?? []),
-    flatTopics: computed(() => catalog.value?.docs ?? []),
+    catalog: computed(() => catalogAsync.data.value?.groups ?? []),
+    catalogPending: computed(() => Boolean(catalogAsync.pending.value)),
+    catalogError: computed(() => catalogAsync.error.value),
+    flatTopics: computed(() => catalogAsync.data.value?.docs ?? []),
     defaultSlug: computed(
-      () => catalog.value?.defaultSlug ?? 'javascript',
+      () => catalogAsync.data.value?.defaultSlug ?? 'javascript',
     ),
     safeLang,
     topic,
-    loaded,
     pending,
-    doc,
+    error,
+    doc: docAsync.data,
     toc,
     adjacent,
     title,
     recent,
+    refresh,
   }
 }
