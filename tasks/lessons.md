@@ -7,3 +7,5 @@
 - When rewriting multi-day labs, default to one repo set up once and make each day explicitly build on prior folders, artifacts, and commits instead of repeating setup per day.
 - When retiring old plan material, remove it from the plan data, quick-resource UI, and routes together, then check for now-unused markdown files before deleting them.
 - When generated plan content starts showing both languages inline, split it into locale-specific files or locale-keyed data and route it through the same locale selection mechanism the app already uses.
+- Never set `nitro.hooks.compiled` in `nuxt.config`. `defu` replaces the Vercel preset hook that writes `.vercel/output/config.json`. Without that file the Nuxt build can exit 0 and Vercel still fails with `No Output Directory named "dist"`. Register extra compiled work via `hooks['nitro:init']` then `nitro.hooks.hook('compiled')`.
+- When Vercel reports a missing `dist` after a completed build, diff `nuxt.config` / Nitro preset / output hooks first. Do not pile speculative GitHub tarball/clone/trees fallbacks until the output tree is proven.
