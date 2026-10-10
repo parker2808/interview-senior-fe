@@ -43,6 +43,32 @@ function looksLikeContentTree(dir) {
   )
 }
 
+function findContentTree(dir, depth = 0) {
+  if (looksLikeContentTree(dir)) return dir
+  if (depth >= 3 || !existsSync(dir)) return null
+  let entries
+  try {
+    entries = readdirSync(dir, { withFileTypes: true })
+  } catch {
+    return null
+  }
+  for (const ent of entries) {
+    if (!ent.isDirectory()) continue
+    if (ent.name.startsWith('.')) continue
+    const found = findContentTree(path.join(dir, ent.name), depth + 1)
+    if (found) return found
+  }
+  return null
+}
+
+function listTopEntries(dir) {
+  try {
+    return readdirSync(dir).slice(0, 30).join(', ')
+  } catch {
+    return '(unreadable)'
+  }
+}
+
 function copyLocal(src) {
   const resolved = path.resolve(src)
   if (!existsSync(resolved)) {
@@ -51,14 +77,10 @@ function copyLocal(src) {
         'Point it at a checkout (or export) of interview-fe-data.',
     )
   }
-  const from = looksLikeContentTree(resolved)
-    ? resolved
-    : existsSync(path.join(resolved, 'knowledge-base'))
-      ? resolved
-      : resolved
-  if (!looksLikeContentTree(from)) {
+  const from = findContentTree(resolved)
+  if (!from) {
     fail(
-      `CONTENT_LOCAL_PATH is not a content tree (need knowledge-base/, plan/, qna/):\n  ${resolved}`,
+      `CONTENT_LOCAL_PATH is not a content tree (need knowledge-base/, plan/, qna/):\n  ${resolved}\n  entries: ${listTopEntries(resolved)}`,
     )
   }
   resetDest()
@@ -71,7 +93,7 @@ async function downloadRepo(token) {
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github+json',
+      Accept: 'application/vnd.github+json, application/octet-stream',
       'User-Agent': 'interview-senior-fe-pull-data',
       'X-GitHub-Api-Version': '2022-11-28',
     },
@@ -97,23 +119,19 @@ async function downloadRepo(token) {
   const extractDir = path.join(tmp, 'extract')
   mkdirSync(extractDir, { recursive: true })
   execFileSync('tar', ['-xzf', tarball, '-C', extractDir], { stdio: 'pipe' })
-  const top = readdirFirst(extractDir)
-  if (!top) fail('GitHub tarball was empty.')
-  const tree = looksLikeContentTree(top) ? top : top
-  if (!looksLikeContentTree(tree)) {
+  const tree = findContentTree(extractDir)
+  if (!tree) {
     fail(
-      `Downloaded ${owner}/${repo}@${ref} but did not find knowledge-base/, plan/, qna/.`,
+      [
+        `Downloaded ${owner}/${repo}@${ref} but did not find knowledge-base/, plan/, qna/.`,
+        `Extracted entries: ${listTopEntries(extractDir)}`,
+      ].join('\n'),
     )
   }
   resetDest()
   cpSync(tree, dest, { recursive: true, dereference: true })
   rmSync(tmp, { recursive: true, force: true })
   console.log(`Pulled ${owner}/${repo}@${ref} → ${dest}`)
-}
-
-function readdirFirst(dir) {
-  const names = readdirSync(dir)
-  return names.length ? path.join(dir, names[0]) : ''
 }
 
 async function main() {
