@@ -20,8 +20,10 @@
 ## Review
 - Draft PR: https://github.com/parker2808/interview-senior-fe/pull/26
 - Content: private `interview-fe-data` was 404; reconstructed via `data:export` from pre-#25 sources into `CONTENT_LOCAL_PATH`.
-- Build: `NUXT_IGNORE_LOCK=1 npm run build` succeeded (Vercel preset).
-- Playwright 14/14: no JS TOC blob, lang switch stayed mid-doc, plan APIs/UI have no `DD/MM/YYYY`, skeleton on throttled TS nav, Q&A unlocks.
+- Build: `CONTENT_LOCAL_PATH=/tmp/interview-fe-data NUXT_IGNORE_LOCK=1 npm run build` succeeded (Vercel preset) on the search/TOC revision.
+- Search API: `hieu nang` → heading “Hiệu năng build trên CI”; `toi uu` → body “tối ưu”; `phong van` → titles “Phỏng vấn”; EN `hoisting` / `rows.sort` hit heading + body and open the hash.
+- TOC: JS doc has 11 H4s with ids; desktop tree + expand/collapse all; mobile “On this page” same tree.
+- README.md is English; Vietnamese is README-vi.md; README-en.md removed.
 
 ## Notes
 - Data repo is private; a parallel agent is fixing JSON there. This PR makes the **renderer** robust to both flat list strings and nested `children`.
