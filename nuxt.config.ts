@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { mkdirSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync } from 'node:fs'
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url))
 const srcRoot = path.resolve(rootDir, 'src')
@@ -72,6 +72,17 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'vercel',
+    // .data/ is gitignored, so Nitro will not pack it as serverAssets.
+    // Copy the pulled tree into the serverless output so runtime fs reads work.
+    hooks: {
+      compiled(nitro) {
+        const from = contentDir
+        if (!existsSync(path.join(from, 'knowledge-base'))) return
+        const dest = path.join(nitro.options.output.serverDir, '.data/content')
+        mkdirSync(dest, { recursive: true })
+        cpSync(from, dest, { recursive: true, dereference: true })
+      },
+    },
     serverAssets: [
       {
         baseName: 'siteContent',
