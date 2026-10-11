@@ -190,7 +190,7 @@
     "makeViewer": "Make viewer",
     "remove": "Remove",
     "removeMemberTitle": "Remove this member?",
-    "removeMemberHint": "Remove @{login}? Their current session will stop working immediately.",
+    "removeMemberHint": "Remove {login}? Their current session will stop working immediately.",
     "add": "Add member",
     "emptyMembers": "No members match.",
     "createLink": "Create a share link",
@@ -243,12 +243,12 @@
     "shareInvalidRevoked": "The owner revoked this link.",
     "shareInvalidMaxUses": "This link has reached its use limit.",
     "audit": {
-      "member.add": "Member added",
-      "member.remove": "Member removed",
-      "member.role": "Member role changed",
-      "share.create": "Share link created",
-      "share.revoke": "Share link revoked",
-      "share.extend": "Share link extended"
+      "memberAdd": "Member added",
+      "memberRemove": "Member removed",
+      "memberRole": "Member role changed",
+      "shareCreate": "Share link created",
+      "shareRevoke": "Share link revoked",
+      "shareExtend": "Share link extended"
     }
   },
   "content": {

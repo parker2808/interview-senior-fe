@@ -37,5 +37,13 @@ export function describeScope(scope: ShareScope) {
 }
 
 export function auditActionKey(action: AuditAction) {
-  return `access.audit.${action}` as const
+  const map = {
+    'member.add': 'access.audit.memberAdd',
+    'member.remove': 'access.audit.memberRemove',
+    'member.role': 'access.audit.memberRole',
+    'share.create': 'access.audit.shareCreate',
+    'share.revoke': 'access.audit.shareRevoke',
+    'share.extend': 'access.audit.shareExtend',
+  } as const
+  return map[action]
 }

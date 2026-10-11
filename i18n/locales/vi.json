@@ -190,7 +190,7 @@
     "makeViewer": "Đổi thành viewer",
     "remove": "Xóa",
     "removeMemberTitle": "Xóa thành viên này?",
-    "removeMemberHint": "Xóa @{login}? Session hiện tại của họ sẽ hết ngay.",
+    "removeMemberHint": "Xóa {login}? Session hiện tại của họ sẽ hết ngay.",
     "add": "Thêm thành viên",
     "emptyMembers": "Không có thành viên khớp.",
     "createLink": "Tạo link chia sẻ",
@@ -243,12 +243,12 @@
     "shareInvalidRevoked": "Owner đã thu hồi link này.",
     "shareInvalidMaxUses": "Link đã hết số lần dùng.",
     "audit": {
-      "member.add": "Thêm thành viên",
-      "member.remove": "Xóa thành viên",
-      "member.role": "Đổi vai trò",
-      "share.create": "Tạo link chia sẻ",
-      "share.revoke": "Thu hồi link",
-      "share.extend": "Gia hạn link"
+      "memberAdd": "Thêm thành viên",
+      "memberRemove": "Xóa thành viên",
+      "memberRole": "Đổi vai trò",
+      "shareCreate": "Tạo link chia sẻ",
+      "shareRevoke": "Thu hồi link",
+      "shareExtend": "Gia hạn link"
     }
   },
   "content": {

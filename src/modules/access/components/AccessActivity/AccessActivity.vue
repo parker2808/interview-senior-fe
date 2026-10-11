@@ -22,8 +22,17 @@ async function reload() {
   }
 }
 
+const ACTION_I18N: Record<AuditEntry['action'], string> = {
+  'member.add': 'access.audit.memberAdd',
+  'member.remove': 'access.audit.memberRemove',
+  'member.role': 'access.audit.memberRole',
+  'share.create': 'access.audit.shareCreate',
+  'share.revoke': 'access.audit.shareRevoke',
+  'share.extend': 'access.audit.shareExtend',
+}
+
 function actionLabel(action: AuditEntry['action']) {
-  return t(`access.audit.${action}`)
+  return t(ACTION_I18N[action])
 }
 
 function detailText(entry: AuditEntry) {

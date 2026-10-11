@@ -9,7 +9,12 @@ import { fetchAccessMeta } from '@/modules/access/services/access-admin.service'
 
 type Tab = 'members' | 'shares' | 'activity'
 
-const tab = ref<Tab>('members')
+const route = useRoute()
+const tab = ref<Tab>(
+  route.query.tab === 'shares' || route.query.tab === 'activity'
+    ? route.query.tab
+    : 'members',
+)
 const storageConfigured = ref(false)
 const envOwners = ref<string[]>([])
 const loading = ref(true)
@@ -40,6 +45,11 @@ function onChanged() {
   if (tab.value === 'activity') {
     void activityRef.value?.reload()
   }
+}
+
+function selectTab(id: Tab) {
+  tab.value = id
+  void navigateTo({ query: { tab: id } }, { replace: true })
 }
 
 onMounted(() => {
@@ -105,7 +115,7 @@ onMounted(() => {
               : 'border border-line bg-surface-elevated text-ink'
           "
           :aria-selected="tab === item.id"
-          @click="tab = item.id"
+          @click="selectTab(item.id)"
         >
           {{ $t(item.key) }}
         </button>
