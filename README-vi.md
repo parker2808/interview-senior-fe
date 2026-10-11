@@ -2,7 +2,7 @@
 
 > 🌍 **Language / Ngôn ngữ:** [🇬🇧 English](./README.md) | [🇻🇳 Tiếng Việt](./README-vi.md)
 
-App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ, kế hoạch 30 ngày kèm lab, và ngân hàng Q&A khoá PIN.
+App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ, kế hoạch 30 ngày kèm lab, và ngân hàng Q&A khoá bằng GitHub.
 
 **Live:** [parker-interview-senior-fe.vercel.app](https://parker-interview-senior-fe.vercel.app)
 
@@ -10,7 +10,8 @@ App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ,
 
 - **Knowledge base** — 22 chủ đề vi/en, sidebar, tìm full-text, TOC lồng heading
 - **Kế hoạch 30 ngày** — checkpoint theo ngày, lab, xem / sửa tiến độ
-- **Interview Q&A** — câu trả lời mẫu sau mã 6 số
+- **Interview Q&A** — câu trả lời mẫu sau GitHub OAuth (owner / viewer / link chia sẻ)
+- **Truy cập / Chia sẻ** — admin chỉ owner: quản lý thành viên và link có hạn
 - **i18n** — `vi` / `en`, không prefix URL; cookie locale
 - **Theme** sáng / tối
 
@@ -27,7 +28,7 @@ Nuxt 3 + Nitro · Vue 3 · TypeScript · Tailwind CSS · `@nuxtjs/i18n` (vi/en, 
 ```text
 pages/                         # route mỏng → view của module
 src/modules/
-  hub/  knowledge-base/  study-plan/  interview-qa/
+  hub/  knowledge-base/  study-plan/  interview-qa/  access/
   content/                     # block Localized + BlockRenderer
   core/                        # chrome, theme, locale, session
 server/api/                    # endpoint Nitro
@@ -56,28 +57,64 @@ Build (`predev` / `prebuild`) chạy `scripts/pull-data.mjs` → `.data/content`
 
 | Method | Path | Auth |
 |---|---|---|
-| `GET` | `/api/knowledge-base/docs` | public |
-| `GET` | `/api/knowledge-base/docs/:slug` | public |
-| `GET` | `/api/knowledge-base/search?q=&lang=vi\|en&limit=` | public |
-| `GET` | `/api/plan/days` | public |
-| `GET` | `/api/plan/days/:n` | public |
-| `GET` | `/api/plan/resources/:id` | public |
-| `GET` | `/api/interview/questions` | phiên interview |
-| `POST` | `/api/auth/interview` | body `{ passcode }` → cookie HttpOnly |
-| `POST` | `/api/auth/edit` | body `{ passcode }` → cookie HttpOnly |
-| `GET` | `/api/auth/session` | báo scope interview + edit |
-| `DELETE` | `/api/auth/session?scope=interview\|edit\|all` | xoá cookie |
-| `GET` | `/api/progress` | đọc public (Blob) |
-| `PUT` / `POST` | `/api/progress` | phiên edit |
+| `GET` | `/api/knowledge-base/docs` | public (cache CDN) |
+| `GET` | `/api/knowledge-base/docs/:slug` | public (cache CDN) |
+| `GET` | `/api/knowledge-base/search?q=&lang=vi\|en&limit=` | public (cache CDN + giới hạn input + rate limit best-effort) |
+| `GET` | `/api/plan/days` | public (cache CDN) |
+| `GET` | `/api/plan/days/:n` | public (cache CDN) |
+| `GET` | `/api/plan/resources/:id` | public (cache CDN) |
+| `GET` | `/api/interview/questions` | owner, viewer, hoặc share session theo scope |
+| `GET` | `/auth/github` | bắt đầu + callback OAuth |
+| `GET` | `/share/:token` | đổi token thành session chỉ đọc |
+| `POST` | `/api/auth/logout` | xoá session |
+| `GET` | `/api/auth/session` | `{ ok, authenticated, role, user, share }` |
+| `GET` | `/api/progress` | owner hoặc viewer |
+| `PUT` / `POST` | `/api/progress` | chỉ owner |
+| `GET`/`POST`/`PATCH`/`DELETE` | `/api/admin/*` | chỉ owner (404/401 nếu không) |
+
+Mọi `/api/**` khác là **default-deny** (`401` JSON) trừ khi được thêm vào allowlist trong `src/modules/core/utils/public-api.util.ts`.
+
+API đọc public gửi `Cache-Control: public, s-maxage=86400, stale-while-revalidate=604800`. Session, Q&A, progress, admin gửi `private, no-store` — không cache trên CDN.
+
+Search từ chối `q` quá dài (tối đa 100), `lang`/`limit` sai (`limit` tối đa 50). Search và thử share-token dùng Upstash Redis khi có, không thì limiter in-memory (một isolate). **Bật Vercel Firewall** để chặn spam thật: Project → Firewall → rule rate-limit cho `/api/knowledge-base/search` (ví dụ 30 request / phút / IP) và tuỳ chọn `/share/**`.
 
 ### Auth
 
-Cookie HttpOnly, 12 giờ. **`INTERVIEW_PASSCODE` ≠ `EDIT_PASSCODE`** — một PIN không mở cả hai.
+GitHub OAuth qua [`nuxt-auth-utils`](https://github.com/atinux/nuxt-auth-utils). Cookie HttpOnly đã niêm (`nuxt-session`), 7 ngày, `Secure` trên production, `SameSite=Lax`. Thư viện dùng OAuth `state` (và PKCE nếu provider hỗ trợ).
 
-- Cookie interview mở `GET /api/interview/questions`
-- Cookie edit mở ghi tiến độ plan
-- Tuỳ chọn `PROGRESS_WRITE_TOKEN` / `x-edit-token` để ghi progress
-- Secret HMAC: `INTERVIEW_TOKEN_SECRET`, `EDIT_TOKEN_SECRET`
+**Public (không login):** trang knowledge base + plan (chỉ đọc) và API nội dung tương ứng.
+
+**Cần login:** `/interview`, `/api/interview/*`, đọc progress, và mọi API không nằm trong allowlist.
+
+**Chỉ owner:** `/admin/access`, `/api/admin/*`, sửa plan / ghi progress. Mục Access ẩn khỏi menu avatar nếu không phải owner. Non-owner nhận `404` trên trang và `404`/`401` trên API admin.
+
+Role được tính lại **mỗi** request bảo vệ (không tin cookie):
+
+1. **Env owner** — `AUTH_OWNER_GITHUB_LOGINS` (mặc định `parker2808`) và, nếu có, `AUTH_OWNER_GITHUB_IDS` (vd `38419968`). Login **và** id phải khớp khi đã set id. Env owner không thể gỡ / hạ quyền trong UI.
+2. **Member đã lưu** — thêm trong `/admin/access` theo username GitHub. Id số được resolve lúc thêm qua GitHub public API và dùng khi login (đổi username không cướp quyền). Ghi chú + hạn tuỳ chọn. Xóa hoặc đổi role tăng `sessionVersion` nên cookie cũ chết ngay.
+3. **Viewer fallback** — `AUTH_ALLOWED_GITHUB_LOGINS` / `AUTH_ALLOWED_GITHUB_IDS` (rỗng nếu không set). Giữ để tương thích; nên thêm member trong UI để có id và thu hồi được.
+
+**Owner** sửa plan, ghi progress, mở module Access. **Viewer** đọc Q&A và progress; mọi mutation trả `403`, UI sửa bị ẩn.
+
+#### Link chia sẻ
+
+Owner tạo link với scope (toàn bộ Q&A, category, hoặc id câu hỏi), hạn bắt buộc (1h / 1d / 7d / 30d / tùy chọn, tối đa 90 ngày), max uses và nhãn tuỳ chọn. Token ≥128 bit ngẫu nhiên; chỉ lưu hash SHA-256. Vào `/share/<token>` tạo session **chỉ đọc** riêng (cùng cookie niêm, không có `user`, không có quyền owner/viewer). Q&A được lọc theo scope. Link hết hạn / bị thu hồi / hết lượt hiện trang thân thiện. Thử token bị rate-limit.
+
+#### Storage (Upstash Redis)
+
+Thành viên, hash link, nhật ký, và rate limit phân tán nằm ở Upstash Redis qua REST (`KV_REST_API_URL`/`KV_REST_API_TOKEN` từ Vercel Marketplace, hoặc `UPSTASH_REDIS_REST_*`). Local/test dùng store in-memory. Thiếu Redis trên production thì **env owner vẫn vào được**; module Access hiện thông báo “chưa cấu hình storage”, ghi member/link trả `503`.
+
+#### Setup OAuth + Upstash (Parker)
+
+1. GitHub → Settings → Developer settings → **OAuth Apps** → New OAuth App.
+2. **Homepage URL:** `https://parker-interview-senior-fe.vercel.app`
+3. **Authorization callback URL:** `https://parker-interview-senior-fe.vercel.app/auth/github`  
+   OAuth App của GitHub chỉ nhận **một** callback. Preview (`*.vercel.app`) không login được trừ khi tạo OAuth App thứ hai cho origin đó.
+4. Local: OAuth App thứ hai, homepage `http://localhost:3000`, callback `http://localhost:3000/auth/github`.
+5. Tạo mật khẩu session (32+ ký tự): `openssl rand -base64 32`
+6. **Upstash Redis (cần cho thành viên / link chia sẻ):** Vercel → Project → tab **Storage** → **Upstash** → tạo/kết nối Redis vào project. Vercel tự inject `KV_REST_API_URL` và `KV_REST_API_TOKEN` (hoặc cặp `UPSTASH_REDIS_REST_*`).
+7. Thêm biến trên Vercel: `NUXT_SESSION_PASSWORD`, `NUXT_OAUTH_GITHUB_CLIENT_ID`, `NUXT_OAUTH_GITHUB_CLIENT_SECRET`, `AUTH_OWNER_GITHUB_LOGINS=parker2808`, `AUTH_OWNER_GITHUB_IDS=38419968`.
+8. Redeploy. Xoá `INTERVIEW_PASSCODE`, `EDIT_PASSCODE`, `INTERVIEW_TOKEN_SECRET`, `EDIT_TOKEN_SECRET`, `PROGRESS_WRITE_TOKEN`. `AUTH_ALLOWED_GITHUB_LOGINS` chỉ còn là viewer fallback tuỳ chọn.
 
 ### i18n
 
@@ -115,30 +152,62 @@ sequenceDiagram
   Note over Browser,Page: Client navigation giữ cùng fetch và hiện skeleton khi pending
 ```
 
-## Mở khoá PIN
+## GitHub OAuth
 
 ```mermaid
 sequenceDiagram
-  participant UI
-  participant Auth as POST /api/auth/interview
-  participant Session as GET /api/auth/session
-  participant Bank as GET /api/interview/questions
-  UI->>Auth: JSON passcode
-  Auth-->>UI: Set-Cookie HttpOnly
-  UI->>Session: cookie
-  Session-->>UI: interview valid
-  UI->>Bank: cookie
-  Bank-->>UI: questions
+  participant Browser
+  participant App
+  participant GitHub
+  Browser->>App: GET /login?redirect=/interview
+  Browser->>App: GET /auth/github?redirect=/interview
+  App->>GitHub: authorize + state
+  GitHub-->>Browser: consent
+  Browser->>App: GET /auth/github?code&state
+  App->>GitHub: exchange code
+  GitHub-->>App: user profile
+  alt env owner hoặc member đã lưu hoặc viewer fallback
+    App->>Browser: Set-Cookie session HttpOnly (role + sessionVersion)
+    App->>Browser: redirect /interview
+    Browser->>App: GET /api/interview/questions
+    App-->>Browser: questions
+  else người khác
+    App->>Browser: redirect /auth/not-allowed (không session)
+  end
 ```
 
-Chế độ sửa plan cùng chuỗi với `POST /api/auth/edit` và `PUT /api/progress`.
+Trang plan vẫn public. Nút sửa và ghi progress chỉ hiện với **owner**.
+
+## Luồng link chia sẻ
+
+```mermaid
+sequenceDiagram
+  participant Owner
+  participant Admin as /admin/access
+  participant Store as Upstash Redis
+  participant Guest
+  participant App
+  Owner->>Admin: tạo link (scope, hạn, max uses)
+  Admin->>Store: chỉ lưu SHA-256(token)
+  Admin-->>Owner: URL /share/token (hiện một lần)
+  Owner->>Guest: gửi URL
+  Guest->>App: GET /share/token
+  App->>Store: tra hash, kiểm hạn / thu hồi / lượt
+  alt hợp lệ
+    App->>Guest: cookie chia sẻ (chỉ đọc, theo scope)
+    Guest->>App: GET /api/interview/questions
+    App-->>Guest: Q&A đã lọc + banner
+  else hết hạn / thu hồi / hết lượt
+    App->>Guest: /share-invalid
+  end
+```
 
 ## Chạy local
 
 **Cần:** Node 22+, npm, và checkout local của `interview-fe-data` hoặc PAT đọc được repo private đó.
 
 ```bash
-cp .env.example .env          # điền PIN local; không commit secret
+cp .env.example .env          # điền OAuth + session password; không commit secret
 # Cách A — data repo local
 CONTENT_LOCAL_PATH=/path/to/interview-fe-data npm run dev
 # Cách B — kéo bằng token
@@ -164,10 +233,14 @@ Không để giá trị secret trong git. Copy `.env.example` rồi điền loca
 | `CONTENT_REPO_REF` | tuỳ chọn | Git ref để kéo (mặc định `main`) |
 | `CONTENT_REPO_OWNER` / `CONTENT_REPO_NAME` | tuỳ chọn | Đổi toạ độ data repo |
 | `CONTENT_LOCAL_PATH` | local | Checkout hoặc export data repo; bỏ qua GitHub |
-| `INTERVIEW_PASSCODE` | Vercel + local | PIN 6 số cho Q&A |
-| `EDIT_PASSCODE` | Vercel + local | PIN 6 số sửa plan (phải khác) |
-| `INTERVIEW_TOKEN_SECRET` / `EDIT_TOKEN_SECRET` | tuỳ chọn | Secret HMAC cho session token |
-| `PROGRESS_WRITE_TOKEN` | tuỳ chọn | Auth ghi progress thay thế |
+| `NUXT_SESSION_PASSWORD` | Vercel + local | 32+ ký tự; niêm cookie session |
+| `NUXT_OAUTH_GITHUB_CLIENT_ID` | Vercel + local | Client id OAuth App |
+| `NUXT_OAUTH_GITHUB_CLIENT_SECRET` | Vercel + local | Client secret OAuth App |
+| `AUTH_OWNER_GITHUB_LOGINS` | Vercel + local | Env owner (mặc định `parker2808`); khóa trong UI |
+| `AUTH_OWNER_GITHUB_IDS` | Vercel + local | Id số AND với login owner (`38419968`) |
+| `AUTH_ALLOWED_GITHUB_LOGINS` | tuỳ chọn | Danh sách **viewer** fallback (tương thích; rỗng nếu không set) |
+| `AUTH_ALLOWED_GITHUB_IDS` | tuỳ chọn | AND với login viewer fallback |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | Vercel (Marketplace) | Upstash Redis REST (hoặc `UPSTASH_REDIS_REST_*`) |
 | `BLOB_READ_WRITE_TOKEN` | Vercel | Blob private cho `/api/progress` |
 | `VERCEL_DEPLOY_HOOK_URL` | secret **data repo** | Action trên `main` kích hoạt rebuild site |
 

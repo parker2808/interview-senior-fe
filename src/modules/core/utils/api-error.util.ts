@@ -1,24 +1,18 @@
 export type AuthErrorCode =
-  | 'INVALID_PASSCODE'
-  | 'PASSCODE_FORMAT'
-  | 'PASSCODE_NOT_CONFIGURED'
+  | 'UNAUTHORIZED'
   | 'SESSION_EXPIRED'
   | 'NETWORK'
   | 'UNKNOWN'
 
 const AUTH_I18N_KEY: Record<AuthErrorCode, string> = {
-  INVALID_PASSCODE: 'auth.wrongCode',
-  PASSCODE_FORMAT: 'auth.mustBeSixDigits',
-  PASSCODE_NOT_CONFIGURED: 'auth.notConfigured',
+  UNAUTHORIZED: 'auth.unauthorized',
   SESSION_EXPIRED: 'auth.sessionExpired',
   NETWORK: 'auth.networkError',
   UNKNOWN: 'auth.genericError',
 }
 
 const KNOWN_CODES = new Set<AuthErrorCode>([
-  'INVALID_PASSCODE',
-  'PASSCODE_FORMAT',
-  'PASSCODE_NOT_CONFIGURED',
+  'UNAUTHORIZED',
   'SESSION_EXPIRED',
   'NETWORK',
   'UNKNOWN',
@@ -77,22 +71,11 @@ export function parseApiErrorCode(
   if (/failed to fetch|networkerror|network error|load failed/i.test(msg)) {
     return 'NETWORK'
   }
-  if (status === 503 || /not configured/i.test(msg)) {
-    return 'PASSCODE_NOT_CONFIGURED'
-  }
-  if (/must be exactly 6|must be a 6-digit|6 digits|6 chữ số/i.test(msg)) {
-    return 'PASSCODE_FORMAT'
-  }
-  if (/invalid passcode|incorrect passcode|incorrect code/i.test(msg)) {
-    return 'INVALID_PASSCODE'
-  }
   if (
     status === 401 ||
-    /session expired|unauthorized|not unlocked|valid interview session/i.test(
-      msg,
-    )
+    /unauthorized|sign in required|session expired/i.test(msg)
   ) {
-    return 'SESSION_EXPIRED'
+    return status === 401 ? 'UNAUTHORIZED' : 'SESSION_EXPIRED'
   }
   return 'UNKNOWN'
 }

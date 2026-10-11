@@ -1,11 +1,10 @@
-import { verifyInterviewToken } from '../../utils/interviewAuth'
+import { privateCacheHeaders } from '@/modules/core/utils/cache-headers.util'
+import { filterBankByScope } from '@/modules/access/utils/share-scope.util'
 import { readInterviewBank } from '../../utils/contentStore'
-import { readInterviewSessionToken } from '../../utils/sessionCookie'
+import { readRequestAccess } from '../../utils/accessContext'
 
 export default defineEventHandler(async (event) => {
-  setResponseHeaders(event, {
-    'Cache-Control': 'no-store',
-  })
+  setResponseHeaders(event, privateCacheHeaders())
 
   if (event.method !== 'GET') {
     throw createError({
@@ -14,19 +13,16 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const token = readInterviewSessionToken(event)
-  if (!verifyInterviewToken(token)) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Unauthorized',
-      data: {
-        error: 'Valid interview session required',
-        code: 'SESSION_EXPIRED',
-      },
-    })
+  const bank = await readInterviewBank()
+  const access = await readRequestAccess(event)
+  if (access.share) {
+    return {
+      ok: true,
+      ...filterBankByScope(bank.questions, bank.categories, access.share.scope),
+      share: access.share,
+    }
   }
 
-  const bank = await readInterviewBank()
   return {
     ok: true,
     categories: bank.categories,

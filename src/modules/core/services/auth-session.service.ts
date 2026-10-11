@@ -1,12 +1,22 @@
 import { toAuthApiError } from '@/modules/core/utils/api-error.util'
+import type { AccessRole, ShareSessionInfo } from '@/modules/access/types/entities/access.type'
+
+export type AuthUser = {
+  login: string
+  id: number
+  name: string
+  avatarUrl: string
+  role?: AccessRole | null
+}
 
 export type AuthSession = {
   ok: boolean
-  interview: boolean
-  edit: boolean
+  authenticated: boolean
+  role: AccessRole | null
+  user: AuthUser | null
+  share: ShareSessionInfo | null
+  storageConfigured: boolean
 }
-
-export type AuthSessionScope = 'interview' | 'edit' | 'all'
 
 type SessionFetch = (url: string, opts?: Record<string, unknown>) => Promise<unknown>
 
@@ -16,6 +26,10 @@ function defaultFetch(url: string, opts?: Record<string, unknown>) {
 
 export function authSessionUrl() {
   return '/api/auth/session'
+}
+
+export function authLogoutUrl() {
+  return '/api/auth/logout'
 }
 
 export async function fetchAuthSession(
@@ -28,22 +42,23 @@ export async function fetchAuthSession(
     })) as AuthSession
     return {
       ok: true,
-      interview: Boolean(data?.interview),
-      edit: Boolean(data?.edit),
+      authenticated: Boolean(data?.authenticated && data.user),
+      role: data?.role ?? data?.user?.role ?? null,
+      user: data?.user ?? null,
+      share: data?.share ?? null,
+      storageConfigured: Boolean(data?.storageConfigured),
     }
   } catch (err) {
     throw toAuthApiError(err)
   }
 }
 
-export async function clearAuthSession(
-  scope: AuthSessionScope = 'all',
+export async function logoutAuthSession(
   requestFetch: SessionFetch = defaultFetch,
 ) {
-  const query = scope === 'all' ? '' : `?scope=${scope}`
   try {
-    await requestFetch(`${authSessionUrl()}${query}`, {
-      method: 'DELETE',
+    await requestFetch(authLogoutUrl(), {
+      method: 'POST',
       credentials: 'include',
     })
   } catch (err) {

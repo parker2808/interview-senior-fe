@@ -4,7 +4,6 @@ import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vu
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import DayList from '@/modules/study-plan/components/DayList/DayList.vue'
 import ProgressTools from '@/modules/study-plan/components/ProgressTools/ProgressTools.vue'
-import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
 import { useProgress } from '@/modules/study-plan/composables/use-progress.composable'
 import {
   planResourceHref,
@@ -43,9 +42,6 @@ const {
   readOnly,
   isEditMode,
   modeLabel,
-  modalOpen,
-  unlocking,
-  unlockError,
   publicMeta,
   statusMessage,
   completedCount,
@@ -60,9 +56,7 @@ const {
   copyShareLink,
   exportJson,
   importJsonFile,
-  tryUnlock,
-  skipUnlock,
-  openUnlockModal,
+  requestEditAccess,
 } = useProgress()
 
 const weekFilter = ref(0)
@@ -87,14 +81,6 @@ function openResource(id: string) {
 
 <template>
   <div class="mx-auto min-h-screen max-w-hub pb-10">
-    <EditGateModal
-      :open="modalOpen"
-      :unlocking="unlocking"
-      :error="unlockError"
-      @submit="tryUnlock"
-      @skip="skipUnlock"
-    />
-
     <AppTopBar
       :title="$t('plan.title')"
       :home-label="$t('plan.backHub')"
@@ -168,9 +154,9 @@ function openResource(id: string) {
             v-if="!isEditMode"
             type="button"
             class="text-sm font-semibold text-accent-ink underline"
-            @click="openUnlockModal"
+            @click="requestEditAccess"
           >
-            {{ $t('plan.unlock') }}
+            {{ $t('plan.signInToEdit') }}
           </button>
         </div>
       </div>
@@ -211,7 +197,7 @@ function openResource(id: string) {
         @copy-share="copyShareLink"
         @export="exportJson"
         @import-file="importJsonFile"
-        @request-unlock="openUnlockModal"
+        @request-unlock="requestEditAccess"
       />
     </div>
 
