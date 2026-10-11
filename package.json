@@ -23,6 +23,7 @@
     "url": "git+https://github.com/parker2808/interview-senior-fe.git"
   },
   "dependencies": {
+    "@upstash/redis": "^1.39.0",
     "@vercel/blob": "^2.8.0",
     "marked": "^15.0.12",
     "nuxt": "^3.21.11",

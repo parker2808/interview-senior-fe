@@ -1,5 +1,6 @@
-import { isAllowedGitHubUser } from '@/modules/core/utils/github-allowlist.util'
+import { resolveAccess } from '@/modules/access/utils/role-resolution.util'
 import { sanitizeRedirectPath } from '@/modules/core/utils/safe-redirect.util'
+import { getAccessStore } from '../../utils/accessStore'
 
 const REDIRECT_COOKIE = 'sf_auth_redirect'
 const SESSION_MAX_AGE = 60 * 60 * 24 * 7
@@ -12,12 +13,28 @@ const oauthHandler = defineOAuthGitHubEventHandler({
     const redirect = sanitizeRedirectPath(getCookie(event, REDIRECT_COOKIE))
     deleteCookie(event, REDIRECT_COOKIE, { path: '/' })
 
-    if (!isAllowedGitHubUser(user)) {
+    const store = getAccessStore()
+    const members = store.configured ? await store.listMembers() : []
+    const identity = {
+      login: user.login,
+      id: Number(user.id),
+    }
+    const access = resolveAccess({
+      user: identity,
+      env: process.env,
+      members,
+    })
+
+    if (!access.role) {
       const login = encodeURIComponent(String(user?.login || ''))
       return sendRedirect(event, `/auth/not-allowed?login=${login}`)
     }
 
-    await setUserSession(
+    if (access.member && access.member.login !== user.login) {
+      await store.upsertMember({ ...access.member, login: user.login })
+    }
+
+    await replaceUserSession(
       event,
       {
         user: {
@@ -25,6 +42,8 @@ const oauthHandler = defineOAuthGitHubEventHandler({
           id: Number(user.id),
           name: user.name || user.login,
           avatarUrl: user.avatar_url,
+          role: access.role,
+          sessionVersion: access.member?.sessionVersion ?? 0,
         },
         loggedInAt: Date.now(),
       },

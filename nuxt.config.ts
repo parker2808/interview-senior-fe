@@ -126,6 +126,12 @@ export default defineNuxtConfig({
     '/api/progress': {
       headers: { 'Cache-Control': 'private, no-store' },
     },
+    '/api/admin/**': {
+      headers: { 'Cache-Control': 'private, no-store' },
+    },
+    '/admin/**': {
+      headers: { 'Cache-Control': 'private, no-store' },
+    },
   },
 
   nitro: {

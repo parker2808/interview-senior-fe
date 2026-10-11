@@ -30,5 +30,7 @@ describe('isPublicApiRequest', () => {
     expect(isPublicApiRequest('/api/knowledge-base/docs', 'DELETE')).toBe(false)
     expect(isPublicApiRequest('/api/auth/session', 'POST')).toBe(false)
     expect(isPublicApiRequest('/api/new-thing', 'GET')).toBe(false)
+    expect(isPublicApiRequest('/api/admin/members', 'GET')).toBe(false)
+    expect(isPublicApiRequest('/api/admin/shares', 'POST')).toBe(false)
   })
 })

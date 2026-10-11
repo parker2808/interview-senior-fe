@@ -19,6 +19,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { loggedIn } = useUserSession()
 const fileInput = ref<HTMLInputElement | null>(null)
 const toolsOpen = ref(false)
 
@@ -51,8 +52,9 @@ function onImportClick() {
       class="mb-3 rounded-lg border border-line bg-accent-soft px-3 py-2 text-sm text-ink"
       role="status"
     >
-      {{ $t('plan.viewOnlyHint') }}
+      {{ loggedIn ? $t('plan.viewerOnlyHint') : $t('plan.viewOnlyHint') }}
       <button
+        v-if="!loggedIn"
         type="button"
         class="ml-1 font-semibold text-accent-ink underline"
         @click="emit('request-unlock')"

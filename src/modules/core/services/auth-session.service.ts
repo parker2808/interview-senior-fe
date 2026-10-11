@@ -1,16 +1,21 @@
 import { toAuthApiError } from '@/modules/core/utils/api-error.util'
+import type { AccessRole, ShareSessionInfo } from '@/modules/access/types/entities/access.type'
 
 export type AuthUser = {
   login: string
   id: number
   name: string
   avatarUrl: string
+  role?: AccessRole | null
 }
 
 export type AuthSession = {
   ok: boolean
   authenticated: boolean
+  role: AccessRole | null
   user: AuthUser | null
+  share: ShareSessionInfo | null
+  storageConfigured: boolean
 }
 
 type SessionFetch = (url: string, opts?: Record<string, unknown>) => Promise<unknown>
@@ -38,7 +43,10 @@ export async function fetchAuthSession(
     return {
       ok: true,
       authenticated: Boolean(data?.authenticated && data.user),
+      role: data?.role ?? data?.user?.role ?? null,
       user: data?.user ?? null,
+      share: data?.share ?? null,
+      storageConfigured: Boolean(data?.storageConfigured),
     }
   } catch (err) {
     throw toAuthApiError(err)

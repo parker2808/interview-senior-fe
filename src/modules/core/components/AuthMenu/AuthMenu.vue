@@ -3,7 +3,11 @@ import { useAuthSession } from '@/modules/core/composables/use-auth-session.comp
 import { sanitizeRedirectPath } from '@/modules/core/utils/safe-redirect.util'
 
 const route = useRoute()
-const { loggedIn, user, logout } = useAuthSession()
+const { loggedIn, user, share, isOwner, logout } = useAuthSession()
+const open = ref(false)
+const rootRef = ref<HTMLElement | null>(null)
+
+const hasSession = computed(() => loggedIn.value || Boolean(share.value))
 
 const loginTo = computed(() => ({
   path: '/login',
@@ -11,20 +15,28 @@ const loginTo = computed(() => ({
 }))
 
 async function onLogout() {
+  open.value = false
   await logout()
-  if (route.path.startsWith('/interview')) {
+  if (route.path.startsWith('/interview') || route.path.startsWith('/admin')) {
     await navigateTo({
       path: '/login',
-      query: { redirect: '/interview' },
+      query: { redirect: route.path.startsWith('/admin') ? '/' : '/interview' },
     })
   }
 }
+
+function onDocClick(event: MouseEvent) {
+  if (!rootRef.value?.contains(event.target as Node)) open.value = false
+}
+
+onMounted(() => document.addEventListener('click', onDocClick))
+onUnmounted(() => document.removeEventListener('click', onDocClick))
 </script>
 
 <template>
-  <div class="flex shrink-0 items-center">
+  <div ref="rootRef" class="relative flex shrink-0 items-center">
     <NuxtLink
-      v-if="!loggedIn"
+      v-if="!hasSession"
       :to="loginTo"
       class="inline-flex h-10 items-center justify-center gap-1.5 rounded-lg border border-line bg-surface-elevated px-2.5 text-sm font-semibold text-ink transition hover:border-accent hover:text-accent-ink sm:px-3"
     >
@@ -41,28 +53,71 @@ async function onLogout() {
       <span class="hidden sm:inline">{{ $t('auth.signIn') }}</span>
     </NuxtLink>
 
-    <div v-else class="flex items-center gap-1.5">
-      <span class="sr-only">{{
-        $t('auth.signedInAs', { login: user?.login || '' })
-      }}</span>
-      <img
-        v-if="user?.avatarUrl"
-        :src="user.avatarUrl"
-        :alt="user.login"
-        class="h-8 w-8 rounded-full border border-line"
-        width="32"
-        height="32"
-      />
-      <span class="hidden max-w-[8rem] truncate text-xs font-semibold text-ink sm:inline">
-        {{ user?.login }}
-      </span>
+    <template v-else>
       <button
         type="button"
-        class="inline-flex h-10 items-center justify-center rounded-lg border border-line bg-surface-elevated px-2.5 text-sm font-semibold text-ink transition hover:border-accent hover:text-accent-ink"
-        @click="onLogout"
+        class="inline-flex h-10 items-center gap-1.5 rounded-lg border border-line bg-surface-elevated px-2 text-sm font-semibold text-ink transition hover:border-accent hover:text-accent-ink"
+        :aria-expanded="open"
+        :aria-haspopup="true"
+        @click="open = !open"
       >
-        {{ $t('auth.signOut') }}
+        <img
+          v-if="user?.avatarUrl"
+          :src="user.avatarUrl"
+          :alt="user.login"
+          class="h-7 w-7 rounded-full border border-line"
+          width="28"
+          height="28"
+        />
+        <span
+          v-else
+          class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-accent-soft text-xs text-accent-ink"
+        >
+          {{ share ? 'S' : '?' }}
+        </span>
+        <span class="hidden max-w-[7rem] truncate sm:inline">
+          {{ user?.login || $t('access.sharedView') }}
+        </span>
+        <svg class="h-4 w-4 text-ink-muted" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path
+            fill-rule="evenodd"
+            d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+            clip-rule="evenodd"
+          />
+        </svg>
       </button>
-    </div>
+
+      <div
+        v-if="open"
+        class="absolute right-0 top-full z-40 mt-2 w-56 rounded-xl border border-line bg-surface-elevated p-2 shadow-lg"
+        role="menu"
+      >
+        <p class="px-2 py-1.5 text-xs text-ink-muted">
+          <template v-if="user">
+            {{ $t('auth.signedInAs', { login: user.login }) }}
+          </template>
+          <template v-else>
+            {{ $t('access.sharedView') }}
+          </template>
+        </p>
+        <NuxtLink
+          v-if="isOwner"
+          to="/admin/access"
+          class="flex min-h-10 items-center rounded-lg px-2 text-sm font-semibold text-ink hover:bg-accent-soft"
+          role="menuitem"
+          @click="open = false"
+        >
+          {{ $t('access.menuAccess') }}
+        </NuxtLink>
+        <button
+          type="button"
+          class="flex min-h-10 w-full items-center rounded-lg px-2 text-left text-sm font-semibold text-ink hover:bg-accent-soft"
+          role="menuitem"
+          @click="onLogout"
+        >
+          {{ $t('auth.signOut') }}
+        </button>
+      </div>
+    </template>
   </div>
 </template>

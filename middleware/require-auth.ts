@@ -1,8 +1,8 @@
 import { sanitizeRedirectPath } from '@/modules/core/utils/safe-redirect.util'
 
 export default defineNuxtRouteMiddleware((to) => {
-  const { loggedIn } = useUserSession()
-  if (loggedIn.value) return
+  const { loggedIn, session } = useUserSession()
+  if (loggedIn.value || session.value.share) return
 
   return navigateTo({
     path: '/login',
