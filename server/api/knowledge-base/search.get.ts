@@ -1,21 +1,34 @@
-import { publicCacheHeaders } from '../../utils/contentStore'
+import { publicCacheHeaders } from '@/modules/core/utils/cache-headers.util'
+import { parseSearchQuery, SEARCH_Q_MIN } from '@/modules/core/utils/search-query.util'
 import { searchKnowledgeBase } from '../../utils/kbSearch'
+import { getClientIp } from '../../utils/requestIp'
+import {
+  applyRateLimitHeaders,
+  hitDistributedRateLimit,
+} from '../../utils/distributedRateLimit'
 
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event)
-  const q = String(query.q || '').trim()
-  const lang = query.lang === 'en' ? 'en' : 'vi'
-  const rawLimit = Number(query.limit)
-  const limit = Number.isFinite(rawLimit)
-    ? Math.min(50, Math.max(1, Math.trunc(rawLimit)))
-    : 20
+  const parsed = parseSearchQuery(getQuery(event))
+  if (!parsed.ok) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: parsed.errors[0] || 'Invalid search query',
+      data: { code: 'BAD_QUERY', errors: parsed.errors },
+    })
+  }
+
+  const limitHit = await hitDistributedRateLimit(`search:${getClientIp(event)}`, {
+    windowMs: 60_000,
+    max: 30,
+  })
+  if (!limitHit.ok) applyRateLimitHeaders(event, limitHit)
 
   setResponseHeaders(event, publicCacheHeaders())
 
-  if (q.length < 2) {
-    return { hits: [], q, lang, limit }
+  if (parsed.q.length < SEARCH_Q_MIN) {
+    return { hits: [], q: parsed.q, lang: parsed.lang, limit: parsed.limit }
   }
 
-  const hits = await searchKnowledgeBase(q, lang, limit)
-  return { hits, q, lang, limit }
+  const hits = await searchKnowledgeBase(parsed.q, parsed.lang, parsed.limit)
+  return { hits, q: parsed.q, lang: parsed.lang, limit: parsed.limit }
 })

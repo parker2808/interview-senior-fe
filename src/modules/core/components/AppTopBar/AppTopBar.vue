@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AuthMenu from '@/modules/core/components/AuthMenu/AuthMenu.vue'
 import BackLink from '@/modules/core/components/BackLink/BackLink.vue'
 import { useHideOnScrollBar } from '@/modules/core/composables/use-hide-on-scroll-bar.composable'
 
@@ -120,6 +121,7 @@ onUnmounted(() => resizeObserver?.disconnect())
           </div>
 
           <slot name="actions" />
+          <AuthMenu />
         </div>
       </div>
     </header>

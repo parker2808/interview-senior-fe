@@ -3,7 +3,6 @@ import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import DayDetail from '@/modules/study-plan/components/DayDetail/DayDetail.vue'
-import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
 import { useProgress } from '@/modules/study-plan/composables/use-progress.composable'
 import { usePlanDay } from '@/modules/study-plan/composables/use-plan-index.composable'
 import {
@@ -44,11 +43,6 @@ const {
   readOnly,
   isDone,
   toggleDone,
-  modalOpen,
-  unlocking,
-  unlockError,
-  tryUnlock,
-  skipUnlock,
 } = useProgress()
 
 function openDoc(path: string) {
@@ -80,14 +74,6 @@ onMounted(() => {
 
 <template>
   <div class="mx-auto min-h-screen max-w-hub pb-10">
-    <EditGateModal
-      :open="modalOpen"
-      :unlocking="unlocking"
-      :error="unlockError"
-      @submit="tryUnlock"
-      @skip="skipUnlock"
-    />
-
     <AppTopBar
       :title="day ? `Day ${String(day.day).padStart(2, '0')}` : t('plan.title')"
       :home-label="t('plan.backHub')"

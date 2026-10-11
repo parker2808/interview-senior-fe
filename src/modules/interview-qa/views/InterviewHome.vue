@@ -2,17 +2,19 @@
 import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
-import InterviewPinGate from '@/modules/interview-qa/components/InterviewPinGate/InterviewPinGate.vue'
 import QuestionCard from '@/modules/interview-qa/components/QuestionCard/QuestionCard.vue'
 import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
 import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
+import { useAuthSession } from '@/modules/core/composables/use-auth-session.composable'
 import { useInterviewUnlock } from '@/modules/interview-qa/composables/use-interview-unlock.composable'
+import { formatAccessDate } from '@/modules/access/utils/format-access.util'
 import type {
   InterviewCategoryId,
   InterviewLang,
 } from '@/modules/interview-qa/types/interview.type'
 
 const { locale, t } = useI18n()
+const { share } = useAuthSession()
 const route = useRoute()
 const lang = computed<InterviewLang>(() =>
   locale.value === 'en' ? 'en' : 'vi',
@@ -20,15 +22,10 @@ const lang = computed<InterviewLang>(() =>
 
 const {
   unlocked,
-  unlocking,
   loadingQuestions,
-  unlockError,
   loadError,
   categories,
   questions,
-  sessionReady,
-  submitPasscode,
-  lock,
   reload,
 } = await useInterviewUnlock()
 
@@ -72,10 +69,7 @@ function collapseAll() {
   openIds.value = new Set()
 }
 
-const contentLoading = computed(
-  () => !sessionReady.value || loadingQuestions.value,
-)
-const gateOpen = computed(() => sessionReady.value && !unlocked.value && !contentLoading.value)
+const contentLoading = computed(() => loadingQuestions.value)
 const showQuestions = computed(
   () => unlocked.value && !contentLoading.value && !loadError.value,
 )
@@ -121,32 +115,28 @@ watch(
 
 <template>
   <div class="mx-auto min-h-screen max-w-hub pb-10">
-    <InterviewPinGate
-      :open="gateOpen"
-      :unlocking="unlocking || loadingQuestions"
-      :error="unlockError || loadError"
-      @submit="submitPasscode"
-    />
-
     <AppTopBar
       :title="$t('interview.title')"
       :home-label="t('interview.backHub')"
     >
       <template #actions>
-        <button
-          v-if="unlocked"
-          type="button"
-          class="hidden min-h-10 rounded-lg border border-line bg-white px-3 text-sm font-semibold sm:inline-flex sm:items-center"
-          @click="lock"
-        >
-          {{ $t('interview.lock') }}
-        </button>
         <LocaleToggle />
         <ThemeToggle />
       </template>
     </AppTopBar>
 
     <div v-if="showQuestions" class="px-4 pt-6 sm:px-6 lg:px-8">
+      <div
+        v-if="share"
+        class="mb-4 rounded-xl border border-line bg-accent-soft px-3 py-2 text-sm text-ink"
+        role="status"
+      >
+        {{
+          $t('access.shareBanner', {
+            date: formatAccessDate(share.expiresAt, locale),
+          })
+        }}
+      </div>
       <header class="max-w-3xl">
         <p class="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">
           {{ $t('interview.eyebrow') }}

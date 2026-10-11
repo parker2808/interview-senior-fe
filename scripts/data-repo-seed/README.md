@@ -15,7 +15,7 @@ plan/index.json                # meta + day summaries
 plan/days/day-XX.json          # day plan + lab blocks
 plan/resources/<id>.json       # lab-repo, project-context, algo-day-XX, …
 qna/categories.json
-qna/questions.json             # existing Q&A shape (PIN-gated in the app)
+qna/questions.json             # existing Q&A shape (GitHub-gated in the app)
 schema/                        # JSON Schema for Localized + blocks
 scripts/validate.mjs           # fails on missing en/vi
 ```

@@ -154,12 +154,7 @@ export async function readInterviewBank(): Promise<InterviewBank> {
   }
 }
 
-export function publicCacheHeaders() {
-  return {
-    'Cache-Control':
-      'public, max-age=60, s-maxage=3600, stale-while-revalidate=86400',
-  }
-}
+export { publicCacheHeaders } from '@/modules/core/utils/cache-headers.util'
 
 export function findDocSummary(
   catalog: KnowledgeCatalog,

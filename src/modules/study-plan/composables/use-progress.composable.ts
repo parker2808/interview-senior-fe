@@ -9,9 +9,7 @@ import {
 } from '@/modules/study-plan/utils/progress-codec.util'
 import {
   fetchCloudProgress,
-  getWriteToken,
   publishCloudProgress,
-  setWriteToken,
 } from '@/modules/study-plan/services/progress.service'
 import { useEditMode } from '@/modules/study-plan/composables/use-edit-mode.composable'
 
@@ -50,20 +48,11 @@ const publicMeta = ref<{
 const statusMessage = ref('')
 
 export function useProgress() {
+  const { t } = useI18n()
   const { data: planIndex } = usePlanIndex()
   const days = computed(() => planIndex.value?.days ?? [])
 
-  const {
-    isEditMode,
-    modeLabel,
-    modalOpen,
-    unlocking,
-    unlockError,
-    submitPasscode,
-    enterViewMode,
-    openUnlockModal,
-    lockEditMode,
-  } = useEditMode()
+  const { isEditMode, modeLabel, requestEditAccess } = useEditMode()
 
   watch(
     localDoneMap,
@@ -142,6 +131,11 @@ export function useProgress() {
   }
 
   async function loadCloudProgress() {
+    if (!isEditMode.value) {
+      statusMessage.value = t('auth.unauthorized')
+      await requestEditAccess()
+      return false
+    }
     statusMessage.value = 'Đang tải tiến độ cloud…'
     try {
       const data = await fetchCloudProgress()
@@ -164,10 +158,10 @@ export function useProgress() {
     }
   }
 
-  async function publishToCloud(tokenOverride?: string) {
+  async function publishToCloud() {
     if (!isEditMode.value) {
-      statusMessage.value = 'Cần mở khóa chỉnh sửa trước khi publish.'
-      openUnlockModal()
+      statusMessage.value = t('plan.signInToEdit')
+      await requestEditAccess()
       return false
     }
     if (source.value !== 'local') {
@@ -180,7 +174,9 @@ export function useProgress() {
       owner: 'Parker',
     }
 
-    const finishOk = (result: { progress?: object } | null) => {
+    statusMessage.value = 'Đang publish lên cloud…'
+    try {
+      const result = await publishCloudProgress(payload)
       const published = (result?.progress || payload) as {
         updatedAt?: string
         completed?: number[]
@@ -189,49 +185,6 @@ export function useProgress() {
         published.updatedAt || 'now'
       } (${published.completed?.length ?? 0} ngày).`
       return true
-    }
-
-    statusMessage.value = 'Đang publish lên cloud…'
-
-    const forcedWriteToken = (tokenOverride || '').trim()
-    if (forcedWriteToken) {
-      setWriteToken(forcedWriteToken)
-      try {
-        return finishOk(
-          await publishCloudProgress(payload, forcedWriteToken, 'write-token'),
-        )
-      } catch (err: unknown) {
-        statusMessage.value = `Publish thất bại: ${
-          err instanceof Error ? err.message : err
-        }`
-        return false
-      }
-    }
-
-    try {
-      return finishOk(await publishCloudProgress(payload, '', 'cookie'))
-    } catch {
-      /* cookie session missing or rejected — fall back to write token */
-    }
-
-    let token = (getWriteToken() || '').trim()
-    if (!token && import.meta.client) {
-      token = (
-        window.prompt(
-          'Nhập PROGRESS_WRITE_TOKEN (lưu tạm trong sessionStorage — không commit):',
-          '',
-        ) || ''
-      ).trim()
-    }
-    if (!token) {
-      statusMessage.value =
-        'Đã hủy — cần phiên chỉnh sửa hoặc PROGRESS_WRITE_TOKEN để publish.'
-      return false
-    }
-
-    setWriteToken(token)
-    try {
-      return finishOk(await publishCloudProgress(payload, token, 'write-token'))
     } catch (err: unknown) {
       statusMessage.value = `Publish thất bại: ${
         err instanceof Error ? err.message : err
@@ -259,20 +212,6 @@ export function useProgress() {
       ...localDoneMap.value,
       [day]: !isDone(day),
     }
-  }
-
-  async function tryUnlock(passcode: string) {
-    const ok = await submitPasscode(passcode)
-    statusMessage.value = ok
-      ? 'Đã mở chế độ Sửa cho phiên này.'
-      : unlockError.value || 'Không mở được chế độ Sửa.'
-    return ok
-  }
-
-  function skipUnlock() {
-    enterViewMode()
-    statusMessage.value =
-      'Chế độ Xem — có thể Load cloud / share; không sửa tiến độ local hay publish.'
   }
 
   function weekStats(week: number) {
@@ -318,8 +257,8 @@ export function useProgress() {
 
   function importJsonFile(file: File) {
     if (!isEditMode.value) {
-      statusMessage.value = 'Cần mở khóa chỉnh sửa trước khi import.'
-      openUnlockModal()
+      statusMessage.value = t('plan.signInToEdit')
+      void requestEditAccess()
       return Promise.resolve(false)
     }
     return new Promise<boolean>((resolve) => {
@@ -355,9 +294,6 @@ export function useProgress() {
     readOnly,
     isEditMode,
     modeLabel,
-    modalOpen,
-    unlocking,
-    unlockError,
     publicMeta,
     statusMessage,
     completedCount,
@@ -372,9 +308,6 @@ export function useProgress() {
     copyShareLink,
     exportJson,
     importJsonFile,
-    tryUnlock,
-    skipUnlock,
-    openUnlockModal,
-    lockEditMode,
+    requestEditAccess,
   }
 }
