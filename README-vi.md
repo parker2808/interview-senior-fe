@@ -2,14 +2,14 @@
 
 > 🌍 **Language / Ngôn ngữ:** [🇬🇧 English](./README.md) | [🇻🇳 Tiếng Việt](./README-vi.md)
 
-App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ, kế hoạch 30 ngày kèm lab, và ngân hàng Q&A khoá PIN.
+App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ, kế hoạch 30 ngày, và ngân hàng Q&A khoá PIN.
 
 **Live:** [parker-interview-senior-fe.vercel.app](https://parker-interview-senior-fe.vercel.app)
 
 ## Tính năng
 
 - **Knowledge base** — 22 chủ đề vi/en, sidebar, tìm full-text, TOC lồng heading
-- **Kế hoạch 30 ngày** — checkpoint theo ngày, lab, xem / sửa tiến độ
+- **Kế hoạch 30 ngày** — checkpoint theo ngày, thuật toán, xem / sửa tiến độ
 - **Interview Q&A** — câu trả lời mẫu sau mã 6 số
 - **i18n** — `vi` / `en`, không prefix URL; cookie locale
 - **Theme** sáng / tối

@@ -48,13 +48,16 @@ export type PlanDaySummary = {
   note?: Localized
 }
 
+export type PlanLab = {
+  resourceId: string
+  title: Localized
+  sections: ContentSection[]
+}
+
 export type PlanDay = PlanDaySummary & {
   kind: 'plan-day'
-  lab: {
-    resourceId: string
-    title: Localized
-    sections: ContentSection[]
-  }
+  /** Retired content keeps a stub with empty `sections`, or omits `lab` entirely. */
+  lab?: PlanLab
 }
 
 export type PlanResourceSummary = {
@@ -76,4 +79,6 @@ export type PlanMeta = {
 
 export type PlanIndex = PlanMeta & {
   days: PlanDaySummary[]
+  /** True when at least one day has non-empty lab sections. */
+  hasLab?: boolean
 }

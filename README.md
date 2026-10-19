@@ -2,14 +2,14 @@
 
 > 🌍 **Language / Ngôn ngữ:** [🇬🇧 English](./README.md) | [🇻🇳 Tiếng Việt](./README-vi.md)
 
-Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 30-day plan with labs, and a PIN-protected Q&A bank.
+Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 30-day plan, and a PIN-protected Q&A bank.
 
 **Live:** [parker-interview-senior-fe.vercel.app](https://parker-interview-senior-fe.vercel.app)
 
 ## Features
 
 - **Knowledge base** — 22 vi/en topics, sidebar, full-text search, nested heading TOC
-- **30-day plan** — daily checkpoints, lab links, view vs edit progress
+- **30-day plan** — daily checkpoints, algorithms, view vs edit progress
 - **Interview Q&A** — model answers behind a 6-digit PIN
 - **i18n** — `vi` / `en`, no URL prefix; locale cookie
 - **Light / dark** theme

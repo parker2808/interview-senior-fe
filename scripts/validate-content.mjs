@@ -130,8 +130,15 @@ for (const file of dayFiles) {
     'handsOn',
     'algorithm',
     'checklist',
-    'lab',
   ])
+  // Lab content is retired: `lab` may be omitted, or kept as a stub with empty sections.
+  if (day.lab != null) {
+    if (typeof day.lab !== 'object' || Array.isArray(day.lab)) {
+      fail(file, '`lab` must be an object when present')
+    } else if (!Array.isArray(day.lab.sections)) {
+      fail(file, '`lab.sections` must be an array (may be empty)')
+    }
+  }
   walkLocalized(day, path.relative(root, file))
 }
 

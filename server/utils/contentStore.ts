@@ -15,6 +15,7 @@ import {
   stripPlanDayDates,
   stripPlanIndexDates,
 } from '@/modules/content/utils/plan-dates.util'
+import { hasLabContent } from '@/modules/content/utils/plan-lab.util'
 
 const DISK_ROOT = join(process.cwd(), '.data/content')
 
@@ -56,11 +57,27 @@ export async function readKnowledgeDoc(slug: string): Promise<KnowledgeDoc> {
   return readContentJson<KnowledgeDoc>(`knowledge-base/${slug}.json`)
 }
 
+let hasLabCache: Promise<boolean> | null = null
+
+/** Content is pulled at build time, so the answer is fixed for the life of the server. */
+function planHasLab(): Promise<boolean> {
+  hasLabCache ??= (async () => {
+    for (let n = 1; n <= 30; n++) {
+      try {
+        if (hasLabContent(await readPlanDay(n))) return true
+      } catch {
+        /* missing day: no lab */
+      }
+    }
+    return false
+  })()
+  return hasLabCache
+}
+
 export async function readPlanIndex(): Promise<PlanIndex> {
+  let index: PlanIndex
   try {
-    return stripPlanIndexDates(
-      await readContentJson<PlanIndex>('plan/index.json'),
-    )
+    index = await readContentJson<PlanIndex>('plan/index.json')
   } catch {
     const meta = await readContentJson<PlanMeta>('plan/meta.json')
     const days: PlanDaySummary[] = []
@@ -69,8 +86,9 @@ export async function readPlanIndex(): Promise<PlanIndex> {
       const { lab: _lab, ...summary } = day
       days.push(summary)
     }
-    return stripPlanIndexDates({ ...meta, days })
+    index = { ...meta, days }
   }
+  return stripPlanIndexDates({ ...index, hasLab: await planHasLab() })
 }
 
 export async function readPlanDay(n: number): Promise<PlanDay> {
