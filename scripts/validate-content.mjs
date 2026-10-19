@@ -169,6 +169,140 @@ if (questions) {
 const meta = readJson(path.join(root, 'plan/meta.json'))
 if (meta) walkLocalized(meta, 'plan/meta.json')
 
+function validatePracticeTree() {
+  const practiceDir = path.join(root, 'practice')
+  if (!existsSync(practiceDir)) return
+
+  const practiceMeta = readJson(path.join(practiceDir, 'meta.json'))
+  const practiceIndex = existsSync(path.join(practiceDir, 'index.json'))
+    ? readJson(path.join(practiceDir, 'index.json'))
+    : null
+  const stepDir = path.join(practiceDir, 'steps')
+  const stepFiles = listJsonFiles(stepDir)
+
+  if (!practiceMeta) {
+    fail(path.join(practiceDir, 'meta.json'), 'missing practice/meta.json')
+    return
+  }
+  requireShape(path.join(practiceDir, 'meta.json'), practiceMeta, [
+    'version',
+    'title',
+    'intro',
+    'specPath',
+    'milestones',
+  ])
+  walkLocalized(practiceMeta, 'practice/meta.json')
+
+  if (!Array.isArray(practiceMeta.milestones) || !practiceMeta.milestones.length) {
+    fail('practice/meta.json', 'milestones[] is empty')
+  }
+
+  const expectedIds = []
+  for (const [i, milestone] of (practiceMeta.milestones || []).entries()) {
+    const hint = `practice/meta.json.milestones[${i}]`
+    requireShape(hint, milestone, ['id', 'title', 'goal', 'outcome', 'steps'])
+    if (!Array.isArray(milestone?.steps)) {
+      fail(hint, '`steps` must be an array')
+      continue
+    }
+    for (const id of milestone.steps) {
+      if (!/^p\d{2}$/.test(id)) fail(hint, `invalid step id \`${id}\``)
+      expectedIds.push(id)
+    }
+  }
+
+  if (practiceIndex) {
+    requireShape(path.join(practiceDir, 'index.json'), practiceIndex, [
+      'version',
+      'title',
+      'intro',
+      'milestones',
+      'steps',
+    ])
+    walkLocalized(practiceIndex, 'practice/index.json')
+  }
+
+  if (!stepFiles.length) fail(stepDir, 'no practice step files')
+
+  const seen = new Set()
+  for (const file of stepFiles) {
+    const step = readJson(file)
+    if (!step) continue
+    requireShape(file, step, [
+      'kind',
+      'id',
+      'milestone',
+      'order',
+      'title',
+      'summary',
+      'estimateMin',
+      'prereqs',
+      'tags',
+      'concepts',
+      'kbLinks',
+      'questionLinks',
+      'specRefs',
+      'tasks',
+      'doneWhen',
+      'pitfalls',
+      'commit',
+    ])
+    walkLocalized(step, path.relative(root, file))
+    if (step.kind !== 'practice-step') {
+      fail(file, '`kind` must be `practice-step`')
+    }
+    if (!/^p\d{2}$/.test(String(step.id || ''))) {
+      fail(file, '`id` must match ^p\\d{2}$')
+    }
+    const basename = path.basename(file, '.json')
+    if (step.id && basename !== step.id) {
+      fail(file, `filename ${basename}.json does not match id ${step.id}`)
+    }
+    if (step.id) seen.add(step.id)
+    const estimate = Number(step.estimateMin)
+    if (!Number.isInteger(estimate) || estimate < 30 || estimate > 300) {
+      fail(file, '`estimateMin` must be an integer between 30 and 300')
+    }
+    const len = (value) => (Array.isArray(value) ? value.length : -1)
+    if (len(step.concepts) < 2 || len(step.concepts) > 5) {
+      fail(file, '`concepts` must have 2–5 items')
+    }
+    if (len(step.kbLinks) > 3) fail(file, '`kbLinks` must have 0–3 items')
+    if (len(step.questionLinks) > 3) {
+      fail(file, '`questionLinks` must have 0–3 items')
+    }
+    if (len(step.tasks) < 3 || len(step.tasks) > 6) {
+      fail(file, '`tasks` must have 3–6 items')
+    }
+    if (len(step.doneWhen) < 1 || len(step.doneWhen) > 4) {
+      fail(file, '`doneWhen` must have 1–4 items')
+    }
+    if (len(step.pitfalls) < 1 || len(step.pitfalls) > 3) {
+      fail(file, '`pitfalls` must have 1–3 items')
+    }
+    for (const [ti, task] of (step.tasks || []).entries()) {
+      if (task?.code != null) {
+        if (typeof task.code !== 'object' || Array.isArray(task.code)) {
+          fail(file, `tasks[${ti}].code must be { lang, text }`)
+        } else {
+          if (typeof task.code.lang !== 'string') {
+            fail(file, `tasks[${ti}].code.lang must be a string`)
+          }
+          if (typeof task.code.text !== 'string') {
+            fail(file, `tasks[${ti}].code.text must be a string`)
+          }
+        }
+      }
+    }
+  }
+
+  for (const id of expectedIds) {
+    if (!seen.has(id)) fail(stepDir, `missing step file ${id}.json`)
+  }
+}
+
+validatePracticeTree()
+
 if (errors.length) {
   console.error(`Content validation failed (${errors.length} issue(s)):`)
   for (const error of errors.slice(0, 80)) console.error(` - ${error}`)

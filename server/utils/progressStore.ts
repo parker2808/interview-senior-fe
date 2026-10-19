@@ -4,6 +4,7 @@
 import { get, put } from '@vercel/blob'
 
 export const PROGRESS_BLOB_PATHNAME = 'progress.json'
+export const PRACTICE_PROGRESS_BLOB_PATHNAME = 'practice-progress.json'
 
 const BLOB_ACCESS = 'private' as const
 
@@ -14,6 +15,16 @@ export function emptyProgress() {
     owner: 'Parker',
     completed: [] as number[],
     note: 'No cloud progress published yet.',
+  }
+}
+
+export function emptyPracticeProgress() {
+  return {
+    version: 1,
+    updatedAt: '',
+    owner: 'Parker',
+    completed: [] as string[],
+    note: 'No cloud practice progress published yet.',
   }
 }
 
@@ -36,12 +47,12 @@ function blobAuthOptions(): { token?: string } {
   throw err
 }
 
-export async function readProgress() {
+async function readBlobJson(pathname: string, fallback: () => object) {
   const auth = blobAuthOptions()
 
   let result
   try {
-    result = await get(PROGRESS_BLOB_PATHNAME, {
+    result = await get(pathname, {
       access: BLOB_ACCESS,
       useCache: false,
       ...auth,
@@ -49,34 +60,50 @@ export async function readProgress() {
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : String(err)
     if (/not found|404/i.test(message)) {
-      return emptyProgress()
+      return fallback()
     }
     throw err
   }
 
   if (!result || result.statusCode !== 200 || !result.stream) {
-    return emptyProgress()
+    return fallback()
   }
 
   const text = await new Response(result.stream).text()
-  if (!text) return emptyProgress()
+  if (!text) return fallback()
 
   try {
     const data = JSON.parse(text)
-    return data && typeof data === 'object' ? data : emptyProgress()
+    return data && typeof data === 'object' ? data : fallback()
   } catch {
-    return emptyProgress()
+    return fallback()
   }
 }
 
-export async function writeProgress(payload: object) {
+async function writeBlobJson(pathname: string, payload: object) {
   const auth = blobAuthOptions()
 
-  await put(PROGRESS_BLOB_PATHNAME, JSON.stringify(payload), {
+  await put(pathname, JSON.stringify(payload), {
     access: BLOB_ACCESS,
     addRandomSuffix: false,
     allowOverwrite: true,
     contentType: 'application/json; charset=utf-8',
     ...auth,
   })
+}
+
+export async function readProgress() {
+  return readBlobJson(PROGRESS_BLOB_PATHNAME, emptyProgress)
+}
+
+export async function writeProgress(payload: object) {
+  await writeBlobJson(PROGRESS_BLOB_PATHNAME, payload)
+}
+
+export async function readPracticeProgress() {
+  return readBlobJson(PRACTICE_PROGRESS_BLOB_PATHNAME, emptyPracticeProgress)
+}
+
+export async function writePracticeProgress(payload: object) {
+  await writeBlobJson(PRACTICE_PROGRESS_BLOB_PATHNAME, payload)
 }

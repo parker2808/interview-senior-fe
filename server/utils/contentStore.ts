@@ -10,7 +10,12 @@ import type {
   PlanMeta,
   PlanResource,
   InterviewBank,
+  PracticeIndex,
+  PracticeMeta,
+  PracticeStep,
 } from '@/modules/content/types'
+import { indexFromMetaAndSteps } from '@/modules/practice/utils/practice-read.util'
+import { isPracticeStepId } from '@/modules/practice/utils/practice-id.util'
 import {
   stripPlanDayDates,
   stripPlanIndexDates,
@@ -38,11 +43,15 @@ async function fromAssets<T>(rel: string): Promise<T | null> {
   }
 }
 
-export async function readContentJson<T>(rel: string): Promise<T> {
+export async function readContentJsonOptional<T>(rel: string): Promise<T | null> {
   const asset = await fromAssets<T>(rel)
   if (asset != null) return asset
-  const disk = fromDisk<T>(rel)
-  if (disk != null) return disk
+  return fromDisk<T>(rel)
+}
+
+export async function readContentJson<T>(rel: string): Promise<T> {
+  const value = await readContentJsonOptional<T>(rel)
+  if (value != null) return value
   throw createError({
     statusCode: 500,
     statusMessage: `Content file missing: ${rel}. Did scripts/pull-data.mjs run before the build?`,
@@ -157,6 +166,68 @@ function listResourceIds() {
   return readdirSync(dir)
     .filter((name) => name.endsWith('.json'))
     .map((name) => name.replace(/\.json$/, ''))
+}
+
+function practiceNotFound(detail: string) {
+  return createError({
+    statusCode: 404,
+    statusMessage: detail,
+  })
+}
+
+export async function hasPracticeContent(): Promise<boolean> {
+  const index = await readContentJsonOptional<PracticeIndex>('practice/index.json')
+  if (index?.steps) return true
+  const meta = await readContentJsonOptional<PracticeMeta>('practice/meta.json')
+  return Boolean(meta?.milestones)
+}
+
+export async function readPracticeIndex(): Promise<PracticeIndex> {
+  const index = await readContentJsonOptional<PracticeIndex>('practice/index.json')
+  if (index?.milestones && Array.isArray(index.steps)) return index
+
+  const meta = await readContentJsonOptional<PracticeMeta>('practice/meta.json')
+  if (!meta?.milestones) {
+    throw practiceNotFound('Practice content is not available')
+  }
+
+  const steps: PracticeStep[] = []
+  for (const milestone of meta.milestones) {
+    for (const id of milestone.steps || []) {
+      if (!isPracticeStepId(id)) continue
+      const step = await readContentJsonOptional<PracticeStep>(
+        `practice/steps/${id}.json`,
+      )
+      if (step) steps.push(step)
+    }
+  }
+  return indexFromMetaAndSteps(meta, steps)
+}
+
+export async function readPracticeStep(id: string): Promise<PracticeStep> {
+  if (!isPracticeStepId(id)) {
+    throw practiceNotFound(`Unknown practice step: ${id}`)
+  }
+  const step = await readContentJsonOptional<PracticeStep>(
+    `practice/steps/${id}.json`,
+  )
+  if (!step) {
+    throw practiceNotFound(`Unknown practice step: ${id}`)
+  }
+  return step
+}
+
+export async function readPracticeSteps(): Promise<PracticeStep[]> {
+  const index = await readPracticeIndex()
+  const out: PracticeStep[] = []
+  for (const item of index.steps) {
+    try {
+      out.push(await readPracticeStep(item.id))
+    } catch {
+      /* skip missing step files */
+    }
+  }
+  return out
 }
 
 export async function readInterviewBank(): Promise<InterviewBank> {

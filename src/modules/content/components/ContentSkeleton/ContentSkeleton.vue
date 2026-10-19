@@ -6,6 +6,8 @@ const props = defineProps<{
     | 'plan-home'
     | 'plan-day'
     | 'plan-resource'
+    | 'practice-home'
+    | 'practice-step'
     | 'qa'
 }>()
 
@@ -17,6 +19,9 @@ const label = computed(() => {
       return 'docs'
     case 'qa':
       return 'interview'
+    case 'practice-home':
+    case 'practice-step':
+      return 'practice'
     default:
       return 'plan'
   }
@@ -51,7 +56,7 @@ const label = computed(() => {
       </div>
     </template>
 
-    <template v-else-if="variant === 'plan-home'">
+    <template v-else-if="variant === 'plan-home' || variant === 'practice-home'">
       <div class="skeleton-bar h-4 w-40" />
       <div class="mt-4 skeleton-bar h-16 w-full" />
       <div class="mt-6 space-y-4">
@@ -70,7 +75,7 @@ const label = computed(() => {
       </div>
     </template>
 
-    <template v-else-if="variant === 'plan-day'">
+    <template v-else-if="variant === 'plan-day' || variant === 'practice-step'">
       <div class="rounded-2xl border border-line bg-surface-elevated p-4 sm:p-6">
         <div class="skeleton-bar h-4 w-24" />
         <div class="mt-3 skeleton-bar h-8 w-2/3" />

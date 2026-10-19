@@ -2,7 +2,7 @@
 
 > 🌍 **Language / Ngôn ngữ:** [🇬🇧 English](./README.md) | [🇻🇳 Tiếng Việt](./README-vi.md)
 
-Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 30-day plan, and a PIN-protected Q&A bank.
+Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 30-day plan, an optional practice path, and a PIN-protected Q&A bank.
 
 **Live:** [parker-interview-senior-fe.vercel.app](https://parker-interview-senior-fe.vercel.app)
 
@@ -10,6 +10,7 @@ Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 3
 
 - **Knowledge base** — 22 vi/en topics, sidebar, full-text search, nested heading TOC
 - **30-day plan** — daily checkpoints, algorithms, view vs edit progress
+- **Practice path** — milestone steps (`/practice`) from optional `practice/` in the data repo
 - **Interview Q&A** — model answers behind a 6-digit PIN
 - **i18n** — `vi` / `en`, no URL prefix; locale cookie
 - **Light / dark** theme
@@ -27,7 +28,7 @@ Nuxt 3 + Nitro · Vue 3 · TypeScript · Tailwind CSS · `@nuxtjs/i18n` (vi/en, 
 ```text
 pages/                         # thin routes → module views
 src/modules/
-  hub/  knowledge-base/  study-plan/  interview-qa/
+  hub/  knowledge-base/  study-plan/  practice/  interview-qa/
   content/                     # Localized blocks + BlockRenderer
   core/                        # chrome, theme, locale, session
 server/api/                    # Nitro endpoints
@@ -42,7 +43,7 @@ UI module conventions (naming, new-module scaffold): [STRUCTURE.md](./STRUCTURE.
 
 ### Content model
 
-KB / plan / Q&A live in private [`parker2808/interview-fe-data`](https://github.com/parker2808/interview-fe-data). Every user-facing string is `Localized`:
+KB / plan / Q&A / optional practice live in private [`parker2808/interview-fe-data`](https://github.com/parker2808/interview-fe-data). Every user-facing string is `Localized`:
 
 ```ts
 type Localized<T = string> = { en: T; vi: T }
@@ -62,6 +63,11 @@ Build (`predev` / `prebuild`) runs `scripts/pull-data.mjs` → `.data/content`, 
 | `GET` | `/api/plan/days` | public |
 | `GET` | `/api/plan/days/:n` | public |
 | `GET` | `/api/plan/resources/:id` | public |
+| `GET` | `/api/practice` | public (404 if `practice/` missing) |
+| `GET` | `/api/practice/steps` | public (all steps, for search) |
+| `GET` | `/api/practice/step/:id` | public (`^p\\d{2}$`, else 404) |
+| `GET` | `/api/practice/progress` | public read (Blob `practice-progress.json`) |
+| `PUT` / `POST` | `/api/practice/progress` | edit session |
 | `GET` | `/api/interview/questions` | interview session |
 | `POST` | `/api/auth/interview` | body `{ passcode }` → HttpOnly cookie |
 | `POST` | `/api/auth/edit` | body `{ passcode }` → HttpOnly cookie |

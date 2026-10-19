@@ -1,7 +1,7 @@
 {
   "private": true,
   "type": "module",
-  "description": "Senior FE interview prep — Nuxt hub, knowledge base, 30-day study plan",
+  "description": "Senior FE interview prep — Nuxt hub, knowledge base, 30-day study plan, practice path",
   "name": "interview-senior-fe",
   "version": "1.0.0",
   "scripts": {

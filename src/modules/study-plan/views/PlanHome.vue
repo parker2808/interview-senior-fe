@@ -14,6 +14,7 @@ import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 import { visiblePlanResources } from '@/modules/content/utils/plan-lab.util'
 import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
 import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
+import { usePracticeAvailable } from '@/modules/practice/composables/use-practice-index.composable'
 
 const router = useRouter()
 const { locale } = useI18n()
@@ -68,6 +69,7 @@ const {
 
 const weekFilter = ref(0)
 const navOpen = ref(false)
+const { data: practiceAvailable } = await usePracticeAvailable()
 
 const filteredDays = computed(() => {
   const days = plan.value?.days ?? []
@@ -106,6 +108,15 @@ function openResource(id: string) {
       :lock-visible="navOpen"
     >
       <template #actions>
+        <NuxtLink
+          v-if="practiceAvailable"
+          to="/practice"
+          class="inline-flex h-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface-elevated px-2.5 text-xs font-semibold text-ink transition hover:border-accent hover:text-accent-ink sm:px-3 sm:text-sm"
+          :aria-label="$t('hub.practiceTitle')"
+          :title="$t('hub.practiceTitle')"
+        >
+          {{ $t('hub.practiceCta') }}
+        </NuxtLink>
         <a
           href="/docs"
           target="_blank"

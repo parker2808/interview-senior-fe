@@ -4,7 +4,7 @@
 
 | Path | Owns |
 |---|---|
-| `parker2808/interview-fe-data` | Bilingual JSON (KB, 30-day plan, Q&A) pulled at build |
+| `parker2808/interview-fe-data` | Bilingual JSON (KB, 30-day plan, Q&A, optional practice path) pulled at build |
 | [`src/modules/`](../src/modules/) | **UI feature modules** (Nuxt) — see [STRUCTURE.md](../STRUCTURE.md) |
 
 Lab starter code (not site copy) still lives in [`study-plan-30-days/lab-template/`](./study-plan-30-days/lab-template/).
@@ -16,6 +16,7 @@ Feature UI follows [STRUCTURE.md](../STRUCTURE.md):
 - `src/modules/hub/` — hub landing
 - `src/modules/knowledge-base/` — docs reader
 - `src/modules/study-plan/` — 30-day plan UI
+- `src/modules/practice/` — milestone practice path (hidden when `practice/` is missing)
 - `src/modules/interview-qa/` — PIN-gated Q&A
 - `src/modules/content/` — block types + renderer
 - `src/modules/core/` — shared components

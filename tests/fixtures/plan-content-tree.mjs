@@ -8,6 +8,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { writePracticeFixture } from './practice-content-tree.mjs'
 
 const L = (en, vi = en) => ({ en, vi })
 const pad = (n) => String(n).padStart(2, '0')
@@ -61,6 +62,31 @@ const doc = {
   ],
 }
 
+const systemDesignDoc = {
+  kind: 'knowledge-doc',
+  slug: 'system-design',
+  title: L('System Design'),
+  summary: L('How to talk through a system design interview.', 'Cách nói system design khi phỏng vấn.'),
+  category: 'pro',
+  order: 2,
+  tags: ['design'],
+  sections: [
+    {
+      id: L('overview'),
+      title: L('Overview', 'Tổng quan'),
+      blocks: [
+        {
+          type: 'paragraph',
+          text: L(
+            'Start from constraints, then APIs, then data.',
+            'Bắt đầu từ constraint, rồi API, rồi data.',
+          ),
+        },
+      ],
+    },
+  ],
+}
+
 const weeks = [1, 2, 3, 4, 5].map((week) => ({
   week,
   title: L(`Week ${week}`, `Tuần ${week}`),
@@ -75,17 +101,26 @@ const resources = [
   { id: 'algo', title: L('Algorithms track', 'Lộ trình thuật toán'), aliases: [] },
 ]
 
-export function writeContentFixture(dir) {
+export function writeContentFixture(dir, options = {}) {
   const write = (rel, value) => {
     const file = path.join(dir, rel)
     mkdirSync(path.dirname(file), { recursive: true })
     writeFileSync(file, `${JSON.stringify(value, null, 2)}\n`)
   }
-  const { kind: _kind, sections: _sections, ...summary } = doc
+  const toSummary = (item) => {
+    const { kind: _kind, sections: _sections, ...summary } = item
+    return { ...summary, headings: [] }
+  }
+  const jsSummary = toSummary(doc)
+  const sdSummary = toSummary(systemDesignDoc)
   write('knowledge-base/javascript.json', doc)
+  write('knowledge-base/system-design.json', systemDesignDoc)
   write('knowledge-base/index.json', {
-    groups: [{ id: 'core', order: 1, topics: [{ ...summary, headings: [] }] }],
-    docs: [{ ...summary, headings: [] }],
+    groups: [
+      { id: 'core', order: 1, topics: [jsSummary] },
+      { id: 'pro', order: 6, topics: [sdSummary] },
+    ],
+    docs: [jsSummary, sdSummary],
     defaultSlug: 'javascript',
   })
   write('qna/categories.json', {
@@ -136,6 +171,7 @@ export function writeContentFixture(dir) {
       },
     ],
   })
+  if (options.practice !== false) writePracticeFixture(dir)
   return dir
 }
 
