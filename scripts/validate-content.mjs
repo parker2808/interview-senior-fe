@@ -185,6 +185,18 @@ function validatePracticeDesign() {
     fail(indexFile, '`screens` must be an array')
     return
   }
+  if (index.figma != null) {
+    const hint = 'practice/design/index.json.figma'
+    if (typeof index.figma !== 'object' || Array.isArray(index.figma)) {
+      fail(hint, '`figma` must be an object when present')
+    } else {
+      requireShape(hint, index.figma, ['url', 'label', 'note'])
+      const url = String(index.figma.url || '').trim()
+      if (!/^https?:\/\//i.test(url)) {
+        fail(hint, '`url` must be an http(s) URL')
+      }
+    }
+  }
   const seen = new Set()
   for (const [i, screen] of index.screens.entries()) {
     const hint = `practice/design/index.json.screens[${i}]`

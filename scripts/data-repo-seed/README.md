@@ -21,7 +21,7 @@ practice/meta.json             # milestones m0–m7 + step ids p01–p33
 practice/index.json            # generated catalog (title, intro, milestones, step summaries)
 practice/steps/pXX.json        # one practice step
 practice/design/               # optional — screens + index; hide Design UI when missing
-practice/design/index.json     # gallery catalog (Localized titles, specRefs, webp files)
+practice/design/index.json     # gallery catalog (Localized titles, specRefs, optional figma { url, label, note })
 practice/design/screens/*.webp
 plans/portfolio-design-system.md  # optional numbered design spec (`§X.Y` headings)
 schema/                        # JSON Schema for Localized + blocks

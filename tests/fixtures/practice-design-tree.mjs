@@ -179,8 +179,17 @@ export function fixtureDesignScreens() {
   ]
 }
 
-export function fixtureDesignIndex(screens = fixtureDesignScreens()) {
-  return {
+export const FIXTURE_FIGMA = {
+  url: 'https://www.figma.com/design/fixture/portfolio-design-system',
+  label: L('Open in Figma', 'Mở trong Figma'),
+  note: L(
+    'Figma is the source of truth for these screens.',
+    'Figma là nguồn sự thật cho các màn hình này.',
+  ),
+}
+
+export function fixtureDesignIndex(screens = fixtureDesignScreens(), options = {}) {
+  const index = {
     version: 1,
     specPath: FIXTURE_SPEC_PATH,
     title: L('Portfolio design system', 'Hệ thống thiết kế portfolio'),
@@ -192,6 +201,8 @@ export function fixtureDesignIndex(screens = fixtureDesignScreens()) {
       ({ color: _color, ...screen }) => screen,
     ),
   }
+  if (options.figma !== false) index.figma = options.figma || FIXTURE_FIGMA
+  return index
 }
 
 function writeWebp(file, { width, height, color, useFfmpeg }) {
@@ -225,7 +236,7 @@ export function writePracticeDesignFixture(dir, options = {}) {
     writeFileSync(file, typeof value === 'string' ? value : `${JSON.stringify(value, null, 2)}\n`)
   }
   write(FIXTURE_SPEC_PATH, fixtureDesignSpecMarkdown())
-  write('practice/design/index.json', fixtureDesignIndex(screens))
+  write('practice/design/index.json', fixtureDesignIndex(screens, options))
   for (const screen of screens) {
     writeWebp(path.join(dir, screen.file), {
       width: screen.width,

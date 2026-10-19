@@ -104,12 +104,19 @@ export type PracticeDesignScreen = {
   height: number
 }
 
+export type PracticeDesignFigma = {
+  url: string
+  label: Localized
+  note: Localized
+}
+
 export type PracticeDesignIndex = {
   version: 1
   specPath: string
   title: Localized
   intro: Localized
   screens: PracticeDesignScreen[]
+  figma?: PracticeDesignFigma
 }
 
 export type PracticeDesignPayload = {

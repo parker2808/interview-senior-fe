@@ -50,6 +50,7 @@ export type {
 } from '@/modules/content/types/qna.type'
 export type {
   PracticeConcept,
+  PracticeDesignFigma,
   PracticeDesignGroup,
   PracticeDesignIndex,
   PracticeDesignPayload,

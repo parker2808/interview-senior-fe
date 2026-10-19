@@ -11,6 +11,7 @@ import {
   usePracticeDesignAvailable,
 } from '@/modules/practice/composables/use-practice-index.composable'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
+import { practiceDesignFigma } from '@/modules/practice/utils/design-figma.util'
 import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
 import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
 
@@ -68,6 +69,8 @@ function openLightbox(index: number) {
 function closeLightbox() {
   lightboxIndex.value = null
 }
+
+const figma = computed(() => practiceDesignFigma(design.value?.index.figma))
 
 const tabClass = (on: boolean) =>
   on
@@ -143,6 +146,32 @@ const tabClass = (on: boolean) =>
         <p class="mt-2 max-w-3xl text-sm leading-6 text-ink-muted">
           {{ pickLocale(design.index.intro, lang) }}
         </p>
+        <div v-if="figma" class="mt-4 max-w-3xl">
+          <a
+            :href="figma.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-semibold text-ink transition hover:border-accent hover:text-accent-ink"
+          >
+            <svg
+              class="h-4 w-4 shrink-0"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path d="M8 24c2.21 0 4-1.79 4-4v-4H8c-2.21 0-4 1.79-4 4s1.79 4 4 4Z" />
+              <path d="M4 12c0-2.21 1.79-4 4-4h4v8H8c-2.21 0-4-1.79-4-4Z" />
+              <path d="M4 4c0-2.21 1.79-4 4-4h4v8H8C5.79 8 4 6.21 4 4Z" />
+              <path d="M12 0h4c2.21 0 4 1.79 4 4s-1.79 4-4 4h-4V0Z" />
+              <path d="M20 12c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4Z" />
+            </svg>
+            {{ pickLocale(figma.label, lang) }}
+            <span class="text-ink-faint" aria-hidden="true">↗</span>
+          </a>
+          <p class="mt-2 text-xs leading-5 text-ink-muted">
+            {{ pickLocale(figma.note, lang) }}
+          </p>
+        </div>
         <div class="mt-4">
           <PracticeSubnav active="design" :design-available="designAvailable !== false" />
         </div>

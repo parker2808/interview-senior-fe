@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { spawnSync } from 'node:child_process'
@@ -6,9 +6,11 @@ import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it } from 'vitest'
 import { writeContentFixture } from './fixtures/plan-content-tree.mjs'
 import {
+  FIXTURE_FIGMA,
   fixtureDesignSpecMarkdown,
   writePracticeDesignFixture,
 } from './fixtures/practice-design-tree.mjs'
+import { practiceDesignFigma } from '@/modules/practice/utils/design-figma.util'
 import {
   designIndexExists,
   listDesignScreenFiles,
@@ -105,6 +107,7 @@ describe('practice design readers', () => {
     expect(loaded?.index.version).toBe(1)
     expect(loaded?.index.screens).toHaveLength(5)
     expect(loaded?.index.screens[0]?.specRefs).toEqual(['§5.1'])
+    expect(practiceDesignFigma(loaded?.index.figma)).toEqual(FIXTURE_FIGMA)
     expect(loaded?.specMarkdown).toContain('## 1. Product overview')
     expect(loaded?.specMarkdown).toContain('### 1.5 Navigation')
     expect(loaded?.headings.some((item) => item.text.startsWith('5.1'))).toBe(true)
@@ -130,5 +133,35 @@ describe('practice design readers', () => {
     const dir = writeContentFixture(tempDir('fe-design-validate-'), { ffmpeg: false })
     const result = validate(dir)
     expect(result.status, result.stderr || result.stdout).toBe(0)
+  })
+
+  it('keeps figma optional: absent is valid and hides the CTA', () => {
+    const dir = writeContentFixture(tempDir('fe-design-no-figma-'), {
+      ffmpeg: false,
+      figma: false,
+    })
+    const loaded = loadPracticeDesignFromDir(dir)
+    expect(loaded?.index.figma).toBeUndefined()
+    expect(practiceDesignFigma(loaded?.index.figma)).toBeNull()
+    const result = validate(dir)
+    expect(result.status, result.stderr || result.stdout).toBe(0)
+  })
+
+  it('rejects a present figma object with a non-http url', () => {
+    const dir = writePracticeDesignFixture(tempDir('fe-design-bad-figma-'), {
+      ffmpeg: false,
+    })
+    const file = path.join(dir, 'practice/design/index.json')
+    const index = JSON.parse(readFileSync(file, 'utf8')) as Record<string, unknown>
+    index.figma = {
+      url: 'javascript:alert(1)',
+      label: { en: 'Open in Figma', vi: 'Mở trong Figma' },
+      note: { en: 'Note', vi: 'Ghi chú' },
+    }
+    writeFileSync(file, `${JSON.stringify(index, null, 2)}\n`)
+    expect(practiceDesignFigma(index.figma as never)).toBeNull()
+    const result = validate(dir)
+    expect(result.status).not.toBe(0)
+    expect(result.stderr).toMatch(/figma/)
   })
 })
