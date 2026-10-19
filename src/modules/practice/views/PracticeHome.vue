@@ -6,8 +6,10 @@ import MilestoneList from '@/modules/practice/components/MilestoneList/Milestone
 import ProgressTools from '@/modules/study-plan/components/ProgressTools/ProgressTools.vue'
 import EditGateModal from '@/modules/study-plan/components/EditGateModal/EditGateModal.vue'
 import { usePracticeProgress } from '@/modules/practice/composables/use-practice-progress.composable'
+import PracticeSubnav from '@/modules/practice/components/PracticeSubnav/PracticeSubnav.vue'
 import {
   practiceStepHref,
+  usePracticeDesignAvailable,
   usePracticeIndex,
   usePracticeSteps,
 } from '@/modules/practice/composables/use-practice-index.composable'
@@ -30,6 +32,7 @@ const {
 } = await usePracticeIndex()
 
 const { data: allSteps, pending: stepsPending } = await usePracticeSteps()
+const { data: designAvailable } = await usePracticeDesignAvailable()
 
 const retrying = ref(false)
 async function retry() {
@@ -114,6 +117,29 @@ function continueStep() {
       :home-label="$t('practice.backHub')"
     >
       <template #actions>
+        <NuxtLink
+          v-if="designAvailable"
+          to="/practice/design"
+          class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface-elevated text-ink transition hover:border-accent hover:text-accent-ink"
+          :aria-label="$t('practice.openDesign')"
+          :title="$t('practice.openDesign')"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+        </NuxtLink>
         <a
           href="/docs"
           target="_blank"
@@ -172,6 +198,9 @@ function continueStep() {
           <p class="mt-2 max-w-3xl text-sm leading-6 text-ink-muted">
             {{ pickLocale(index.intro, lang) }}
           </p>
+          <div class="mt-3">
+            <PracticeSubnav active="steps" :design-available="Boolean(designAvailable)" />
+          </div>
           <div class="mt-3 flex flex-wrap items-center gap-2">
             <span
               class="rounded-full px-2.5 py-1 text-xs font-semibold"

@@ -11,6 +11,7 @@ Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 3
 - **Knowledge base** — 22 vi/en topics, sidebar, full-text search, nested heading TOC
 - **30-day plan** — daily checkpoints, algorithms, view vs edit progress
 - **Practice path** — milestone steps (`/practice`) from optional `practice/` in the data repo
+- **Practice Design** — optional screen gallery + numbered spec (`/practice/design`); hidden when `practice/design/` is missing
 - **Interview Q&A** — model answers behind a 6-digit PIN
 - **i18n** — `vi` / `en`, no URL prefix; locale cookie
 - **Light / dark** theme
@@ -67,6 +68,10 @@ Build (`predev` / `prebuild`) runs `scripts/pull-data.mjs` → `.data/content`, 
 | `GET` | `/api/practice/steps` | public (all steps, for search) |
 | `GET` | `/api/practice/step/:id` | public (`^p\\d{2}$`, else 404) |
 | `GET` | `/api/practice/progress` | public read (Blob `practice-progress.json`) |
+| `GET` | `/api/practice/design` | public (404 if `practice/design/` missing) |
+| `GET` | `/api/practice/design/available` | public `{ available }` |
+| `GET` | `/api/practice/design/screen/:name` | public WebP fallback |
+| static | `/assets/practice-design/screens/:file` | copied at pull/build |
 | `PUT` / `POST` | `/api/practice/progress` | edit session |
 | `GET` | `/api/interview/questions` | interview session |
 | `POST` | `/api/auth/interview` | body `{ passcode }` → HttpOnly cookie |

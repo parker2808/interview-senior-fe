@@ -1,12 +1,24 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { cpSync, existsSync, mkdirSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs'
 
 const rootDir = fileURLToPath(new URL('.', import.meta.url))
 const srcRoot = path.resolve(rootDir, 'src')
 const contentDir = path.resolve(rootDir, '.data/content')
 mkdirSync(contentDir, { recursive: true })
+
+function copyDesignScreensToPublic() {
+  const src = path.join(contentDir, 'practice/design/screens')
+  const dest = path.join(rootDir, 'public/assets/practice-design/screens')
+  rmSync(path.join(rootDir, 'public/assets/practice-design'), { recursive: true, force: true })
+  rmSync(path.join(rootDir, 'public/practice/design'), { recursive: true, force: true })
+  if (!existsSync(src)) return
+  mkdirSync(dest, { recursive: true })
+  cpSync(src, dest, { recursive: true, dereference: true })
+}
+
+copyDesignScreensToPublic()
 
 function copyContentIntoNitroOutput(nitro: { options: { output: { serverDir: string } } }) {
   if (!existsSync(path.join(contentDir, 'knowledge-base'))) return

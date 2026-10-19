@@ -166,7 +166,7 @@ export function fixturePracticeStepP06() {
     questionLinks: [
       { id: 'self-intro', label: L('Self intro', 'Giới thiệu') },
     ],
-    specRefs: ['practice/SPEC.md#p06'],
+    specRefs: ['§5.1'],
     tasks: [
       {
         title: L('Write the Prisma schema', 'Viết Prisma schema'),
@@ -267,7 +267,7 @@ export function fixturePracticeStep(id) {
     kbLinks: id === 'p01' ? [{ slug: 'javascript', label: L('JavaScript runtime') }] : [],
     questionLinks:
       id === 'p01' ? [{ id: 'self-intro', label: L('Self intro', 'Giới thiệu') }] : [],
-    specRefs: [],
+    specRefs: id === 'p18' ? ['§5.2'] : [],
     tasks: genericTasks(id),
     doneWhen: [
       L(`You can demo ${id} out loud`, `Demo được ${id} thành tiếng`),

@@ -1,19 +1,24 @@
 <script setup lang="ts">
-import type { PracticeStep } from '@/modules/content/types'
+import type { PracticeStep, TocItem } from '@/modules/content/types'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 import {
   docsHref,
   interviewHref,
 } from '@/modules/study-plan/utils/open-app-link.util'
 import { practiceStepHref } from '@/modules/practice/composables/use-practice-index.composable'
+import SpecRefLinks from '@/modules/practice/components/SpecRefLinks/SpecRefLinks.vue'
 
-defineProps<{
-  step: PracticeStep
-  done: boolean
-  readOnly: boolean
-  prevId: string | null
-  nextId: string | null
-}>()
+withDefaults(
+  defineProps<{
+    step: PracticeStep
+    done: boolean
+    readOnly: boolean
+    prevId: string | null
+    nextId: string | null
+    headings?: TocItem[]
+  }>(),
+  { headings: () => [] },
+)
 
 defineEmits<{
   toggle: []
@@ -192,6 +197,18 @@ const linkClass =
             {{ pickLocale(link.label, lang) }}
             <span class="ml-1 text-ink-faint" aria-hidden="true">↗</span>
           </a>
+        </div>
+      </div>
+
+      <div v-if="step.specRefs.length">
+        <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
+          {{ $t('practice.specRefs') }}
+        </p>
+        <p class="mt-1 text-[11px] leading-4 text-ink-faint">
+          {{ $t('practice.specRefsHint') }}
+        </p>
+        <div class="mt-3">
+          <SpecRefLinks :refs="step.specRefs" :headings="headings" />
         </div>
       </div>
 

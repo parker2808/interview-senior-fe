@@ -169,19 +169,109 @@ if (questions) {
 const meta = readJson(path.join(root, 'plan/meta.json'))
 if (meta) walkLocalized(meta, 'plan/meta.json')
 
+function validatePracticeDesign() {
+  const indexFile = path.join(root, 'practice/design/index.json')
+  if (!existsSync(indexFile)) return
+
+  const index = readJson(indexFile)
+  if (!index) return
+  requireShape(indexFile, index, ['version', 'specPath', 'title', 'intro', 'screens'])
+  walkLocalized(index, 'practice/design/index.json')
+  if (index.version !== 1) fail(indexFile, '`version` must be 1')
+  if (typeof index.specPath !== 'string' || !index.specPath.trim()) {
+    fail(indexFile, '`specPath` must be a non-empty string')
+  }
+  if (!Array.isArray(index.screens)) {
+    fail(indexFile, '`screens` must be an array')
+    return
+  }
+  if (index.figma != null) {
+    const hint = 'practice/design/index.json.figma'
+    if (typeof index.figma !== 'object' || Array.isArray(index.figma)) {
+      fail(hint, '`figma` must be an object when present')
+    } else {
+      requireShape(hint, index.figma, ['url', 'label', 'note'])
+      const url = String(index.figma.url || '').trim()
+      if (!/^https?:\/\//i.test(url)) {
+        fail(hint, '`url` must be an http(s) URL')
+      }
+    }
+  }
+  const seen = new Set()
+  for (const [i, screen] of index.screens.entries()) {
+    const hint = `practice/design/index.json.screens[${i}]`
+    requireShape(hint, screen, [
+      'id',
+      'file',
+      'title',
+      'caption',
+      'group',
+      'theme',
+      'viewport',
+      'specRefs',
+      'width',
+      'height',
+    ])
+    if (screen?.id) {
+      if (seen.has(screen.id)) fail(hint, `duplicate id \`${screen.id}\``)
+      seen.add(screen.id)
+    }
+    if (screen?.group !== 'public' && screen?.group !== 'admin') {
+      fail(hint, '`group` must be public|admin')
+    }
+    if (screen?.theme !== 'light' && screen?.theme !== 'dark') {
+      fail(hint, '`theme` must be light|dark')
+    }
+    if (screen?.viewport !== 'desktop' && screen?.viewport !== 'mobile') {
+      fail(hint, '`viewport` must be desktop|mobile')
+    }
+    if (!Array.isArray(screen?.specRefs)) {
+      fail(hint, '`specRefs` must be an array of strings')
+    } else {
+      for (const [ri, ref] of screen.specRefs.entries()) {
+        if (typeof ref !== 'string' || !ref.trim()) {
+          fail(hint, `specRefs[${ri}] must be a non-empty string`)
+        }
+      }
+    }
+    const width = Number(screen?.width)
+    const height = Number(screen?.height)
+    if (!Number.isInteger(width) || width < 1) fail(hint, '`width` must be a positive integer')
+    if (!Number.isInteger(height) || height < 1) fail(hint, '`height` must be a positive integer')
+    const file = String(screen?.file || '')
+    if (!file.startsWith('practice/design/screens/') || !file.toLowerCase().endsWith('.webp')) {
+      fail(hint, '`file` must be a .webp under practice/design/screens/')
+    } else if (!existsSync(path.join(root, file))) {
+      fail(hint, `missing screen file ${file}`)
+    }
+  }
+}
+
 function validatePracticeTree() {
   const practiceDir = path.join(root, 'practice')
-  if (!existsSync(practiceDir)) return
+  if (!existsSync(practiceDir)) {
+    validatePracticeDesign()
+    return
+  }
 
-  const practiceMeta = readJson(path.join(practiceDir, 'meta.json'))
+  const practiceMeta = existsSync(path.join(practiceDir, 'meta.json'))
+    ? readJson(path.join(practiceDir, 'meta.json'))
+    : null
   const practiceIndex = existsSync(path.join(practiceDir, 'index.json'))
     ? readJson(path.join(practiceDir, 'index.json'))
     : null
   const stepDir = path.join(practiceDir, 'steps')
   const stepFiles = listJsonFiles(stepDir)
+  const hasStepsTree = Boolean(practiceMeta || practiceIndex || stepFiles.length)
+
+  if (!hasStepsTree) {
+    validatePracticeDesign()
+    return
+  }
 
   if (!practiceMeta) {
     fail(path.join(practiceDir, 'meta.json'), 'missing practice/meta.json')
+    validatePracticeDesign()
     return
   }
   requireShape(path.join(practiceDir, 'meta.json'), practiceMeta, [
@@ -299,6 +389,8 @@ function validatePracticeTree() {
   for (const id of expectedIds) {
     if (!seen.has(id)) fail(stepDir, `missing step file ${id}.json`)
   }
+
+  validatePracticeDesign()
 }
 
 validatePracticeTree()

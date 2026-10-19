@@ -11,6 +11,7 @@ App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ,
 - **Knowledge base** — 22 chủ đề vi/en, sidebar, tìm full-text, TOC lồng heading
 - **Kế hoạch 30 ngày** — checkpoint theo ngày, thuật toán, xem / sửa tiến độ
 - **Lộ trình thực hành** — các bước theo milestone (`/practice`) từ thư mục `practice/` tuỳ chọn trong data repo
+- **Practice Design** — gallery màn hình + spec đánh số (`/practice/design`); ẩn khi thiếu `practice/design/`
 - **Interview Q&A** — câu trả lời mẫu sau mã 6 số
 - **i18n** — `vi` / `en`, không prefix URL; cookie locale
 - **Theme** sáng / tối
