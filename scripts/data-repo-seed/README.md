@@ -16,6 +16,10 @@ plan/days/day-XX.json          # day plan (+ optional `lab` stub; empty `section
 plan/resources/<id>.json       # lab-repo, project-context, algo-day-XX, …
 qna/categories.json
 qna/questions.json             # existing Q&A shape (PIN-gated in the app)
+practice/                      # optional — older snapshots omit this folder
+practice/meta.json             # milestones m0–m7 + step ids p01–p33
+practice/index.json            # generated catalog (title, intro, milestones, step summaries)
+practice/steps/pXX.json        # one practice step
 schema/                        # JSON Schema for Localized + blocks
 scripts/validate.mjs           # fails on missing en/vi
 ```

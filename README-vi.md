@@ -2,7 +2,7 @@
 
 > 🌍 **Language / Ngôn ngữ:** [🇬🇧 English](./README.md) | [🇻🇳 Tiếng Việt](./README-vi.md)
 
-App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ, kế hoạch 30 ngày, và ngân hàng Q&A khoá PIN.
+App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ, kế hoạch 30 ngày, lộ trình thực hành tuỳ chọn, và ngân hàng Q&A khoá PIN.
 
 **Live:** [parker-interview-senior-fe.vercel.app](https://parker-interview-senior-fe.vercel.app)
 
@@ -10,6 +10,7 @@ App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ,
 
 - **Knowledge base** — 22 chủ đề vi/en, sidebar, tìm full-text, TOC lồng heading
 - **Kế hoạch 30 ngày** — checkpoint theo ngày, thuật toán, xem / sửa tiến độ
+- **Lộ trình thực hành** — các bước theo milestone (`/practice`) từ thư mục `practice/` tuỳ chọn trong data repo
 - **Interview Q&A** — câu trả lời mẫu sau mã 6 số
 - **i18n** — `vi` / `en`, không prefix URL; cookie locale
 - **Theme** sáng / tối
@@ -27,7 +28,7 @@ Nuxt 3 + Nitro · Vue 3 · TypeScript · Tailwind CSS · `@nuxtjs/i18n` (vi/en, 
 ```text
 pages/                         # route mỏng → view của module
 src/modules/
-  hub/  knowledge-base/  study-plan/  interview-qa/
+  hub/  knowledge-base/  study-plan/  practice/  interview-qa/
   content/                     # block Localized + BlockRenderer
   core/                        # chrome, theme, locale, session
 server/api/                    # endpoint Nitro
@@ -42,7 +43,7 @@ Quy ước UI module (đặt tên, scaffold module mới): [STRUCTURE.md](./STRU
 
 ### Mô hình nội dung
 
-KB / plan / Q&A nằm ở repo private [`parker2808/interview-fe-data`](https://github.com/parker2808/interview-fe-data). Mọi chuỗi user-facing là `Localized`:
+KB / plan / Q&A / practice tuỳ chọn nằm ở repo private [`parker2808/interview-fe-data`](https://github.com/parker2808/interview-fe-data). Mọi chuỗi user-facing là `Localized`:
 
 ```ts
 type Localized<T = string> = { en: T; vi: T }
@@ -62,6 +63,11 @@ Build (`predev` / `prebuild`) chạy `scripts/pull-data.mjs` → `.data/content`
 | `GET` | `/api/plan/days` | public |
 | `GET` | `/api/plan/days/:n` | public |
 | `GET` | `/api/plan/resources/:id` | public |
+| `GET` | `/api/practice` | public (404 nếu thiếu `practice/`) |
+| `GET` | `/api/practice/steps` | public (mọi bước, phục vụ search) |
+| `GET` | `/api/practice/step/:id` | public (`^p\\d{2}$`, không khớp thì 404) |
+| `GET` | `/api/practice/progress` | đọc public (Blob `practice-progress.json`) |
+| `PUT` / `POST` | `/api/practice/progress` | phiên edit |
 | `GET` | `/api/interview/questions` | phiên interview |
 | `POST` | `/api/auth/interview` | body `{ passcode }` → cookie HttpOnly |
 | `POST` | `/api/auth/edit` | body `{ passcode }` → cookie HttpOnly |

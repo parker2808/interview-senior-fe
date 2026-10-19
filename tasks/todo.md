@@ -1,18 +1,21 @@
-# Hide retired Lab content
+# Practice module
 
 ## Plan
-- [x] Hide Lab tab when `lab` is missing or `lab.sections` is empty; keep Plan as the only tab
-- [x] Hide Lab setup CTA and Lab quick-resource links on the plan overview
-- [x] Make `lab` optional in types; empty `lab.sections` valid in `scripts/validate-content.mjs`
-- [x] Keep progress (day number) and Plan-tab `studyLinks` / `algorithm`
-- [x] Fixtures + tests for empty-sections and no-`lab` days
-- [x] Lint, typecheck, tests, fixture-backed build
-- [ ] Draft PR
+- [x] Types, readers, optional `practice/` in pull + validators
+- [x] Fixtures matching data-repo shape (p01–p33, exact p06)
+- [x] API `/api/practice`, `/api/practice/step/:id`, `/api/practice/steps`, `/api/practice/progress`
+- [x] Search util (AND, fold diacritics, title > tags/concepts > body, both langs)
+- [x] Progress: `practice-progress.json` Blob + localStorage, mirror plan tools
+- [x] Pages `/practice` and `/practice/step/[id]` + components, skeletons, empty/error
+- [x] Hub card + nav link, hidden when `practice/` missing
+- [x] i18n en/vi
+- [x] Tests for search and readers
+- [x] typecheck, tests, fixture build, SSR routes
+- [x] Draft PR (never merge)
 
 ## Review
-- Day page: Lab tab omitted when `lab` is missing or `lab.sections` is empty. Plan tab stays as the only tab. Plan-tab `studyLinks` and `algorithm` still render. No Lab empty-state.
-- Plan overview: Day 0 lab setup card and Lab quick-resource buttons hidden when `hasLab` is false (no day has lab sections).
-- Validator/types: `lab` optional; empty `lab.sections` allowed; `algorithm` still required.
-- Progress: still keyed by day number (unchanged codec).
-- Tests: `tests/plan-lab.test.ts` plus fixture tree (day 1 empty sections, day 2 no `lab`). Optional real-content suite no longer crashes when `.data/content` is missing.
-- Verify: no `lint` script. `nuxi typecheck` — our files clean; one pre-existing `scrollTop` error in `use-hide-on-scroll-bar.composable.ts`. `npm test` 23 passed / 3 skipped. Fixture `data:validate` OK. `CONTENT_LOCAL_PATH=.data/fixture-content npm run build` OK. Live SSR: `/plan`, `/plan/day/1`, `/plan/day/2` 200; only Plan tab; Lab nav/setup gone; algorithm + JS study link present.
+- New standalone `src/modules/practice/` mirrors study-plan: list grouped by milestone with progress bars, Continue to next unfinished step, search box; step page with why, estimate, prereq links, concepts, tasks+code, done-when, pitfalls, KB/Q&A links, suggested commit, prev/next, mark done.
+- Readers `readPracticeIndex()` / `readPracticeStep(id)` (`^p\d{2}$` else 404). `practice/` is optional in pull + validators; hub card and Plan top-bar nav link hide when the folder is missing.
+- Progress is a separate Blob key / public file `practice-progress.json` with localStorage fallback; edit gate reused from the plan.
+- Search reuses `search-text.util` (AND, fold diacritics, both locales; title > tags/concept terms > body).
+- Verify: `nuxi typecheck` — our files clean; pre-existing `scrollTop` error in `use-hide-on-scroll-bar.composable.ts`. `npm test` 35 passed / 3 skipped. Fixture `data:validate` OK. `CONTENT_LOCAL_PATH=.data/fixture-content npm run build` OK. Live SSR: `/practice` and `/practice/step/p06` 200 with content (not empty/loading); `/api/practice/step/p6` and `/foo` 404; hub card + plan nav present. Browser: search prisma/hieu nang, p06 detail, prereq nav, EN locale.

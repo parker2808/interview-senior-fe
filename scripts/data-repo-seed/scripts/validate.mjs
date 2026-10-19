@@ -93,6 +93,27 @@ if (!existsSync(path.join(resolvedRoot, 'qna/questions.json'))) {
   fail('qna/questions.json', 'missing Q&A bank')
 }
 
+const practiceDir = path.join(resolvedRoot, 'practice')
+if (existsSync(practiceDir)) {
+  const practiceMeta = path.join(practiceDir, 'meta.json')
+  if (!existsSync(practiceMeta)) {
+    fail('practice/meta.json', 'missing (practice/ is present)')
+  }
+  const stepDir = path.join(practiceDir, 'steps')
+  const steps = listJsonFiles(stepDir)
+  if (!steps.length) fail('practice/steps', 'no practice step files')
+  for (const file of steps) {
+    const step = readJson(file)
+    if (!step) continue
+    if (step.kind != null && step.kind !== 'practice-step') {
+      fail(path.relative(resolvedRoot, file), '`kind` must be `practice-step`')
+    }
+    if (step.id != null && !/^p\d{2}$/.test(String(step.id))) {
+      fail(path.relative(resolvedRoot, file), '`id` must match ^p\\d{2}$')
+    }
+  }
+}
+
 if (errors.length) {
   console.error(`Content validation failed (${errors.length} issue(s)):`)
   for (const error of errors.slice(0, 80)) console.error(` - ${error}`)

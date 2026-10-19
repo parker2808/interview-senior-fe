@@ -48,3 +48,16 @@ export type {
   InterviewCategoryId,
   InterviewQuestion,
 } from '@/modules/content/types/qna.type'
+export type {
+  PracticeConcept,
+  PracticeIndex,
+  PracticeKbLink,
+  PracticeMeta,
+  PracticeMilestone,
+  PracticeMilestoneId,
+  PracticeQuestionLink,
+  PracticeStep,
+  PracticeStepSummary,
+  PracticeTask,
+  PracticeTaskCode,
+} from '@/modules/content/types/practice.type'

@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "updatedAt": "",
+  "owner": "Parker",
+  "completed": [],
+  "note": "Commit updates here and redeploy Vercel so others can load public practice progress from /practice-progress.json"
+}

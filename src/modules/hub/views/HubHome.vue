@@ -2,6 +2,15 @@
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import { HUB_MODULES } from '@/modules/hub/constants/hub-modules.constant'
+import { usePracticeAvailable } from '@/modules/practice/composables/use-practice-index.composable'
+
+const { data: practiceAvailable } = await usePracticeAvailable()
+
+const modules = computed(() =>
+  HUB_MODULES.filter(
+    (mod) => mod.requires !== 'practice' || practiceAvailable.value,
+  ),
+)
 </script>
 
 <template>
@@ -29,7 +38,7 @@ import { HUB_MODULES } from '@/modules/hub/constants/hub-modules.constant'
       aria-label="Modules"
     >
       <NuxtLink
-        v-for="(mod, index) in HUB_MODULES"
+        v-for="(mod, index) in modules"
         :key="mod.id"
         :to="mod.to"
         class="animate-fade-up group flex flex-col rounded-2xl border border-line bg-surface-elevated p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-accent hover:shadow-md sm:p-6"

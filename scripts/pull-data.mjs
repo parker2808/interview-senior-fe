@@ -43,6 +43,12 @@ function looksLikeContentTree(dir) {
   )
 }
 
+function noteOptionalPractice(dir) {
+  if (!existsSync(path.join(dir, 'practice'))) {
+    console.log('Note: practice/ is missing (optional — Practice UI will stay hidden).')
+  }
+}
+
 function findContentTree(dir) {
   if (looksLikeContentTree(dir)) return dir
   if (!existsSync(dir)) return null
@@ -74,6 +80,7 @@ function copyLocal(src) {
   }
   resetDest()
   cpSync(from, dest, { recursive: true, dereference: true })
+  noteOptionalPractice(from)
   console.log(`Pulled local content from ${from} → ${dest}`)
 }
 
@@ -116,6 +123,7 @@ async function downloadRepo(token) {
   }
   resetDest()
   cpSync(tree, dest, { recursive: true, dereference: true })
+  noteOptionalPractice(tree)
   rmSync(tmp, { recursive: true, force: true })
   console.log(`Pulled ${owner}/${repo}@${ref} → ${dest}`)
 }
