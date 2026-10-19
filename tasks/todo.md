@@ -20,8 +20,10 @@
 | Plan week filter | Week dropdown | Unchanged (no keyword search) |
 
 ## Review
-- Tests: `npm test` — 16 passed + 3 skipped (`tests/real-content.optional.test.ts` runs only when `.data/content` has ≥10 KB docs)
-- Build: `CONTENT_LOCAL_PATH=/tmp/interview-fe-data-stub npm run build` succeeded (Vercel preset)
-- B31 fetch: **impossible from this agent**. GitHub App installation token can only see `parker2808/interview-senior-fe` (`GET /installation/repositories` total=1). `gh`, GraphQL, git clone, and tarball of `parker2808/interview-fe-data` all 404. No `CONTENT_REPO_TOKEN` in the environment.
-- Unblock: install the Cursor GitHub App on `interview-fe-data` (Contents: Read), **or** add `CONTENT_REPO_TOKEN` to this environment, then `CONTENT_REPO_REF=cursor/kb-rewrite-b31-final-pass-08d0 npm run data:pull`.
-- Renderer vs B31 FYI: KB `heading`/`paragraph`/`thematic-break`/`callout`/`table`/`list`/`key-takeaways`/`code`/`senior-answer`+`label` already render; Q&A `example` + `followUps` already render on `QuestionCard`.
+- Content: unzipped attached B31 snapshot (102 files) to gitignored `.data/content` via `CONTENT_LOCAL_PATH=/tmp/fe-data-b31`. **Not committed.**
+- Validate: `CONTENT_DIR=.data/content npm run data:validate` → Content OK (22 KB docs, 142 Q&A, 30 plan days).
+- Tests: `npm test` — **19 passed**, including optional real-content suite (distinctive text per KB block type; `hieu nang`/`hiệu năng` parity; `event loop` → javascript; Q&A `internal admin product` example and `chieu sau production vue` follow-ups).
+- Live SSR: all 22 KB docs × vi/en return 200 and include `senior-answer` / `callout` / `key-takeaways` / `<table>` / `<pre>` / `<hr>` plus rewritten titles. B31 `senior-answer` is `label`+`text` only (no nested example/followUps in KB JSON); those fields live on Q&A and render in `QuestionCard`.
+- Live search API: `hieu nang` ≡ `hiệu năng` (top hit title **Hiệu năng**); `event loop` heading on javascript; body hits for ARIA / AbortController / Core Web Vitals.
+- Q&A API: PIN 123456 → 142 questions, every item has `example` + `followUps`.
+- Production default `CONTENT_REPO_REF` remains `main`.
