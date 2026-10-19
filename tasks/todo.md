@@ -20,9 +20,8 @@
 | Plan week filter | Week dropdown | Unchanged (no keyword search) |
 
 ## Review
-- Tests: `npm test` — 16 passed (search-text, kb-search, qa-search)
+- Tests: `npm test` — 16 passed + 3 skipped (`tests/real-content.optional.test.ts` runs only when `.data/content` has ≥10 KB docs)
 - Build: `CONTENT_LOCAL_PATH=/tmp/interview-fe-data-stub npm run build` succeeded (Vercel preset)
-- Live API (stub content): `hieu nang` → heading “Hiệu năng build trên CI”; `cache splitchunks` AND body hit; `eventloopmicrotask` example-block hit; `cache bananas` empty
-- Browser: DocSearch modal, skeletons, debounce, Escape, VI/EN lang-scoped search
-- B31: `CONTENT_REPO_TOKEN` is not in this VM, so `interview-fe-data@cursor/kb-rewrite-b31-final-pass-08d0` could not be pulled. Production default `CONTENT_REPO_REF=main` was not changed.
-- Content-repo: no required change. Optional: use `example` / `follow-ups` block types or nested `example`/`followUps` on `senior-answer` (app schema allows both). Generic walk still indexes other Localized fields for search.
+- B31 fetch: **impossible from this agent**. GitHub App installation token can only see `parker2808/interview-senior-fe` (`GET /installation/repositories` total=1). `gh`, GraphQL, git clone, and tarball of `parker2808/interview-fe-data` all 404. No `CONTENT_REPO_TOKEN` in the environment.
+- Unblock: install the Cursor GitHub App on `interview-fe-data` (Contents: Read), **or** add `CONTENT_REPO_TOKEN` to this environment, then `CONTENT_REPO_REF=cursor/kb-rewrite-b31-final-pass-08d0 npm run data:pull`.
+- Renderer vs B31 FYI: KB `heading`/`paragraph`/`thematic-break`/`callout`/`table`/`list`/`key-takeaways`/`code`/`senior-answer`+`label` already render; Q&A `example` + `followUps` already render on `QuestionCard`.
