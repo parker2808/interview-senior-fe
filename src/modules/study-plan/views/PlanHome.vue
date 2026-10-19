@@ -11,6 +11,7 @@ import {
   usePlanIndex,
 } from '@/modules/study-plan/composables/use-plan-index.composable'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
+import { visiblePlanResources } from '@/modules/content/utils/plan-lab.util'
 import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
 import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
 
@@ -74,6 +75,10 @@ const filteredDays = computed(() => {
     ? days
     : days.filter((d) => d.week === weekFilter.value)
 })
+
+const quickResources = computed(() =>
+  visiblePlanResources(plan.value?.resources, plan.value?.hasLab),
+)
 
 function openDay(day: number) {
   router.push(`/plan/day/${day}`)
@@ -222,7 +227,10 @@ function openResource(id: string) {
       <p class="mt-2 max-w-3xl text-sm leading-6 text-ink-muted">
         {{ $t('plan.overviewSub') }}
       </p>
-      <div class="mt-4 rounded-xl border border-line bg-surface p-3 sm:flex sm:items-center sm:justify-between sm:gap-4">
+      <div
+        v-if="plan.hasLab"
+        class="mt-4 rounded-xl border border-line bg-surface p-3 sm:flex sm:items-center sm:justify-between sm:gap-4"
+      >
         <div>
           <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
             {{ $t('plan.setupTitle') }}
@@ -268,7 +276,7 @@ function openResource(id: string) {
         :class="navOpen ? 'flex' : 'hidden sm:flex'"
       >
         <button
-          v-for="r in plan.resources"
+          v-for="r in quickResources"
           :key="r.id"
           type="button"
           class="min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-medium text-ink transition hover:border-accent hover:text-accent-ink"

@@ -4,6 +4,7 @@ import PlanDayContent from '@/modules/study-plan/components/PlanDayContent/PlanD
 import BlockRenderer from '@/modules/content/components/BlockRenderer/BlockRenderer.vue'
 import { classifyContentHref } from '@/modules/content/utils/content-links.util'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
+import { hasLabContent } from '@/modules/content/utils/plan-lab.util'
 import { usePlanIndex } from '@/modules/study-plan/composables/use-plan-index.composable'
 
 const props = defineProps<{
@@ -29,6 +30,7 @@ const lang = computed<'en' | 'vi'>(() =>
 )
 
 const tab = ref<DayTab>('plan')
+const showLab = computed(() => hasLabContent(props.day))
 
 watch(
   () => props.day.day,
@@ -36,6 +38,10 @@ watch(
     tab.value = 'plan'
   },
 )
+
+watch(showLab, (ok) => {
+  if (!ok) tab.value = 'plan'
+})
 
 const aliases = computed(() =>
   (plan.value?.resources ?? []).flatMap((item) => [item.id, ...item.aliases]),
@@ -47,7 +53,7 @@ function onDocClick(e: MouseEvent) {
   const href = a.getAttribute('href')
   const result = classifyContentHref(
     href || '',
-    props.day.lab.resourceId,
+    props.day.lab?.resourceId ?? '',
     aliases.value,
   )
   if (result.kind === 'ignore' || result.kind === 'hash') return
@@ -118,6 +124,7 @@ function onDocClick(e: MouseEvent) {
         {{ $t('plan.tabPlan') }}
       </button>
       <button
+        v-if="showLab"
         type="button"
         role="tab"
         class="min-h-10 rounded-lg px-3 text-sm font-semibold"
@@ -129,10 +136,10 @@ function onDocClick(e: MouseEvent) {
       </button>
     </div>
 
-    <PlanDayContent v-if="tab === 'plan'" :content="day" />
+    <PlanDayContent v-if="tab === 'plan' || !showLab" :content="day" />
 
     <BlockRenderer
-      v-if="tab === 'lab'"
+      v-else-if="day.lab"
       :sections="day.lab.sections"
       :lang="lang"
       @click="onDocClick"

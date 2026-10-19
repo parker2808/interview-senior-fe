@@ -59,12 +59,12 @@ function distinctiveQuery(text: string): string | null {
 }
 
 describe.skipIf(!hasRealTree)('real interview-fe-data content', () => {
-  const docs = kbFiles.map((file) =>
-    readJson<KnowledgeDoc>(`knowledge-base/${file}`),
-  )
-  const questions = readJson<{ questions: InterviewQuestion[] }>(
-    'qna/questions.json',
-  ).questions
+  const docs = hasRealTree
+    ? kbFiles.map((file) => readJson<KnowledgeDoc>(`knowledge-base/${file}`))
+    : []
+  const questions = hasRealTree
+    ? readJson<{ questions: InterviewQuestion[] }>('qna/questions.json').questions
+    : []
 
   it('has bilingual KB docs and Q&A example/followUps', () => {
     expect(docs.length).toBeGreaterThanOrEqual(10)

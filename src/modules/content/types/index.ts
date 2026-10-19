@@ -34,6 +34,7 @@ export type {
   PlanDay,
   PlanDaySummary,
   PlanIndex,
+  PlanLab,
   PlanMeta,
   PlanQuestionLink,
   PlanResource,
