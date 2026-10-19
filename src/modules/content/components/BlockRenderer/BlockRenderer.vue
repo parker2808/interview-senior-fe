@@ -104,6 +104,40 @@ function headingTag(level: number) {
         >
           <p class="content-senior__label">{{ text(block.label) }}</p>
           <div v-html="md(block.text)" />
+          <div v-if="block.example" class="content-senior__extra">
+            <p class="content-senior__label">{{ $t('interview.example') }}</p>
+            <div v-html="md(block.example)" />
+          </div>
+          <div v-if="block.followUps?.length" class="content-senior__extra">
+            <p class="content-senior__label">{{ $t('interview.followUps') }}</p>
+            <ul>
+              <li v-for="(item, i) in block.followUps" :key="i">
+                <div class="content-list__item" v-html="html(item)" />
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section
+          v-else-if="block.type === 'example'"
+          class="content-senior"
+        >
+          <p class="content-senior__label">
+            {{ block.label ? text(block.label) : $t('interview.example') }}
+          </p>
+          <div v-html="md(block.text)" />
+        </section>
+
+        <section
+          v-else-if="block.type === 'follow-ups'"
+          class="content-takeaways"
+        >
+          <p class="content-senior__label">{{ $t('interview.followUps') }}</p>
+          <ul>
+            <li v-for="(item, i) in block.items" :key="i">
+              <div class="content-list__item" v-html="html(item)" />
+            </li>
+          </ul>
         </section>
 
         <section

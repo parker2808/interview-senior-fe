@@ -1,10 +1,13 @@
-import type { ContentBlock, ContentSection, KnowledgeDoc, ListBlock } from '@/modules/content/types'
+import type { ContentBlock, ContentSection, KnowledgeDoc, Localized } from '@/modules/content/types'
 import { isTocHeadingText } from '@/modules/content/utils/in-content-toc.util'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 import type { DocLang } from '@/modules/core/constants/locale.constant'
 import {
   foldSearchText,
   highlightSnippet,
+  matchesAllKeywords,
+  scoreKeywordHay,
+  splitSearchKeywords,
 } from '@/modules/knowledge-base/utils/search-text.util'
 
 export type KbSearchKind = 'title' | 'heading' | 'body'
@@ -29,6 +32,9 @@ type IndexRecord = {
   kind: KbSearchKind
   text: string
   folded: string
+  foldedContext: string
+  foldedTitle: string
+  foldedHeading: string
 }
 
 const KIND_BASE: Record<KbSearchKind, number> = {
@@ -37,9 +43,23 @@ const KIND_BASE: Record<KbSearchKind, number> = {
   body: 80,
 }
 
+const SKIP_PLAIN_KEYS = new Set([
+  'id',
+  'type',
+  'style',
+  'kind',
+  'align',
+  'level',
+  'lang',
+  'order',
+  'category',
+  'slug',
+  'tags',
+])
+
 function stripMd(value: string): string {
   return String(value || '')
-    .replace(/```([\s\S]*?)```/g, ' $1 ')
+    .replace(/```([\s\S]*?)```/g, ' ')
     .replace(/`([^`]+)`/g, '$1')
     .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     .replace(/[*_>#]+/g, ' ')
@@ -47,58 +67,73 @@ function stripMd(value: string): string {
     .trim()
 }
 
-function listPlain(block: ListBlock, lang: string): string[] {
-  const out: string[] = []
-  for (const item of block.items) {
-    const text = pickLocale(item, lang)
-    if (text) out.push(stripMd(text))
-    if ('children' in item && item.children) {
-      out.push(...listPlain(item.children, lang))
-    }
+function isLocalized(value: unknown): value is Localized {
+  if (!value || typeof value !== 'object') return false
+  const rec = value as Record<string, unknown>
+  return typeof rec.en === 'string' && typeof rec.vi === 'string'
+}
+
+function walkPlain(value: unknown, lang: string, out: string[]): void {
+  if (value == null) return
+  if (typeof value === 'string') {
+    const text = stripMd(value)
+    if (text) out.push(text)
+    return
   }
-  return out
+  if (Array.isArray(value)) {
+    for (const item of value) walkPlain(item, lang, out)
+    return
+  }
+  if (typeof value !== 'object') return
+
+  if (isLocalized(value)) {
+    const text = stripMd(pickLocale(value, lang))
+    if (text) out.push(text)
+    for (const [key, child] of Object.entries(value)) {
+      if (key === 'en' || key === 'vi' || SKIP_PLAIN_KEYS.has(key)) continue
+      walkPlain(child, lang, out)
+    }
+    return
+  }
+
+  const rec = value as Record<string, unknown>
+  if (rec.type === 'heading') return
+
+  for (const [key, child] of Object.entries(rec)) {
+    if (SKIP_PLAIN_KEYS.has(key)) continue
+    if (key === 'code') {
+      const code = isLocalized(child) ? pickLocale(child, lang) : String(child || '')
+      if (code.trim()) out.push(code.replace(/\s+/g, ' ').trim())
+      continue
+    }
+    walkPlain(child, lang, out)
+  }
 }
 
 function blockPlain(block: ContentBlock, lang: string): string[] {
-  switch (block.type) {
-    case 'heading':
-      return []
-    case 'paragraph':
-    case 'callout':
-    case 'markdown':
-      return [stripMd(pickLocale(block.text, lang))]
-    case 'senior-answer':
-      return [
-        stripMd(`${pickLocale(block.label, lang)} ${pickLocale(block.text, lang)}`),
-      ]
-    case 'code':
-      return [pickLocale(block.code, lang)]
-    case 'list':
-      return listPlain(block, lang)
-    case 'table': {
-      const cells = [
-        ...block.headers.map((cell) => pickLocale(cell, lang)),
-        ...block.rows.flatMap((row) => row.map((cell) => pickLocale(cell, lang))),
-      ]
-      return [stripMd(cells.filter(Boolean).join(' '))]
-    }
-    case 'key-takeaways':
-      return [stripMd(block.items.map((item) => pickLocale(item, lang)).join(' '))]
-    default:
-      return []
-  }
+  const out: string[] = []
+  walkPlain(block, lang, out)
+  return out
 }
 
 function pushRecord(
   records: IndexRecord[],
-  record: Omit<IndexRecord, 'folded' | 'text'> & { text: string },
+  record: Omit<IndexRecord, 'folded' | 'foldedContext' | 'foldedTitle' | 'foldedHeading' | 'text'> & {
+    text: string
+  },
 ) {
   const text = String(record.text || '').replace(/\s+/g, ' ').trim()
   if (!text) return
+  const folded = foldSearchText(text)
+  const foldedTitle = foldSearchText(record.title)
+  const foldedHeading = foldSearchText(record.headingTitle)
   records.push({
     ...record,
     text,
-    folded: foldSearchText(text),
+    folded,
+    foldedTitle,
+    foldedHeading,
+    foldedContext: foldSearchText(`${record.title} ${record.headingTitle} ${text}`),
   })
 }
 
@@ -108,6 +143,7 @@ export function indexKnowledgeDoc(
 ): IndexRecord[] {
   const title = pickLocale(doc.title, lang) || doc.slug
   const records: IndexRecord[] = []
+  const tags = Array.isArray(doc.tags) ? doc.tags.join(' ') : ''
   pushRecord(records, {
     slug: doc.slug,
     lang,
@@ -115,7 +151,7 @@ export function indexKnowledgeDoc(
     headingId: '',
     headingTitle: title,
     kind: 'title',
-    text: `${title} ${doc.slug} ${doc.category} ${pickLocale(doc.summary, lang)}`,
+    text: `${title} ${doc.slug} ${doc.category} ${tags} ${pickLocale(doc.summary, lang)}`,
   })
 
   let headingId = ''
@@ -145,6 +181,9 @@ export function indexKnowledgeDoc(
         isTocHeadingText(section.title.vi)
       ) {
         continue
+      }
+      if (sectionTitle && sectionTitle !== headingTitle && sectionTitle !== title) {
+        bodyParts.push(sectionTitle)
       }
       for (const block of section.blocks) {
         if (block.type === 'heading') {
@@ -176,36 +215,24 @@ export function indexKnowledgeDoc(
   return records
 }
 
-function scoreRecord(query: string, record: IndexRecord): number {
-  const q = foldSearchText(query)
-  if (!q || q.length < 2) return 0
-  const hay = record.folded
-  if (!hay) return 0
+function scoreRecord(keywords: string[], record: IndexRecord): number {
+  if (!keywords.length) return 0
+  if (!matchesAllKeywords(record.foldedContext, keywords)) return 0
 
-  let hit = 0
-  if (hay === q) hit = 100
-  else if (hay.startsWith(q)) hit = 80
-  else if (hay.includes(q)) hit = 50 - Math.min(hay.indexOf(q), 30)
-  else {
-    const words = hay.split(/[\s-]+/).filter(Boolean)
-    for (const word of words) {
-      if (word.startsWith(q)) {
-        hit = 40
-        break
-      }
-    }
-    if (!hit && q.length >= 3) {
-      for (const word of words) {
-        if (word.includes(q)) {
-          hit = 20
-          break
-        }
-      }
-    }
+  const own = scoreKeywordHay(record.folded, keywords)
+  const titleOwn = scoreKeywordHay(record.foldedTitle, keywords)
+  if (!own && record.kind !== 'title') return 0
+
+  if (record.kind === 'title') {
+    const base = titleOwn > 0 ? KIND_BASE.title : 90
+    return base + (titleOwn || own)
   }
 
-  if (!hit) return 0
-  return KIND_BASE[record.kind] + hit
+  const headingBonus = Math.round(
+    scoreKeywordHay(record.foldedHeading, keywords) * 0.25,
+  )
+  const titleBonus = Math.round(titleOwn * 0.15)
+  return KIND_BASE[record.kind] + own + headingBonus + titleBonus
 }
 
 export function searchIndexRecords(
@@ -215,13 +242,14 @@ export function searchIndexRecords(
   limit = 20,
 ): KbSearchHit[] {
   const q = query.trim()
-  if (foldSearchText(q).length < 2) return []
+  const keywords = splitSearchKeywords(q)
+  if (!keywords.length) return []
 
   const best = new Map<string, KbSearchHit>()
 
   for (const record of records) {
     if (record.lang !== lang) continue
-    const score = scoreRecord(q, record)
+    const score = scoreRecord(keywords, record)
     if (score <= 0) continue
     const key = `${record.slug}::${record.headingId || 'doc'}`
     const current = best.get(key)

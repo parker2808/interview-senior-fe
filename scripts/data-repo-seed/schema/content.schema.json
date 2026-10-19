@@ -107,7 +107,32 @@
           "properties": {
             "type": { "const": "senior-answer" },
             "label": { "$ref": "#/$defs/localized" },
+            "text": { "$ref": "#/$defs/localized" },
+            "example": { "$ref": "#/$defs/localized" },
+            "followUps": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/localized" }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "text"],
+          "properties": {
+            "type": { "const": "example" },
+            "label": { "$ref": "#/$defs/localized" },
             "text": { "$ref": "#/$defs/localized" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "items"],
+          "properties": {
+            "type": { "const": "follow-ups" },
+            "items": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/localized" }
+            }
           }
         },
         {

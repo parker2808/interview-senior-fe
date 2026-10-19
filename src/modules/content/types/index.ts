@@ -4,6 +4,8 @@ export type {
   CodeBlock,
   ContentBlock,
   ContentSection,
+  ExampleBlock,
+  FollowUpsBlock,
   HeadingBlock,
   HeadingLevel,
   KeyTakeawaysBlock,
