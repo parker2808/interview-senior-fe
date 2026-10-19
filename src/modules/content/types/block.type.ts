@@ -51,6 +51,19 @@ export type SeniorAnswerBlock = {
   type: 'senior-answer'
   label: Localized
   text: Localized
+  example?: Localized
+  followUps?: Localized[]
+}
+
+export type ExampleBlock = {
+  type: 'example'
+  label?: Localized
+  text: Localized
+}
+
+export type FollowUpsBlock = {
+  type: 'follow-ups'
+  items: Localized[]
 }
 
 export type KeyTakeawaysBlock = {
@@ -75,6 +88,8 @@ export type ContentBlock =
   | CodeBlock
   | TableBlock
   | SeniorAnswerBlock
+  | ExampleBlock
+  | FollowUpsBlock
   | KeyTakeawaysBlock
   | MarkdownBlock
   | ThematicBreakBlock

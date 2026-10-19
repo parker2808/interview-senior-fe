@@ -11,6 +11,7 @@ import type {
   InterviewCategoryId,
   InterviewLang,
 } from '@/modules/interview-qa/types/interview.type'
+import { filterInterviewQuestions } from '@/modules/interview-qa/utils/qa-search.util'
 
 const { locale, t } = useI18n()
 const route = useRoute()
@@ -37,25 +38,13 @@ const query = ref('')
 const openIds = ref<Set<string>>(new Set())
 const focusedId = ref('')
 
-const filtered = computed(() => {
-  const q = query.value.trim().toLowerCase()
-  return questions.value.filter((item) => {
-    if (categoryFilter.value !== 'all' && item.category !== categoryFilter.value) {
-      return false
-    }
-    if (!q) return true
-    const blob = [
-      item.question.vi,
-      item.question.en,
-      item.tags.join(' '),
-      item.answer.vi,
-      item.answer.en,
-    ]
-      .join(' ')
-      .toLowerCase()
-    return blob.includes(q)
-  })
-})
+const filtered = computed(() =>
+  filterInterviewQuestions(questions.value, {
+    query: query.value,
+    category: categoryFilter.value,
+    lang: lang.value,
+  }),
+)
 
 function toggle(id: string) {
   const next = new Set(openIds.value)

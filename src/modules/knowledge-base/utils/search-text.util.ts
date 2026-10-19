@@ -10,6 +10,61 @@ export function foldSearchText(value: string): string {
     .trim()
 }
 
+/** Split a query into unique folded keywords. Drops 1-char tokens when a longer keyword exists. */
+export function splitSearchKeywords(query: string): string[] {
+  const folded = foldSearchText(query)
+  if (!folded) return []
+  const parts = folded.split(/\s+/).filter(Boolean)
+  const long = parts.filter((part) => part.length >= 2)
+  const tokens = long.length ? long : parts.filter((part) => part.length >= 2)
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const token of tokens) {
+    if (seen.has(token)) continue
+    seen.add(token)
+    out.push(token)
+  }
+  return out
+}
+
+export function matchesAllKeywords(foldedHay: string, keywords: string[]): boolean {
+  if (!foldedHay || !keywords.length) return false
+  return keywords.every((keyword) => foldedHay.includes(keyword))
+}
+
+function qualityForToken(hay: string, token: string): number {
+  if (!hay || !token) return 0
+  if (hay === token) return 100
+  if (hay.startsWith(token)) return 80
+  const idx = hay.indexOf(token)
+  if (idx >= 0) return 50 - Math.min(idx, 30)
+  const words = hay.split(/[\s-]+/).filter(Boolean)
+  for (const word of words) {
+    if (word.startsWith(token)) return 40
+  }
+  if (token.length >= 3) {
+    for (const word of words) {
+      if (word.includes(token)) return 20
+    }
+  }
+  return 0
+}
+
+/** Quality of how `keywords` sit in an already-folded haystack. 0 if none hit. */
+export function scoreKeywordHay(foldedHay: string, keywords: string[]): number {
+  if (!foldedHay || !keywords.length) return 0
+  if (keywords.length === 1) return qualityForToken(foldedHay, keywords[0])
+
+  const phrase = keywords.join(' ')
+  const phraseHit = qualityForToken(foldedHay, phrase)
+  if (phraseHit) return phraseHit + 12
+
+  const parts = keywords.map((keyword) => qualityForToken(foldedHay, keyword))
+  const present = parts.filter((score) => score > 0)
+  if (!present.length) return 0
+  return Math.round(present.reduce((sum, score) => sum + score, 0) / keywords.length)
+}
+
 export function escapeHtml(value: string): string {
   return String(value || '')
     .replace(/&/g, '&amp;')
@@ -67,24 +122,52 @@ export function findFoldRange(
   return { start, end }
 }
 
+type FoldRange = { start: number; end: number }
+
+function collectKeywordRanges(text: string, query: string): FoldRange[] {
+  const keywords = splitSearchKeywords(query)
+  const needles = keywords.length ? keywords : [foldSearchText(query)].filter(Boolean)
+  const ranges: FoldRange[] = []
+  for (const needle of needles) {
+    const range = findFoldRange(text, needle)
+    if (range) ranges.push(range)
+  }
+  if (!ranges.length) {
+    const whole = findFoldRange(text, query)
+    if (whole) ranges.push(whole)
+  }
+  ranges.sort((a, b) => a.start - b.start || a.end - b.end)
+  const merged: FoldRange[] = []
+  for (const range of ranges) {
+    const last = merged[merged.length - 1]
+    if (last && range.start <= last.end) {
+      last.end = Math.max(last.end, range.end)
+    } else {
+      merged.push({ ...range })
+    }
+  }
+  return merged
+}
+
 const MARK =
   '<mark class="rounded bg-accent-soft px-0.5 text-accent-ink">'
 
-function wrapRange(text: string, start: number, end: number): string {
-  return (
-    escapeHtml(text.slice(0, start)) +
-    MARK +
-    escapeHtml(text.slice(start, end)) +
-    '</mark>' +
-    escapeHtml(text.slice(end))
-  )
+function wrapRanges(text: string, ranges: FoldRange[]): string {
+  if (!ranges.length) return escapeHtml(text)
+  let html = ''
+  let cursor = 0
+  for (const range of ranges) {
+    if (range.start > cursor) html += escapeHtml(text.slice(cursor, range.start))
+    html += MARK + escapeHtml(text.slice(range.start, range.end)) + '</mark>'
+    cursor = range.end
+  }
+  if (cursor < text.length) html += escapeHtml(text.slice(cursor))
+  return html
 }
 
 export function highlightSearchText(text: string, query: string): string {
   const value = String(text || '')
-  const range = findFoldRange(value, query)
-  if (!range) return escapeHtml(value)
-  return wrapRange(value, range.start, range.end)
+  return wrapRanges(value, collectKeywordRanges(value, query))
 }
 
 export function highlightSnippet(
@@ -94,7 +177,12 @@ export function highlightSnippet(
 ): string {
   const flat = String(text || '').replace(/\s+/g, ' ').trim()
   if (!flat) return ''
-  const range = findFoldRange(flat, query)
+  const keywords = splitSearchKeywords(query)
+  const phrase = keywords.join(' ')
+  const range =
+    (phrase ? findFoldRange(flat, phrase) : null) ||
+    collectKeywordRanges(flat, query)[0] ||
+    findFoldRange(flat, query)
   if (!range) {
     const cut = flat.length <= max ? flat : `${flat.slice(0, max - 1).trim()}…`
     return escapeHtml(cut)
@@ -116,9 +204,5 @@ export function highlightSnippet(
   const prefix = start > 0 ? '…' : ''
   const suffix = end < flat.length ? '…' : ''
   const windowed = flat.slice(start, end)
-  const inner = findFoldRange(windowed, query)
-  const body = inner
-    ? wrapRange(windowed, inner.start, inner.end)
-    : escapeHtml(windowed)
-  return prefix + body + suffix
+  return prefix + wrapRanges(windowed, collectKeywordRanges(windowed, query)) + suffix
 }
