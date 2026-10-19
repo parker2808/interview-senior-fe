@@ -10,10 +10,17 @@ import type {
   PlanMeta,
   PlanResource,
   InterviewBank,
+  PracticeDesignIndex,
+  PracticeDesignPayload,
   PracticeIndex,
   PracticeMeta,
   PracticeStep,
 } from '@/modules/content/types'
+import {
+  DEFAULT_SPEC_PATH,
+  DESIGN_INDEX_REL,
+} from '@/modules/practice/utils/design-read.util'
+import { specHeadingsFromMarkdown } from '@/modules/practice/utils/spec-ref.util'
 import { indexFromMetaAndSteps } from '@/modules/practice/utils/practice-read.util'
 import { isPracticeStepId } from '@/modules/practice/utils/practice-id.util'
 import {
@@ -28,6 +35,36 @@ function fromDisk<T>(rel: string): T | null {
   const file = join(DISK_ROOT, rel)
   if (!existsSync(file)) return null
   return JSON.parse(readFileSync(file, 'utf8')) as T
+}
+
+function fromDiskText(rel: string): string | null {
+  const file = join(DISK_ROOT, rel)
+  if (!existsSync(file)) return null
+  return readFileSync(file, 'utf8')
+}
+
+function safeContentRel(rel: string): string | null {
+  const cleaned = String(rel || '').replace(/^\/+/, '').replaceAll('\\', '/')
+  if (!cleaned || cleaned.includes('..')) return null
+  return cleaned
+}
+
+export async function readContentTextOptional(rel: string): Promise<string | null> {
+  const pathRel = safeContentRel(rel)
+  if (!pathRel) return null
+  try {
+    const storage = useStorage('assets:siteContent')
+    const slash = pathRel
+    const colon = pathRel.replaceAll('/', ':')
+    const value =
+      (await storage.getItemRaw(slash)) ?? (await storage.getItemRaw(colon))
+    if (typeof value === 'string') return value
+    if (value instanceof Uint8Array) return new TextDecoder().decode(value)
+    if (Buffer.isBuffer(value)) return value.toString('utf8')
+  } catch {
+    /* fall through to disk */
+  }
+  return fromDiskText(pathRel)
 }
 
 async function fromAssets<T>(rel: string): Promise<T | null> {
@@ -228,6 +265,22 @@ export async function readPracticeSteps(): Promise<PracticeStep[]> {
     }
   }
   return out
+}
+
+export async function hasPracticeDesign(): Promise<boolean> {
+  const index = await readContentJsonOptional<PracticeDesignIndex>(DESIGN_INDEX_REL)
+  return Boolean(index && Array.isArray(index.screens))
+}
+
+export async function readPracticeDesign(): Promise<PracticeDesignPayload> {
+  const index = await readContentJsonOptional<PracticeDesignIndex>(DESIGN_INDEX_REL)
+  if (!index || !Array.isArray(index.screens)) {
+    throw practiceNotFound('Practice design content is not available')
+  }
+  const specPath = safeContentRel(index.specPath || DEFAULT_SPEC_PATH) || DEFAULT_SPEC_PATH
+  const specMarkdown = (await readContentTextOptional(specPath)) ?? ''
+  const headings = specMarkdown ? specHeadingsFromMarkdown(specMarkdown) : []
+  return { index, specMarkdown, headings }
 }
 
 export async function readInterviewBank(): Promise<InterviewBank> {

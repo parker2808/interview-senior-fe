@@ -1,4 +1,5 @@
 import type { Localized } from '@/modules/content/types/localized.type'
+import type { TocItem } from '@/modules/content/types/block.type'
 
 export type PracticeMilestoneId =
   | 'm0'
@@ -84,4 +85,35 @@ export type PracticeIndex = {
   intro: Localized
   milestones: PracticeMilestone[]
   steps: PracticeStepSummary[]
+}
+
+export type PracticeDesignGroup = 'public' | 'admin'
+export type PracticeDesignTheme = 'light' | 'dark'
+export type PracticeDesignViewport = 'desktop' | 'mobile'
+
+export type PracticeDesignScreen = {
+  id: string
+  file: string
+  title: Localized
+  caption: Localized
+  group: PracticeDesignGroup
+  theme: PracticeDesignTheme
+  viewport: PracticeDesignViewport
+  specRefs: string[]
+  width: number
+  height: number
+}
+
+export type PracticeDesignIndex = {
+  version: 1
+  specPath: string
+  title: Localized
+  intro: Localized
+  screens: PracticeDesignScreen[]
+}
+
+export type PracticeDesignPayload = {
+  index: PracticeDesignIndex
+  specMarkdown: string
+  headings: TocItem[]
 }

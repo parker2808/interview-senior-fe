@@ -8,6 +8,7 @@ const props = defineProps<{
     | 'plan-resource'
     | 'practice-home'
     | 'practice-step'
+    | 'practice-design'
     | 'qa'
 }>()
 
@@ -21,6 +22,7 @@ const label = computed(() => {
       return 'interview'
     case 'practice-home':
     case 'practice-step':
+    case 'practice-design':
       return 'practice'
     default:
       return 'plan'
@@ -70,6 +72,30 @@ const label = computed(() => {
           <div class="mt-4 space-y-2">
             <div class="skeleton-bar h-16 w-full" />
             <div class="skeleton-bar h-16 w-full" />
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template v-else-if="variant === 'practice-design'">
+      <div class="skeleton-bar h-4 w-40" />
+      <div class="mt-4 skeleton-bar h-8 w-1/2" />
+      <div class="mt-3 skeleton-bar h-4 w-10/12" />
+      <div class="mt-6 flex gap-2">
+        <div class="skeleton-bar h-11 w-24" />
+        <div class="skeleton-bar h-11 w-24" />
+      </div>
+      <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div
+          v-for="card in 4"
+          :key="card"
+          class="overflow-hidden rounded-2xl border border-line"
+        >
+          <div class="skeleton-bar h-36 w-full rounded-none" />
+          <div class="space-y-2 p-4">
+            <div class="skeleton-bar h-4 w-1/3" />
+            <div class="skeleton-bar h-5 w-2/3" />
+            <div class="skeleton-bar h-4 w-full" />
           </div>
         </div>
       </div>

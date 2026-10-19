@@ -9,6 +9,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { writePracticeFixture } from './practice-content-tree.mjs'
+import { writePracticeDesignFixture } from './practice-design-tree.mjs'
 
 const L = (en, vi = en) => ({ en, vi })
 const pad = (n) => String(n).padStart(2, '0')
@@ -172,6 +173,11 @@ export function writeContentFixture(dir, options = {}) {
     ],
   })
   if (options.practice !== false) writePracticeFixture(dir)
+  if (options.design !== false && options.practice !== false) {
+    writePracticeDesignFixture(dir, options)
+  } else if (options.design === true) {
+    writePracticeDesignFixture(dir, options)
+  }
   return dir
 }
 

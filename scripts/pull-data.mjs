@@ -49,6 +49,46 @@ function noteOptionalPractice(dir) {
   }
 }
 
+function noteOptionalDesign(dir) {
+  if (!existsSync(path.join(dir, 'practice/design'))) {
+    console.log(
+      'Note: practice/design/ is missing (optional — Design gallery will stay hidden).',
+    )
+  }
+  if (!existsSync(path.join(dir, 'plans/portfolio-design-system.md'))) {
+    console.log(
+      'Note: plans/portfolio-design-system.md is missing (optional — Spec tab will be empty).',
+    )
+  }
+}
+
+function copyOptionalDesign(from, to) {
+  const specSrc = path.join(from, 'plans/portfolio-design-system.md')
+  const specDest = path.join(to, 'plans/portfolio-design-system.md')
+  if (existsSync(specSrc)) {
+    mkdirSync(path.dirname(specDest), { recursive: true })
+    cpSync(specSrc, specDest)
+  }
+  const designSrc = path.join(from, 'practice/design')
+  const designDest = path.join(to, 'practice/design')
+  if (existsSync(designSrc)) {
+    mkdirSync(path.dirname(designDest), { recursive: true })
+    cpSync(designSrc, designDest, { recursive: true, dereference: true })
+  }
+  noteOptionalDesign(from)
+}
+
+function syncDesignPublicAssets(contentRoot) {
+  const publicDir = path.join(root, 'public/assets/practice-design')
+  rmSync(publicDir, { recursive: true, force: true })
+  const src = path.join(contentRoot, 'practice/design/screens')
+  if (!existsSync(src)) return
+  const dest = path.join(publicDir, 'screens')
+  mkdirSync(dest, { recursive: true })
+  cpSync(src, dest, { recursive: true, dereference: true })
+  console.log(`Copied design screens → ${dest}`)
+}
+
 function findContentTree(dir) {
   if (looksLikeContentTree(dir)) return dir
   if (!existsSync(dir)) return null
@@ -80,6 +120,8 @@ function copyLocal(src) {
   }
   resetDest()
   cpSync(from, dest, { recursive: true, dereference: true })
+  copyOptionalDesign(from, dest)
+  syncDesignPublicAssets(dest)
   noteOptionalPractice(from)
   console.log(`Pulled local content from ${from} → ${dest}`)
 }
@@ -123,6 +165,8 @@ async function downloadRepo(token) {
   }
   resetDest()
   cpSync(tree, dest, { recursive: true, dereference: true })
+  copyOptionalDesign(tree, dest)
+  syncDesignPublicAssets(dest)
   noteOptionalPractice(tree)
   rmSync(tmp, { recursive: true, force: true })
   console.log(`Pulled ${owner}/${repo}@${ref} → ${dest}`)
