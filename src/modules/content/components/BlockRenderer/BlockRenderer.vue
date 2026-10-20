@@ -75,28 +75,31 @@ function headingTag(level: number) {
 
         <pre v-else-if="block.type === 'code'"><code :class="block.lang ? `language-${block.lang}` : ''">{{ text(block.code) }}</code></pre>
 
-        <table v-else-if="block.type === 'table'">
-          <thead v-if="block.headers.some((cell) => text(cell))">
-            <tr>
-              <th
-                v-for="(cell, i) in block.headers"
-                :key="i"
-                :style="block.align?.[i] ? { textAlign: block.align[i] || undefined } : undefined"
-                v-html="html(cell)"
-              />
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(row, r) in block.rows" :key="r">
-              <td
-                v-for="(cell, c) in row"
-                :key="c"
-                :style="block.align?.[c] ? { textAlign: block.align[c] || undefined } : undefined"
-                v-html="html(cell)"
-              />
-            </tr>
-          </tbody>
-        </table>
+        <div v-else-if="block.type === 'table'" class="prose-table-wrap">
+          <table>
+            <thead v-if="block.headers.some((cell) => text(cell))">
+              <tr>
+                <th
+                  v-for="(cell, i) in block.headers"
+                  :key="i"
+                  :style="block.align?.[i] ? { textAlign: block.align[i] || undefined } : undefined"
+                  v-html="html(cell)"
+                />
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, r) in block.rows" :key="r">
+                <td
+                  v-for="(cell, c) in row"
+                  :key="c"
+                  :data-label="text(block.headers[c])"
+                  :style="block.align?.[c] ? { textAlign: block.align[c] || undefined } : undefined"
+                  v-html="html(cell)"
+                />
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
         <section
           v-else-if="block.type === 'senior-answer'"

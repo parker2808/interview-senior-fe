@@ -94,7 +94,7 @@ function goDay(n: number) {
         :back-label="t('plan.backDayList')"
         inner-class="px-2 sm:px-4 lg:px-5"
         :scroll-target="scrollTarget"
-        :lock-visible="navOpen"
+        :lock-visible="true"
         @heightchange="onHeightChange"
       >
         <template #leading>

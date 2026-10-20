@@ -58,7 +58,23 @@ const doc = {
     {
       id: L('event-loop'),
       title: L('Event loop'),
-      blocks: [{ type: 'paragraph', text: L('Microtasks run first.', 'Microtask chạy trước.') }],
+      blocks: [
+        { type: 'paragraph', text: L('Microtasks run first.', 'Microtask chạy trước.') },
+        {
+          type: 'table',
+          headers: [L('API'), L('Entity'), L('Notes', 'Ghi chú')],
+          rows: [
+            [
+              L('`queueMicrotask`'),
+              L('`SiteSettings`'),
+              L(
+                'Runs before the next macrotask and must not wrap identifiers.',
+                'Chạy trước macrotask; không bẻ identifier.',
+              ),
+            ],
+          ],
+        },
+      ],
     },
   ],
 }
@@ -134,7 +150,10 @@ export function writeContentFixture(dir, options = {}) {
         category: 'soft',
         tags: ['intro'],
         question: L('Introduce yourself', 'Giới thiệu bản thân'),
-        answer: L('Short and specific.', 'Ngắn gọn, cụ thể.'),
+        answer: L(
+          'Short and specific.\n\n| API | Entity | Notes |\n| --- | --- | --- |\n| `fetch` | `SiteSettings` | Keep identifiers intact. |',
+          'Ngắn gọn, cụ thể.\n\n| API | Entity | Ghi chú |\n| --- | --- | --- |\n| `fetch` | `SiteSettings` | Giữ nguyên identifier. |',
+        ),
       },
     ],
   })

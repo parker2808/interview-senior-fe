@@ -15,7 +15,7 @@ defineEmits<{
 </script>
 
 <template>
-  <nav class="flex h-full flex-col gap-5 overflow-y-auto p-4" aria-label="Topics">
+  <nav class="flex min-w-0 flex-col gap-5 p-4" aria-label="Topics">
     <div v-for="group in catalog" :key="group.id" class="space-y-2">
       <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
         {{ $t(`docs.groups.${group.id}`) }}
@@ -24,7 +24,7 @@ defineEmits<{
         <li v-for="topic in group.topics" :key="topic.slug">
           <button
             type="button"
-            class="flex min-h-10 w-full items-center rounded-lg border-l-2 px-2.5 text-left text-sm transition"
+            class="flex min-h-10 min-w-0 w-full items-center rounded-lg border-l-2 px-2.5 text-left text-sm transition"
             :class="
               topic.slug === activeSlug
                 ? 'border-accent bg-accent-soft font-semibold text-accent-ink'
@@ -32,7 +32,7 @@ defineEmits<{
             "
             @click="$emit('select', topic.slug)"
           >
-            {{ pickLocale(topic.title, lang) }}
+            <span class="min-w-0 truncate">{{ pickLocale(topic.title, lang) }}</span>
           </button>
         </li>
       </ul>

@@ -11,7 +11,7 @@ const linkClass =
 <template>
   <nav
     v-if="designAvailable"
-    class="flex flex-wrap gap-2"
+    class="flex min-w-0 flex-wrap gap-2"
     :aria-label="$t('practice.moduleNav')"
   >
     <NuxtLink

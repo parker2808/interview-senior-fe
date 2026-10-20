@@ -120,7 +120,7 @@ function jumpSpec(id: string) {
         :back-label="t('practice.backList')"
         inner-class="px-2 sm:px-4 lg:px-5"
         :scroll-target="scrollTarget"
-        :lock-visible="navOpen"
+        :lock-visible="true"
         @heightchange="onHeightChange"
       >
         <template #leading>
@@ -155,14 +155,13 @@ function jumpSpec(id: string) {
       </AppTopBar>
     </template>
 
-    <template #nav>
+    <template v-if="designAvailable !== false" #nav-pinned>
       <div class="p-3">
-        <PracticeSubnav
-          v-if="designAvailable !== false"
-          active="design"
-          :design-available="true"
-        />
+        <PracticeSubnav active="design" :design-available="true" />
       </div>
+    </template>
+
+    <template #nav>
       <DocToc
         v-if="tab === 'spec'"
         :items="specHeadings"

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { marked } from 'marked'
 import type {
   InterviewLang,
   InterviewQuestion,
 } from '@/modules/interview-qa/types/interview.type'
+import { renderMarkdown } from '@/modules/content/utils/inline-md.util'
 
 const props = defineProps<{
   item: InterviewQuestion
@@ -11,7 +11,7 @@ const props = defineProps<{
 }>()
 
 function md(text: string) {
-  return marked.parse(text || '', { async: false }) as string
+  return renderMarkdown(text || '')
 }
 
 const answerHtml = computed(() => md(props.item.answer[props.lang]))

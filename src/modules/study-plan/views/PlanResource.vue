@@ -55,7 +55,7 @@ function goResource(id: string) {
         :back-label="t('plan.backPlan')"
         inner-class="px-2 sm:px-4 lg:px-5"
         :scroll-target="scrollTarget"
-        :lock-visible="navOpen"
+        :lock-visible="true"
         @heightchange="onHeightChange"
       >
         <template #leading>
@@ -78,12 +78,12 @@ function goResource(id: string) {
     </template>
 
     <template #nav>
-      <nav class="flex h-full flex-col gap-2 overflow-y-auto p-4" :aria-label="t('plan.resources.plan')">
+      <nav class="flex min-w-0 flex-col gap-2 p-4" :aria-label="t('plan.resources.plan')">
         <button
           v-for="item in plan?.resources ?? []"
           :key="item.id"
           type="button"
-          class="flex min-h-10 w-full items-center rounded-lg border-l-2 px-2.5 text-left text-sm transition"
+          class="flex min-h-10 min-w-0 w-full items-center rounded-lg border-l-2 px-2.5 text-left text-sm transition"
           :class="
             item.id === path || item.aliases.includes(path)
               ? 'border-accent bg-accent-soft font-semibold text-accent-ink'
@@ -91,7 +91,7 @@ function goResource(id: string) {
           "
           @click="goResource(item.id)"
         >
-          {{ pickLocale(item.title, lang) }}
+          <span class="min-w-0 truncate">{{ pickLocale(item.title, lang) }}</span>
         </button>
       </nav>
     </template>
