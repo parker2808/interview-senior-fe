@@ -191,7 +191,7 @@ const linkClass =
             :key="link.slug"
             :href="docsHref(lang, link.slug)"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             :class="linkClass"
           >
             {{ pickLocale(link.label, lang) }}
@@ -225,7 +225,7 @@ const linkClass =
             :key="question.id"
             :href="interviewHref(question.id)"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             :class="linkClass"
           >
             {{ pickLocale(question.label, lang) }}

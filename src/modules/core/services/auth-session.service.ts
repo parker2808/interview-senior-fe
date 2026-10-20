@@ -1,4 +1,8 @@
 import { toAuthApiError } from '@/modules/core/utils/api-error.util'
+import {
+  interviewAuthHeaders,
+  readInterviewToken,
+} from '@/modules/core/utils/interview-token.util'
 
 export type AuthSession = {
   ok: boolean
@@ -8,10 +12,22 @@ export type AuthSession = {
 
 export type AuthSessionScope = 'interview' | 'edit' | 'all'
 
+export const EMPTY_AUTH_SESSION: AuthSession = {
+  ok: true,
+  interview: false,
+  edit: false,
+}
+
 type SessionFetch = (url: string, opts?: Record<string, unknown>) => Promise<unknown>
 
 function defaultFetch(url: string, opts?: Record<string, unknown>) {
   return $fetch(url, { credentials: 'include', ...opts })
+}
+
+/** Browser `$fetch` on the client so a new tab can send cookie + Bearer. */
+export function sessionFetcher(requestFetch?: SessionFetch): SessionFetch {
+  if (import.meta.client || !requestFetch) return defaultFetch
+  return requestFetch
 }
 
 export function authSessionUrl() {
@@ -20,11 +36,16 @@ export function authSessionUrl() {
 
 export async function fetchAuthSession(
   requestFetch: SessionFetch = defaultFetch,
+  token?: string,
 ): Promise<AuthSession> {
+  const bearer = token ?? readInterviewToken()
   try {
     const data = (await requestFetch(authSessionUrl(), {
       credentials: 'include',
       cache: 'no-store',
+      headers: {
+        ...interviewAuthHeaders(bearer),
+      },
     })) as AuthSession
     return {
       ok: true,

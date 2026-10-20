@@ -199,7 +199,10 @@
     "example": "Example / story",
     "followUps": "Likely follow-ups",
     "empty": "No matching questions.",
-    "loading": "Loading questions…"
+    "loading": "Loading questions…",
+    "openNav": "Questions",
+    "backList": "Question list",
+    "selectPrompt": "Select a question from the list."
   },
   "auth": {
     "wrongCode": "Incorrect code. You can still view.",

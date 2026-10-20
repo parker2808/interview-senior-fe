@@ -23,7 +23,8 @@ practice/steps/pXX.json        # one practice step
 practice/design/               # optional — screens + index; hide Design UI when missing
 practice/design/index.json     # gallery catalog (Localized titles, specRefs, optional figma { url, label, note })
 practice/design/screens/*.webp
-plans/portfolio-design-system.md  # optional numbered design spec (`§X.Y` headings)
+plans/portfolio-design-system.md     # optional numbered design spec (`§X.Y`, `s-…` ids)
+plans/portfolio-design-system.vi.md  # optional Vietnamese spec (same § numbers; Spec tab falls back to EN)
 schema/                        # JSON Schema for Localized + blocks
 scripts/validate.mjs           # fails on missing en/vi
 ```

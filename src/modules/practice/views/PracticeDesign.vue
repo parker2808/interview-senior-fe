@@ -2,18 +2,22 @@
 import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
+import AppDetailShell from '@/modules/core/components/AppDetailShell/AppDetailShell.vue'
 import PracticeSubnav from '@/modules/practice/components/PracticeSubnav/PracticeSubnav.vue'
 import DesignGallery from '@/modules/practice/components/DesignGallery/DesignGallery.vue'
 import DesignLightbox from '@/modules/practice/components/DesignLightbox/DesignLightbox.vue'
 import DesignSpec from '@/modules/practice/components/DesignSpec/DesignSpec.vue'
+import DocToc from '@/modules/knowledge-base/components/DocToc/DocToc.vue'
 import {
   usePracticeDesign,
   usePracticeDesignAvailable,
 } from '@/modules/practice/composables/use-practice-index.composable'
 import { pickLocale } from '@/modules/content/utils/pick-locale.util'
 import { practiceDesignFigma } from '@/modules/practice/utils/design-figma.util'
+import { pickSpecMarkdown } from '@/modules/practice/utils/spec-locale.util'
 import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
 import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
+import type { TocItem } from '@/modules/content/types'
 
 const route = useRoute()
 const router = useRouter()
@@ -24,6 +28,10 @@ const { data: design, pending, error, refresh } = await usePracticeDesign()
 const { data: designAvailable } = await usePracticeDesignAvailable()
 
 const retrying = ref(false)
+const navOpen = ref(false)
+const shellRef = ref<{ mainRef: HTMLElement | null } | null>(null)
+const specRef = ref<{ jumpTo: (id: string) => void; activeHeading: string } | null>(null)
+
 async function retry() {
   retrying.value = true
   try {
@@ -72,58 +80,106 @@ function closeLightbox() {
 
 const figma = computed(() => practiceDesignFigma(design.value?.index.figma))
 
+const specPick = computed(() =>
+  pickSpecMarkdown(
+    {
+      en: design.value?.specMarkdown,
+      vi: design.value?.specMarkdownVi,
+    },
+    lang.value,
+  ),
+)
+
+const specHeadings = computed<TocItem[]>(() => {
+  if (specPick.value.usedLocale === 'vi' && design.value?.headingsVi?.length) {
+    return design.value.headingsVi
+  }
+  return design.value?.headings ?? []
+})
+
 const tabClass = (on: boolean) =>
   on
     ? 'border-accent bg-accent-soft text-accent-ink'
     : 'border-line bg-surface-elevated text-ink hover:border-accent hover:text-accent-ink'
+
+function jumpSpec(id: string) {
+  specRef.value?.jumpTo(id)
+  navOpen.value = false
+}
 </script>
 
 <template>
-  <div class="mx-auto min-h-screen max-w-hub pb-10">
-    <AppTopBar
-      :title="
-        design ? pickLocale(design.index.title, lang) : t('practice.designTitle')
-      "
-      :home-label="t('practice.backHub')"
-      back-to="/practice"
-      :back-label="t('practice.backList')"
-    >
-      <template #actions>
-        <a
-          href="/docs"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface-elevated text-ink transition hover:border-accent hover:text-accent-ink"
-          :aria-label="t('practice.openDocs')"
-          :title="t('practice.openDocs')"
-        >
-          <svg
-            class="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            aria-hidden="true"
+  <AppDetailShell ref="shellRef" v-model:nav-open="navOpen">
+    <template #topbar="{ onHeightChange, scrollTarget }">
+      <AppTopBar
+        :title="
+          design ? pickLocale(design.index.title, lang) : t('practice.designTitle')
+        "
+        :home-label="t('practice.backHub')"
+        back-to="/practice"
+        :back-label="t('practice.backList')"
+        inner-class="px-2 sm:px-4 lg:px-5"
+        :scroll-target="scrollTarget"
+        :lock-visible="navOpen"
+        @heightchange="onHeightChange"
+      >
+        <template #leading>
+          <button
+            type="button"
+            class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-white text-ink lg:hidden"
+            :aria-label="$t('docs.openNav')"
+            @click="navOpen = true"
           >
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-          </svg>
-        </a>
-        <LocaleToggle />
-        <ThemeToggle />
-      </template>
-    </AppTopBar>
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
+        </template>
+        <template #actions>
+          <a
+            href="/docs"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface-elevated text-ink transition hover:border-accent hover:text-accent-ink"
+            :aria-label="t('practice.openDocs')"
+            :title="t('practice.openDocs')"
+          >
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+          </a>
+          <LocaleToggle />
+          <ThemeToggle />
+        </template>
+      </AppTopBar>
+    </template>
+
+    <template #nav>
+      <div class="p-3">
+        <PracticeSubnav
+          v-if="designAvailable !== false"
+          active="design"
+          :design-available="true"
+        />
+      </div>
+      <DocToc
+        v-if="tab === 'spec'"
+        :items="specHeadings"
+        :active-id="specRef?.activeHeading || ''"
+        @navigate="jumpSpec"
+      />
+      <p v-else class="p-4 text-sm text-ink-muted">
+        {{ t('practice.tabScreens') }}
+      </p>
+    </template>
 
     <ContentSkeleton
       v-if="pending && !design"
       variant="practice-design"
-      class="px-4 pt-5 sm:px-6 sm:pt-8"
     />
     <ContentStatus
       v-else-if="error && !notFound"
-      class="mx-4 mt-5 sm:mx-6"
       kind="error"
       :message="t('practice.loadError')"
       :retrying="retrying"
@@ -131,11 +187,10 @@ const tabClass = (on: boolean) =>
     />
     <ContentStatus
       v-else-if="!design"
-      class="mx-4 mt-5 sm:mx-6"
       kind="empty"
       :message="t('practice.emptyDesign')"
     />
-    <div v-else class="animate-fade-up px-4 pt-5 sm:px-6 sm:pt-8">
+    <div v-else class="animate-fade-up pb-10">
       <header class="border-b border-line pb-5">
         <p class="text-xs font-semibold uppercase tracking-wider text-accent-ink">
           {{ t('practice.designEyebrow') }}
@@ -150,30 +205,15 @@ const tabClass = (on: boolean) =>
           <a
             :href="figma.url"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             class="inline-flex min-h-11 items-center gap-2 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-semibold text-ink transition hover:border-accent hover:text-accent-ink"
           >
-            <svg
-              class="h-4 w-4 shrink-0"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path d="M8 24c2.21 0 4-1.79 4-4v-4H8c-2.21 0-4 1.79-4 4s1.79 4 4 4Z" />
-              <path d="M4 12c0-2.21 1.79-4 4-4h4v8H8c-2.21 0-4-1.79-4-4Z" />
-              <path d="M4 4c0-2.21 1.79-4 4-4h4v8H8C5.79 8 4 6.21 4 4Z" />
-              <path d="M12 0h4c2.21 0 4 1.79 4 4s-1.79 4-4 4h-4V0Z" />
-              <path d="M20 12c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4Z" />
-            </svg>
             {{ pickLocale(figma.label, lang) }}
             <span class="text-ink-faint" aria-hidden="true">↗</span>
           </a>
           <p class="mt-2 text-xs leading-5 text-ink-muted">
             {{ pickLocale(figma.note, lang) }}
           </p>
-        </div>
-        <div class="mt-4">
-          <PracticeSubnav active="design" :design-available="designAvailable !== false" />
         </div>
       </header>
 
@@ -204,17 +244,20 @@ const tabClass = (on: boolean) =>
         </button>
       </div>
 
-      <section class="mt-6 pb-10">
+      <section class="mt-6">
         <DesignGallery
           v-if="tab === 'screens'"
           :screens="design.index.screens"
-          :headings="design.headings"
+          :headings="specHeadings"
           @open="openLightbox"
         />
         <DesignSpec
           v-else
-          :markdown="design.specMarkdown"
-          :headings="design.headings"
+          ref="specRef"
+          :markdown="specPick.markdown"
+          :headings="specHeadings"
+          hide-toc
+          :scroll-root="shellRef?.mainRef ?? null"
         />
       </section>
     </div>
@@ -228,5 +271,5 @@ const tabClass = (on: boolean) =>
         @index="lightboxIndex = $event"
       />
     </ClientOnly>
-  </div>
+  </AppDetailShell>
 </template>

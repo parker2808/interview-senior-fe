@@ -3,7 +3,8 @@ import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import InterviewPinGate from '@/modules/interview-qa/components/InterviewPinGate/InterviewPinGate.vue'
-import QuestionCard from '@/modules/interview-qa/components/QuestionCard/QuestionCard.vue'
+import InterviewQuestionNav from '@/modules/interview-qa/components/InterviewQuestionNav/InterviewQuestionNav.vue'
+import InterviewQuestionDetail from '@/modules/interview-qa/components/InterviewQuestionDetail/InterviewQuestionDetail.vue'
 import ContentSkeleton from '@/modules/content/components/ContentSkeleton/ContentSkeleton.vue'
 import ContentStatus from '@/modules/content/components/ContentStatus/ContentStatus.vue'
 import { useInterviewUnlock } from '@/modules/interview-qa/composables/use-interview-unlock.composable'
@@ -12,9 +13,20 @@ import type {
   InterviewLang,
 } from '@/modules/interview-qa/types/interview.type'
 import { filterInterviewQuestions } from '@/modules/interview-qa/utils/qa-search.util'
+import {
+  questionExists,
+  requestedQuestionId,
+  withQuestionQuery,
+} from '@/modules/interview-qa/utils/qa-route.util'
+import {
+  qaIsContentLoading,
+  qaIsGateOpen,
+  qaShouldShowQuestions,
+} from '@/modules/interview-qa/utils/qa-session-view.util'
 
 const { locale, t } = useI18n()
 const route = useRoute()
+const router = useRouter()
 const lang = computed<InterviewLang>(() =>
   locale.value === 'en' ? 'en' : 'vi',
 )
@@ -28,6 +40,8 @@ const {
   categories,
   questions,
   sessionReady,
+  sessionTimedOut,
+  questionsTimedOut,
   submitPasscode,
   lock,
   reload,
@@ -35,8 +49,9 @@ const {
 
 const categoryFilter = ref<'all' | InterviewCategoryId>('all')
 const query = ref('')
-const openIds = ref<Set<string>>(new Set())
-const focusedId = ref('')
+const navOpen = ref(false)
+const mobileShowList = ref(true)
+const mainRef = ref<HTMLElement | null>(null)
 
 const filtered = computed(() =>
   filterInterviewQuestions(questions.value, {
@@ -46,81 +61,150 @@ const filtered = computed(() =>
   }),
 )
 
-function toggle(id: string) {
-  const next = new Set(openIds.value)
-  if (next.has(id)) next.delete(id)
-  else next.add(id)
-  openIds.value = next
-}
-
-function expandAll() {
-  openIds.value = new Set(filtered.value.map((q) => q.id))
-}
-
-function collapseAll() {
-  openIds.value = new Set()
-}
-
-const contentLoading = computed(
-  () => !sessionReady.value || loadingQuestions.value,
-)
-const gateOpen = computed(() => sessionReady.value && !unlocked.value && !contentLoading.value)
-const showQuestions = computed(
-  () => unlocked.value && !contentLoading.value && !loadError.value,
+const requestedId = computed(() =>
+  requestedQuestionId({ query: route.query.q, hash: route.hash }),
 )
 
-const requestedQuestionId = computed(() => {
-  const q = route.query.q
-
-  if (typeof q === 'string' && q) return q
-  if (Array.isArray(q) && q[0]) return q[0]
-  if (route.hash?.startsWith('#')) return route.hash.slice(1)
-  return ''
+const selected = computed(() => {
+  const id = requestedId.value
+  if (id && questionExists(filtered.value, id)) {
+    return filtered.value.find((item) => item.id === id) ?? null
+  }
+  if (id && questionExists(questions.value, id)) {
+    return questions.value.find((item) => item.id === id) ?? null
+  }
+  return filtered.value[0] ?? questions.value[0] ?? null
 })
 
-async function focusQuestion(id: string) {
-  if (!id || !questions.value.some((item) => item.id === id)) return
+const selectedId = computed(() => selected.value?.id || '')
 
-  categoryFilter.value = 'all'
-  query.value = ''
-  focusedId.value = id
+const view = computed(() => ({
+  sessionPending: !sessionReady.value,
+  sessionTimedOut: Boolean(sessionTimedOut.value),
+  unlocked: unlocked.value,
+  questionsPending: loadingQuestions.value,
+  questionsTimedOut: Boolean(questionsTimedOut.value),
+  questionCount: questions.value.length,
+  loadError: loadError.value,
+}))
 
-  const next = new Set(openIds.value)
-  next.add(id)
-  openIds.value = next
+const contentLoading = computed(() => qaIsContentLoading(view.value))
+const gateOpen = computed(() => qaIsGateOpen(view.value))
+const showQuestions = computed(() => qaShouldShowQuestions(view.value))
 
+const showMobileDetail = computed(
+  () => Boolean(selected.value) && !mobileShowList.value,
+)
+
+function setQuestion(id: string, replace = true) {
+  mobileShowList.value = false
+  navOpen.value = false
+  const nextQuery = withQuestionQuery(
+    { ...route.query } as Record<string, string | string[] | null | undefined>,
+    id,
+  )
+  const method = replace ? router.replace : router.push
+  void method({ path: '/interview', query: nextQuery, hash: '' })
+}
+
+function backToList() {
+  mobileShowList.value = true
+  navOpen.value = false
+}
+
+onMounted(() => {
+  document.documentElement.classList.add('docs-lock-scroll')
+  document.body.classList.add('docs-lock-scroll')
+})
+onUnmounted(() => {
+  document.documentElement.classList.remove('docs-lock-scroll')
+  document.body.classList.remove('docs-lock-scroll')
+})
+
+watch(
+  [requestedId, unlocked, questions],
+  ([id, isUnlocked, loaded]) => {
+    if (!isUnlocked || !loaded.length) return
+    if (id && questionExists(loaded, id)) {
+      mobileShowList.value = false
+      return
+    }
+    if (id && !questionExists(filtered.value, id) && questionExists(loaded, id)) {
+      categoryFilter.value = 'all'
+      query.value = ''
+      mobileShowList.value = false
+      return
+    }
+    if (!id) mobileShowList.value = true
+  },
+  { immediate: true },
+)
+
+watch(selectedId, async (id) => {
+  if (!import.meta.client || !id) return
   await nextTick()
+  const pane = mainRef.value
+  if (pane) pane.scrollTop = 0
+})
 
-  const el = document.getElementById(id)
-  if (el) {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+async function onRetry() {
+  const ok = await reload()
+  if (ok && requestedId.value) {
+    await nextTick()
+    setQuestion(requestedId.value)
   }
 }
 
-watch(
-  [requestedQuestionId, unlocked, questions],
-  ([id, isUnlocked, loadedQuestions]) => {
-    if (!import.meta.client) return
-    if (!isUnlocked || !loadedQuestions.length || !id) return
-    void focusQuestion(id)
-  },
-  { immediate: false },
-)
+async function onUnlock(passcode: string) {
+  const ok = await submitPasscode(passcode)
+  if (ok && requestedId.value) {
+    await nextTick()
+    setQuestion(requestedId.value)
+  }
+}
 </script>
 
 <template>
-  <div class="mx-auto min-h-screen max-w-hub pb-10">
+  <div
+    class="docs-shell flex h-dvh max-h-dvh flex-col overflow-hidden"
+    style="--docs-header-h: 3.5rem"
+  >
     <InterviewPinGate
       :open="gateOpen"
-      :unlocking="unlocking || loadingQuestions"
+      :unlocking="unlocking"
       :error="unlockError || loadError"
-      @submit="submitPasscode"
+      @submit="onUnlock"
     />
 
     <AppTopBar
       :title="$t('interview.title')"
       :home-label="t('interview.backHub')"
+      inner-class="px-2 sm:px-4 lg:px-5"
+      :scroll-target="mainRef"
+      :lock-visible="navOpen"
     >
+      <template #leading>
+        <button
+          v-if="showQuestions"
+          type="button"
+          class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-white text-ink lg:hidden"
+          :aria-label="$t('interview.openNav')"
+          :title="$t('interview.openNav')"
+          @click="navOpen = true"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg>
+        </button>
+      </template>
       <template #actions>
         <button
           v-if="unlocked"
@@ -135,97 +219,173 @@ watch(
       </template>
     </AppTopBar>
 
-    <div v-if="showQuestions" class="px-4 pt-6 sm:px-6 lg:px-8">
-      <header class="max-w-3xl">
-        <p class="text-sm font-semibold uppercase tracking-[0.14em] text-accent-ink">
-          {{ $t('interview.eyebrow') }}
-        </p>
-        <h1 class="mt-2 text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-          {{ $t('interview.headline') }}
-        </h1>
-        <p class="mt-3 text-sm text-ink-muted sm:text-base">
-          {{ $t('interview.sub') }}
-        </p>
-      </header>
-
-      <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-        <input
-          v-model="query"
-          type="search"
-          class="min-h-11 w-full flex-1 rounded-lg border border-line bg-white px-3 text-sm outline-none focus:border-accent"
-          :placeholder="$t('interview.searchPlaceholder')"
-        />
-        <div class="flex gap-2">
-          <button
-            type="button"
-            class="min-h-11 rounded-lg border border-line bg-white px-3 text-sm font-semibold"
-            @click="expandAll"
-          >
-            {{ $t('interview.expandAll') }}
-          </button>
-          <button
-            type="button"
-            class="min-h-11 rounded-lg border border-line bg-white px-3 text-sm font-semibold"
-            @click="collapseAll"
-          >
-            {{ $t('interview.collapseAll') }}
-          </button>
-        </div>
-      </div>
-
-      <div class="mt-4 flex flex-wrap gap-2" role="tablist">
-        <button
-          type="button"
-          class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-          :class="
-            categoryFilter === 'all'
-              ? 'bg-accent text-white'
-              : 'border border-line bg-white'
-          "
-          @click="categoryFilter = 'all'"
-        >
-          {{ $t('interview.allCategories') }}
-        </button>
-        <button
-          v-for="cat in categories"
-          :key="cat.id"
-          type="button"
-          class="min-h-10 rounded-lg px-3 text-sm font-semibold"
-          :class="
-            categoryFilter === cat.id
-              ? 'bg-accent text-white'
-              : 'border border-line bg-white'
-          "
-          @click="categoryFilter = cat.id"
-        >
-          {{ cat.title[lang] }}
-        </button>
-      </div>
-
-      <p class="mt-3 text-xs text-ink-faint">
-        {{ filtered.length }} / {{ questions.length }}
-        {{ $t('interview.questionCount') }}
-      </p>
-
-      <div
-        class="mt-4 min-w-0 overflow-hidden rounded-2xl border border-line bg-surface-elevated px-3 sm:px-5"
+    <div v-if="showQuestions" class="flex min-h-0 flex-1 flex-col lg:flex-row">
+      <aside
+        class="hidden min-h-0 w-80 shrink-0 flex-col overflow-hidden border-r border-line bg-surface-elevated/70 lg:flex xl:w-96"
       >
-        <QuestionCard
-          v-for="item in filtered"
-          :key="item.id"
-          :item="item"
-          :lang="lang"
-          :open="openIds.has(item.id)"
-          :highlight="focusedId === item.id"
-          @toggle="toggle(item.id)"
-        />
-        <p
-          v-if="!filtered.length"
-          class="px-1 py-8 text-center text-sm text-ink-muted"
-        >
-          {{ $t('interview.empty') }}
-        </p>
-      </div>
+        <div class="shrink-0 space-y-3 border-b border-line p-3">
+          <input
+            v-model="query"
+            type="search"
+            class="min-h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none focus:border-accent"
+            :placeholder="$t('interview.searchPlaceholder')"
+          />
+          <div class="flex flex-wrap gap-2" role="tablist">
+            <button
+              type="button"
+              class="min-h-9 rounded-lg px-2.5 text-xs font-semibold"
+              :class="
+                categoryFilter === 'all'
+                  ? 'bg-accent text-white'
+                  : 'border border-line bg-white'
+              "
+              @click="categoryFilter = 'all'"
+            >
+              {{ $t('interview.allCategories') }}
+            </button>
+            <button
+              v-for="cat in categories"
+              :key="cat.id"
+              type="button"
+              class="min-h-9 rounded-lg px-2.5 text-xs font-semibold"
+              :class="
+                categoryFilter === cat.id
+                  ? 'bg-accent text-white'
+                  : 'border border-line bg-white'
+              "
+              @click="categoryFilter = cat.id"
+            >
+              {{ cat.title[lang] }}
+            </button>
+          </div>
+          <p class="text-xs text-ink-faint">
+            {{ filtered.length }} / {{ questions.length }}
+            {{ $t('interview.questionCount') }}
+          </p>
+        </div>
+        <div class="min-h-0 flex-1 overflow-y-auto">
+          <InterviewQuestionNav
+            :questions="filtered"
+            :categories="categories"
+            :lang="lang"
+            :active-id="selectedId"
+            @select="setQuestion"
+          />
+        </div>
+      </aside>
+
+      <Teleport to="body">
+        <div v-if="navOpen" class="fixed inset-0 z-40 lg:hidden">
+          <div class="absolute inset-0 bg-ink/40" @click="navOpen = false" />
+          <aside
+            class="absolute inset-y-0 left-0 flex w-[min(100%,22rem)] flex-col bg-surface-elevated shadow-xl"
+          >
+            <div class="flex items-center justify-between border-b border-line px-3 py-2">
+              <p class="text-sm font-semibold">{{ $t('interview.openNav') }}</p>
+              <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-lg"
+                :aria-label="$t('docs.closeNav')"
+                @click="navOpen = false"
+              >
+                ×
+              </button>
+            </div>
+            <div class="shrink-0 space-y-3 border-b border-line p-3">
+              <input
+                v-model="query"
+                type="search"
+                class="min-h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none focus:border-accent"
+                :placeholder="$t('interview.searchPlaceholder')"
+              />
+            </div>
+            <div class="min-h-0 flex-1 overflow-y-auto">
+              <InterviewQuestionNav
+                :questions="filtered"
+                :categories="categories"
+                :lang="lang"
+                :active-id="selectedId"
+                @select="setQuestion"
+              />
+            </div>
+          </aside>
+        </div>
+      </Teleport>
+
+      <main ref="mainRef" class="docs-main min-h-0 min-w-0 flex-1 overflow-y-auto">
+        <div class="lg:hidden">
+          <div v-if="!showMobileDetail" class="flex min-h-0 flex-col">
+            <div class="space-y-3 border-b border-line p-4">
+              <input
+                v-model="query"
+                type="search"
+                class="min-h-11 w-full rounded-lg border border-line bg-white px-3 text-sm outline-none focus:border-accent"
+                :placeholder="$t('interview.searchPlaceholder')"
+              />
+              <div class="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  class="min-h-9 rounded-lg px-2.5 text-xs font-semibold"
+                  :class="
+                    categoryFilter === 'all'
+                      ? 'bg-accent text-white'
+                      : 'border border-line bg-white'
+                  "
+                  @click="categoryFilter = 'all'"
+                >
+                  {{ $t('interview.allCategories') }}
+                </button>
+                <button
+                  v-for="cat in categories"
+                  :key="cat.id"
+                  type="button"
+                  class="min-h-9 rounded-lg px-2.5 text-xs font-semibold"
+                  :class="
+                    categoryFilter === cat.id
+                      ? 'bg-accent text-white'
+                      : 'border border-line bg-white'
+                  "
+                  @click="categoryFilter = cat.id"
+                >
+                  {{ cat.title[lang] }}
+                </button>
+              </div>
+            </div>
+            <InterviewQuestionNav
+              :questions="filtered"
+              :categories="categories"
+              :lang="lang"
+              :active-id="selectedId"
+              @select="setQuestion"
+            />
+          </div>
+          <div v-else class="px-4 py-5 sm:px-6">
+            <button
+              type="button"
+              class="mb-4 inline-flex min-h-10 items-center gap-1 rounded-lg border border-line bg-white px-3 text-sm font-semibold"
+              @click="backToList"
+            >
+              ← {{ $t('interview.backList') }}
+            </button>
+            <InterviewQuestionDetail
+              v-if="selected"
+              :item="selected"
+              :lang="lang"
+            />
+          </div>
+        </div>
+
+        <div class="hidden px-4 py-6 sm:px-6 lg:block lg:px-8">
+          <InterviewQuestionDetail
+            v-if="selected"
+            :item="selected"
+            :lang="lang"
+          />
+          <p v-else class="py-16 text-center text-sm text-ink-muted">
+            {{ $t('interview.selectPrompt') }}
+          </p>
+        </div>
+      </main>
     </div>
 
     <div v-else-if="contentLoading" class="px-4 pt-6 sm:px-6 lg:px-8">
@@ -240,7 +400,7 @@ watch(
         kind="error"
         :message="loadError"
         :retrying="loadingQuestions"
-        @retry="reload"
+        @retry="onRetry"
       />
     </div>
   </div>

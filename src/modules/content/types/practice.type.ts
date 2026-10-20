@@ -122,5 +122,7 @@ export type PracticeDesignIndex = {
 export type PracticeDesignPayload = {
   index: PracticeDesignIndex
   specMarkdown: string
+  specMarkdownVi: string
   headings: TocItem[]
+  headingsVi: TocItem[]
 }

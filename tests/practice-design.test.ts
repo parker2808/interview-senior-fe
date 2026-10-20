@@ -83,7 +83,7 @@ describe('§-ref mapping', () => {
     expect(specRefHref('§5.1', headings)).toBe(
       `/practice/design?tab=spec#${encodeURIComponent(hit!.id)}`,
     )
-    expect(hit!.id).toBe('51-home-light')
+    expect(hit!.id).toBe('s-5-1')
   })
 
   it('searches the spec with keyword AND and Vietnamese folding', () => {
@@ -110,6 +110,9 @@ describe('practice design readers', () => {
     expect(practiceDesignFigma(loaded?.index.figma)).toEqual(FIXTURE_FIGMA)
     expect(loaded?.specMarkdown).toContain('## 1. Product overview')
     expect(loaded?.specMarkdown).toContain('### 1.5 Navigation')
+    expect(loaded?.specMarkdownVi).toContain('## 1. Tổng quan sản phẩm')
+    expect(loaded?.headings.some((item) => item.id === 's-1-5')).toBe(true)
+    expect(loaded?.headingsVi.some((item) => item.id === 's-1-5')).toBe(true)
     expect(loaded?.headings.some((item) => item.text.startsWith('5.1'))).toBe(true)
     expect(listDesignScreenFiles(dir).some((name) => name.endsWith('.webp'))).toBe(true)
     expect(designScreenSrc('practice/design/screens/01-home-light.webp')).toBe(

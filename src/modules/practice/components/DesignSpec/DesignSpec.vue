@@ -8,10 +8,18 @@ import {
 
 const HEADER_OFFSET = 72
 
-const props = defineProps<{
-  markdown: string
-  headings: TocItem[]
-}>()
+const props = withDefaults(
+  defineProps<{
+    markdown: string
+    headings: TocItem[]
+    hideToc?: boolean
+    scrollRoot?: HTMLElement | null
+  }>(),
+  {
+    hideToc: false,
+    scrollRoot: null,
+  },
+)
 
 const { t } = useI18n()
 const query = ref('')
@@ -38,12 +46,32 @@ function headingEls() {
   )
 }
 
+function scrollContainer(): HTMLElement | Window {
+  if (props.scrollRoot) return props.scrollRoot
+  if (import.meta.client) {
+    const pane = document.querySelector<HTMLElement>('.docs-main')
+    if (pane) return pane
+  }
+  return window
+}
+
 function scrollToId(id: string, smooth = true) {
   if (!id) return
   const el = document.getElementById(id)
   if (!el) return
-  const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET
-  window.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' })
+  const container = scrollContainer()
+  if (container === window) {
+    const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET
+    window.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' })
+  } else {
+    const root = container as HTMLElement
+    const top =
+      el.getBoundingClientRect().top -
+      root.getBoundingClientRect().top +
+      root.scrollTop -
+      HEADER_OFFSET
+    root.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' })
+  }
   activeHeading.value = id
   if (import.meta.client) {
     const url = new URL(window.location.href)
@@ -56,6 +84,8 @@ function jumpTo(id: string) {
   tocOpen.value = false
   scrollToId(id, true)
 }
+
+defineExpose({ jumpTo, activeHeading, tocItems })
 
 function syncActiveFromScroll() {
   const headings = headingEls()
@@ -81,13 +111,17 @@ function applyHash() {
 }
 
 let scrollBound = false
+let boundTarget: HTMLElement | Window | null = null
 onMounted(() => {
-  window.addEventListener('scroll', syncActiveFromScroll, { passive: true })
+  boundTarget = scrollContainer()
+  boundTarget.addEventListener('scroll', syncActiveFromScroll, { passive: true })
   scrollBound = true
   nextTick(() => applyHash())
 })
 onUnmounted(() => {
-  if (scrollBound) window.removeEventListener('scroll', syncActiveFromScroll)
+  if (scrollBound && boundTarget) {
+    boundTarget.removeEventListener('scroll', syncActiveFromScroll)
+  }
 })
 
 watch(
@@ -103,7 +137,11 @@ watch(query, () => {
 </script>
 
 <template>
-  <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start lg:gap-6">
+  <div
+    :class="
+      hideToc ? '' : 'lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:items-start lg:gap-6'
+    "
+  >
     <div class="min-w-0">
       <label class="sr-only" for="design-spec-search">{{ t('practice.specSearch') }}</label>
       <input
@@ -133,7 +171,7 @@ watch(query, () => {
       </p>
     </div>
 
-    <div class="mt-6 lg:mt-0">
+    <div v-if="!hideToc" class="mt-6 lg:mt-0">
       <button
         type="button"
         class="mb-2 min-h-10 rounded-lg border border-line bg-surface-elevated px-3 text-sm font-semibold lg:hidden"

@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import type { PracticeDesignIndex } from '@/modules/content/types/practice.type'
+import { localeSpecPath } from '@/modules/practice/utils/spec-locale.util'
 import { specHeadingsFromMarkdown } from '@/modules/practice/utils/spec-ref.util'
 
 export const DEFAULT_SPEC_PATH = 'plans/portfolio-design-system.md'
@@ -41,7 +42,11 @@ export function listDesignScreenFiles(root: string): string[] {
 export function loadPracticeDesignFromDir(root: string) {
   const index = loadPracticeDesignIndexFromDir(root)
   if (!index) return null
-  const specMarkdown = loadPracticeSpecMarkdownFromDir(root, index.specPath) ?? ''
+  const specPath = index.specPath || DEFAULT_SPEC_PATH
+  const specMarkdown = loadPracticeSpecMarkdownFromDir(root, specPath) ?? ''
+  const specMarkdownVi =
+    loadPracticeSpecMarkdownFromDir(root, localeSpecPath(specPath, 'vi')) ?? ''
   const headings = specMarkdown ? specHeadingsFromMarkdown(specMarkdown) : []
-  return { index, specMarkdown, headings }
+  const headingsVi = specMarkdownVi ? specHeadingsFromMarkdown(specMarkdownVi) : []
+  return { index, specMarkdown, specMarkdownVi, headings, headingsVi }
 }

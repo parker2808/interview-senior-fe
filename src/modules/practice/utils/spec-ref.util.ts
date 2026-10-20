@@ -17,27 +17,44 @@ export function designScreenSrc(file: string): string {
   return name ? `/assets/practice-design/screens/${name}` : ''
 }
 
-const SECTION_ID_RE = /^\d+(?:\.\d+)*$/
+/** `1`, `1.5`, `3.1b` — letter suffix is allowed for sibling sections. */
+const SECTION_ID_RE = /^\d+(?:\.\d+)*[a-z]?$/i
+const SECTION_ID_CAPTURE = /(\d+(?:\.\d+)*[a-z]?)/i
 
-/** Parse `§5.1`, `5.1`, or a string that starts with a section id. */
+/** Stable HTML id so EN/VI headings share the same `#s-1-5` target. */
+export function specAnchorId(sectionId: string): string {
+  return `s-${String(sectionId || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\./g, '-')}`
+}
+
+/** Parse `§5.1`, `5.1`, `3.1b`, or a string that starts with a section id. */
 export function parseSpecSectionId(ref: string): string | null {
   const value = String(ref || '').trim()
   if (!value) return null
-  const exact = value.match(/^§\s*(\d+(?:\.\d+)*)\s*$/)
+  const exact = value.match(new RegExp(`^§\\s*${SECTION_ID_CAPTURE.source}\\s*$`, 'i'))
   if (exact) return exact[1]
-  const prefixed = value.match(/^§\s*(\d+(?:\.\d+)*)\b/)
+  const prefixed = value.match(new RegExp(`^§\\s*${SECTION_ID_CAPTURE.source}\\b`, 'i'))
   if (prefixed) return prefixed[1]
-  const bare = value.match(/^(\d+(?:\.\d+)*)\s*$/)
+  const bare = value.match(new RegExp(`^${SECTION_ID_CAPTURE.source}\\s*$`, 'i'))
   if (bare) return bare[1]
+  const fromAnchor = value.match(/^#?s-([0-9]+(?:-[0-9]+)*[a-z]?)$/i)
+  if (fromAnchor) return fromAnchor[1].replace(/-/g, '.')
   return null
 }
 
-function leadingSectionId(headingText: string): string | null {
+export function leadingSectionId(headingText: string): string | null {
   const text = String(headingText || '')
     .replace(/<[^>]+>/g, '')
     .trim()
-  const match = text.match(/^(\d+(?:\.\d+)*)/)
+  const match = text.match(new RegExp(`^${SECTION_ID_CAPTURE.source}\\b`, 'i'))
   return match?.[1] ?? null
+}
+
+export function headingSpecAnchorId(headingText: string): string | null {
+  const sectionId = leadingSectionId(headingText)
+  return sectionId ? specAnchorId(sectionId) : null
 }
 
 /**
@@ -48,7 +65,8 @@ export function headingMatchesSection(headingText: string, sectionId: string): b
   const id = String(sectionId || '').trim()
   if (!SECTION_ID_RE.test(id)) return false
   const leading = leadingSectionId(headingText)
-  return leading === id
+  if (!leading) return false
+  return leading.toLowerCase() === id.toLowerCase()
 }
 
 export function mapSpecRefToHeading(
@@ -73,8 +91,42 @@ export function specHeadingsFromMarkdown(markdown: string): TocItem[] {
   return renderSpecMarkdown(markdown).toc
 }
 
+function decodeBasicEntities(s: string) {
+  return s
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+}
+
+/**
+ * Prefer explicit `s-…` ids (from the markdown or from `§N.M`) so locale
+ * switches and § refs keep pointing at the same heading.
+ */
 export function renderSpecMarkdown(markdown: string): { html: string; toc: TocItem[] } {
-  return enhanceMarkdownHtml(renderMarkdown(markdown))
+  const rendered = enhanceMarkdownHtml(renderMarkdown(markdown))
+  const toc: TocItem[] = []
+
+  const html = rendered.html.replace(
+    /<h([1-6])([^>]*)>([\s\S]*?)<\/h\1>/gi,
+    (_full, levelStr: string, attrs: string, inner: string) => {
+      const level = Number(levelStr)
+      const text = decodeBasicEntities(inner.replace(/<[^>]+>/g, '')).trim()
+      const existing = attrs.match(/\sid=["']([^"']+)["']/i)?.[1] || ''
+      const fromSection = headingSpecAnchorId(text)
+      const id =
+        existing.startsWith('s-') && existing.length > 2
+          ? existing
+          : fromSection || existing || `section-${level}`
+      const cleanAttrs = attrs.replace(/\sid=["'][^"']*["']/i, '')
+      if (level >= 2) toc.push({ id, text, level })
+      return `<h${level}${cleanAttrs} id="${id}">${inner}</h${level}>`
+    },
+  )
+
+  return { html, toc }
 }
 
 export function specMatchesQuery(text: string, query: string): boolean {

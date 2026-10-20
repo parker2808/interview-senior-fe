@@ -16,6 +16,55 @@ export const TINY_WEBP = Buffer.from(
 )
 
 export const FIXTURE_SPEC_PATH = 'plans/portfolio-design-system.md'
+export const FIXTURE_SPEC_PATH_VI = 'plans/portfolio-design-system.vi.md'
+
+export function fixtureDesignSpecMarkdownVi() {
+  return `# Hệ thống thiết kế portfolio
+
+Nguồn sự thật cho UI sản phẩm practice. Heading được đánh số để \`§X.Y\` resolve.
+
+## 1. Tổng quan sản phẩm
+
+Site public là một content graph song ngữ. Admin là bề mặt riêng, cùng token.
+
+| Surface | Audience | Auth |
+| --- | --- | --- |
+| Public | Readers | None |
+| Admin | Editors | Session cookie |
+
+### 1.5 Navigation
+
+Nav chính: Hub, Docs, Plan, Practice, Q&A. Practice cũng link sang trang Design này.
+
+## 2. Foundations
+
+Color, type, và space. Token phải sống được ở light và dark.
+
+### 2.1 Color
+
+Accent là teal. Không hard-code white trên elevated surface.
+
+### 2.3 Hiệu năng
+
+Giữ LCP của thumbnail gallery trung thực: width/height trên mọi \`<img>\`, \`loading="lazy"\` dưới fold.
+
+## 5. Screens
+
+Ảnh full page. View admin dài phải cuộn trong lightbox.
+
+### 5.1 Home - light
+
+Trang chủ public, theme sáng, desktop.
+
+### 5.2 Admin dashboard
+
+Editor thấy draft, publish, và media.
+
+## 6. Motion
+
+Ưu tiên opacity và translate nhỏ. Tôn trọng \`prefers-reduced-motion\`.
+`
+}
 
 export function fixtureDesignSpecMarkdown() {
   return `# Portfolio design system
@@ -236,6 +285,7 @@ export function writePracticeDesignFixture(dir, options = {}) {
     writeFileSync(file, typeof value === 'string' ? value : `${JSON.stringify(value, null, 2)}\n`)
   }
   write(FIXTURE_SPEC_PATH, fixtureDesignSpecMarkdown())
+  write(FIXTURE_SPEC_PATH_VI, fixtureDesignSpecMarkdownVi())
   write('practice/design/index.json', fixtureDesignIndex(screens, options))
   for (const screen of screens) {
     writeWebp(path.join(dir, screen.file), {

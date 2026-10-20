@@ -20,6 +20,7 @@ import {
   DEFAULT_SPEC_PATH,
   DESIGN_INDEX_REL,
 } from '@/modules/practice/utils/design-read.util'
+import { localeSpecPath } from '@/modules/practice/utils/spec-locale.util'
 import { specHeadingsFromMarkdown } from '@/modules/practice/utils/spec-ref.util'
 import { indexFromMetaAndSteps } from '@/modules/practice/utils/practice-read.util'
 import { isPracticeStepId } from '@/modules/practice/utils/practice-id.util'
@@ -279,8 +280,11 @@ export async function readPracticeDesign(): Promise<PracticeDesignPayload> {
   }
   const specPath = safeContentRel(index.specPath || DEFAULT_SPEC_PATH) || DEFAULT_SPEC_PATH
   const specMarkdown = (await readContentTextOptional(specPath)) ?? ''
+  const specMarkdownVi =
+    (await readContentTextOptional(localeSpecPath(specPath, 'vi'))) ?? ''
   const headings = specMarkdown ? specHeadingsFromMarkdown(specMarkdown) : []
-  return { index, specMarkdown, headings }
+  const headingsVi = specMarkdownVi ? specHeadingsFromMarkdown(specMarkdownVi) : []
+  return { index, specMarkdown, specMarkdownVi, headings, headingsVi }
 }
 
 export async function readInterviewBank(): Promise<InterviewBank> {

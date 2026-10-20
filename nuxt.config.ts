@@ -109,4 +109,9 @@ export default defineNuxtConfig({
   },
 
   telemetry: false,
+
+  experimental: {
+    // After a new deploy, missing hashed chunks should reload instead of hanging.
+    emitRouteChunkError: 'automatic',
+  },
 })
