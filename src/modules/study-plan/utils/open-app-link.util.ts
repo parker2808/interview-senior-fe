@@ -11,5 +11,7 @@ export function interviewHref(id: string) {
 
 export function openInNewTab(href: string) {
   if (!import.meta.client) return
-  window.open(href, '_blank', 'noopener,noreferrer')
+  // Keep opener isolated (`noopener`) but send a same-site referrer so
+  // SameSite=Lax session cookies go with the first request in the new tab.
+  window.open(href, '_blank', 'noopener')
 }

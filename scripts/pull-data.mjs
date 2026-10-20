@@ -60,15 +60,25 @@ function noteOptionalDesign(dir) {
       'Note: plans/portfolio-design-system.md is missing (optional — Spec tab will be empty).',
     )
   }
+  if (!existsSync(path.join(dir, 'plans/portfolio-design-system.vi.md'))) {
+    console.log(
+      'Note: plans/portfolio-design-system.vi.md is missing (optional — Spec tab falls back to English).',
+    )
+  }
+}
+
+function copySpecIfPresent(from, to, rel) {
+  const specSrc = path.join(from, rel)
+  if (!existsSync(specSrc)) return false
+  const specDest = path.join(to, rel)
+  mkdirSync(path.dirname(specDest), { recursive: true })
+  cpSync(specSrc, specDest)
+  return true
 }
 
 function copyOptionalDesign(from, to) {
-  const specSrc = path.join(from, 'plans/portfolio-design-system.md')
-  const specDest = path.join(to, 'plans/portfolio-design-system.md')
-  if (existsSync(specSrc)) {
-    mkdirSync(path.dirname(specDest), { recursive: true })
-    cpSync(specSrc, specDest)
-  }
+  copySpecIfPresent(from, to, 'plans/portfolio-design-system.md')
+  copySpecIfPresent(from, to, 'plans/portfolio-design-system.vi.md')
   const designSrc = path.join(from, 'practice/design')
   const designDest = path.join(to, 'practice/design')
   if (existsSync(designSrc)) {

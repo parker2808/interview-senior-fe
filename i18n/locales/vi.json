@@ -199,7 +199,10 @@
     "example": "Ví dụ / story",
     "followUps": "Follow-up hay gặp",
     "empty": "Không có câu hỏi khớp.",
-    "loading": "Đang tải câu hỏi…"
+    "loading": "Đang tải câu hỏi…",
+    "openNav": "Câu hỏi",
+    "backList": "Danh sách câu hỏi",
+    "selectPrompt": "Chọn một câu hỏi trong danh sách."
   },
   "auth": {
     "wrongCode": "Mã không đúng. Bạn vẫn có thể xem.",

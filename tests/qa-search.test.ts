@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { filterInterviewQuestions } from '@/modules/interview-qa/utils/qa-search.util'
+import {
+  filterInterviewQuestions,
+  groupInterviewQuestions,
+} from '@/modules/interview-qa/utils/qa-search.util'
 import { sampleQuestions } from './fixtures/search-content'
 
 describe('interview Q&A keyword search', () => {
@@ -65,5 +68,23 @@ describe('interview Q&A keyword search', () => {
         lang: 'en',
       }),
     ).toEqual([])
+  })
+
+  it('groups questions in category order for the two-pane list', () => {
+    const groups = groupInterviewQuestions(sampleQuestions, [
+      {
+        id: 'soft',
+        title: { en: 'Soft skills', vi: 'Kỹ năng mềm' },
+        blurb: { en: '', vi: '' },
+      },
+      {
+        id: 'technical',
+        title: { en: 'Technical', vi: 'Kỹ thuật' },
+        blurb: { en: '', vi: '' },
+      },
+    ])
+    expect(groups.map((group) => group.category.id)).toEqual(['soft', 'technical'])
+    expect(groups[0]?.questions.map((item) => item.id)).toEqual(['q-soft'])
+    expect(groups[1]?.questions.map((item) => item.id)).toEqual(['q-tdz'])
   })
 })

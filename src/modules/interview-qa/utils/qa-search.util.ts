@@ -1,5 +1,6 @@
 import type {
   InterviewCategoryId,
+  InterviewCategoryMeta,
   InterviewLang,
   InterviewQuestion,
 } from '@/modules/interview-qa/types/interview.type'
@@ -109,4 +110,39 @@ export function filterInterviewQuestions(
     .filter((entry) => entry.score > 0)
     .sort((a, b) => b.score - a.score || a.index - b.index)
     .map((entry) => entry.item)
+}
+
+export function groupInterviewQuestions(
+  items: InterviewQuestion[],
+  categories: InterviewCategoryMeta[],
+): Array<{ category: InterviewCategoryMeta; questions: InterviewQuestion[] }> {
+  const byId = new Map<InterviewCategoryId, InterviewQuestion[]>()
+  for (const item of items) {
+    const list = byId.get(item.category) ?? []
+    list.push(item)
+    byId.set(item.category, list)
+  }
+  const groups: Array<{
+    category: InterviewCategoryMeta
+    questions: InterviewQuestion[]
+  }> = []
+  const seen = new Set<InterviewCategoryId>()
+  for (const category of categories) {
+    const questions = byId.get(category.id)
+    if (!questions?.length) continue
+    groups.push({ category, questions })
+    seen.add(category.id)
+  }
+  for (const [id, questions] of byId) {
+    if (seen.has(id) || !questions.length) continue
+    groups.push({
+      category: {
+        id,
+        title: { en: id, vi: id },
+        blurb: { en: '', vi: '' },
+      },
+      questions,
+    })
+  }
+  return groups
 }

@@ -17,27 +17,44 @@ export function designScreenSrc(file: string): string {
   return name ? `/assets/practice-design/screens/${name}` : ''
 }
 
-const SECTION_ID_RE = /^\d+(?:\.\d+)*$/
+/** `1`, `1.5`, `3.1b` — letter suffix is allowed for sibling sections. */
+const SECTION_ID_RE = /^\d+(?:\.\d+)*[a-z]?$/i
+const SECTION_ID_CAPTURE = /(\d+(?:\.\d+)*[a-z]?)/i
 
-/** Parse `§5.1`, `5.1`, or a string that starts with a section id. */
+/** Stable HTML id so EN/VI headings share the same `#s-1-5` target. */
+export function specAnchorId(sectionId: string): string {
+  return `s-${String(sectionId || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\./g, '-')}`
+}
+
+/** Parse `§5.1`, `5.1`, `3.1b`, or a string that starts with a section id. */
 export function parseSpecSectionId(ref: string): string | null {
   const value = String(ref || '').trim()
   if (!value) return null
-  const exact = value.match(/^§\s*(\d+(?:\.\d+)*)\s*$/)
+  const exact = value.match(new RegExp(`^§\\s*${SECTION_ID_CAPTURE.source}\\s*$`, 'i'))
   if (exact) return exact[1]
-  const prefixed = value.match(/^§\s*(\d+(?:\.\d+)*)\b/)
+  const prefixed = value.match(new RegExp(`^§\\s*${SECTION_ID_CAPTURE.source}\\b`, 'i'))
   if (prefixed) return prefixed[1]
-  const bare = value.match(/^(\d+(?:\.\d+)*)\s*$/)
+  const bare = value.match(new RegExp(`^${SECTION_ID_CAPTURE.source}\\s*$`, 'i'))
   if (bare) return bare[1]
+  const fromAnchor = value.match(/^#?s-([0-9]+(?:-[0-9]+)*[a-z]?)$/i)
+  if (fromAnchor) return fromAnchor[1].replace(/-/g, '.')
   return null
 }
 
-function leadingSectionId(headingText: string): string | null {
+export function leadingSectionId(headingText: string): string | null {
   const text = String(headingText || '')
     .replace(/<[^>]+>/g, '')
     .trim()
-  const match = text.match(/^(\d+(?:\.\d+)*)/)
+  const match = text.match(new RegExp(`^${SECTION_ID_CAPTURE.source}\\b`, 'i'))
   return match?.[1] ?? null
+}
+
+export function headingSpecAnchorId(headingText: string): string | null {
+  const sectionId = leadingSectionId(headingText)
+  return sectionId ? specAnchorId(sectionId) : null
 }
 
 /**
@@ -48,7 +65,8 @@ export function headingMatchesSection(headingText: string, sectionId: string): b
   const id = String(sectionId || '').trim()
   if (!SECTION_ID_RE.test(id)) return false
   const leading = leadingSectionId(headingText)
-  return leading === id
+  if (!leading) return false
+  return leading.toLowerCase() === id.toLowerCase()
 }
 
 export function mapSpecRefToHeading(
@@ -73,8 +91,50 @@ export function specHeadingsFromMarkdown(markdown: string): TocItem[] {
   return renderSpecMarkdown(markdown).toc
 }
 
+function decodeBasicEntities(s: string) {
+  return s
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+}
+
+const SAFE_SPEC_ANCHOR = /^s-[a-z0-9-]+$/i
+
+function sanitizeHeadingInner(inner: string): string {
+  return String(inner || '')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+}
+
+/**
+ * Prefer explicit `s-…` ids (HTML `<h2 id="s-1">` from the data spec, or
+ * derived from `§N.M`) so locale switches and § refs share the same hash.
+ * Heading tags keep only that id (no onclick / style passthrough).
+ */
 export function renderSpecMarkdown(markdown: string): { html: string; toc: TocItem[] } {
-  return enhanceMarkdownHtml(renderMarkdown(markdown))
+  const rendered = enhanceMarkdownHtml(renderMarkdown(markdown))
+  const toc: TocItem[] = []
+
+  const html = rendered.html.replace(
+    /<h([1-6])([^>]*)>([\s\S]*?)<\/h\1>/gi,
+    (_full, levelStr: string, attrs: string, inner: string) => {
+      const level = Number(levelStr)
+      const safeInner = sanitizeHeadingInner(inner)
+      const text = decodeBasicEntities(safeInner.replace(/<[^>]+>/g, '')).trim()
+      const existing = attrs.match(/\sid=["']([^"']+)["']/i)?.[1] || ''
+      const fromSection = headingSpecAnchorId(text)
+      const id = SAFE_SPEC_ANCHOR.test(existing)
+        ? existing
+        : fromSection || `section-${level}`
+      if (level >= 2) toc.push({ id, text, level })
+      return `<h${level} id="${id}">${safeInner}</h${level}>`
+    },
+  )
+
+  return { html, toc }
 }
 
 export function specMatchesQuery(text: string, query: string): boolean {
@@ -85,15 +145,27 @@ export function specMatchesQuery(text: string, query: string): boolean {
 
 type MdSection = { heading: string; body: string }
 
-function splitMarkdownByHeadings(markdown: string): MdSection[] {
+function headingTextFromLine(line: string): string | null {
+  const trimmed = String(line || '').trim()
+  const md = trimmed.match(/^#{1,6}\s+(.+)$/)
+  if (md) return md[1].trim()
+  const html = trimmed.match(/^<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]\s*>$/i)
+  if (html) {
+    return decodeBasicEntities(html[1].replace(/<[^>]+>/g, '')).trim()
+  }
+  return null
+}
+
+/** Split on markdown `##` and HTML `<hN id="s-…">` headings (data-repo spec). */
+export function splitSpecSections(markdown: string): MdSection[] {
   const lines = String(markdown || '').split(/\r?\n/)
   const sections: MdSection[] = []
   let current: MdSection | null = null
   for (const line of lines) {
-    const heading = line.match(/^#{1,6}\s+(.+)$/)
+    const heading = headingTextFromLine(line)
     if (heading) {
       if (current) sections.push(current)
-      current = { heading: heading[1].trim(), body: '' }
+      current = { heading, body: '' }
       continue
     }
     if (!current) current = { heading: '', body: `${line}\n` }
@@ -112,7 +184,7 @@ export function matchingSpecHeadingIds(
   const keywords = splitSearchKeywords(query)
   if (!keywords.length) return headings.map((item) => item.id)
 
-  const sections = splitMarkdownByHeadings(markdown)
+  const sections = splitSpecSections(markdown)
   const claimed = new Set<number>()
   const ids: string[] = []
 

@@ -245,6 +245,74 @@ function validatePracticeDesign() {
       fail(hint, `missing screen file ${file}`)
     }
   }
+
+  validateDesignSpecPair(String(index.specPath || '').trim())
+}
+
+function specSectionIdsFromMarkdown(markdown) {
+  const ids = []
+  for (const line of String(markdown || '').split(/\r?\n/)) {
+    const match = line.match(/^#{1,6}\s+(\d+(?:\.\d+)*[a-z]?)\b/i)
+    if (match) ids.push(match[1].toLowerCase())
+  }
+  for (const match of String(markdown || '').matchAll(
+    /<h[1-6][^>]*>(\d+(?:\.\d+)*[a-z]?)\b/gi,
+  )) {
+    const id = match[1].toLowerCase()
+    if (!ids.includes(id)) ids.push(id)
+  }
+  return ids
+}
+
+function specHtmlAnchorIds(markdown) {
+  return [...String(markdown || '').matchAll(/<h[1-6][^>]*\sid=["'](s-[^"']+)["']/gi)].map(
+    (match) => match[1].toLowerCase(),
+  )
+}
+
+function expectedSpecAnchor(sectionId) {
+  return `s-${String(sectionId).toLowerCase().replace(/\./g, '-')}`
+}
+
+function validateDesignSpecPair(specPath) {
+  if (!specPath) return
+  const enFile = path.join(root, specPath)
+  if (!existsSync(enFile)) return
+  const enMarkdown = readFileSync(enFile, 'utf8')
+  const enIds = specSectionIdsFromMarkdown(enMarkdown)
+  const enAnchors = new Set(specHtmlAnchorIds(enMarkdown))
+  for (const id of enIds) {
+    const anchor = expectedSpecAnchor(id)
+    if (!enAnchors.has(anchor) && !enMarkdown.includes(`id="${anchor}"`)) {
+      /* markdown `## N.M` headings get `s-…` ids in the app renderer */
+    }
+  }
+  const viRel = specPath.replace(/\.md$/i, '.vi.md')
+  const viFile = path.join(root, viRel)
+  if (!existsSync(viFile)) return
+  const viMarkdown = readFileSync(viFile, 'utf8')
+  const viIds = specSectionIdsFromMarkdown(viMarkdown)
+  const viAnchors = new Set(specHtmlAnchorIds(viMarkdown))
+  const enSet = new Set(enIds)
+  const viSet = new Set(viIds)
+  for (const id of enSet) {
+    if (!viSet.has(id)) {
+      fail(viRel, `missing numbered heading ${id} (must match the English spec)`)
+    }
+    const anchor = expectedSpecAnchor(id)
+    if (
+      (enAnchors.has(anchor) || enMarkdown.includes(`id="${anchor}"`)) &&
+      !viAnchors.has(anchor) &&
+      !viMarkdown.includes(`id="${anchor}"`)
+    ) {
+      fail(viRel, `missing explicit id="${anchor}" for §${id}`)
+    }
+  }
+  for (const id of viSet) {
+    if (!enSet.has(id)) {
+      fail(viRel, `extra numbered heading ${id} (must match the English spec)`)
+    }
+  }
 }
 
 function validatePracticeTree() {
