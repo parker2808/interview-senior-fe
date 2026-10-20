@@ -52,6 +52,7 @@ const query = ref('')
 const navOpen = ref(false)
 const mobileShowList = ref(true)
 const mainRef = ref<HTMLElement | null>(null)
+const topBarHeight = ref(56)
 
 const filtered = computed(() =>
   filterInterviewQuestions(questions.value, {
@@ -167,7 +168,7 @@ async function onUnlock(passcode: string) {
 <template>
   <div
     class="docs-shell flex h-dvh max-h-dvh flex-col overflow-hidden"
-    style="--docs-header-h: 3.5rem"
+    :style="{ '--docs-header-h': `${topBarHeight}px` }"
   >
     <InterviewPinGate
       :open="gateOpen"
@@ -181,7 +182,8 @@ async function onUnlock(passcode: string) {
       :home-label="t('interview.backHub')"
       inner-class="px-2 sm:px-4 lg:px-5"
       :scroll-target="mainRef"
-      :lock-visible="navOpen"
+      :lock-visible="true"
+      @heightchange="topBarHeight = $event"
     >
       <template #leading>
         <button
@@ -219,7 +221,7 @@ async function onUnlock(passcode: string) {
       </template>
     </AppTopBar>
 
-    <div v-if="showQuestions" class="flex min-h-0 flex-1 flex-col lg:flex-row">
+    <div v-if="showQuestions" class="docs-split flex min-h-0 flex-1 flex-col lg:flex-row">
       <aside
         class="hidden min-h-0 w-80 shrink-0 flex-col overflow-hidden border-r border-line bg-surface-elevated/70 lg:flex xl:w-96"
       >
@@ -263,7 +265,7 @@ async function onUnlock(passcode: string) {
             {{ $t('interview.questionCount') }}
           </p>
         </div>
-        <div class="min-h-0 flex-1 overflow-y-auto">
+        <div class="docs-nav-pane min-h-0 flex-1">
           <InterviewQuestionNav
             :questions="filtered"
             :categories="categories"
@@ -278,7 +280,7 @@ async function onUnlock(passcode: string) {
         <div v-if="navOpen" class="fixed inset-0 z-40 lg:hidden">
           <div class="absolute inset-0 bg-ink/40" @click="navOpen = false" />
           <aside
-            class="absolute inset-y-0 left-0 flex w-[min(100%,22rem)] flex-col bg-surface-elevated shadow-xl"
+            class="absolute inset-y-0 left-0 flex w-[min(100%,22rem)] min-w-0 flex-col overflow-hidden bg-surface-elevated shadow-xl"
           >
             <div class="flex items-center justify-between border-b border-line px-3 py-2">
               <p class="text-sm font-semibold">{{ $t('interview.openNav') }}</p>
@@ -299,7 +301,7 @@ async function onUnlock(passcode: string) {
                 :placeholder="$t('interview.searchPlaceholder')"
               />
             </div>
-            <div class="min-h-0 flex-1 overflow-y-auto">
+            <div class="docs-nav-pane min-h-0 flex-1">
               <InterviewQuestionNav
                 :questions="filtered"
                 :categories="categories"
@@ -312,7 +314,7 @@ async function onUnlock(passcode: string) {
         </div>
       </Teleport>
 
-      <main ref="mainRef" class="docs-main min-h-0 min-w-0 flex-1 overflow-y-auto">
+      <main ref="mainRef" class="docs-main docs-pane min-h-0 min-w-0 flex-1">
         <div class="lg:hidden">
           <div v-if="!showMobileDetail" class="flex min-h-0 flex-col">
             <div class="space-y-3 border-b border-line p-4">

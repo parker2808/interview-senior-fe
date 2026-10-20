@@ -117,7 +117,7 @@ function goStep(id: string) {
         :back-label="t('practice.backList')"
         inner-class="px-2 sm:px-4 lg:px-5"
         :scroll-target="scrollTarget"
-        :lock-visible="navOpen"
+        :lock-visible="true"
         @heightchange="onHeightChange"
       >
         <template #leading>
@@ -153,10 +153,13 @@ function goStep(id: string) {
       </AppTopBar>
     </template>
 
-    <template #nav>
-      <div v-if="designAvailable" class="p-3">
+    <template v-if="designAvailable" #nav-pinned>
+      <div class="p-3">
         <PracticeSubnav active="steps" :design-available="true" />
       </div>
+    </template>
+
+    <template #nav>
       <PracticeStepNav
         v-if="index"
         :milestones="index.milestones"

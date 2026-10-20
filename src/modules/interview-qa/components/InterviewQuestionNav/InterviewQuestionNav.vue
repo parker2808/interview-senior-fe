@@ -40,7 +40,7 @@ watch(
 </script>
 
 <template>
-  <nav ref="listRef" class="flex flex-col" :aria-label="$t('interview.title')">
+  <nav ref="listRef" class="flex min-w-0 flex-col" :aria-label="$t('interview.title')">
     <div v-for="group in grouped" :key="group.category.id">
       <p
         class="sticky top-0 z-[1] bg-surface-elevated/95 px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-ink-faint"
@@ -52,7 +52,7 @@ watch(
         :key="item.id"
         type="button"
         :data-qid="item.id"
-        class="flex min-h-12 w-full flex-col items-start gap-1 border-b border-line px-3 py-3 text-left text-sm transition last:border-b-0"
+        class="flex min-h-12 min-w-0 w-full flex-col items-start gap-1 border-b border-line px-3 py-3 text-left text-sm transition last:border-b-0"
         :class="
           item.id === activeId
             ? 'bg-accent-soft font-semibold text-accent-ink'
@@ -60,7 +60,7 @@ watch(
         "
         @click="$emit('select', item.id)"
       >
-        <span class="line-clamp-2">{{ item.question[lang] }}</span>
+        <span class="min-w-0 max-w-full line-clamp-2 overflow-hidden">{{ item.question[lang] }}</span>
         <span class="flex flex-wrap gap-1">
           <span
             v-for="tag in item.tags.slice(0, 3)"

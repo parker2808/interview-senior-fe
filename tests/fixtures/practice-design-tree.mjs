@@ -42,6 +42,13 @@ Site public là một content graph song ngữ. Admin là bề mặt riêng, cù
 
 Nav chính: Hub, Docs, Plan, Practice, Q&A. Practice cũng link sang trang Design này.
 
+<h3 id="s-1-6">1.6 Data model</h3>
+
+| Nhóm | Entity | Fields | Ghi chú |
+| --- | --- | --- | --- |
+| Site (1 row) | \`SiteSettings\` | \`siteName\`, \`domain\`, \`defaultLocale\`, \`seoTitle{En,Vi}\`, \`seoDescription{En,Vi}\`, \`ogImageId?\`, \`footerNote{En,Vi}\`, \`contactIntro{En,Vi}\`, \`replyTimeNote{En,Vi}\`, \`contactEmail\` (\`<email>\`), \`availability\` (OPEN \\| NOT_LOOKING \\| FREELANCE), \`availabilityNote{En,Vi}\`, \`analyticsEnabled\` | SEO mặc định cho page không có SEO riêng |
+| Site | \`NavItem\` | \`location\` (HEADER \\| FOOTER), \`label{En,Vi}\`, \`href\` | Admin chọn từ list |
+
 <h2 id="s-2">2. Foundations</h2>
 
 > **Trong chương này:** các mục đánh số bên dưới.
@@ -121,6 +128,13 @@ The public site is a bilingual content graph. Admin is a separate surface with t
 <h3 id="s-1-5">1.5 Navigation</h3>
 
 Primary nav: Hub, Docs, Plan, Practice, Q&A. Practice also links to this Design page.
+
+<h3 id="s-1-6">1.6 Data model</h3>
+
+| Group | Entity | Fields | Notes |
+| --- | --- | --- | --- |
+| Site (1 row) | \`SiteSettings\` | \`siteName\`, \`domain\`, \`defaultLocale\`, \`seoTitle{En,Vi}\`, \`seoDescription{En,Vi}\`, \`ogImageId?\`, \`footerNote{En,Vi}\`, \`contactIntro{En,Vi}\`, \`replyTimeNote{En,Vi}\`, \`contactEmail\` (\`<email>\`), \`availability\` (OPEN \\| NOT_LOOKING \\| FREELANCE), \`availabilityNote{En,Vi}\`, \`analyticsEnabled\` | Default SEO for pages without their own |
+| Site | \`NavItem\` | \`location\` (HEADER \\| FOOTER), \`label{En,Vi}\`, \`href\` | Admin picks from the list |
 
 \`\`\`
 +--------------------------------------+

@@ -1,16 +1,18 @@
-# Layout, Q&A two-pane, auth bugs, bilingual design spec
+# Split-pane layout: one scrollbar per pane, sticky nav
 
 ## Plan
-- [x] Restructure EN design spec + add VI version (data files local; GitHub App cannot open interview-fe-data)
-- [x] App Spec tab picks vi/en by locale; pull-data copies `.vi.md`
-- [x] Full-width KB-like layout for detail pages
-- [x] Q&A two-pane + `?q=` deep links (grouped/searchable, mobile list then detail)
-- [x] Fix post-redeploy infinite skeleton (chunk reload + boot timeout + pending flag)
-- [x] Fix cross-tab session + `?q=` after auth/retry (Bearer localStorage, client fetch)
-- [x] Tests, typecheck, fixture validate, build
-- [x] Screenshots (Q&A, detail, VI spec; light/dark; desktop + 390px)
-- [x] Draft app PR; data repo PR blocked (no GitHub access)
+- [x] Reproduce `/practice/step/p02` nested sidebar scrollbars + document-level content scroll
+- [x] Check KB, Q&A, plan day/resource, practice design for the same overflow nesting
+- [x] Fix shared app shell: viewport height minus nav, `min-h-0`, one `overflow-y-auto` per pane, no body scroll on desktop
+- [x] Mobile: stacked/drawer layout, sticky top nav
+- [x] Left menu: overflow-x hidden, truncate/ellipsis, min-w-0
+- [x] Markdown tables: wrap + stacked cards on narrow screens, no mid-word identifier breaks
+- [x] Keep light/dark themes
+- [x] Verify in browser (desktop + mobile) with before/after screenshots
+- [x] Draft PR against `main` (do not merge, do not touch PR #27)
 
 ## Review
-- Tests: 55 passed / 3 skipped. Typecheck: only pre-existing `scrollTop` on `use-hide-on-scroll-bar.composable.ts`. `CONTENT_LOCAL_PATH=.data/fixture-content` build OK.
-- Data spec EN/VI live under `/tmp/interview-fe-data-work/plans/` and `/opt/cursor/artifacts/interview-fe-data-pr/`. `check-practice OK`.
+- Root cause: `AppDetailShell` aside used `overflow-y-auto` while `PracticeStepNav` / `DocSidebar` also used `h-full overflow-y-auto`. Flex `min-height: auto` plus hide-on-scroll made the top bar leave the viewport.
+- Fix: shared `.docs-split` / `.docs-pane` / `.docs-nav-pane` (`min-h-0`, `overflow-x: hidden`, one vertical scroller). Top bar locked visible. Tables wrapped in `.prose-table-wrap`; mobile uses stacked cards.
+- Tests: 61 passed / 3 skipped (including new `tests/prose-tables.test.ts`).
+- Browser: desktop 1440 and mobile 390 on practice step, design spec (EN/VI, light/dark), KB, plan day.

@@ -31,7 +31,7 @@ const stepsByMilestone = computed(() => {
 </script>
 
 <template>
-  <nav class="flex h-full flex-col gap-5 overflow-y-auto p-4" :aria-label="$t('practice.backList')">
+  <nav class="flex min-w-0 flex-col gap-5 p-4" :aria-label="$t('practice.backList')">
     <div
       v-for="milestone in milestones"
       :key="milestone.id"
@@ -47,7 +47,7 @@ const stepsByMilestone = computed(() => {
         >
           <button
             type="button"
-            class="flex min-h-10 w-full items-center justify-between gap-2 rounded-lg border-l-2 px-2.5 text-left text-sm transition"
+            class="flex min-h-10 min-w-0 w-full items-center justify-between gap-2 rounded-lg border-l-2 px-2.5 text-left text-sm transition"
             :class="
               step.id === activeId
                 ? 'border-accent bg-accent-soft font-semibold text-accent-ink'

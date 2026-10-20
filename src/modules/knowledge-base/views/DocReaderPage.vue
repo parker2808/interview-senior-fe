@@ -375,7 +375,7 @@ onUnmounted(() => observer?.disconnect())
       :home-label="$t('docs.backHub')"
       :back-to="parentTo"
       :back-label="backLabel"
-      :lock-visible="sidebarOpen || searchOpen || tocOpen"
+      :lock-visible="true"
       :scroll-target="mainRef"
       inner-class="px-2 sm:px-4 lg:px-5"
       @heightchange="onTopBarHeightChange"
@@ -429,18 +429,20 @@ onUnmounted(() => observer?.disconnect())
       </template>
     </AppTopBar>
 
-    <div class="flex min-h-0 flex-1 flex-col lg:flex-row">
+    <div class="docs-split flex min-h-0 flex-1 flex-col lg:flex-row">
       <aside
-        class="hidden w-64 shrink-0 overflow-y-auto border-r border-line bg-surface-elevated/70 lg:block xl:w-72"
+        class="hidden min-h-0 w-64 shrink-0 overflow-hidden border-r border-line bg-surface-elevated/70 lg:flex lg:flex-col xl:w-72"
       >
-        <ContentSkeleton v-if="catalogPending && !catalog.length" variant="sidebar" class="p-4" />
-        <DocSidebar
-          v-else
-          :catalog="catalog"
-          :lang="safeLang"
-          :active-slug="slug"
-          @select="goDoc"
-        />
+        <div class="docs-nav-pane min-h-0 flex-1">
+          <ContentSkeleton v-if="catalogPending && !catalog.length" variant="sidebar" class="p-4" />
+          <DocSidebar
+            v-else
+            :catalog="catalog"
+            :lang="safeLang"
+            :active-slug="slug"
+            @select="goDoc"
+          />
+        </div>
       </aside>
 
       <Teleport to="body">
@@ -450,7 +452,7 @@ onUnmounted(() => observer?.disconnect())
         >
           <div class="absolute inset-0 bg-ink/40" @click="sidebarOpen = false" />
           <aside
-            class="absolute inset-y-0 left-0 flex w-[min(100%,20rem)] flex-col bg-surface-elevated shadow-xl"
+            class="absolute inset-y-0 left-0 flex w-[min(100%,20rem)] min-w-0 flex-col overflow-hidden bg-surface-elevated shadow-xl"
           >
             <div class="flex items-center justify-between border-b border-line px-3 py-2">
               <BackLink :to="backTo" :label="backLabel" icon-only />
@@ -474,26 +476,27 @@ onUnmounted(() => observer?.disconnect())
                 </svg>
               </button>
             </div>
-            <ContentSkeleton
-              v-if="catalogPending && !catalog.length"
-              variant="sidebar"
-              class="flex-1 p-4"
-            />
-            <DocSidebar
-              v-else
-              class="flex-1"
-              :catalog="catalog"
-              :lang="safeLang"
-              :active-slug="slug"
-              @select="goDoc"
-            />
+            <div class="docs-nav-pane min-h-0 flex-1">
+              <ContentSkeleton
+                v-if="catalogPending && !catalog.length"
+                variant="sidebar"
+                class="p-4"
+              />
+              <DocSidebar
+                v-else
+                :catalog="catalog"
+                :lang="safeLang"
+                :active-slug="slug"
+                @select="goDoc"
+              />
+            </div>
           </aside>
         </div>
       </Teleport>
 
       <main
         ref="mainRef"
-        class="docs-main min-h-0 min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8"
+        class="docs-main docs-pane min-h-0 min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8"
       >
         <article v-if="doc" class="animate-fade-up mx-auto max-w-prose">
           <div ref="proseRef">
@@ -561,7 +564,7 @@ onUnmounted(() => observer?.disconnect())
       </main>
 
       <aside
-        class="hidden w-64 shrink-0 overflow-y-auto border-l border-line bg-surface-elevated/50 xl:block"
+        class="docs-pane hidden w-64 shrink-0 border-l border-line bg-surface-elevated/50 xl:block"
       >
         <DocToc
           :items="toc"

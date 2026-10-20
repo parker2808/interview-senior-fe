@@ -63,12 +63,19 @@ html[data-theme='dark'] {
     font-family: var(--font);
   }
 
-  /* Docs reader: only `.docs-main` scrolls — block outer page overflow */
+  /* Split-pane shells: only the nav/content panes scroll */
   html.docs-lock-scroll,
   html.docs-lock-scroll body {
     overflow: hidden;
     height: 100%;
+    max-height: 100dvh;
     overscroll-behavior: none;
+  }
+
+  html.docs-lock-scroll #__nuxt {
+    height: 100%;
+    max-height: 100dvh;
+    overflow: hidden;
   }
 
   a {
@@ -137,7 +144,7 @@ html[data-theme='dark'] {
 
   .prose-doc {
     @apply max-w-full min-w-0 break-words text-[0.95rem] leading-relaxed text-[var(--ink)] sm:text-base;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
 
   .prose-doc h1 {
@@ -249,13 +256,115 @@ html[data-theme='dark'] {
     @apply underline decoration-[var(--accent)] underline-offset-2;
   }
 
+  .prose-table-wrap {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
   .prose-doc table {
-    @apply mb-4 block w-full overflow-x-auto border-collapse text-sm;
+    display: table;
+    width: 100%;
+    min-width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    font-size: 0.875rem;
   }
 
   .prose-doc th,
   .prose-doc td {
-    @apply border border-[var(--line)] px-2 py-1.5 text-left;
+    border: 1px solid var(--line);
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: none;
+    min-width: 8rem;
+  }
+
+  .prose-doc th {
+    background: var(--bg);
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .prose-doc th:first-child,
+  .prose-doc td:first-child {
+    min-width: 6.5rem;
+  }
+
+  .prose-doc table code {
+    display: inline-block;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  @media (max-width: 639px) {
+    .prose-table-wrap:has(td[data-label]) {
+      overflow-x: visible;
+    }
+
+    .prose-table-wrap:has(td[data-label]) table {
+      display: block;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .prose-table-wrap:has(td[data-label]) thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .prose-table-wrap:has(td[data-label]) tbody,
+    .prose-table-wrap:has(td[data-label]) tr {
+      display: block;
+      width: 100%;
+    }
+
+    .prose-table-wrap:has(td[data-label]) tr {
+      margin-bottom: 0.75rem;
+      padding: 0.35rem 0.85rem 0.55rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--bg-elevated);
+    }
+
+    .prose-table-wrap:has(td[data-label]) td {
+      display: block;
+      min-width: 0;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      padding: 0.55rem 0;
+    }
+
+    .prose-table-wrap:has(td[data-label]) td:last-child {
+      border-bottom: 0;
+    }
+
+    .prose-table-wrap:has(td[data-label]) td::before {
+      display: block;
+      margin-bottom: 0.3rem;
+      content: attr(data-label);
+      font-size: 0.68rem;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
   }
 
   .prose-doc blockquote {
@@ -280,4 +389,22 @@ html[data-theme='dark'] {
 
 .animate-fade-up {
   animation: fade-up 0.35s var(--ease) both;
+}
+
+/* Independent pane scroll under a sticky top bar */
+.docs-split {
+  min-height: 0;
+  flex: 1 1 0%;
+  height: calc(100dvh - var(--docs-header-h, 3.5rem));
+  max-height: calc(100dvh - var(--docs-header-h, 3.5rem));
+  overflow: hidden;
+}
+
+.docs-pane,
+.docs-nav-pane {
+  min-width: 0;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }

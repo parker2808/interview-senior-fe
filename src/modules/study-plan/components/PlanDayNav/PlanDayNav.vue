@@ -28,7 +28,7 @@ const daysByWeek = computed(() => {
 </script>
 
 <template>
-  <nav class="flex h-full flex-col gap-5 overflow-y-auto p-4" :aria-label="$t('plan.backDayList')">
+  <nav class="flex min-w-0 flex-col gap-5 p-4" :aria-label="$t('plan.backDayList')">
     <div v-for="week in weeks" :key="week.week" class="space-y-2">
       <p class="text-xs font-semibold uppercase tracking-wider text-ink-faint">
         {{ pickLocale(week.title, lang) }}
@@ -37,7 +37,7 @@ const daysByWeek = computed(() => {
         <li v-for="day in daysByWeek.get(week.week) ?? []" :key="day.day">
           <button
             type="button"
-            class="flex min-h-10 w-full items-center justify-between gap-2 rounded-lg border-l-2 px-2.5 text-left text-sm transition"
+            class="flex min-h-10 min-w-0 w-full items-center justify-between gap-2 rounded-lg border-l-2 px-2.5 text-left text-sm transition"
             :class="
               day.day === activeDay
                 ? 'border-accent bg-accent-soft font-semibold text-accent-ink'
