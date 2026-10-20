@@ -101,9 +101,18 @@ function decodeBasicEntities(s: string) {
     .replace(/&nbsp;/g, ' ')
 }
 
+const SAFE_SPEC_ANCHOR = /^s-[a-z0-9-]+$/i
+
+function sanitizeHeadingInner(inner: string): string {
+  return String(inner || '')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+}
+
 /**
- * Prefer explicit `s-…` ids (from the markdown or from `§N.M`) so locale
- * switches and § refs keep pointing at the same heading.
+ * Prefer explicit `s-…` ids (HTML `<h2 id="s-1">` from the data spec, or
+ * derived from `§N.M`) so locale switches and § refs share the same hash.
+ * Heading tags keep only that id (no onclick / style passthrough).
  */
 export function renderSpecMarkdown(markdown: string): { html: string; toc: TocItem[] } {
   const rendered = enhanceMarkdownHtml(renderMarkdown(markdown))
@@ -113,16 +122,15 @@ export function renderSpecMarkdown(markdown: string): { html: string; toc: TocIt
     /<h([1-6])([^>]*)>([\s\S]*?)<\/h\1>/gi,
     (_full, levelStr: string, attrs: string, inner: string) => {
       const level = Number(levelStr)
-      const text = decodeBasicEntities(inner.replace(/<[^>]+>/g, '')).trim()
+      const safeInner = sanitizeHeadingInner(inner)
+      const text = decodeBasicEntities(safeInner.replace(/<[^>]+>/g, '')).trim()
       const existing = attrs.match(/\sid=["']([^"']+)["']/i)?.[1] || ''
       const fromSection = headingSpecAnchorId(text)
-      const id =
-        existing.startsWith('s-') && existing.length > 2
-          ? existing
-          : fromSection || existing || `section-${level}`
-      const cleanAttrs = attrs.replace(/\sid=["'][^"']*["']/i, '')
+      const id = SAFE_SPEC_ANCHOR.test(existing)
+        ? existing
+        : fromSection || `section-${level}`
       if (level >= 2) toc.push({ id, text, level })
-      return `<h${level}${cleanAttrs} id="${id}">${inner}</h${level}>`
+      return `<h${level} id="${id}">${safeInner}</h${level}>`
     },
   )
 
@@ -137,15 +145,27 @@ export function specMatchesQuery(text: string, query: string): boolean {
 
 type MdSection = { heading: string; body: string }
 
-function splitMarkdownByHeadings(markdown: string): MdSection[] {
+function headingTextFromLine(line: string): string | null {
+  const trimmed = String(line || '').trim()
+  const md = trimmed.match(/^#{1,6}\s+(.+)$/)
+  if (md) return md[1].trim()
+  const html = trimmed.match(/^<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]\s*>$/i)
+  if (html) {
+    return decodeBasicEntities(html[1].replace(/<[^>]+>/g, '')).trim()
+  }
+  return null
+}
+
+/** Split on markdown `##` and HTML `<hN id="s-…">` headings (data-repo spec). */
+export function splitSpecSections(markdown: string): MdSection[] {
   const lines = String(markdown || '').split(/\r?\n/)
   const sections: MdSection[] = []
   let current: MdSection | null = null
   for (const line of lines) {
-    const heading = line.match(/^#{1,6}\s+(.+)$/)
+    const heading = headingTextFromLine(line)
     if (heading) {
       if (current) sections.push(current)
-      current = { heading: heading[1].trim(), body: '' }
+      current = { heading, body: '' }
       continue
     }
     if (!current) current = { heading: '', body: `${line}\n` }
@@ -164,7 +184,7 @@ export function matchingSpecHeadingIds(
   const keywords = splitSearchKeywords(query)
   if (!keywords.length) return headings.map((item) => item.id)
 
-  const sections = splitMarkdownByHeadings(markdown)
+  const sections = splitSpecSections(markdown)
   const claimed = new Set<number>()
   const ids: string[] = []
 

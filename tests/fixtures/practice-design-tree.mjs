@@ -21,9 +21,15 @@ export const FIXTURE_SPEC_PATH_VI = 'plans/portfolio-design-system.vi.md'
 export function fixtureDesignSpecMarkdownVi() {
   return `# Hệ thống thiết kế portfolio
 
-Nguồn sự thật cho UI sản phẩm practice. Heading được đánh số để \`§X.Y\` resolve.
+Nguồn sự thật cho UI sản phẩm practice. Heading HTML \`<h2 id="s-N">\` / \`<h3 id="s-N-M">\` để \`§X.Y\` resolve.
 
-## 1. Tổng quan sản phẩm
+<h2 id="s-1">1. Tổng quan sản phẩm</h2>
+
+> **Trong chương này:** các mục đánh số bên dưới.
+
+| § | Mục |
+| --- | --- |
+| 1.5 | Navigation |
 
 Site public là một content graph song ngữ. Admin là bề mặt riêng, cùng token.
 
@@ -32,35 +38,61 @@ Site public là một content graph song ngữ. Admin là bề mặt riêng, cù
 | Public | Readers | None |
 | Admin | Editors | Session cookie |
 
-### 1.5 Navigation
+<h3 id="s-1-5">1.5 Navigation</h3>
 
 Nav chính: Hub, Docs, Plan, Practice, Q&A. Practice cũng link sang trang Design này.
 
-## 2. Foundations
+<h2 id="s-2">2. Foundations</h2>
+
+> **Trong chương này:** các mục đánh số bên dưới.
+
+| § | Mục |
+| --- | --- |
+| 2.1 | Color |
+| 2.3 | Hiệu năng |
 
 Color, type, và space. Token phải sống được ở light và dark.
 
-### 2.1 Color
+<h3 id="s-2-1">2.1 Color</h3>
 
 Accent là teal. Không hard-code white trên elevated surface.
 
-### 2.3 Hiệu năng
+<h3 id="s-2-3">2.3 Hiệu năng</h3>
 
 Giữ LCP của thumbnail gallery trung thực: width/height trên mọi \`<img>\`, \`loading="lazy"\` dưới fold.
 
-## 5. Screens
+<h2 id="s-3">3. Design tokens</h2>
+
+> **Trong chương này:** các mục đánh số bên dưới.
+
+| § | Mục |
+| --- | --- |
+| 3.1b | Atmosphere |
+
+<h3 id="s-3-1b">3.1b Atmosphere</h3>
+
+Hue phụ cho admin. Cùng token light/dark.
+
+<h2 id="s-5">5. Screens</h2>
+
+> **Trong chương này:** các mục đánh số bên dưới.
+
+| § | Mục |
+| --- | --- |
+| 5.1 | Home - light |
+| 5.2 | Admin dashboard |
 
 Ảnh full page. View admin dài phải cuộn trong lightbox.
 
-### 5.1 Home - light
+<h3 id="s-5-1">5.1 Home - light</h3>
 
 Trang chủ public, theme sáng, desktop.
 
-### 5.2 Admin dashboard
+<h3 id="s-5-2">5.2 Admin dashboard</h3>
 
 Editor thấy draft, publish, và media.
 
-## 6. Motion
+<h2 id="s-6">6. Motion</h2>
 
 Ưu tiên opacity và translate nhỏ. Tôn trọng \`prefers-reduced-motion\`.
 `
@@ -69,9 +101,15 @@ Editor thấy draft, publish, và media.
 export function fixtureDesignSpecMarkdown() {
   return `# Portfolio design system
 
-Source of truth for the practice product UI. Headings are numbered so \`§X.Y\` refs resolve.
+Source of truth for the practice product UI. Numbered headings are HTML \`<h2 id="s-N">\` / \`<h3 id="s-N-M">\` so \`§X.Y\` refs resolve.
 
-## 1. Product overview
+<h2 id="s-1">1. Product overview</h2>
+
+> **In this chapter:** numbered sections below.
+
+| § | Section |
+| --- | --- |
+| 1.5 | Navigation |
 
 The public site is a bilingual content graph. Admin is a separate surface with the same tokens.
 
@@ -80,7 +118,7 @@ The public site is a bilingual content graph. Admin is a separate surface with t
 | Public | Readers | None |
 | Admin | Editors | Session cookie |
 
-### 1.5 Navigation
+<h3 id="s-1-5">1.5 Navigation</h3>
 
 Primary nav: Hub, Docs, Plan, Practice, Q&A. Practice also links to this Design page.
 
@@ -92,11 +130,18 @@ Primary nav: Hub, Docs, Plan, Practice, Q&A. Practice also links to this Design 
 +--------------------------------------+
 \`\`\`
 
-## 2. Foundations
+<h2 id="s-2">2. Foundations</h2>
+
+> **In this chapter:** numbered sections below.
+
+| § | Section |
+| --- | --- |
+| 2.1 | Color |
+| 2.3 | Hiệu năng |
 
 Color, type, and space. Tokens must survive light and dark.
 
-### 2.1 Color
+<h3 id="s-2-1">2.1 Color</h3>
 
 Accent is teal. Never hard-code white on elevated surfaces.
 
@@ -110,15 +155,34 @@ Accent is teal. Never hard-code white on elevated surfaces.
 html[data-theme='dark'] { --accent: #2dd4bf; }
 \`\`\`
 
-### 2.3 Hiệu năng
+<h3 id="s-2-3">2.3 Hiệu năng</h3>
 
 Keep LCP on gallery thumbnails honest: width/height on every \`<img>\`, \`loading="lazy"\` below the fold.
 
-## 5. Screens
+<h2 id="s-3">3. Design tokens</h2>
+
+> **In this chapter:** numbered sections below.
+
+| § | Section |
+| --- | --- |
+| 3.1b | Atmosphere |
+
+<h3 id="s-3-1b">3.1b Atmosphere</h3>
+
+Secondary hue for admin. Same tokens in light and dark.
+
+<h2 id="s-5">5. Screens</h2>
+
+> **In this chapter:** numbered sections below.
+
+| § | Section |
+| --- | --- |
+| 5.1 | Home - light |
+| 5.2 | Admin dashboard |
 
 Full-page captures. Tall admin views must scroll inside the lightbox.
 
-### 5.1 Home — light
+<h3 id="s-5-1">5.1 Home - light</h3>
 
 Public home, light theme, desktop. Search sits in the header; milestone cards below.
 
@@ -133,11 +197,11 @@ Public home, light theme, desktop. Search sits in the header; milestone cards be
 +---------------------------+
 \`\`\`
 
-### 5.2 Admin dashboard
+<h3 id="s-5-2">5.2 Admin dashboard</h3>
 
 Editors see drafts, publish, and media. Dark admin is the same layout with inverted tokens.
 
-## 6. Motion
+<h2 id="s-6">6. Motion</h2>
 
 Prefer opacity and small translates. Respect \`prefers-reduced-motion\`.
 `

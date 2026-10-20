@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { localeSpecPath, pickSpecMarkdown } from '@/modules/practice/utils/spec-locale.util'
 import {
   headingSpecAnchorId,
+  matchingSpecHeadingIds,
   parseSpecSectionId,
+  renderSpecMarkdown,
   specAnchorId,
   specHeadingsFromMarkdown,
 } from '@/modules/practice/utils/spec-ref.util'
@@ -35,9 +37,21 @@ describe('spec s- anchors', () => {
     expect(specAnchorId('3.1b')).toBe('s-3-1b')
     expect(headingSpecAnchorId('1.5 Navigation')).toBe('s-1-5')
     expect(parseSpecSectionId('#s-5-1')).toBe('5.1')
-    const headings = specHeadingsFromMarkdown(
+    const fromMarkdown = specHeadingsFromMarkdown(
       '## 1. Product\n\n### 1.5 Navigation\n\n### 5.1 Home\n',
     )
-    expect(headings.map((item) => item.id)).toEqual(['s-1', 's-1-5', 's-5-1'])
+    expect(fromMarkdown.map((item) => item.id)).toEqual(['s-1', 's-1-5', 's-5-1'])
+
+    const htmlSpec = [
+      '<h2 id="s-1">1. Product</h2>',
+      '<h3 id="s-1-5">1.5 Navigation</h3>',
+      'Primary nav sits in the header.',
+      '<h3 id="s-3-1b">3.1b Atmosphere</h3>',
+      '<h3 id="s-5-1">5.1 Home</h3>',
+    ].join('\n\n')
+    const fromHtml = specHeadingsFromMarkdown(htmlSpec)
+    expect(fromHtml.map((item) => item.id)).toEqual(['s-1', 's-1-5', 's-3-1b', 's-5-1'])
+    expect(renderSpecMarkdown(htmlSpec).html).toContain('id="s-3-1b"')
+    expect(matchingSpecHeadingIds(htmlSpec, fromHtml, 'nav header')).toContain('s-1-5')
   })
 })

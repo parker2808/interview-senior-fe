@@ -8,6 +8,7 @@ import { writeContentFixture } from './fixtures/plan-content-tree.mjs'
 import {
   FIXTURE_FIGMA,
   fixtureDesignSpecMarkdown,
+  fixtureDesignSpecMarkdownVi,
   writePracticeDesignFixture,
 } from './fixtures/practice-design-tree.mjs'
 import { practiceDesignFigma } from '@/modules/practice/utils/design-figma.util'
@@ -24,6 +25,7 @@ import {
   mapSpecRefToHeading,
   matchingSpecHeadingIds,
   parseSpecSectionId,
+  renderSpecMarkdown,
   specHeadingsFromMarkdown,
   specRefHref,
 } from '@/modules/practice/utils/spec-ref.util'
@@ -86,16 +88,47 @@ describe('§-ref mapping', () => {
     expect(hit!.id).toBe('s-5-1')
   })
 
-  it('searches the spec with keyword AND and Vietnamese folding', () => {
+  it('builds a TOC from HTML <h2 id="s-N"> / <h3 id="s-N-M"> headings', () => {
+    expect(headings.map((item) => item.id)).toEqual(
+      expect.arrayContaining(['s-1', 's-1-5', 's-2-3', 's-3-1b', 's-5-1']),
+    )
+    expect(headings.find((item) => item.id === 's-1')?.text).toMatch(/^1\b/)
+    expect(headings.find((item) => item.id === 's-3-1b')?.text.startsWith('3.1b')).toBe(true)
+    const html = renderSpecMarkdown(markdown).html
+    expect(html).toMatch(/<h2 id="s-1">1\. Product overview<\/h2>/)
+    expect(html).toMatch(/<h3 id="s-5-1">5\.1 Home/)
+    expect(html).not.toMatch(/onclick/i)
+  })
+
+  it('keeps § refs and search working on the Vietnamese HTML spec', () => {
+    const vi = fixtureDesignSpecMarkdownVi()
+    const headingsVi = specHeadingsFromMarkdown(vi)
+    expect(mapSpecRefToHeading('§1.5', headingsVi)?.id).toBe('s-1-5')
+    expect(mapSpecRefToHeading('§5.1', headingsVi)?.id).toBe('s-5-1')
+    expect(matchingSpecHeadingIds(vi, headingsVi, 'hieu nang')).toContain('s-2-3')
+    expect(matchingSpecHeadingIds(vi, headingsVi, 'cuon lightbox')).toContain('s-5')
+  })
+
+  it('searches HTML-heading sections (body under <h2>/<h3>) with keyword AND and Vietnamese folding', () => {
     const hieu = matchingSpecHeadingIds(markdown, headings, 'hieu nang')
-    expect(hieu.length).toBeGreaterThan(0)
-    expect(headings.find((item) => item.id === hieu[0])?.text).toMatch(/Hiệu năng|hieu/i)
+    expect(hieu).toEqual(expect.arrayContaining(['s-2-3']))
+    expect(headings.find((item) => item.id === 's-2-3')?.text).toMatch(/Hiệu năng|hieu/i)
 
     const both = matchingSpecHeadingIds(markdown, headings, 'lightbox scroll')
+    expect(both).toContain('s-5')
     expect(both.length).toBeGreaterThan(0)
 
     const miss = matchingSpecHeadingIds(markdown, headings, 'webpack rust')
     expect(miss).toEqual([])
+  })
+
+  it('strips unsafe attributes from HTML headings while keeping s- ids', () => {
+    const { html, toc } = renderSpecMarkdown(
+      '<h2 id="s-1" onclick="alert(1)" style="color:red">1. Product</h2>\n',
+    )
+    expect(html).toContain('<h2 id="s-1">1. Product</h2>')
+    expect(html).not.toMatch(/onclick|style=/i)
+    expect(toc.map((item) => item.id)).toEqual(['s-1'])
   })
 })
 
@@ -108,11 +141,15 @@ describe('practice design readers', () => {
     expect(loaded?.index.screens).toHaveLength(5)
     expect(loaded?.index.screens[0]?.specRefs).toEqual(['§5.1'])
     expect(practiceDesignFigma(loaded?.index.figma)).toEqual(FIXTURE_FIGMA)
-    expect(loaded?.specMarkdown).toContain('## 1. Product overview')
-    expect(loaded?.specMarkdown).toContain('### 1.5 Navigation')
-    expect(loaded?.specMarkdownVi).toContain('## 1. Tổng quan sản phẩm')
+    expect(loaded?.specMarkdown).toContain('<h2 id="s-1">1. Product overview</h2>')
+    expect(loaded?.specMarkdown).toContain('<h3 id="s-1-5">1.5 Navigation</h3>')
+    expect(loaded?.specMarkdownVi).toContain('<h2 id="s-1">1. Tổng quan sản phẩm</h2>')
     expect(loaded?.headings.some((item) => item.id === 's-1-5')).toBe(true)
     expect(loaded?.headingsVi.some((item) => item.id === 's-1-5')).toBe(true)
+    expect(loaded?.headingsVi.some((item) => item.id === 's-3-1b')).toBe(true)
+    expect(loaded?.headings.map((item) => item.id)).toEqual(
+      loaded?.headingsVi.map((item) => item.id),
+    )
     expect(loaded?.headings.some((item) => item.text.startsWith('5.1'))).toBe(true)
     expect(listDesignScreenFiles(dir).some((name) => name.endsWith('.webp'))).toBe(true)
     expect(designScreenSrc('practice/design/screens/01-home-light.webp')).toBe(
