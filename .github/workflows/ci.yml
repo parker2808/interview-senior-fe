@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A new push to a PR replaces its running check; runs on main always finish.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Unit tests (vitest, fixtures only)
+        run: set -o pipefail; npx vitest run 2>&1 | tee qa-logs/unit.txt
+      - name: Nuxt production build (only when the content token secret is set)
+        env:
+          CONTENT_REPO_TOKEN: ${{ secrets.CONTENT_REPO_TOKEN }}
+        run: |
+          set -o pipefail
+          if [ -z "$CONTENT_REPO_TOKEN" ]; then
+            echo "CONTENT_REPO_TOKEN is not set; skipping build (content is pulled at build time)." | tee qa-logs/build.txt
+            exit 0
+          fi
+          npm run build 2>&1 | tee qa-logs/build.txt
+      - name: Upload test logs for diagnosis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-logs
+          path: qa-logs/*.txt
+          if-no-files-found: warn

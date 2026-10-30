@@ -2,7 +2,7 @@
 
 ## Common rules
 
-Source: `ai-memory/rules/COMMON_RULES.md` (copied verbatim below).
+Source: `<private-memory-repo>/rules/COMMON_RULES.md` (copied verbatim below).
 
 # COMMON_RULES — Parker's flow (all agents, all repos)
 
@@ -26,12 +26,12 @@ Built only from what the repos, PR history, CI and bot exports actually show (re
 
 ## 3. Merging (absolute)
 - **Never merge, deploy, or close a PR without Parker's explicit OK ("merge").** Open the PR and stop. One PR at a time.
-- Only exception: `parker2808/ai-memory` may be auto-merged after a secrets/PII scan passes.
+- Only exception: `<private-memory-repo>` may be auto-merged after a secrets/PII scan passes.
 - **Never touch PR #27 in `interview-senior-fe`** (GitHub OAuth, in development).
 
 ## 4. PROJECT_CONTEXT.md + context-check CI
 - Every PR to `main` that changes files outside the exempt paths must update `PROJECT_CONTEXT.md` (status/open items + changelog sections) in the same PR.
-- CI `context-check` fails if `PROJECT_CONTEXT.md` is missing at HEAD or not in the diff for non-exempt changes. Exempt: `docs/` (plus content folders in interview-fe-data).
+- CI `context-check` fails if `PROJECT_CONTEXT.md` is missing at HEAD or not in the diff for non-exempt changes. Exempt: `docs/` (plus content folders in <private-content-repo>).
 - The `skip-context` label bypasses the check; use only when Parker agrees.
 - Record new decisions from Parker (with date) in PROJECT_CONTEXT.md in your PR. Never invent rules.
 
@@ -39,7 +39,7 @@ Built only from what the repos, PR history, CI and bot exports actually show (re
 - Never commit, paste, print or log secrets: `.env` values, tokens, passcodes, API keys, deploy hook URLs, auth codes. Not in code, PRs, logs or chat.
 - Never commit Parker's phone number or personal email. Use `<email>` and `<phone>` placeholders.
 - Public repos: `lil.p`, `lil.j`, `interview-senior-fe`. Never name or link private repos there (write `<private-content-repo>`).
-- Private: `interview-fe-data`, `ai-memory`.
+- Private: `<private-content-repo>`, `<private-memory-repo>`.
 
 ## 6. Facts and content
 - Never invent facts, dates, metrics, memories, places, captions or confirmations. Mark unknowns as **(uncertain)** or leave blank and list them as open items.
@@ -56,7 +56,7 @@ Built only from what the repos, PR history, CI and bot exports actually show (re
 ## 8. Checks before opening a PR
 - Run the repo's own checks (listed in its project rules) and paste the results in the PR body.
 - Run a secrets/PII grep on the diff (tokens, `@` emails, phone numbers) before pushing.
-- Package managers: lil.p uses pnpm (workspace, husky + commitlint); interview-senior-fe uses npm (`package-lock.json`); lil.j and interview-fe-data have no package manager (static site / JSON + node scripts).
+- Package managers: lil.p uses pnpm (workspace, husky + commitlint); interview-senior-fe uses npm (`package-lock.json`); lil.j and <private-content-repo> have no package manager (static site / JSON + node scripts).
 
 ## Project rules for interview-senior-fe
 
@@ -64,6 +64,7 @@ Built only from what the repos, PR history, CI and bot exports actually show (re
 - **Package manager:** npm with `package-lock.json`. Install with `npm ci`. `npm run dev` and `npm run build` run `scripts/pull-data.mjs` first through `predev` and `prebuild`.
 - **Checks before a PR:** Run `npm test`. Run `npm run build` when the change affects the build or app. Run `npm run data:validate` for content-shape changes. For changes outside `docs/`, run `bash .github/scripts/context-check.sh origin/main HEAD` after committing and update `PROJECT_CONTEXT.md` §8 and §9 in that commit.
 - **CI:** `.github/workflows/context-check.yml` runs on PRs to `main` and calls `.github/scripts/context-check.sh`. It requires `PROJECT_CONTEXT.md` to exist at HEAD and be changed for non-`docs/` changes; the `skip-context` label bypasses the job.
+- **CI checks:** `.github/workflows/ci.yml` runs on PRs, pushes to `main` and manual dispatch, with shared setup in `.github/actions/setup` (Node 22, npm cache, `npm ci`). Job `checks` runs `vitest run` on fixtures and the Nuxt build only when the `CONTENT_REPO_TOKEN` secret is set (content is pulled at build time). Stale PR runs are cancelled, `main` runs never; every job has `timeout-minutes`; logs upload as artifacts. Any CI change must follow the shared front-end CI/CD lessons in Parker's memory repo.
 - **Content and code locations:** Content is pulled at build time by `scripts/pull-data.mjs` into gitignored `.data/content/`, then served through `server/api/`; client code must not import content JSON. Use `pages/` for thin routes, `src/modules/` for feature modules, `server/utils/` for server helpers, `schema/` for content schema, and `i18n/locales/en.json` and `vi.json` for UI strings. Follow `STRUCTURE.md`.
 - **Forbidden:** Do not commit personal contact details or secrets, invent facts or metrics, merge without Parker's explicit approval, or touch PR #27. Vietnamese text must read naturally. Mobile tables scroll within the table; pages must not scroll sideways. Split layouts keep the top nav visible and use one scroll area for the left menu.
 - **Branches and PR titles:** Use one branch or worktree and one PR to `main` per task. Branch names use `<type>/<short-kebab-topic>`. Recent PRs use short, plain titles such as `Add …` or `Fix …`; this repo does not require conventional-commit PR titles. For this task, use `Add agent rules (common + project)`.

@@ -1,0 +1,15 @@
+name: Set up app
+description: Node 22 with the npm cache, frozen install (runs nuxt prepare) and the qa-logs folder.
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: npm
+        cache-dependency-path: package-lock.json
+    - name: Install dependencies
+      shell: bash
+      run: |
+        npm ci
+        mkdir -p qa-logs
