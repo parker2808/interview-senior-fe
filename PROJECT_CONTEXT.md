@@ -51,7 +51,7 @@
 - Portfolio case study lives outside this repo (Parker's portfolio).
 
 ## 8. Open items / status
-- Agent rules: `AGENT_RULES.md` now contains the shared rules copied from `ai-memory/rules/COMMON_RULES.md` and confirmed project rules; `AGENTS.md` points to it.
+- Agent rules: `AGENT_RULES.md` now contains the shared rules copied from `<private-memory-repo>/rules/COMMON_RULES.md` and confirmed project rules; `AGENTS.md` points to it.
 - PR #34 review fixes: context-file existence check, accurate CI wording, private source placeholder, and corrected auth/local-dev descriptions.
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
