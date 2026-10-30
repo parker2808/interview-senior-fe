@@ -51,9 +51,11 @@
 - Portfolio case study lives outside this repo (Parker's portfolio).
 
 ## 8. Open items / status
+- 2026-10-31 — Agent rules added in `.agents/RULES.md` from the shared rules and verified project rules; private repo names are replaced with placeholders.
 - PR #34 review fixes: context-file existence check, accurate CI wording, private source placeholder, and corrected auth/local-dev descriptions.
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
 ## 9. Changelog
+- 2026-10-31 — Added `.agents/RULES.md` and linked it from `AGENTS.md`; verified project-specific guidance against the app and CI configuration.
 - 2026-10-30 — Added PROJECT_CONTEXT.md, AGENTS.md and context-check CI (T3 Code multi-agent setup, mirrors lil.j).
 - 2026-10-30 — Fixed PR #34 review findings: reject missing/deleted context at HEAD, clarify file-level CI enforcement, redact the private source name, and correct auth/local-dev documentation.
