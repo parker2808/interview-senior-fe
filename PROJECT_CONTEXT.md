@@ -51,12 +51,13 @@
 - Portfolio case study lives outside this repo (Parker's portfolio).
 
 ## 8. Open items / status
-- Agent rules: `AGENT_RULES.md` now contains the shared rules copied from `<private-memory-repo>/rules/COMMON_RULES.md` and confirmed project rules; `AGENTS.md` points to it.
+- Agent rules: `AGENTS.md` is canonical; `AGENT_RULES.md` points to it. `docs/LESSONS.md` records new lessons. Branch and secret-scan guardrails are in place.
 - PR #34 review fixes: context-file existence check, accurate CI wording, private source placeholder, and corrected auth/local-dev descriptions.
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
 ## 9. Changelog
 
+- 2026-10-31 — Made `AGENTS.md` canonical, added lessons, blocked commits on protected branches, and added local/CI gitleaks scans.
 - 2026-10-31: Added Graphify code map (`graphify-out/GRAPH_REPORT.md` committed, rest of `graphify-out/` gitignored; built with `--code-only`, no model calls) and shortened `AGENT_RULES.md` to ~30 lines pointing to the shared common rules and TOKEN_FLOW in `<private-memory-repo>`. Pending Parker's review.
 - 2026-10-31 — Added front-end CI (`ci.yml`: vitest + token-gated Nuxt build, npm cache, concurrency, timeouts, log artifacts) per the shared CI/CD lessons.
 - 2026-10-31 — Added `AGENT_RULES.md` with shared and project rules and linked it from `AGENTS.md`.

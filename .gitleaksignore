@@ -1,0 +1,10 @@
+# Verified historical false positives: UI storage key and API prose.
+beb3ade4172717a15e6628a30d9d4b3b72a5a493:modules/study-plan-30-days/src/src/App.vue:generic-api-key:12
+9541e519917eb88fd8e3b144d1b03ba2329acc2c:modules/study-plan-30-days/content/artifacts/day-08-component-tree.md:generic-api-key:23
+9541e519917eb88fd8e3b144d1b03ba2329acc2c:modules/study-plan-30-days/content/30-day-study-plan.md:generic-api-key:230
+f399b92daef658e09b98263689b94db744ec446f:modules/study-plan-30-days/content/30-day-study-plan.md:generic-api-key:230
+f399b92daef658e09b98263689b94db744ec446f:modules/study-plan-30-days/content/artifacts/day-08-component-tree.md:generic-api-key:23
+085e422e6b05ba6960e0d8b01b84efded93c3765:documents/study-plan/30-days/30-day-study-plan.md:generic-api-key:230
+085e422e6b05ba6960e0d8b01b84efded93c3765:documents/study-plan/30-days/artifacts/day-08-component-tree.md:generic-api-key:23
+7994c506efb3df4b9c42320d46d8d74ccb5cea6e:study-plan/30-days/artifacts/day-08-component-tree.md:generic-api-key:23
+7994c506efb3df4b9c42320d46d8d74ccb5cea6e:study-plan/30-days/30-day-study-plan.md:generic-api-key:230

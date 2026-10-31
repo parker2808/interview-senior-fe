@@ -5,6 +5,7 @@
   "name": "interview-senior-fe",
   "version": "1.0.0",
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
     "dev": "nuxt dev",
     "predev": "node scripts/pull-data.mjs",
     "build": "nuxt build",
