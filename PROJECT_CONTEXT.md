@@ -59,6 +59,7 @@
 
 Older and full entries: `docs/CHANGELOG_ARCHIVE.md` (read only when needed).
 
+- 2026-11-01 — Token savings: `.cursorignore` and AGENTS.md rules to skip Graphify on small tasks and avoid reading large files.
 - 2026-11-01 — Trimmed this changelog to the latest 5 entries; full history moved to `docs/CHANGELOG_ARCHIVE.md`.
 - 2026-10-31 — Canonical `AGENTS.md`, lessons, protected-branch hook, local/CI gitleaks scans.
 - 2026-10-31 — Graphify code map (`graphify-out/GRAPH_REPORT.md`) and shortened agent rules.
