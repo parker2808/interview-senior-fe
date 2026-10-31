@@ -44,7 +44,7 @@ Quy ước UI module (đặt tên, scaffold module mới): [STRUCTURE.md](./STRU
 
 ### Mô hình nội dung
 
-KB / plan / Q&A / practice tuỳ chọn nằm ở repo private [`parker2808/interview-fe-data`](https://github.com/parker2808/interview-fe-data). Mọi chuỗi user-facing là `Localized`:
+KB / plan / Q&A / practice tuỳ chọn nằm ở repo private `<private-content-repo>`. Mọi chuỗi user-facing là `Localized`:
 
 ```ts
 type Localized<T = string> = { en: T; vi: T }
@@ -94,7 +94,7 @@ Cookie HttpOnly, 12 giờ. **`INTERVIEW_PASSCODE` ≠ `EDIT_PASSCODE`** — mộ
 
 ```mermaid
 flowchart LR
-  editor[Editor] --> dataRepo["private interview-fe-data"]
+  editor[Editor] --> dataRepo["private <private-content-repo>"]
   dataRepo --> ci[CI validate Localized JSON]
   ci --> main[merge to main]
   main --> hook[GitHub Action deploy hook]
@@ -142,12 +142,12 @@ Chế độ sửa plan cùng chuỗi với `POST /api/auth/edit` và `PUT /api/p
 
 ## Chạy local
 
-**Cần:** Node 22+, npm, và checkout local của `interview-fe-data` hoặc PAT đọc được repo private đó.
+**Cần:** Node 22+, npm, và checkout local của `<private-content-repo>` hoặc PAT đọc được repo private đó.
 
 ```bash
 cp .env.example .env          # điền PIN local; không commit secret
 # Cách A — data repo local
-CONTENT_LOCAL_PATH=/path/to/interview-fe-data npm run dev
+CONTENT_LOCAL_PATH="/path/to/<private-content-repo>" npm run dev
 # Cách B — kéo bằng token
 CONTENT_REPO_TOKEN=… npm run dev
 ```
@@ -167,7 +167,7 @@ Không để giá trị secret trong git. Copy `.env.example` rồi điền loca
 
 | Biến | Ở đâu | Mục đích |
 |---|---|---|
-| `CONTENT_REPO_TOKEN` | Vercel + tuỳ chọn local | PAT fine-grained, **Contents: Read** trên `interview-fe-data` |
+| `CONTENT_REPO_TOKEN` | Vercel + tuỳ chọn local | PAT fine-grained, **Contents: Read** trên `<private-content-repo>` |
 | `CONTENT_REPO_REF` | tuỳ chọn | Git ref để kéo (mặc định `main`) |
 | `CONTENT_REPO_OWNER` / `CONTENT_REPO_NAME` | tuỳ chọn | Đổi toạ độ data repo |
 | `CONTENT_LOCAL_PATH` | local | Checkout hoặc export data repo; bỏ qua GitHub |
@@ -180,7 +180,7 @@ Không để giá trị secret trong git. Copy `.env.example` rồi điền loca
 
 ## Deploy và cập nhật nội dung
 
-1. Sửa JSON trong **`parker2808/interview-fe-data`**.
+1. Sửa JSON trong **`<private-content-repo>`**.
 2. CI trên PR validate JSON Localized.
 3. Merge `main` → Action `POST` deploy hook Vercel.
 4. Build Vercel chạy `data:pull` với `CONTENT_REPO_TOKEN`, copy content vào Nitro, deploy.

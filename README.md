@@ -44,7 +44,7 @@ UI module conventions (naming, new-module scaffold): [STRUCTURE.md](./STRUCTURE.
 
 ### Content model
 
-KB / plan / Q&A / optional practice live in private [`parker2808/interview-fe-data`](https://github.com/parker2808/interview-fe-data). Every user-facing string is `Localized`:
+KB / plan / Q&A / optional practice live in private `<private-content-repo>`. Every user-facing string is `Localized`:
 
 ```ts
 type Localized<T = string> = { en: T; vi: T }
@@ -98,7 +98,7 @@ HttpOnly cookies, 12h. **`INTERVIEW_PASSCODE` ≠ `EDIT_PASSCODE`** — one PIN 
 
 ```mermaid
 flowchart LR
-  editor[Editor] --> dataRepo["private interview-fe-data"]
+  editor[Editor] --> dataRepo["private <private-content-repo>"]
   dataRepo --> ci[CI validate Localized JSON]
   ci --> main[merge to main]
   main --> hook[GitHub Action deploy hook]
@@ -146,12 +146,12 @@ Edit mode is the same sequence against `POST /api/auth/edit` and `PUT /api/progr
 
 ## Local development
 
-**Needs:** Node 22+, npm, and either a local checkout of `interview-fe-data` or a GitHub PAT that can read that private repo.
+**Needs:** Node 22+, npm, and either a local checkout of `<private-content-repo>` or a GitHub PAT that can read that private repo.
 
 ```bash
 cp .env.example .env          # fill PINs locally; never commit secrets
 # Option A — local data repo
-CONTENT_LOCAL_PATH=/path/to/interview-fe-data npm run dev
+CONTENT_LOCAL_PATH="/path/to/<private-content-repo>" npm run dev
 # Option B — token pull
 CONTENT_REPO_TOKEN=… npm run dev
 ```
@@ -171,7 +171,7 @@ No secret values belong in git. Copy `.env.example` and fill locally / on Vercel
 
 | Variable | Where | Purpose |
 |---|---|---|
-| `CONTENT_REPO_TOKEN` | Vercel + optional local | Fine-grained PAT, **Contents: Read** on `interview-fe-data` |
+| `CONTENT_REPO_TOKEN` | Vercel + optional local | Fine-grained PAT, **Contents: Read** on `<private-content-repo>` |
 | `CONTENT_REPO_REF` | optional | Git ref to pull (default `main`) |
 | `CONTENT_REPO_OWNER` / `CONTENT_REPO_NAME` | optional | Override data-repo coordinates |
 | `CONTENT_LOCAL_PATH` | local | Checkout or export of the data repo; skips GitHub |
@@ -184,7 +184,7 @@ No secret values belong in git. Copy `.env.example` and fill locally / on Vercel
 
 ## Deploy and content updates
 
-1. Edit JSON in **`parker2808/interview-fe-data`**.
+1. Edit JSON in **`<private-content-repo>`**.
 2. PR CI validates Localized JSON.
 3. Merge to `main` → Action `POST`s the Vercel deploy hook.
 4. Vercel build runs `data:pull` with `CONTENT_REPO_TOKEN`, copies content into Nitro, deploys.
