@@ -11,3 +11,7 @@ dist
 !.env.example
 .data/
 public/assets/practice-design/
+
+# Graphify: only GRAPH_REPORT.md is committed
+graphify-out/*
+!graphify-out/GRAPH_REPORT.md
