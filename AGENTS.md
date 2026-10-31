@@ -14,7 +14,8 @@ Read [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md) in full, then [`docs/LESSONS.md`
 - Every PR to `main` updates `PROJECT_CONTEXT.md` §8 status and §9 changelog. CI checks file change and existence at HEAD; docs-only changes are exempt, and `skip-context` bypasses CI.
 
 ## Navigation and checks
-- Read `graphify-out/GRAPH_REPORT.md`; query exact names with `graphify explain` or `graphify path` and open needed lines only. Refresh with `graphify update .` after code changes.
+- Small tasks: skip Graphify; use `rg` and open needed lines only. Big tasks: read `graphify-out/GRAPH_REPORT.md`, query `graphify explain`/`graphify path`, refresh with `graphify update .` after code changes.
+- Token budget: never read `package-lock.json`, `public/assets/**` or generated `.nuxt`/`.output` files; use `rg`/line ranges and `tail -n 80` for long command output. See `.cursorignore`.
 - Use `npm ci`; `predev` and `prebuild` pull content. Run `npm test` before a PR, `npm run build` for app/build changes, and `npm run data:validate` for content-shape changes.
 - After committing, run `bash .github/scripts/context-check.sh origin/main HEAD`. CI runs vitest and builds when the content token is available.
 - Reports to Parker are in natural Vietnamese and include check results.
