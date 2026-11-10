@@ -54,7 +54,7 @@ Docs are `{ sections: { id, title, blocks }[] }`. Block types: `heading`, `parag
 
 Build (`predev` / `prebuild`) runs `scripts/pull-data.mjs` → `.data/content`, then Nitro copies that tree into server assets. The client never imports the JSON files.
 
-The backend learning guide adds the 23rd data-only catalog topic in Infrastructure at `/docs/en/backend-learning` and `/docs/vi/backend-learning`. It contains eight connected EN/VI core chapters and optional operations, with existing nested heading TOC and full-text search via `/api/knowledge-base/docs/:slug`. Pull the paired content PR #65 before app PR #43 is published; neither PR is ready for independent merge or deploy. The 30-day frontend plan and app-side backend services are unchanged.
+The backend learning guide adds the 23rd data-only catalog topic in Infrastructure at `/docs/en/backend-learning` and `/docs/vi/backend-learning`. It contains eight connected EN/VI core chapters and optional operations, with existing nested heading TOC and full-text search via `/api/knowledge-base/docs/:slug`. Chapter 5 distinguishes observed disposable local Prisma/MySQL lab output from production behavior. Pull the paired content PR #65 before app PR #43 is published; neither PR is ready for independent merge or deploy. The 30-day frontend plan and app-side backend services are unchanged.
 
 ### APIs
 

@@ -51,13 +51,14 @@
 - Portfolio case study lives outside this repo (Parker's portfolio).
 
 ## 8. Open items / status
-- Backend guide PR #43 documents the round-four revision of the eight-chapter EN/VI guide on the existing route and the new 23rd catalog entry (22 on `main`); it depends on content PR #65. Neither may be merged or deployed to production independently. No route, scope or feature-flag behavior changes.
+- Backend guide PR #43 documents the round-five EN/VI guide on the existing route and new 23rd catalog entry (22 on `main`); it depends on content PR #65. The paired content now distinguishes local Prisma lab output from expected/live behavior. Neither PR may be merged or deployed to production independently. No route, scope or feature-flag behavior changes.
 - Agent rules: `AGENTS.md` is canonical; `AGENT_RULES.md` points to it. `docs/LESSONS.md` records new lessons. Branch and secret-scan guardrails are in place.
 - PR #34 review fixes: context-file existence check, accurate CI wording, private source placeholder, and corrected auth/local-dev descriptions.
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
 ## 9. Changelog
 
+- 2026-11-10 — Review round five: aligned EN/VI README lab wording and paired app context with content PR #65; retained existing routes, content schema and renderer.
 - 2026-11-10 — Paired the existing app navigation with content PR #65's round-four Docker build fix, small tables and bilingual chapter edits; no route or renderer changes.
 - 2026-11-10 — Confirmed existing navigation handles the paired content PR's round-three stage map, code-block diagrams and 23rd topic without route/schema changes; retained parallel EN/VI README placement.
 

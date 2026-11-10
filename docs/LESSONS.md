@@ -6,3 +6,4 @@
 - 2026-11-10: A documentation-only guide revision must update both README languages and verify the generated catalog count against the paired content worktree.
 - 2026-11-10: Keep localized README guide placement parallel to English and distinguish a new catalog entry from a preexisting topic.
 - 2026-11-10: Confirm renderer capability before authoring tutorial diagrams; the current content renderer prints code blocks but does not execute Mermaid.
+- 2026-11-10: In paired content/app PRs, distinguish a disposable lab's observed output from production status in both README languages.
