@@ -51,14 +51,14 @@
 - Portfolio case study lives outside this repo (Parker's portfolio).
 
 ## 8. Open items / status
-- Backend guide PR #43 documents the revised eight-chapter EN/VI guide on the existing route and 23-topic catalog; it depends on content PR #65. Neither may be merged or deployed independently. No route, scope or feature-flag behavior changes.
+- Backend guide PR #43 documents the revised eight-chapter EN/VI guide on the existing route and the new 23rd catalog entry (22 on `main`); it depends on content PR #65. Neither may be merged or deployed independently. No route, scope or feature-flag behavior changes.
 - Agent rules: `AGENTS.md` is canonical; `AGENT_RULES.md` points to it. `docs/LESSONS.md` records new lessons. Branch and secret-scan guardrails are in place.
 - PR #34 review fixes: context-file existence check, accurate CI wording, private source placeholder, and corrected auth/local-dev descriptions.
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
 ## 9. Changelog
 
-- 2026-11-10 — Synchronized EN/VI app documentation and the 23-topic count with the expanded eight-chapter backend guide in content PR #65.
+- 2026-11-10 — Clarified that the paired content PR adds the 23rd topic; aligned EN/VI README placement with the revised backend textbook after review round two.
 
 Older and full entries: `docs/CHANGELOG_ARCHIVE.md` (read only when needed).
 

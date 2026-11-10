@@ -22,8 +22,6 @@ App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ,
 
 ## Stack
 
-Giáo trình backend là một chủ đề Infrastructure tại `/docs/vi/backend-learning` và `/docs/en/backend-learning`, gồm tám chương cốt lõi EN/VI và phần học thêm. Sidebar, tìm kiếm và mục lục heading dùng chung cơ chế tài liệu hiện có. PR app #43 phụ thuộc bản nội dung PR #65; không merge/deploy riêng. Giáo trình không thay thế kế hoạch frontend 30 ngày hay bổ sung backend vào app này.
-
 Nuxt 3 + Nitro · Vue 3 · TypeScript · Tailwind CSS · `@nuxtjs/i18n` (vi/en, `no_prefix`) · Vercel (preset Nitro `vercel`) · Vercel Blob private cho tiến độ plan
 
 ## Kiến trúc
@@ -55,6 +53,8 @@ type Localized<T = string> = { en: T; vi: T }
 Doc: `{ sections: { id, title, blocks }[] }`. Kiểu block: `heading`, `paragraph`, `list`, `callout`, `code`, `table`, `senior-answer`, `key-takeaways`, `markdown`, `thematic-break`.
 
 Build (`predev` / `prebuild`) chạy `scripts/pull-data.mjs` → `.data/content`, rồi Nitro copy vào server assets. Client không import file JSON.
+
+Giáo trình backend là chủ đề Infrastructure thứ 23 tại `/docs/vi/backend-learning` và `/docs/en/backend-learning`, gồm tám chương cốt lõi EN/VI và phần học thêm. Sidebar, tìm kiếm và mục lục heading dùng chung cơ chế tài liệu hiện có. PR app #43 phụ thuộc bản nội dung PR #65; không merge/deploy riêng. Giáo trình không thay thế kế hoạch frontend 30 ngày hay bổ sung backend vào app này.
 
 ### API
 
