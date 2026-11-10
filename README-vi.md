@@ -8,7 +8,7 @@ App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ,
 
 ## Tính năng
 
-- **Knowledge base** — 22 chủ đề vi/en, sidebar, tìm full-text, TOC lồng heading
+- **Knowledge base** — 23 chủ đề vi/en (gồm giáo trình backend), sidebar, tìm full-text, TOC lồng heading
 - **Kế hoạch 30 ngày** — checkpoint theo ngày, thuật toán, xem / sửa tiến độ
 - **Lộ trình thực hành** — các bước theo milestone (`/practice`) từ thư mục `practice/` tuỳ chọn trong data repo
 - **Practice Design** — gallery màn hình + spec đánh số (`/practice/design`); ẩn khi thiếu `practice/design/`
@@ -21,6 +21,8 @@ App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ,
 ![Kế hoạch 30 ngày](./docs/readme/plan.png)
 
 ## Stack
+
+Giáo trình backend là một chủ đề Infrastructure tại `/docs/vi/backend-learning` và `/docs/en/backend-learning`, gồm tám chương cốt lõi EN/VI và phần học thêm. Sidebar, tìm kiếm và mục lục heading dùng chung cơ chế tài liệu hiện có. PR app #43 phụ thuộc bản nội dung PR #65; không merge/deploy riêng. Giáo trình không thay thế kế hoạch frontend 30 ngày hay bổ sung backend vào app này.
 
 Nuxt 3 + Nitro · Vue 3 · TypeScript · Tailwind CSS · `@nuxtjs/i18n` (vi/en, `no_prefix`) · Vercel (preset Nitro `vercel`) · Vercel Blob private cho tiến độ plan
 

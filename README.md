@@ -54,7 +54,7 @@ Docs are `{ sections: { id, title, blocks }[] }`. Block types: `heading`, `parag
 
 Build (`predev` / `prebuild`) runs `scripts/pull-data.mjs` → `.data/content`, then Nitro copies that tree into server assets. The client never imports the JSON files.
 
-The backend learning guide is a data-only catalog entry under Infrastructure at `/docs/en/backend-learning` and `/docs/vi/backend-learning`. Its bilingual sections are resolved by the existing `/api/knowledge-base/docs/:slug` endpoint and indexed for search; the app must pull the matching content revision before the updated topic count is published. It does not change the 30-day frontend plan or add an app-side backend service.
+The backend learning guide is one data-only Infrastructure topic at `/docs/en/backend-learning` and `/docs/vi/backend-learning`. It now contains eight connected EN/VI core chapters and optional operations, with existing nested heading TOC and full-text search via `/api/knowledge-base/docs/:slug`. Pull the paired content PR #65 before app PR #43 is published; neither PR is ready for independent merge or deploy. The 30-day frontend plan and app-side backend services are unchanged.
 
 ### APIs
 
