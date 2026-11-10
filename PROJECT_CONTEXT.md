@@ -51,11 +51,14 @@
 - Portfolio case study lives outside this repo (Parker's portfolio).
 
 ## 8. Open items / status
+- Backend guide navigation and the 23-topic copy depend on the matching content-repo guide landing first; do not merge or deploy this PR independently. No route, scope or feature-flag behavior changes.
 - Agent rules: `AGENTS.md` is canonical; `AGENT_RULES.md` points to it. `docs/LESSONS.md` records new lessons. Branch and secret-scan guardrails are in place.
 - PR #34 review fixes: context-file existence check, accurate CI wording, private source placeholder, and corrected auth/local-dev descriptions.
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
 ## 9. Changelog
+
+- 2026-11-10 — Linked the bilingual backend learning guide in the app documentation and aligned the knowledge-base topic count with its catalog entry.
 
 Older and full entries: `docs/CHANGELOG_ARCHIVE.md` (read only when needed).
 
