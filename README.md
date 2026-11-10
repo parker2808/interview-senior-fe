@@ -8,7 +8,7 @@ Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 3
 
 ## Features
 
-- **Knowledge base** — 22 vi/en topics, sidebar, full-text search, nested heading TOC
+- **Knowledge base** — 23 vi/en topics (including a backend learning path), sidebar, full-text search, nested heading TOC
 - **30-day plan** — daily checkpoints, algorithms, view vs edit progress
 - **Practice path** — milestone steps (`/practice`) from optional `practice/` in the data repo
 - **Practice Design** — optional screen gallery + numbered spec (`/practice/design`); hidden when `practice/design/` is missing
@@ -53,6 +53,8 @@ type Localized<T = string> = { en: T; vi: T }
 Docs are `{ sections: { id, title, blocks }[] }`. Block types: `heading`, `paragraph`, `list`, `callout`, `code`, `table`, `senior-answer`, `key-takeaways`, `markdown`, `thematic-break`.
 
 Build (`predev` / `prebuild`) runs `scripts/pull-data.mjs` → `.data/content`, then Nitro copies that tree into server assets. The client never imports the JSON files.
+
+The backend learning guide adds the 23rd data-only catalog topic in Infrastructure at `/docs/en/backend-learning` and `/docs/vi/backend-learning`. It contains eight connected EN/VI core chapters and optional operations, with existing nested heading TOC and full-text search via `/api/knowledge-base/docs/:slug`. Chapter 5 distinguishes observed disposable local Prisma/MySQL lab output from production behavior. Pull the paired content PR #65 before app PR #43 is published; neither PR is ready for independent merge or deploy. The 30-day frontend plan and app-side backend services are unchanged.
 
 ### APIs
 
