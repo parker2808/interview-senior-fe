@@ -5,3 +5,4 @@
 - 2026-10-31: A big task skipped its plan/spec step. Write the plan before coding and put a spec in `docs/specs/` for big tasks.
 - 2026-11-10: A documentation-only guide revision must update both README languages and verify the generated catalog count against the paired content worktree.
 - 2026-11-10: Keep localized README guide placement parallel to English and distinguish a new catalog entry from a preexisting topic.
+- 2026-11-10: Confirm renderer capability before authoring tutorial diagrams; the current content renderer prints code blocks but does not execute Mermaid.
