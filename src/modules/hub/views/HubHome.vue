@@ -5,10 +5,11 @@ import { HUB_MODULES } from '@/modules/hub/constants/hub-modules.constant'
 import { usePracticeAvailable } from '@/modules/practice/composables/use-practice-index.composable'
 
 const { data: practiceAvailable } = await usePracticeAvailable()
+const { data: fdeAvailable } = await useAsyncData('fde-available', () => $fetch<{ available: boolean }>('/api/fde/available'))
 
 const modules = computed(() =>
   HUB_MODULES.filter(
-    (mod) => mod.requires !== 'practice' || practiceAvailable.value,
+    (mod) => (mod.requires !== 'practice' || practiceAvailable.value) && (mod.requires !== 'fde' || fdeAvailable.value?.available),
   ),
 )
 </script>

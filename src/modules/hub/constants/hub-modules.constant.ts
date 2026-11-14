@@ -5,7 +5,7 @@ export type HubModuleCard = {
   descKey: string
   ctaKey: string
   /** When set, the hub card is hidden until that content tree exists. */
-  requires?: 'practice'
+  requires?: 'practice' | 'fde'
 }
 
 export const HUB_MODULES: HubModuleCard[] = [
@@ -37,5 +37,13 @@ export const HUB_MODULES: HubModuleCard[] = [
     titleKey: 'hub.interviewTitle',
     descKey: 'hub.interviewDesc',
     ctaKey: 'hub.interviewCta',
+  },
+  {
+    id: 'fde',
+    to: '/fde',
+    titleKey: 'fde.title',
+    descKey: 'fde.subtitle',
+    ctaKey: 'fde.open',
+    requires: 'fde',
   },
 ]

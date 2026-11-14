@@ -1,5 +1,7 @@
 # Senior FE Interview Prep
 
+**Ôn FDE:** Khi có `fde/fde-prep.json` trong dữ liệu được kéo lúc build, trang `/fde` cho tìm nhanh cả tiếng Việt lẫn tiếng Anh, lọc theo JD, xem câu trả lời ngắn rồi mở giải thích. Trang `/fde/cheat-sheet` gói phần giới thiệu, câu gỡ bí và câu hỏi dành cho người phỏng vấn. Hai trang có `noindex`, dùng chế độ sáng/tối sẵn có. Trang đã tải vẫn tìm được khi mất mạng, nhưng tải lại khi hoàn toàn offline chưa được hỗ trợ. Phải gộp PR dữ liệu trước PR ứng dụng, chỉ sau khi Parker duyệt; không tự gộp hay triển khai.
+
 > 🌍 **Language / Ngôn ngữ:** [🇬🇧 English](./README.md) | [🇻🇳 Tiếng Việt](./README-vi.md)
 
 App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ, kế hoạch 30 ngày, lộ trình thực hành tuỳ chọn, và ngân hàng Q&A khoá PIN.
