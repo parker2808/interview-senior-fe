@@ -39,7 +39,7 @@ const port = 33289
 const url = `http://127.0.0.1:${port}`
 const server = spawn('npm', ['run', 'dev', '--', '--host', '127.0.0.1', '--port', String(port)], {
   cwd: path.resolve(import.meta.dirname, '..'),
-  env: { ...process.env, CONTENT_LOCAL_PATH: dataDir }, stdio: ['ignore', 'ignore', 'pipe'],
+  env: { ...process.env, CONTENT_LOCAL_PATH: dataDir }, stdio: ['ignore', 'ignore', 'pipe'], detached: true,
 })
 let serverError = ''
 server.stderr.on('data', (chunk) => { serverError = `${serverError}${chunk}`.slice(-1200) })
@@ -80,7 +80,10 @@ try {
   console.log(`JD viewport OK: /jd, /jd/${fallbackOnly ? 'fde' : 'fictional-frontend'} (six tabs), /search at 430x932`)
 } finally {
   await browser?.close()
-  server.kill('SIGTERM')
+  if (server.pid) {
+    try { process.kill(-server.pid, 'SIGTERM') } catch (error) { if (error.code !== 'ESRCH') throw error }
+  }
+  server.stderr.destroy()
   rmSync(root, { recursive: true, force: true })
 }
 

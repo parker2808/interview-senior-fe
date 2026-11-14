@@ -60,6 +60,7 @@
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
 ## 9. Changelog
+- 2026-11-15: Stopped the viewport check's development-server process group after assertions so continuous integration finishes instead of timing out.
 - 2026-11-15: Added optional JD module cards, bilingual short-answer-first tabs, and active-only global search without changing existing FDE routes.
 - 2026-11-15: Addressed FDE app review A1-A4 with safe Markdown-lite details, token/phrase synonym expansion, scoped Escape handling, regression tests and matching EN/VI feature bullets.
 - 2026-11-15: Added optional bilingual FDE interview lookup, quick cheat sheet, ranked search and tests.
