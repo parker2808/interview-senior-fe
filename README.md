@@ -14,6 +14,7 @@ Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 3
 - **Practice Design** — optional screen gallery + numbered spec (`/practice/design`); hidden when `practice/design/` is missing
 - **Interview Q&A** — model answers behind a 6-digit PIN
 - **FDE prep:** optional `/fde` client-side bilingual search, JD filters, detailed explanations and `/fde/cheat-sheet`; shown when `fde/fde-prep.json` exists in the content pull. These pages use `noindex` and reuse the light/dark theme. Loaded pages remain searchable if the connection drops, but a fresh offline reload is not supported.
+- **JD modules:** `/jd` lists active study modules beside FDE, with role and tag filters. `/jd/<slug>` offers short answers followed by expandable explanations, and `/search` searches active modules in both languages. For example, the fictional fixture demonstrates keyboard focus without using a real job description. The index is optional: when `modules/` has not merged yet, FDE still appears. Telegram handoff remains unavailable until an opaque token provider and `JD_TELEGRAM_BOT_USERNAME` are configured; no private text is placed in a link. Archive/restore and comparison are future work.
 - **i18n** — `vi` / `en`, no URL prefix; locale cookie
 - **Light / dark** theme
 

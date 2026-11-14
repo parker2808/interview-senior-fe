@@ -1,5 +1,7 @@
 # Lessons
 
+- 2026-11-15: Keep optional content discovery separate from existing FDE routes; a missing modules index must fall back to the original version 1 pack.
+
 - 2026-11-15: The shared Markdown renderer accepts raw HTML; FDE details need an isolated safe renderer that escapes HTML, drops active link/image URLs and preserves fenced whitespace instead of stripping Markdown markers.
 
 - 2026-11-15: Optional content modules need a lightweight availability endpoint so the hub does not download the full study pack.

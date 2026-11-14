@@ -16,6 +16,7 @@ App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ,
 - **Practice Design** — gallery màn hình + spec đánh số (`/practice/design`); ẩn khi thiếu `practice/design/`
 - **Interview Q&A** — câu trả lời mẫu sau mã 6 số
 - **Ôn FDE:** trang `/fde` tìm nhanh nội dung song ngữ ngay trên trình duyệt, lọc theo JD, mở giải thích chi tiết và xem `/fde/cheat-sheet`; chỉ hiện khi dữ liệu kéo về có `fde/fde-prep.json`. Hai trang có `noindex`, dùng giao diện sáng/tối sẵn có. Trang đã tải vẫn tìm được khi mất mạng, nhưng chưa hỗ trợ tải lại hoàn toàn offline.
+- **Module theo JD:** `/jd` liệt kê các bộ ôn tập đang hoạt động cùng với FDE, có bộ lọc vai trò và thẻ. Trong `/jd/<slug>`, câu trả lời ngắn xuất hiện trước phần giải thích; `/search` tìm cả tiếng Việt lẫn tiếng Anh. Module giả định về điểm focus chỉ dùng để thử giao diện, không chứa JD thật. Nếu dữ liệu chưa có `modules/`, FDE vẫn hiện bình thường. Nút Telegram chỉ hoạt động khi đã có bot và dịch vụ cấp token an toàn; không đưa nội dung riêng tư vào liên kết. Tính năng lưu trữ, khôi phục và so sánh sẽ làm sau.
 - **i18n** — `vi` / `en`, không prefix URL; cookie locale
 - **Theme** sáng / tối
 

@@ -14,7 +14,7 @@ scripts/                  # pull / export / validate
 .data/content/            # gitignored — pulled at build
 ```
 
-Content JSON lives in private `parker2808/interview-fe-data`, not in this repo.
+Content JSON lives in private `<private-content-repo>`, not in this repo.
 
 ## Module layout
 

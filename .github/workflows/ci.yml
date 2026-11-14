@@ -46,3 +46,17 @@ jobs:
           name: ci-logs
           path: qa-logs/*.txt
           if-no-files-found: warn
+  jd-viewport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Install browser test runtime
+        run: |
+          npm install --prefix "$RUNNER_TEMP/jd-playwright" --no-save --no-package-lock playwright
+          "$RUNNER_TEMP/jd-playwright/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Check JD routes at 430x932 with fictional content
+        run: |
+          PLAYWRIGHT_PACKAGE="$RUNNER_TEMP/jd-playwright/node_modules/playwright" node scripts/check-jd-viewport.mjs
+          JD_VIEWPORT_NO_MODULES=1 PLAYWRIGHT_PACKAGE="$RUNNER_TEMP/jd-playwright/node_modules/playwright" node scripts/check-jd-viewport.mjs
