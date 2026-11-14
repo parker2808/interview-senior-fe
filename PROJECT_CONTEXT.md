@@ -51,6 +51,7 @@
 - Portfolio case study lives outside this repo (Parker's portfolio).
 
 ## 8. Open items / status
+- FDE app rev1 A1-A4: safe detail Markdown preserves fenced code/ASCII spacing, search expands aliases within longer queries, and Escape yields to dialogs. App-only checks do not replace the parent's paired content checks or mobile visual review; no commit, push, merge or deploy in this implementation pass.
 - FDE route and optional content endpoint are paired with a separate data PR. Merge data first, app second only after Parker's approval. Fresh offline reload is not supported; search continues on an already loaded page.
 - Backend guide PR #43 documents the round-five EN/VI guide on the existing route and new 23rd catalog entry (22 on `main`); it depends on content PR #65. The paired content now distinguishes local Prisma lab output from expected/live behavior. Neither PR may be merged or deployed to production independently. No route, scope or feature-flag behavior changes.
 - Agent rules: `AGENTS.md` is canonical; `AGENT_RULES.md` points to it. `docs/LESSONS.md` records new lessons. Branch and secret-scan guardrails are in place.
@@ -58,6 +59,7 @@
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
 ## 9. Changelog
+- 2026-11-15: Addressed FDE app review A1-A4 with safe Markdown-lite details, token/phrase synonym expansion, scoped Escape handling, regression tests and matching EN/VI feature bullets.
 - 2026-11-15: Added optional bilingual FDE interview lookup, quick cheat sheet, ranked search and tests.
 
 - 2026-11-10 — Review round five: aligned EN/VI README lab wording and paired app context with content PR #65; retained existing routes, content schema and renderer.

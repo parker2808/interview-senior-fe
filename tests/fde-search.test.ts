@@ -29,6 +29,35 @@ describe('FDE search', () => {
     expect(searchFde(index, 'completely unrelated')).toEqual([])
   })
 
+  it('matches the idempotncy typo', () => {
+    const hits = searchFde(buildFdeIndex([makeEntry('retry', 'Idempotency', 'Safe retries')]), 'idempotncy')
+    expect(hits.map((hit) => hit.entry.id)).toEqual(['retry'])
+  })
+
+  it('expands a Vietnamese phrase inside a longer mixed query', () => {
+    const mixed = buildFdeIndex([
+      makeEntry('gateway', 'Monday write-back audit', 'A controlled gateway'),
+      makeEntry('missing', 'Write-back audit', 'No board integration'),
+    ])
+    const hits = searchFde(mixed, 'monday ghi nguoc audit')
+    expect(hits.map((hit) => hit.entry.id)).toEqual(['gateway'])
+    expect(snippetHtml(hits[0])).toContain('>write-back</mark>')
+  })
+
+  it('combines multiple synonym groups without dropping other query terms', () => {
+    const mixed = buildFdeIndex([makeEntry('gateway', 'Monday write-back email audit', 'Safe updates')])
+    expect(searchFde(mixed, 'monday ghi nguoc hop thu audit')).toHaveLength(1)
+    expect(searchFde(mixed, 'monday ghi nguoc hop thu missing')).toEqual([])
+    expect(searchFde(mixed, 'monday preghi nguoc audit')).toEqual([])
+  })
+
+  it('ranks an expanded title match above an expanded detail-only match', () => {
+    const bodyOnly = makeEntry('body-first', 'Gateway design', 'A controlled gateway')
+    bodyOnly.detail = { en: 'Monday write-back audit', vi: 'Monday write-back audit' }
+    const mixed = buildFdeIndex([bodyOnly, makeEntry('title-last', 'Monday write-back audit', 'Safe updates')])
+    expect(searchFde(mixed, 'monday ghi nguoc audit').map((hit) => hit.entry.id)).toEqual(['title-last', 'body-first'])
+  })
+
   it('escapes snippets before highlighting', () => {
     const hit = searchFde(index, 'script')[0]
     expect(snippetHtml(hit)).not.toContain('<script>')

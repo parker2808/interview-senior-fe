@@ -15,6 +15,7 @@ App Nuxt để **ôn phỏng vấn Senior Frontend**: knowledge base song ngữ,
 - **Lộ trình thực hành** — các bước theo milestone (`/practice`) từ thư mục `practice/` tuỳ chọn trong data repo
 - **Practice Design** — gallery màn hình + spec đánh số (`/practice/design`); ẩn khi thiếu `practice/design/`
 - **Interview Q&A** — câu trả lời mẫu sau mã 6 số
+- **Ôn FDE:** trang `/fde` tìm nhanh nội dung song ngữ ngay trên trình duyệt, lọc theo JD, mở giải thích chi tiết và xem `/fde/cheat-sheet`; chỉ hiện khi dữ liệu kéo về có `fde/fde-prep.json`. Hai trang có `noindex`, dùng giao diện sáng/tối sẵn có. Trang đã tải vẫn tìm được khi mất mạng, nhưng chưa hỗ trợ tải lại hoàn toàn offline.
 - **i18n** — `vi` / `en`, không prefix URL; cookie locale
 - **Theme** sáng / tối
 

@@ -3,6 +3,8 @@ import AppTopBar from '@/modules/core/components/AppTopBar/AppTopBar.vue'
 import LocaleToggle from '@/modules/core/components/LocaleToggle/LocaleToggle.vue'
 import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import { buildFdeIndex, searchFde, snippetHtml } from '@/modules/fde/utils/fde-search.util'
+import { renderFdeDetail } from '@/modules/fde/utils/fde-markdown.util'
+import { shouldClearFdeSearch } from '@/modules/fde/utils/fde-keyboard.util'
 import type { FdeContent, FdeEntry, FdeLocalized } from '@/modules/fde/types/entities/fde-content.type'
 
 const { t, locale } = useI18n()
@@ -41,7 +43,16 @@ function onKeydown(event: KeyboardEvent) {
     event.preventDefault()
     searchRef.value?.focus()
   }
-  if (event.key === 'Escape') {
+  if (shouldClearFdeSearch({
+    key: event.key,
+    defaultPrevented: event.defaultPrevented,
+    isComposing: event.isComposing,
+    searchFocused: document.activeElement === searchRef.value,
+    query: query.value,
+    dialogOpen: !!(target?.closest('dialog, [role="dialog"], [role="alertdialog"]') ||
+      document.querySelector('dialog[open], [aria-modal="true"]')),
+  })) {
+    event.preventDefault()
     query.value = ''
     searchRef.value?.blur()
   }
@@ -137,7 +148,7 @@ function requirement(entry: FdeEntry): string {
           <div v-if="expanded.includes(hit.entry.id)" class="mt-3 border-t border-line pt-3">
             <div v-for="lang in languages()" :key="lang" :lang="lang" class="mb-4">
               <p v-if="languageMode === 'both'" class="mb-1 text-xs font-bold uppercase text-accent-ink">{{ lang }}</p>
-              <p class="whitespace-pre-line break-words text-sm leading-7 text-ink sm:text-base">{{ plain(hit.entry.detail[lang]) }}</p>
+              <div class="prose-doc min-w-0 max-w-full break-words text-sm leading-7 text-ink sm:text-base" v-html="renderFdeDetail(hit.entry.detail[lang])" />
             </div>
           </div>
         </article>

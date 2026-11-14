@@ -49,33 +49,49 @@ function nearMatch(text: string, token: string): boolean {
   })
 }
 
-function variants(query: string): string[] {
-  const normalized = foldSearchText(query)
-  if (!normalized) return []
-  const group = SYNONYMS.find((aliases) => aliases.some((alias) => foldSearchText(alias) === normalized))
-  return group ? [normalized, ...group.map(foldSearchText).filter((alias) => alias !== normalized)] : [normalized]
+function queryGroups(query: string): string[][][] {
+  const tokens = foldSearchText(query).split(' ').filter(Boolean)
+  const aliases = SYNONYMS.flatMap((group) => group.map((alias) => ({
+    tokens: foldSearchText(alias).split(' '),
+    alternatives: group.map(splitSearchKeywords),
+  }))).sort((first, second) => second.tokens.length - first.tokens.length)
+  const groups: string[][][] = []
+  for (let offset = 0; offset < tokens.length;) {
+    const alias = aliases.find((item) => item.tokens.every((token, index) => tokens[offset + index] === token))
+    if (alias) {
+      groups.push(alias.alternatives)
+      offset += alias.tokens.length
+    } else {
+      const keywords = splitSearchKeywords(tokens[offset])
+      if (keywords.length) groups.push([keywords])
+      offset++
+    }
+  }
+  return groups
 }
 
 export function searchFde(index: SearchRecord[], query: string): FdeSearchHit[] {
-  const queries = variants(query)
-  if (!queries.length) return index.map(({ entry }) => ({ entry, score: 0, snippet: '', matchedLang: 'en', matchTerm: '' }))
+  const groups = queryGroups(query)
+  if (!groups.length) return index.map(({ entry }) => ({ entry, score: 0, snippet: '', matchedLang: 'en', matchTerm: '' }))
   const results: FdeSearchHit[] = []
   for (const record of index) {
     let best: FdeSearchHit | null = null
-    for (const variant of queries) {
-      const keywords = splitSearchKeywords(variant)
-      if (!keywords.length) continue
-      const fuzzy = keywords.every((token) => record.all.includes(token) || nearMatch(record.fuzzyHay, token))
-      if (!fuzzy) continue
-      for (const field of record.fields) {
-        const exact = matchesAllKeywords(field.folded, keywords)
-        const score = exact ? field.weight + scoreKeywordHay(field.folded, keywords) : (fuzzy ? 12 : 0)
-        if (!score || (best && best.score >= score)) continue
-        best = {
-          entry: record.entry, score,
-          snippet: field.weight === 360 ? record.entry.shortAnswer[field.lang] : field.text,
-          matchedLang: field.lang, matchTerm: variant,
-        }
+    const matches = groups.every((alternatives) => alternatives.some((keywords) =>
+      keywords.every((token) => record.all.includes(token) || nearMatch(record.fuzzyHay, token)),
+    ))
+    if (!matches) continue
+    for (const field of record.fields) {
+      const choices = groups.map((alternatives) => alternatives
+        .filter((keywords) => matchesAllKeywords(field.folded, keywords))
+        .sort((first, second) => scoreKeywordHay(field.folded, second) - scoreKeywordHay(field.folded, first))[0])
+      const exact = choices.every(Boolean)
+      const keywords = choices.flatMap((choice) => choice || [])
+      const score = exact ? field.weight + scoreKeywordHay(field.folded, keywords) : 12
+      if (best && best.score >= score) continue
+      best = {
+        entry: record.entry, score,
+        snippet: field.weight === 360 ? record.entry.shortAnswer[field.lang] : field.text,
+        matchedLang: field.lang, matchTerm: keywords.join(' ') || query,
       }
     }
     if (best) results.push(best)
