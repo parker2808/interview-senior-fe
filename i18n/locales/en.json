@@ -224,6 +224,13 @@
     "retry": "Retry",
     "retrying": "Retrying…"
   },
+  "jd": {
+    "title": "JD modules", "hint": "Each module groups answers for one study brief. Search across modules; Telegram opens only after a safe bot link is configured.",
+    "globalSearch": "Search all modules", "filter": "Find a module", "search": "Role, tag or title", "tag": "Tag", "date": "Date", "recent": "Last 30 days", "group": "Group by", "organization": "Organization alias", "role": "Role", "all": "All", "empty": "No modules match these filters.",
+    "open": "Open module", "telegram": "Open in Telegram", "telegramUnavailable": "Telegram link is not available yet.",
+    "back": "Back to modules", "answer": "30-second answer", "detail": "Detailed explanation", "general": "General knowledge", "pending": "Knowledge link pending review", "cvEmpty": "No approved CV defence notes yet.", "testEmpty": "No test results yet.", "searchResults": "{count} results", "searchHint": "Search titles, tags, and answers in both languages ( / or ⌘K ).", "noResults": "No matching answers.",
+    "tabs": { "jd": "JD map", "concepts": "Concepts", "interview": "Questions and answers", "cv": "CV defence", "cheat": "Cheat sheet", "test": "Test results" }
+  },
   "fde": {
     "eyebrow": "Live interview reference",
     "title": "FDE interview prep",

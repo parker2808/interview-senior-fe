@@ -224,6 +224,13 @@
     "retry": "Thử lại",
     "retrying": "Đang thử lại…"
   },
+  "jd": {
+    "title": "Bộ ôn tập theo JD", "hint": "Mỗi module gom câu trả lời cho một chủ đề ôn tập. Bạn có thể tìm trên nhiều module; nút Telegram chỉ hoạt động khi đã có liên kết an toàn.",
+    "globalSearch": "Tìm trong mọi module", "filter": "Tìm module", "search": "Vai trò, thẻ hoặc tiêu đề", "tag": "Thẻ", "date": "Ngày", "recent": "30 ngày gần đây", "group": "Nhóm theo", "organization": "Tên tổ chức rút gọn", "role": "Vai trò", "all": "Tất cả", "empty": "Không có module nào khớp bộ lọc.",
+    "open": "Mở module", "telegram": "Mở trong Telegram", "telegramUnavailable": "Chưa có liên kết Telegram.",
+    "back": "Về danh sách module", "answer": "Trả lời trong 30 giây", "detail": "Giải thích chi tiết", "general": "Kiến thức chung", "pending": "Liên kết kiến thức đang chờ duyệt", "cvEmpty": "Chưa có ghi chú bảo vệ CV được duyệt.", "testEmpty": "Chưa có kết quả kiểm tra.", "searchResults": "{count} kết quả", "searchHint": "Tìm tiêu đề, thẻ và câu trả lời ở cả hai ngôn ngữ ( / hoặc ⌘K ).", "noResults": "Chưa tìm thấy câu trả lời phù hợp.",
+    "tabs": { "jd": "Theo JD", "concepts": "Kiến thức", "interview": "Hỏi đáp", "cv": "Bảo vệ CV", "cheat": "Tờ nhắc", "test": "Kết quả" }
+  },
   "fde": {
     "eyebrow": "Tra nhanh khi phỏng vấn",
     "title": "Ôn phỏng vấn FDE",
