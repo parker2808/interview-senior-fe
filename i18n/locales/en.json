@@ -223,5 +223,37 @@
     "themeLight": "Light mode",
     "retry": "Retry",
     "retrying": "Retrying…"
+  },
+  "fde": {
+    "eyebrow": "Live interview reference",
+    "title": "FDE interview prep",
+    "subtitle": "Find a speakable answer first, then expand the explanation.",
+    "open": "Open FDE prep",
+    "cheat": "Quick cheat sheet",
+    "back": "Back to FDE prep",
+    "search": "Search both languages, tags, answers and details ( / or ⌘K )",
+    "sectionFilter": "Filter by section",
+    "jdFilter": "JD requirement",
+    "all": "All",
+    "language": "Answer language",
+    "both": "EN + VI",
+    "results": "{count} entries",
+    "more": "Read detailed explanation",
+    "less": "Hide detailed explanation",
+    "loadMore": "Show more entries",
+    "empty": "No matches. Try another keyword or remove a filter.",
+    "loading": "Loading interview notes…",
+    "unavailable": "FDE notes are not available yet.",
+    "linkTo": "Link to {id}",
+    "sections": {
+      "all": "All",
+      "jd": "JD map",
+      "concepts": "Deep concepts",
+      "interview": "Interview Q&A",
+      "pitch": "Pitch",
+      "rescue": "Rescue phrases",
+      "ask": "Questions to ask",
+      "cheat": "Cheat sheet"
+    }
   }
 }

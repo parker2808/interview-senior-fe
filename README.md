@@ -13,6 +13,7 @@ Nuxt app for **Senior Frontend interview prep**: a bilingual knowledge base, a 3
 - **Practice path** — milestone steps (`/practice`) from optional `practice/` in the data repo
 - **Practice Design** — optional screen gallery + numbered spec (`/practice/design`); hidden when `practice/design/` is missing
 - **Interview Q&A** — model answers behind a 6-digit PIN
+- **FDE prep:** optional `/fde` client-side bilingual search, JD filters, detailed explanations and `/fde/cheat-sheet`; shown when `fde/fde-prep.json` exists in the content pull. These pages use `noindex` and reuse the light/dark theme. Loaded pages remain searchable if the connection drops, but a fresh offline reload is not supported.
 - **i18n** — `vi` / `en`, no URL prefix; locale cookie
 - **Light / dark** theme
 
@@ -76,6 +77,9 @@ The backend learning guide adds the 23rd data-only catalog topic in Infrastructu
 | static | `/assets/practice-design/screens/:file` | copied at pull/build |
 | `PUT` / `POST` | `/api/practice/progress` | edit session |
 | `GET` | `/api/interview/questions` | interview session |
+| `GET` | `/api/fde` | public (404 until optional FDE data exists) |
+| `GET` | `/api/fde/available` | public |
+| `GET` | `/api/fde/cheat` | public (compact cheat-sheet entries) |
 | `POST` | `/api/auth/interview` | body `{ passcode }` → HttpOnly cookie |
 | `POST` | `/api/auth/edit` | body `{ passcode }` → HttpOnly cookie |
 | `GET` | `/api/auth/session` | reports interview + edit scopes |

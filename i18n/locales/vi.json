@@ -223,5 +223,37 @@
     "themeLight": "Chế độ sáng",
     "retry": "Thử lại",
     "retrying": "Đang thử lại…"
+  },
+  "fde": {
+    "eyebrow": "Tra nhanh khi phỏng vấn",
+    "title": "Ôn phỏng vấn FDE",
+    "subtitle": "Xem câu trả lời ngắn trước, mở giải thích khi cần.",
+    "open": "Mở phần ôn FDE",
+    "cheat": "Tờ nhắc nhanh",
+    "back": "Về phần ôn FDE",
+    "search": "Tìm cả EN/VI, thẻ, câu trả lời và nội dung ( / hoặc ⌘K )",
+    "sectionFilter": "Lọc theo phần",
+    "jdFilter": "Yêu cầu JD",
+    "all": "Tất cả",
+    "language": "Ngôn ngữ trả lời",
+    "both": "EN + VI",
+    "results": "{count} mục",
+    "more": "Xem giải thích chi tiết",
+    "less": "Thu gọn giải thích",
+    "loadMore": "Xem thêm",
+    "empty": "Không có kết quả. Thử từ khóa khác hoặc bỏ bộ lọc.",
+    "loading": "Đang tải tài liệu…",
+    "unavailable": "Tài liệu FDE chưa có sẵn.",
+    "linkTo": "Liên kết tới {id}",
+    "sections": {
+      "all": "Tất cả",
+      "jd": "Theo JD",
+      "concepts": "Kiến thức sâu",
+      "interview": "Hỏi đáp",
+      "pitch": "Giới thiệu",
+      "rescue": "Câu gỡ bí",
+      "ask": "Câu hỏi để hỏi lại",
+      "cheat": "Nhắc nhanh"
+    }
   }
 }
