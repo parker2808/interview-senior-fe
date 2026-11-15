@@ -13,12 +13,21 @@ const fallback: JdRow = {
 }
 
 export async function activeModules(): Promise<JdRow[]> {
+  return (await moduleRows()).filter((row) => row.status === 'active')
+}
+
+async function moduleRows(): Promise<JdRow[]> {
   const index = await readContentJsonOptional<ModuleIndex>('modules/index.json')
   const rows = index?.version === 2 && Array.isArray(index.modules)
     ? index.modules : (await readContentJsonOptional('fde/fde-prep.json') ? [fallback] : [])
-  return rows.filter((row) => row.status === 'active' &&
-    (row.slug === 'fde' ? row.source === 'fde/fde-prep.json' :
+  return rows.filter((row) =>
+    (row.slug === 'fde' ? row.status === 'active' && row.source === 'fde/fde-prep.json' :
       /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(row.slug) && row.source === `modules/${row.slug}.json`))
+}
+
+export async function archivedModules(): Promise<JdRow[]> {
+  return (await moduleRows()).filter((row) => row.status === 'archived' && row.slug !== 'fde' &&
+    typeof row.purgeAfter === 'string' && Number.isFinite(Date.parse(row.purgeAfter)))
 }
 
 export async function activeModule(slug: string): Promise<JdModule | null> {
