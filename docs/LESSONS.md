@@ -1,5 +1,7 @@
 # Lessons
 
+- 2026-11-15: A bot job-review deep link is not an archive-action link; keep action tokens unconfigured until the bot recognizes and verifies them, and fall back to a plain chat plus a copyable command.
+
 - 2026-11-15: A browser check can pass its assertions but still time out in continuous integration when a development server's child processes keep a pipe open; stop the full process group during cleanup.
 
 - 2026-11-15: Keep optional content discovery separate from existing FDE routes; a missing modules index must fall back to the original version 1 pack.

@@ -1,5 +1,7 @@
 # UI module conventions
 
+The JD feature keeps its bot-command fallback UI in `src/modules/jd/components/JdModuleAction.vue`; dashboard and study views share it. Server-side edit-session checks live in the existing `server/api/jd/` readers, not in a client-only filter. For example, a visitor's request for the Archived list returns no rows.
+
 Project overview, APIs, auth, and data flow: **[README.md](./README.md)** ([Tiếng Việt](./README-vi.md)).
 
 This file is only how `src/modules/` is laid out.

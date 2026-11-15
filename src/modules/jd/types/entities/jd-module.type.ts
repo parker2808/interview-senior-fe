@@ -16,10 +16,14 @@ export type JdRow = {
   testScore?: number
   fixture?: boolean
   telegram?: { url: string } | null
+  action?: JdActionHandoff | null
 }
+
+export type JdActionHandoff = { command: string; url: string | null; deepLink: boolean }
 
 export type JdModule = FdeContent & {
   slug?: string
+  action?: JdActionHandoff | null
   entries: (FdeEntry & {
     kbRefs?: { slug: string; sectionId: string; state: 'pending' | 'live' | 'rejected' }[]
     embellishmentRefs?: string[]

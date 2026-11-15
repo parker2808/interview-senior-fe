@@ -5,11 +5,16 @@ import ThemeToggle from '@/modules/core/components/ThemeToggle/ThemeToggle.vue'
 import { renderFdeDetail } from '@/modules/fde/utils/fde-markdown.util'
 import { tabEntries, liveKbHref, type JdTab } from '@/modules/jd/utils/jd-tabs.util'
 import type { JdModule } from '@/modules/jd/types/entities/jd-module.type'
+import JdModuleAction from '@/modules/jd/components/JdModuleAction.vue'
+import { useEditMode } from '@/modules/study-plan/composables/use-edit-mode.composable'
+import { canShowJdAction } from '@/modules/jd/utils/jd-actions.util'
 
 const { t, locale } = useI18n()
 const route = useRoute()
 const slug = String(route.params.slug || '')
-const { data, error } = await useAsyncData(`jd-${slug}`, () => $fetch<JdModule>(`/api/jd/${encodeURIComponent(slug)}`))
+const { isEditMode } = useEditMode()
+const requestFetch = useRequestFetch()
+const { data, error } = await useAsyncData(`jd-${slug}`, () => requestFetch<JdModule>(`/api/jd/${encodeURIComponent(slug)}`), { watch: [isEditMode] })
 const tabs: JdTab[] = ['jd', 'concepts', 'interview', 'cv', 'cheat', 'test']
 const tab = ref<JdTab>('jd')
 const expanded = ref<string[]>([])
@@ -28,6 +33,7 @@ useHead({ meta: [{ name: 'robots', content: 'noindex, nofollow' }], title: t('jd
       <h1 class="mt-2 break-words text-2xl font-bold text-ink">{{ t('jd.title') }}</h1>
       <p v-if="error" role="alert" class="mt-5 text-ink-muted">{{ t('fde.unavailable') }}</p>
       <div v-else-if="data">
+        <JdModuleAction v-if="canShowJdAction(slug, 'active', isEditMode, data.action)" :action="data.action!" kind="delete" />
         <nav class="sticky z-20 -mx-4 mt-4 flex gap-2 overflow-x-auto border-y border-line bg-surface-elevated/95 px-4 py-2 backdrop-blur sm:mx-0 sm:rounded-lg sm:border" style="top:var(--app-header-h)" :aria-label="t('jd.title')">
           <button v-for="item in tabs" :key="item" type="button" :aria-current="tab === item ? 'page' : undefined" class="min-h-11 shrink-0 rounded-lg border border-line px-3 text-sm text-ink" :class="tab === item ? 'bg-accent-soft font-bold text-accent-ink' : ''" @click="tab = item">{{ t(`jd.tabs.${item}`) }}</button>
         </nav>

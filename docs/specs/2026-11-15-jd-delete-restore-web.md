@@ -1,8 +1,8 @@
 # Edit-mode JD archive and restore handoff
 
-An owner needs to hide an outdated job-description (JD) study module without accidentally deleting it. The web offers Delete and Restore in edit mode, but the bot alone confirms and executes either action. For example, the owner can archive a fictional application and restore it before its seven-day deadline. This change never writes to the content repository.
+An owner needs to hide an outdated job-description (JD) study module without accidentally deleting it. The web offers Delete and Restore in edit mode, but the bot alone handles execution and any confirmation. For example, the owner can archive a fictional application and restore it before its seven-day deadline. This change never writes to the content repository.
 
-The lifecycle contract is `jdcv/docs/specs/module-delete-and-archive.md`; the private content shape and reviewed removal are `interview-fe-data/docs/specs/module-archive.md`; the bot commands are `tg-bots/docs/specs/jd-delete-restore.md`. The source plan's delete, user experience and writing sections describe the intended flow. The bot currently supports typed `/jd_delete <slug>` and `/jd_restore <slug>` but **not** an action-specific start payload. Its existing `jd_` token opens a job review, not deletion. The web must not substitute that token for a module action.
+The lifecycle contract is `jdcv/docs/specs/module-delete-and-archive.md`; the private content shape and reviewed removal are `<private-content-repo>/docs/specs/module-archive.md`; the bot commands are `<private-bot-repo>/docs/specs/jd-delete-restore.md`. The source plan's delete, user experience and writing sections describe the intended flow. The bot currently supports typed `/jd_delete <slug>` and `/jd_restore <slug>` but **not** an action-specific start payload. Its existing `jd_` token opens a job review, not deletion. The web must not substitute that token for a module action. The bot confirms deletion; its current restore command handles restore directly without a separate confirmation step.
 
 ## Behavior and boundary
 
