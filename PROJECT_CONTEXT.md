@@ -78,3 +78,6 @@ Older and full entries: `docs/CHANGELOG_ARCHIVE.md` (read only when needed).
 - 2026-10-31 — Graphify code map (`graphify-out/GRAPH_REPORT.md`) and shortened agent rules.
 - 2026-10-31 — Front-end CI (`ci.yml`: vitest + token-gated Nuxt build).
 - 2026-10-31 — Added `AGENT_RULES.md` linked from `AGENTS.md`.
+
+## Changelog
+- 2026-11-15: Graphify refresh (auto weekly, parker bot).
