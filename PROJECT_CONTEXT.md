@@ -51,6 +51,8 @@
 - Portfolio case study lives outside this repo (Parker's portfolio).
 
 ## 8. Open items / status
+- 2026-11-18: Full decision authority documentation PR is open; no merge or deployment.
+
 - JD modules fall back to FDE when the index is missing. Edit-mode Delete and Restore controls hand off to the bot: without an action-token issuer, they show a copyable owner command and a plain bot-chat link if configured. Only a verified edit session can list archived modules and deadlines; active lists and search hide them. The web never mutates module data. Bot action deep links, owner-scoped action-token issuance and comparison remain unimplemented; the existing `jd_` token is for job review only.
 - FDE app rev1 A1-A4: safe detail Markdown preserves fenced code/ASCII spacing, search expands aliases within longer queries, and Escape yields to dialogs. App-only checks do not replace the parent's paired content checks or mobile visual review; no commit, push, merge or deploy in this implementation pass.
 - FDE route and optional content endpoint are paired with a separate data PR. Merge data first, app second only after Parker's approval. Fresh offline reload is not supported; search continues on an already loaded page.
@@ -60,6 +62,8 @@
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
 ## 9. Changelog
+- 2026-11-18: Document Parker’s task-scoped full decision authority in AGENTS.md; all existing gates remain mandatory. No runtime change.
+
 - 2026-11-15: Added edit-only JD archive/restore handoffs, server-gated archived listing and copyable bot-command fallback without web mutations.
 - 2026-11-15: Stopped the viewport check's development-server process group after assertions so continuous integration finishes instead of timing out.
 - 2026-11-15: Added optional JD module cards, bilingual short-answer-first tabs, and active-only global search without changing existing FDE routes.
