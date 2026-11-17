@@ -2,6 +2,12 @@
 
 Read [`PROJECT_CONTEXT.md`](PROJECT_CONTEXT.md) in full, then [`docs/LESSONS.md`](docs/LESSONS.md), before starting. Append one line per new lesson.
 
+## Full decision authority
+
+When Parker assigns a task with “có toàn quyền quyết định” to a Grok Bot assistant or the Parker Telegram bot, it may assign T3 coding and review, choose next steps, coordinate bots and threads, merge, deploy, and re-test that task without asking again.
+At task start, check required permissions and access; ask Parker once, immediately, for exactly what is missing.
+Every existing gate and ban remains mandatory: green CI or the required local gate, review with no P0–P2 findings, privacy, PR #50 backups/rollback/startup logs, 08:00–23:00 ICT merges/deploys, pinned T3 threads, interview-senior-fe PR #27, no paid runners, same-PR README/help updates, and quiet hours. See [COMMON_RULES §3](<private-memory-repo>/rules/COMMON_RULES.md#3-merging-absolute).
+
 ## Workflow
 - Work in a T3 worktree task branch; never edit or commit on `main` or `master`.
 - One task = one branch/worktree = one PR. Stay in scope; never edit another agent's branch.

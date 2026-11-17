@@ -200,6 +200,10 @@ App repo pushes also rebuild on Vercel. Content is **not** in this repo.
 
 **Backup / integrity:** source of truth is git on the private data repo. Vercel only serves the last successful build. If a build fails, the previous deployment keeps serving. Progress JSON lives in private Blob, separate from content.
 
+## Agent rules
+
+The task-scoped [full decision authority rule](./AGENTS.md#full-decision-authority) applies only when Parker assigns it; all existing review, privacy, CI, and deployment gates still apply.
+
 ## License
 
 Free for personal interview prep. Credit the source if you share it.
