@@ -195,6 +195,10 @@ Push repo app cũng rebuild trên Vercel. Content **không** nằm trong repo n�
 
 **Backup / toàn vẹn:** nguồn sự thật là git trên data repo private. Vercel chỉ serve bản build thành công gần nhất. Build fail thì deployment cũ vẫn chạy. JSON tiến độ nằm ở Blob private, tách khỏi content.
 
+## Quy tắc cho trợ lý
+
+[Quy tắc toàn quyền quyết định theo nhiệm vụ](./AGENTS.md#full-decision-authority) chỉ áp dụng khi Parker giao quyền; các bước duyệt, bảo mật, CI và triển khai hiện có vẫn bắt buộc.
+
 ## License
 
 Dùng miễn phí để ôn phỏng vấn cá nhân. Ghi nguồn nếu chia sẻ công khai.

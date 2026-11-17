@@ -61,7 +61,7 @@
 - (uncertain) anything not confirmed by Parker is listed here before acting on it.
 
 ## 9. Changelog
-- 2026-11-18: Document Parker’s task-scoped full decision authority in AGENTS.md; all existing gates remain mandatory. No runtime change.
+- 2026-11-18: Document Parker’s task-scoped full decision authority in AGENTS.md and link it from the README; all existing gates remain mandatory. No runtime change.
 
 - 2026-11-15: Added edit-only JD archive/restore handoffs, server-gated archived listing and copyable bot-command fallback without web mutations.
 - 2026-11-15: Stopped the viewport check's development-server process group after assertions so continuous integration finishes instead of timing out.
