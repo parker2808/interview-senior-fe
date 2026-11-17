@@ -51,7 +51,6 @@
 - Portfolio case study lives outside this repo (Parker's portfolio).
 
 ## 8. Open items / status
-- 2026-11-18: Full decision authority documentation PR is open; no merge or deployment.
 
 - JD modules fall back to FDE when the index is missing. Edit-mode Delete and Restore controls hand off to the bot: without an action-token issuer, they show a copyable owner command and a plain bot-chat link if configured. Only a verified edit session can list archived modules and deadlines; active lists and search hide them. The web never mutates module data. Bot action deep links, owner-scoped action-token issuance and comparison remain unimplemented; the existing `jd_` token is for job review only.
 - FDE app rev1 A1-A4: safe detail Markdown preserves fenced code/ASCII spacing, search expands aliases within longer queries, and Escape yields to dialogs. App-only checks do not replace the parent's paired content checks or mobile visual review; no commit, push, merge or deploy in this implementation pass.
